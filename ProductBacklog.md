@@ -2,14 +2,14 @@
 **US 01.01.01 As an entrant, I want to search for campsites.**\
 - Story Points: 1
 - Risk: Low\
-**US 01.01.02 As an entrant, I want to filter campsites by location, date, and number of guests.**\
+**US 01.01.02 As an entrant, I want to filter campsites by location, date, and number of guests.**
 - Story Points: 2
-- Risk: Low
+- Risk: Low\
 **US 01.01.03 As an entrant, I want to see a list of campsites based on my filters.**
 - Story Points: 2
-- Risk: Low
-**US 01.01.04 As an entrant, I want to see campsite summary information including name, location, maximum occupancy, and rating.**\
-- Story Points: 3\
+- Risk: Low\
+**US 01.01.04 As an entrant, I want to see campsite summary information including name, location, maximum occupancy, and rating.**
+- Story Points: 3
 - Risk: Low\
 **US 01.01.05 As an entrant, I want to see details of a campsite.**\
 - Story Points: 3\
