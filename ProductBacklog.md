@@ -203,40 +203,40 @@
 ## Admin:
 **US 03.01.01 As an admin, I want to remove registered campsites.**
 - Story Points:
-- Risk:
+- Risk: 2
 
 **US 03.02.01 As an admin, I want to remove profiles.**
 - Story Points:
-- Risk:
+- Risk: 2
 
 **US 03.03.01 As an admin, I want to remove images.**
 - Story Points:
-- Risk:
+- Risk: 2
 
 **US 03.04.01 As an admin, I want to browse campsites.**
-- Story Points:
-- Risk:
+- Story Points: 1 or 3
+- Risk: 
 
 **US 03.05.01 As an admin, I want to browse profiles.**
-- Story Points:
-- Risk:
+- Story Points: 1 or 3
+- Risk: 
 
 **US 03.06.01 As an admin, I want to browse uploaded images so I can remove them if necessary.**
-- Story Points:
-- Risk:
+- Story Points: 1 or 3
+- Risk: 
 
 **US 03.07.01 As an admin, I want to remove campsite owners that violate app policy.**
-- Story Points:
+- Story Points: 13
 - Risk:
 
 **US 03.08.01 As an admin, I want to review logs of all notifications.**
-- Story Points:
+- Story Points: 5
 - Risk:
 
 **US 03.11.01 As an admin, I should be able to be a campsite owner and/or entrant with my admin profile.**
-- Story Points:
+- Story Points: 13
 - Risk:
 
 **US 03.12.01 As an admin, I want to review logs of all messages from campsite owners to entrants who reserved their campsite.**
-- Story Points:
+- Story Points: 8
 - Risk:
