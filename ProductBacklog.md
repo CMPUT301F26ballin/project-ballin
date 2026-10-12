@@ -202,16 +202,16 @@
 
 ## Admin:
 **US 03.01.01 As an admin, I want to remove registered campsites.**
-- Story Points:
-- Risk: 2
+- Story Points: 2
+- Risk: 
 
 **US 03.02.01 As an admin, I want to remove profiles.**
-- Story Points:
-- Risk: 2
+- Story Points: 2
+- Risk: 
 
 **US 03.03.01 As an admin, I want to remove images.**
-- Story Points:
-- Risk: 2
+- Story Points: 2
+- Risk: 
 
 **US 03.04.01 As an admin, I want to browse campsites.**
 - Story Points: 1 or 3
