@@ -105,99 +105,99 @@
 
 ## Campsite Owner:  
 **US 02.01.01 As a campsite owner, I want to register my campsite with the app.**  
-- Story Points:  
+- Story Points: 3
 - Risk: High  
 
 **US 02.01.02 As a campsite owner, I want to provide campsite details including name, location, description (amenities), maximum occupancy, map location, optional image, and tags.**  
-- Story Points:
+- Story Points: 8
 - Risk: High
 
 **US 02.01.03 As a campsite owner, I want to update details about my campsite.**
-- Story Points:  
+- Story Points: 5  
 - Risk: Medium  
 
 **US 02.01.04 As a campsite owner, I want to view details of my campsite.**  
-- Story Points:  
+- Story Points: 2  
 - Risk: Medium  
 
 **US 02.02.01 As a campsite owner, I want the system to generate a unique QR code that links to the campsite details.**  
-- Story Points:  
+- Story Points: 3  
 - Risk: High  
 
 **US 02.03.01 As a campsite owner, I want to view a list of my campsites.**  
-- Story Points:  
-- Risk: Medium  
+- Story Points: 2  
+- Risk: low  
 
 **US 02.04.01 As a campsite owner, I want to list my campsite in a lottery for a certain period.**  
-- Story Points:  
+- Story Points: 5  
 - Risk: High
 
 **US 02.04.02 As a campsite owner, I want be able to list multiple campsites in a lottery for a certain period.**  
-- Story Points:  
+- Story Points: 5 
 - Risk: High
 
 **US 02.04.03 As a campsite owner, I want to set a registration period.**
-- Story Points:  
+- Story Points: 2 
 - Risk: High  
 
 **US 02.04.04 As a campsite owner, I want to set a booking period**  
-- Story Points:
+- Story Points: 2
 - Risk: High
 
 **US 02.04.05 As a campsite owner, I want to set the number of lottery winners.**  
-- Story Points:  
+- Story Points: 1 
 - Risk: High
 
 **US 02.04.06 As a campsite owner, I want to update my campsite lottery listing.**  
-- Story Points:  
-- Risk: High
+- Story Points: 3 
+- Risk: Medium
 
 **US 02.04.07 As a campsite owner, I want to optionally set a capacity for my lottery waitlist**  
-- Story Points:  
+- Story Points: 1 
 - Risk: Low  
 
 **US 02.05.01 As a campsite owner, I want the system to automatically draw winners after the registration period ends.**  
-- Story Points:  
+- Story Points: 5 
 - Risk: High
 
 **US 02.06.01 As a campsite owner, I want to view the currently booked dates for my campsite**  
-- Story Points:
+- Story Points: 2
 - Risk: High
 
 **US 02.07.01 As a campsite owner, I want to view a list of active reservations.**  
-- Story Points:  
-- Risk: High
+- Story Points: 2 
+- Risk: Medium
 
 **US 02.07.02 As a campsite owner, I want to view a list of past reservations.**  
-- Story Points:  
-- Risk: Medium
+- Story Points: 2 
+- Risk: Low
 
 **US 02.07.03 As a campsite owner, I want to view a list of cancelled reservations.**  
-- Story Points:  
-- Risk: Medium
+- Story Points: 2 
+- Risk: Low
 
 **US 02.08.01 As a campsite owner, I want to reject a reservation.**  
-- Story Points:  
+- Story Points: 2 
 - Risk: Medium  
 
 **US 02.09.01 As a campsite owner, I want to view a list of entrants who have joined the waitlist for my campsite lottery.**  
-- Story Points:
+- Story Points: 3
 - Risk: Medium
 
 **US 02.10.01 As a campsite owner, I want to send notifications to entrants who have joined the waitlist for my campsite lottery.**  
-- Story Points:
+- Story Points: 3
 - Risk: Medium
 
 **US 02.10.02 As a campsite owner, I want to view a list of all notifications I have sent.**  
-- Story Points:
+- Story Points: 3
 - Risk: Low
 
 **US 02.11.01 As a campsite owner, I want entrants to confirm that they have read the campsite rules and policies before confirming their reservation.**  
-- Story Points:
+- Story Points: 1
 - Risk: Low
 
 **US 02.12.01 As a campsite owner, I want to message a user who is reserving my campsite.**  
-- Story Points:
+- Story Points: 5
 - Risk: Medium  
 
 ## Admin:
