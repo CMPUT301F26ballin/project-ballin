@@ -201,42 +201,98 @@
 - Risk: Medium  
 
 ## Admin:
-**US 03.01.01 As an admin, I want to remove registered campsites.**
+**US 03.01.01 As an admin, I want a homepage with sections for campsites, profiles, notifications, and messages, so I can reach everything I moderate**
 - Story Points: 2
-- Risk: 
+- Risk: Low
 
 **US 03.02.01 As an admin, I want to remove profiles.**
 - Story Points: 2
-- Risk: 
+- Risk: Low
+
+**US 03.02.02 As an admin, I want to Search profiles.**
+- Story Points: 2
+- Risk: Low 
+
+**US 03.02.03 As an admin, I want to browse all user profiles.**
+- Story Points: 2
+- Risk: Low
+
+**US 03.02.04 As an admin, I want to view all user profiles’ information and image gallery.**
+- Story Points: 3
+- Risk: Medium
+
+**US 03.02.05 As an admin, I should be able to be a campsite owner and/or entrant with my admin profile**
+- Story Points: 8
+- Risk: Hard
+
+**US 03.02.06 As an admin, I want to remove campsite owners that violate app policy.**
+- Story Points: 13
+- Risk: Hard
 
 **US 03.03.01 As an admin, I want to remove images.**
 - Story Points: 2
-- Risk: 
+- Risk: Low
 
-**US 03.04.01 As an admin, I want to browse campsites.**
-- Story Points: 1 or 3
-- Risk: 
+**US 03.03.02 As an admin, I want to browse uploaded images**
+- Story Points: 2
+- Risk: Low
 
-**US 03.05.01 As an admin, I want to browse profiles.**
-- Story Points: 1 or 3
-- Risk: 
-
-**US 03.06.01 As an admin, I want to browse uploaded images so I can remove them if necessary.**
-- Story Points: 1 or 3
-- Risk: 
-
-**US 03.07.01 As an admin, I want to remove campsite owners that violate app policy.**
-- Story Points: 13
-- Risk:
-
-**US 03.08.01 As an admin, I want to review logs of all notifications.**
-- Story Points: 5
-- Risk:
-
-**US 03.11.01 As an admin, I should be able to be a campsite owner and/or entrant with my admin profile.**
-- Story Points: 13
-- Risk:
-
-**US 03.12.01 As an admin, I want to review logs of all messages from campsite owners to entrants who reserved their campsite.**
+**US 03.03.03 As an admin, I want to search images**
 - Story Points: 8
-- Risk:
+- Risk: Medium
+
+**US 03.04.01 As an admin, I want to remove registered campsites.**
+- Story Points: 2
+- Risk: Low
+
+**US 03.04.02 As an admin, I want to browse campsites.**
+- Story Points:  2
+- Risk: Low
+
+**US 03.04.04 As an admin, I want to search campsites.**
+- Story Points: 3
+- Risk: medium
+
+**US 03.04.05 As an admin, I want to View a campsite’s details, QR code, and image gallery**
+- Story Points: 3
+- Risk: low
+
+**US 03.05.01 As an admin, I want to see a confirmation showing what will be deleted, with cancel and confirm options, so I don’t remove things by accident.**
+- Story Points: 2
+- Risk: low
+
+**US 03.06.01 As an admin, I want to browse a log of all the notifications sent by the app.**
+- Story Points: 3
+- Risk: medium
+  
+**US 03.06.02 As an admin, I want to search the notification log.**
+- Story Points: 2
+- Risk: Low
+  
+**US 03.06.03 As an admin, I want to View all notifications's full details.**
+- Story Points: 2
+- Risk: Low
+  
+**US 03.06.04 As an admin, I want to delete the notification log.**
+- Story Points: 2
+- Risk: Low
+
+**US 03.07.01 As an admin, I want to browse a log of messages sent by campsite owners to entrants.**
+- Story Points: 3
+- Risk: Medium
+
+**US 03.07.02 As an admin, I want to search the message log.**
+- Story Points: 2
+- Risk: Low
+
+**US 03.07.03 As an admin, I want to view a message’s full details.**
+- Story Points: 2
+- Risk: Low
+
+**US 03.07.04 As an admin, I want to remove the message log.**
+- Story Points: 2
+- Risk: Low
+
+
+
+
