@@ -15,3 +15,5 @@ Week 2 (Oct 14-20):
 
 Mies: Finished up entrant CRC cards
 
+Peter: Updated Owner UI Mockup with more pages, Created and updated Owner CRC cards, updated backlog designating certain items to be completed by the halfway point
+
