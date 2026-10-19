@@ -9,5 +9,9 @@ Peter: Implemented first drafts of product backlog Story Points and Risk Levels.
 
 Nick: all of the entrant UI storyboard. 
 
+Mies: Did all the entrant backlog/risk management, started on the entrant CRC cards
+
 Week 2 (Oct 14-20):
+
+Mies: Finished up entrant CRC cards
 
