@@ -141,6 +141,7 @@
 **US 02.04.02 As a campsite owner, I want be able to list multiple campsites in a lottery for a certain period.**  
 - Story Points: 5 
 - Risk: High
+- Complete by Half-way Checkpoint
 
 **US 02.04.03 As a campsite owner, I want to set a registration period.**
 - Story Points: 2 
