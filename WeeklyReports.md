@@ -20,3 +20,5 @@ Peter: Updated Owner UI Mockup with more pages, Created and updated Owner CRC ca
 Yuming: refined admin crc cards
 
 Leighan: Refined the Admin UI Mockup, created admin storyboard sequence, helped designate certain admin stories to be completed by the halfway point
+
+Salix: Worked on Owner storyboards and UI mockup
