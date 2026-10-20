@@ -1,5 +1,5 @@
-## Entrant:
 ✅ Indicates what will be complete at halfway checkpoint
+## Entrant:
 
 **US 01.01.01 As an entrant, I want to search for campsites.** ✅
 - Story Points: 1
