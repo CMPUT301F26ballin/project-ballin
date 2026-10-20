@@ -11,6 +11,8 @@ Nick: all of the entrant UI storyboard.
 
 Mies: Did all the entrant backlog/risk management, started on the entrant CRC cards
 
+Salix: Worked on Owner UI mockup
+
 Week 2 (Oct 14-20):
 
 Mies: Finished up entrant CRC cards and helped make entrant storyboard
@@ -21,4 +23,4 @@ Yuming: refined admin crc cards
 
 Leighan: Refined the Admin UI Mockup, created admin storyboard sequence, helped designate certain admin stories to be completed by the halfway point
 
-Salix: Worked on Owner storyboards and UI mockup
+Salix: Worked on Owner storyboards
