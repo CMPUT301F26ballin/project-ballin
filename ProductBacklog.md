@@ -203,29 +203,25 @@
 - Risk: Medium  
 
 ## Admin:
-**US 03.01.01 As an admin, I want a homepage with sections for campsites, profiles, notifications, and messages, so I can reach everything I moderate**
+**US 03.01.01 As an admin, I want a homepage with sections for campsites, profiles, notifications, and messages, so I can reach everything I moderate** ✅
 - Story Points: 2
 - Risk: Low
-- Complete by Half-way Checkpoint
 
-**US 03.02.01 As an admin, I want to remove profiles.**
+**US 03.02.01 As an admin, I want to remove profiles.** ✅
 - Story Points: 2
 - Risk: Low
-- Complete by Half-way Checkpoint
 
 **US 03.02.02 As an admin, I want to Search profiles.**
 - Story Points: 2
 - Risk: Low 
 
-**US 03.02.03 As an admin, I want to browse all user profiles.**
+**US 03.02.03 As an admin, I want to browse all user profiles.** ✅
 - Story Points: 2
 - Risk: Low
-- Complete by Half-way Checkpoint
 
-**US 03.02.04 As an admin, I want to view all user profiles’ information.**
+**US 03.02.04 As an admin, I want to view all user profiles’ information.** ✅
 - Story Points: 3
 - Risk: Medium
-- Complete by Half-way Checkpoint
 
 **US 03.02.05 As an admin, I should be able to be a campsite owner and/or entrant with my admin profile**
 - Story Points: 8
@@ -235,39 +231,33 @@
 - Story Points: 13
 - Risk: Hard
 
-**US 03.03.01 As an admin, I want to remove images.**
+**US 03.03.01 As an admin, I want to remove images.** ✅
 - Story Points: 2
 - Risk: Low
-- Complete by Half-way Checkpoint
 
-**US 03.03.02 As an admin, I want to browse uploaded images**
+**US 03.03.02 As an admin, I want to browse uploaded images** ✅
 - Story Points: 2
 - Risk: Low
-- Complete by Half-way Checkpoint
 
-**US 03.04.01 As an admin, I want to remove registered campsites.**
+**US 03.04.01 As an admin, I want to remove registered campsites.** ✅
 - Story Points: 2
 - Risk: Low
-- Complete by Half-way Checkpoint
 
-**US 03.04.02 As an admin, I want to browse campsites.**
+**US 03.04.02 As an admin, I want to browse campsites.** ✅
 - Story Points:  2
 - Risk: Low
-- Complete by Half-way Checkpoint
 
 **US 03.04.03 As an admin, I want to search campsites.**
 - Story Points: 3
 - Risk: medium
 
-**US 03.04.04 As an admin, I want to View a campsite’s details, QR code, and image gallery**
+**US 03.04.04 As an admin, I want to View a campsite’s details, QR code, and image gallery** ✅
 - Story Points: 3
 - Risk: low
-- Complete by Half-way Checkpoint
 
-**US 03.05.01 As an admin, I want to see a confirmation showing what will be deleted, with cancel and confirm options, so I don’t remove things by accident.**
+**US 03.05.01 As an admin, I want to see a confirmation showing what will be deleted, with cancel and confirm options, so I don’t remove things by accident.** ✅
 - Story Points: 2
 - Risk: low
-- Complete by Half-way Checkpoint
 
 **US 03.06.01 As an admin, I want to browse a log of all the notifications sent by the app.**
 - Story Points: 3
@@ -277,7 +267,7 @@
 - Story Points: 2
 - Risk: Low
   
-**US 03.06.03 As an admin, I want to View all notifications's full details.**
+**US 03.06.03 As an admin, I want to View all notifications's full details.** ✅
 - Story Points: 2
 - Risk: Low
   
