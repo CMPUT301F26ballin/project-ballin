@@ -13,7 +13,7 @@ Mies: Did all the entrant backlog/risk management, started on the entrant CRC ca
 
 Week 2 (Oct 14-20):
 
-Mies: Finished up entrant CRC cards
+Mies: Finished up entrant CRC cards and made storyboard
 
 Peter: Updated Owner UI Mockup with more pages, Created and updated Owner CRC cards, updated backlog designating certain items to be completed by the halfway point
 
