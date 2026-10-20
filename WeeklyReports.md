@@ -17,3 +17,5 @@ Mies: Finished up entrant CRC cards
 
 Peter: Updated Owner UI Mockup with more pages, Created and updated Owner CRC cards, updated backlog designating certain items to be completed by the halfway point
 
+Yuming: refined admin crc cards
+
