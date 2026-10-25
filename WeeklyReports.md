@@ -30,4 +30,4 @@ Nick: worked on Entrant storyboard sequence, and some minor modifications to UI.
 
 Week 3:
 
-Mies: Doing campsiteSearch
+Mies: Doing campsiteSearch, entrant, and user
