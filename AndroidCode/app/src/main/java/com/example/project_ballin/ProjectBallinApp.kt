@@ -11,5 +11,8 @@ fun projectBallinApp(){
 
     NavHost(navController = navController, startDestination = "login"){
         composable("login") {LoginScreen(navController)}
+        composable("OwnerMenu") {OwnerMenuScreen(navController)}
+        composable("CampsiteListScreen") {CampsiteListScreen(navController)}
+        composable("CampsiteDetailScreen") {CampsiteDetailScreen(navController) }
     }
 }
