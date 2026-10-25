@@ -27,3 +27,7 @@ Leighan: Refined the Admin UI Mockup, created admin storyboard sequence, helped 
 Salix: Worked on Owner storyboards
 
 Nick: worked on Entrant storyboard sequence, and some minor modifications to UI.
+
+Week 3:
+
+Mies: Implementing the User interface and building the entrant class off of that
