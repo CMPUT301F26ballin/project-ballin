@@ -1,8 +1,12 @@
 package com.example.project_ballin
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.toObjects
+
 /**
  * A List connected to the Firestore database that contains
  * every campsite added to the app. Users will access this list
@@ -49,17 +53,36 @@ class CampsiteList {
      */
     fun addCampsite(site: Campsite){
         //THIS MAY CHANGE BASED ON IF WE IMPLEMENT CAMPSITE IDs
-        campsitesRef.document(site.name).set(site)
+        campsitesRef.document(site.ID.toString()).set(site)
     }
 
     fun updateCampsite(oldSite: Campsite, updatedSite: Campsite){
         //THIS MAY CHANGE BASED ON IF WE IMPLEMENT CAMPSITE IDs
-        campsitesRef.document(oldSite.name).set(updatedSite)
+        campsitesRef.document(oldSite.ID.toString()).set(updatedSite)
     }
 
     // Would need to further handle how this affects owners/entrants
     fun deleteCampsite(site: Campsite) {
-        campsitesRef.document(site.name).delete()
+        campsitesRef.document(site.ID.toString()).delete()
+    }
+
+    fun getOwnerSites(ID: Int): List<Campsite>{
+        var returnList = mutableStateListOf<Campsite>()
+        campsitesRef.whereEqualTo("ownerID", ID).get()
+            .addOnSuccessListener { result ->
+                returnList = result.toObjects<Campsite>() as SnapshotStateList<Campsite>
+
+            }
+        return returnList
+    }
+
+    fun getCampsite(ID: Int): Campsite{
+        var siteToReturn: Campsite? = null
+        campsitesRef.document(ID.toString()).get().addOnSuccessListener {
+            result ->
+            siteToReturn = result.toObject<Campsite>()!!
+        }
+        return siteToReturn!!
     }
 
 }
