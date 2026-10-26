@@ -30,7 +30,7 @@ Nick: worked on Entrant storyboard sequence, and some minor modifications to UI.
 
 Week 3:
 
-Mies: Doing campsiteSearch, entrant, lottery and user, but they are barebones missing some functions because I am still missing some classes
+Mies: Doing campsiteSearch, entrant, lottery, lotteryList, lotteryDrawer and user, but they are barebones missing some functions because I am still missing some classes
 
 Leighan: Doing admin class
 
