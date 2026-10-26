@@ -1,6 +1,6 @@
-A Markdown File where all members of the team will notate what they did over the course of the week.
+# A Markdown File where all members of the team will notate what they did over the course of the week.
 
-Week 1 (Oct 7-13):
+# Week 1 (Oct 7-13):
 yuming7: part of story mockup(admin), most of UML(admin), half of crc card(admin), half of backlog/risk management(admin).  
 
 leighanbaroro12: most of story mockup(admin), parts of UML(admin), half of crc card(admin), half of backlog/risk management(admin).  
@@ -13,7 +13,7 @@ Mies: Did all the entrant backlog/risk management, started on the entrant CRC ca
 
 Salix: Worked on Owner UI mockup
 
-Week 2 (Oct 14-20):
+# Week 2 (Oct 14-20):
 
 Mies: Finished up entrant CRC cards and helped make entrant storyboard
 
@@ -28,7 +28,7 @@ Salix: Worked on Owner storyboards
 
 Nick: worked on Entrant storyboard sequence, and some minor modifications to UI.
 
-Week 3:
+# Week 3:
 
 Mies: Doing campsiteSearch, entrant, lottery, lotteryList, lotteryDrawer and user, but they are barebones missing some functions because I am still missing some classes
 
