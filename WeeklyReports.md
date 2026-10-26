@@ -17,7 +17,8 @@ Week 2 (Oct 14-20):
 
 Mies: Finished up entrant CRC cards and helped make entrant storyboard
 
-Peter: Updated Owner UI Mockup with more pages, Created and updated Owner CRC cards, Updated CRCs to include known attributes, updated backlog designating certain items to be completed by the halfway point, Created Owner Campsite Creation and Owner Messaging storyboards
+Peter: Updated Owner UI Mockup with more pages, Created and updated Owner CRC cards, Updated CRCs to include known attributes, updated backlog designating certain items to be completed by the halfway point, Created Owner Campsite Creation and Owner Messaging storyboards.  
+This week, I plan to implement the Campsite List; being able to add and update campsite listings with at least most of the details.
 
 Yuming: refined admin crc cards
 
@@ -26,3 +27,9 @@ Leighan: Refined the Admin UI Mockup, created admin storyboard sequence, helped 
 Salix: Worked on Owner storyboards
 
 Nick: worked on Entrant storyboard sequence, and some minor modifications to UI.
+
+Week 3:
+
+Mies: Doing campsiteSearch, entrant, lottery and user, but they are barebones missing some functions because I am still missing some classes
+
+Leighan: Doing admin class

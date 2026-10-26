@@ -12,6 +12,22 @@ fun BallinApp() {
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
         composable("profile"){ EditProfileScreen(navController) }
+
+        composable("OwnerMenu/{OwnerID}") {
+            val ownerID = it.arguments!!.getInt("OwnerID")
+            OwnerMenuScreen(navController, ownerID)
+        }
+
+        composable("CampsiteListScreen/{OwnerID}") {
+            val ownerID = it.arguments!!.getInt("OwnerID")
+            CampsiteListScreen(navController, ownerID)
+        }
+
+        composable("CampsiteDetailScreen/{CampID}") {
+            val siteID = it.arguments!!.getInt("CampID")
+            CampsiteDetailScreen(navController, siteID)
+        }
     }
+
 }
 
