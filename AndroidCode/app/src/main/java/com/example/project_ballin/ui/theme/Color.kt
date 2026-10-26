@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 
 //Light mode colors
 val BallinGreen = Color(0xFF608368)
+val BallinSecondaryGreen = Color(0xFF314528)
 val BallinWhite = Color(0xFFffffff)
 val BallinBackground = Color(0xFFf8f7f1)
 val BallinBackgroundText = Color(0xFF000000)
