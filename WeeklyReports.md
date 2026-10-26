@@ -37,3 +37,5 @@ Leighan: Doing admin class
 Nick: making UI elements, such as initial start screen *lacks functionality*. made our "skeleton" for other UI elements, changed the colors to match our mockups.
 
 Peter: I plan to implement the Campsite List; being able to add and update campsite listings with at least most of the details.
+
+Salix: Start implementing the lottery menus: view lotteries, add lottery (basic details)
