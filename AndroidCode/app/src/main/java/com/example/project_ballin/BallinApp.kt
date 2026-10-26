@@ -11,6 +11,7 @@ fun BallinApp() {
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
+        composable("profile"){ EditProfileScreen(navController) }
 
         composable("OwnerMenu/{OwnerID}") {
             val ownerID = it.arguments!!.getInt("OwnerID")
