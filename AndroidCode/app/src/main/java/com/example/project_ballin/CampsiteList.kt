@@ -57,6 +57,9 @@ class CampsiteList {
         campsitesRef.document(oldSite.name).set(updatedSite)
     }
 
-
+    // Would need to further handle how this affects owners/entrants
+    fun deleteCampsite(site: Campsite) {
+        campsitesRef.document(site.name).delete()
+    }
 
 }
