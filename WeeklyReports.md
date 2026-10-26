@@ -33,3 +33,5 @@ Week 3:
 Mies: Doing campsiteSearch, entrant, lottery and user, but they are barebones missing some functions because I am still missing some classes
 
 Leighan: Doing admin class
+
+Nick: making UI elements, such as initial start screen *lacks functionality*. made our "skeleton" for other UI elements, changed the colors to match our mockups.
