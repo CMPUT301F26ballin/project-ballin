@@ -7,7 +7,11 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun BallinApp() {
+
+
     val navController = rememberNavController()
+
+    val campsiteList = CampsiteList()
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
@@ -20,12 +24,17 @@ fun BallinApp() {
 
         composable("CampsiteListScreen/{OwnerID}") {
             val ownerID = it.arguments!!.getInt("OwnerID")
-            CampsiteListScreen(navController, ownerID)
+            CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
         }
 
         composable("CampsiteDetailScreen/{CampID}") {
             val siteID = it.arguments!!.getInt("CampID")
-            CampsiteDetailScreen(navController, siteID)
+            CampsiteDetailScreen(navController, siteID, getSite = {campsiteList.getCampsite(it)})
+        }
+
+        composable("CampsiteInputScreen/{CampID}") {
+            val siteID = it.arguments?.getInt("CampID")
+            CampsiteInputScreen(navController, siteID, getSite = {campsiteList.getCampsite(it)})
         }
     }
 
