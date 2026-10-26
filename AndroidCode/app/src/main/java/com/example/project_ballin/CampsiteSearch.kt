@@ -1,7 +1,7 @@
 package com.example.project_ballin
 
 /**
- * 
+ *
  * A class that searches over the campsite list based
  * on a query and filters to return a list of results
  *

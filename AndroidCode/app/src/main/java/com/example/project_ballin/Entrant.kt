@@ -21,8 +21,9 @@ class Entrant(
     override var profilePic: String,
     override val appPolicy: String
 ) : User {
-    //var activeLotteries = ArrayList<Lottery>()
-    //var activeReservations = ArrayList<Reservation>()
+    private val activeLotteries = mutableListOf<Lottery>()
+    //private val activeReservations = mutableListOf<Reservation>()
+    //private val pastReservations = mutableListOf<Reservation>()
 
     override fun updateName(newName: String) {
         name = newName
@@ -41,7 +42,7 @@ class Entrant(
     }
 
     override fun deleteAccount() {
-        TODO("Not yet implemented")
+        TODO()
     }
 
 

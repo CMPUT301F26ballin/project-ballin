@@ -1,10 +1,34 @@
 package com.example.project_ballin
 
+/**
+ * A class that stores all the information of a lottery
+ *
+ * Lotteries have a list of waitlist users, an occupancy limit,
+ * a number of winners, an owner, an active date Range, and associated campsites
+ *
+ * @property waitList the list of waitlist users
+ * @property occupancy the occupancy limit of the lottery
+ * @property numWinners the number of winners of the lottery
+ * @property lotteryOwner the owner of the lottery
+ * @property dateRange the date range of the lottery
+ * @property associatedSites the associated campsites of the lottery
+ *
+ */
 class Lottery {
     private val waitList: MutableList<User> = mutableListOf()
     private var occupancy: Int = 0
+    private var numWinners: Int = 0
     //private val lotteryOwner: Owner = TODO()
     //private val dateRange: DateRange = TODO()
+    private val associatedSites: MutableList<Campsite> = mutableListOf()
+
+    fun setLotteryDrawNumber(newNumber: Int) {
+        numWinners = newNumber
+    }
+
+    fun getLotteryDrawNumber(): Int {
+        return numWinners
+    }
 
     fun addToWaitlist(user: User) {
         waitList.add(user)
@@ -46,7 +70,12 @@ class Lottery {
         //return TODO()
     //}
 
-    //fun drawWinner(): User {
-        //return TODO()
-    //}
+    fun getAssociatedSites(): MutableList<Campsite> {
+        return associatedSites
+    }
+
+    fun addAssociatedSite(newSites: ArrayList<Campsite>) {
+        associatedSites.addAll(newSites)
+    }
+
 }
