@@ -14,13 +14,14 @@ package com.example.project_ballin
  * @property associatedSites the associated campsites of the lottery
  *
  */
-class Lottery {
-    private val waitList: MutableList<User> = mutableListOf()
-    private var occupancy: Int = 0
-    private var numWinners: Int = 0
-    //private val lotteryOwner: Owner = TODO()
-    //private val dateRange: DateRange = TODO()
+class Lottery(
+    private val waitList: MutableList<User> = mutableListOf(),
+    private var occupancy: Int = 0,
+    private var numWinners: Int = 0,
+    private var lotteryOwner: Owner,
+    //private val dateRange: DateRange = TODO(),
     private val associatedSites: MutableList<Campsite> = mutableListOf()
+) {
 
     fun setLotteryDrawNumber(newNumber: Int) {
         numWinners = newNumber
@@ -52,15 +53,13 @@ class Lottery {
 
     }
 
-    //fun setLotteryOwner(newOwner: Owner) {
-        //lotteryOwner = newOwner
+    fun setLotteryOwner(newOwner: Owner) {
+        lotteryOwner = newOwner
+    }
 
-    //}
-
-    //fun getLotteryOwner(): Owner {
-        //return TODO()
-
-    //}
+    fun getLotteryOwner(): Owner {
+        return lotteryOwner
+    }
 
     //fun setDateRange(newDateRange: DateRange) {
         //dateRange = newDateRange
