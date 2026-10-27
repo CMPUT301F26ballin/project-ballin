@@ -16,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
@@ -38,19 +40,19 @@ fun CampsiteListView(navController: NavController, ownerID: Int, getOwnerSites: 
     val campsitesByOwner = getOwnerSites(ownerID)
 
     //Paste the skeleton pieces here once they are made.
+    Button(onClick ={ val ID = null
+        navController.navigate("CampsiteInputScreen/$ID")} )
+    {
+        Text("Create Campsite")
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Button(onClick =navController.navigate() ) {
-
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         itemsIndexed(campsitesByOwner){ index, campsite ->
-
             val ID = campsite.ID
             CampsiteItem(campsite, OnClick = {navController.navigate("CampsiteDetailScreen/$ID")})
-
         }
     }
 
@@ -87,7 +89,14 @@ fun CampsiteItem(site: Campsite, OnClick: () -> Unit)
         //Row needs the image
         Text(site.name)
 
-        Text(site.location.toString())
+        //Text(site.location.toString())
 
     }
+}
+
+@Preview (showBackground = true)
+@Composable
+fun CampsiteListScreenPreview(){
+    val navController = rememberNavController()
+
 }

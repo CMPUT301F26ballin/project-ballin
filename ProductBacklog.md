@@ -225,11 +225,11 @@
 
 **US 03.02.05 As an admin, I should be able to be a campsite owner and/or entrant with my admin profile**
 - Story Points: 8
-- Risk: Hard
+- Risk: High
 
 **US 03.02.06 As an admin, I want to remove campsite owners that violate app policy.**
 - Story Points: 13
-- Risk: Hard
+- Risk: High
 
 **US 03.03.01 As an admin, I want to remove images.** ✅
 - Story Points: 2
@@ -259,7 +259,7 @@
 - Story Points: 2
 - Risk: low
 
-**US 03.06.01 As an admin, I want to browse a log of all the notifications sent by the app.**
+**US 03.06.01 As an admin, I want to browse a log of all the notifications sent by the app.** ✅
 - Story Points: 3
 - Risk: medium
   
@@ -279,15 +279,15 @@
 - Story Points: 3
 - Risk: Medium
 
-**US 03.07.02 As an admin, I want to search the message log.**
+**US 03.07.02 As an admin, I want to search the message log.** ✅
 - Story Points: 2
 - Risk: Low
 
-**US 03.07.03 As an admin, I want to view a message’s full details.**
+**US 03.07.03 As an admin, I want to view a message’s full details.** ✅
 - Story Points: 2
 - Risk: Low
 
-**US 03.07.04 As an admin, I want to remove the message log.**
+**US 03.07.04 As an admin, I want to remove the message log.** ✅
 - Story Points: 2
 - Risk: Low
 

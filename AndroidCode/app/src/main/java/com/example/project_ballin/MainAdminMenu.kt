@@ -42,7 +42,7 @@ fun AdminMenuScreen(navController: NavController) {
 
             FeatureTopicButton("CAMPSITES", "", "", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("PROFILES", "", "", navController)
+            FeatureTopicButton("PROFILES", "AdminProfiles", "adminProfilesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
             FeatureTopicButton("NOTIFICATIONS", "", "", navController)
             Spacer(modifier = Modifier.height(16.dp))
