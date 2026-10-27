@@ -225,11 +225,11 @@
 
 **US 03.02.05 As an admin, I should be able to be a campsite owner and/or entrant with my admin profile**
 - Story Points: 8
-- Risk: Hard
+- Risk: High
 
 **US 03.02.06 As an admin, I want to remove campsite owners that violate app policy.**
 - Story Points: 13
-- Risk: Hard
+- Risk: High
 
 **US 03.03.01 As an admin, I want to remove images.** ✅
 - Story Points: 2
