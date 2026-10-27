@@ -24,7 +24,7 @@ fun BallinApp() {
 
         composable("CampsiteListScreen/{OwnerID}") {
             val ownerID = it.arguments!!.getInt("OwnerID")
-            CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
+            //CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
         }
 
         composable("CampsiteDetailScreen/{CampID}") {

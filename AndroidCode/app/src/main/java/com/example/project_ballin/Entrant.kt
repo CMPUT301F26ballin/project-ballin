@@ -19,11 +19,12 @@ class Entrant(
     override var email: String,
     override val deviceId: String,
     override var profilePic: String,
-    override val appPolicy: String
-) : User {
-    private val activeLotteries = mutableListOf<Lottery>()
+    override val appPolicy: String,
+    private val activeLotteries: MutableList<Lottery> = mutableListOf<Lottery>()
     //private val activeReservations = mutableListOf<Reservation>()
     //private val pastReservations = mutableListOf<Reservation>()
+
+) : User {
 
     override fun updateName(newName: String) {
         name = newName
@@ -45,6 +46,15 @@ class Entrant(
         TODO()
     }
 
+    fun addLottery(lottery: Lottery) {
+        activeLotteries.add(lottery)
+    }
 
+    fun getActiveLotteries(): MutableList<Lottery> {
+        return activeLotteries
+    }
 
+    fun removeLottery(lottery: Lottery) {
+        activeLotteries.remove(lottery)
+    }
 }
