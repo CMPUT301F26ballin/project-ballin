@@ -34,6 +34,8 @@ Mies: Doing campsiteSearch, entrant, lottery, lotteryList, lotteryDrawer and use
 
 Leighan: Doing admin class, admin home screen UI.
 
+Yuming: doing admin class, doing profile class, profile list class, admin profile screen, confirm delete dialog, browse and remove profile
+
 Nick: making UI elements, such as initial start screen *lacks functionality*. made our "skeleton" for other UI elements, changed the colors to match our mockups.
 
 Peter: I plan to implement the Campsite List; being able to add and update campsite listings with at least most of the details.

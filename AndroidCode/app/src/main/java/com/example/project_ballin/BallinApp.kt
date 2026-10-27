@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.entrant.entantui.EditProfileScreen
 
 @Composable
 fun BallinApp() {
@@ -24,7 +25,7 @@ fun BallinApp() {
 
         composable("CampsiteListScreen/{OwnerID}") {
             val ownerID = it.arguments!!.getInt("OwnerID")
-            //CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
+            CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
         }
 
         composable("CampsiteDetailScreen/{CampID}") {
