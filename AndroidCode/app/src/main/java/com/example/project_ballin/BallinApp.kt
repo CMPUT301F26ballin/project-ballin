@@ -37,6 +37,10 @@ fun BallinApp() {
             CampsiteInputScreen(navController, siteID, getSite = {campsiteList.getCampsite(it)})
         }
 
+        composable ("LotteryDetailScreen/{LotteryID}") {
+
+        }
+
         composable("AdminMenu") { AdminMenuScreen(navController) }
     }
 

@@ -20,8 +20,8 @@ class LotteryList {
      * snapshot listener that updates the database everytime
      * a new site is added.
      * */
-
     private val lotteriesRef = db.collection("Lotteries")
+
     init{
         lotteriesRef.addSnapshotListener { snapshots, error ->
             if(error != null){
