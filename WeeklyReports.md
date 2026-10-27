@@ -32,7 +32,7 @@ Nick: worked on Entrant storyboard sequence, and some minor modifications to UI.
 
 Mies: Doing campsiteSearch, entrant, lottery, lotteryList, lotteryDrawer and user, but they are barebones missing some functions because I am still missing some classes
 
-Leighan: Doing admin class
+Leighan: Doing admin class, admin home screen UI.
 
 Nick: making UI elements, such as initial start screen *lacks functionality*. made our "skeleton" for other UI elements, changed the colors to match our mockups.
 
