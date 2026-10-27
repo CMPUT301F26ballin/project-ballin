@@ -1,6 +1,7 @@
 package com.example.project_ballin
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,6 +13,9 @@ fun BallinApp() {
     val navController = rememberNavController()
 
     val campsiteList = CampsiteList()
+
+    // remember = only create one ProfileList
+    val profileList = remember { ProfileList() }
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
@@ -38,6 +42,23 @@ fun BallinApp() {
         }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }
+
+        composable("AdminProfiles") {
+            AdminProfileListScreen(
+                navController,
+                profiles = profileList.profiles,
+                onDelete = { profileList.deleteProfile(it) }
+            )
+        }
+
+        composable("AdminProfileDetail/{DeviceID}") {
+            val deviceID = it.arguments?.getString("DeviceID") ?: ""
+            AdminProfileDetailScreen(
+                navController,
+                profile = profileList.getProfile(deviceID),
+                onDelete = { profileList.deleteProfile(it) }
+            )
+        }
     }
 
 }
