@@ -5,3 +5,5 @@
 #---------------------------------------
 
 # Week 1 : 
+
+yuming: entrant viewing and deletion
