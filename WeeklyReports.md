@@ -32,7 +32,7 @@ Nick: worked on Entrant storyboard sequence, and some minor modifications to UI.
 
 Mies: Doing campsiteSearch, entrant, lottery, lotteryList, lotteryDrawer and user, but they are barebones missing some functions because I am still missing some classes
 
-Leighan: Doing admin class, admin home screen UI.
+Leighan: Doing admin class, admin home screen UI, implementing things related to message: classes, screens, etc.
 
 Yuming: doing admin class, doing profile class, profile list class, admin profile screen, confirm delete dialog, browse and remove profile
 
