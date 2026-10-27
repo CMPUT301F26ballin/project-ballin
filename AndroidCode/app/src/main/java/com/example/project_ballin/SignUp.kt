@@ -10,6 +10,15 @@ import androidx.navigation.compose.*
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 
+/**
+ *
+ * the first screen a user will see, need to implement something that will
+ * recognize device ID
+ *
+ * @param navController a [NavController] to continue to enter details screen
+ *
+ */
+
 @Composable
 fun Signup(navController: NavController){
     Column(
