@@ -38,13 +38,17 @@ fun CampsiteListView(navController: NavController, ownerID: Int, getOwnerSites: 
     val campsitesByOwner = getOwnerSites(ownerID)
 
     //Paste the skeleton pieces here once they are made.
+    Button(onClick ={ val ID = null
+        navController.navigate("CampsiteInputScreen/$ID")} )
+    {
+        Text("Create Campsite")
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
 
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Button(onClick =navController.navigate() ) {
 
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
 
         itemsIndexed(campsitesByOwner){ index, campsite ->
 

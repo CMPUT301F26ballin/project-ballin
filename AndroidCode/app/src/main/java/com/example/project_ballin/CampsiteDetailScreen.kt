@@ -22,7 +22,7 @@ fun CampsiteDetailScreen(navController: NavController, siteID: Int, getSite: (In
 fun CampsiteDetailsView(navController: NavController, siteID: Int, getSite: (Int) -> Campsite){
     val site = getSite(siteID)
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        site.
+
     }
 
 }
