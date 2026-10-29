@@ -1,8 +1,13 @@
 package com.example.project_ballin
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
+import com.google.firebase.firestore.toObjects
+
 /**
  * A List connected to the Firestore database that contains
  * every campsite added to the app. Users will access this list
@@ -48,22 +53,34 @@ class LotteryList {
      * @param lottery The lottery object being added
      */
     fun addLottery(lottery: Lottery){
-        lotteriesRef.add(lottery)
+        lotteriesRef.document(lottery.getLotteryID().toString()).set(lottery)
     }
 
-    fun updateCampsite(oldLottery: Lottery, updatedLottery: Lottery){
-        for(i in _lotteries.indices) {
-            if (_lotteries[i] == oldLottery) {
-                _lotteries[i] = updatedLottery
-            }
-        }
+    fun updateLottery(oldLottery: Lottery, updatedLottery: Lottery){
+        lotteriesRef.document(oldLottery.getLotteryID().toString()).set(updatedLottery)
     }
 
     fun deleteCampsite(lottery: Lottery) {
-        for(i in _lotteries.indices) {
-            if (_lotteries[i] == lottery) {
-                _lotteries.removeAt(i)
-            }
-        }
+        lotteriesRef.document(lottery.getLotteryID().toString()).delete()
     }
+
+    fun getOwnerLotteries(ID: Int): List<Lottery>{
+        var returnList = mutableStateListOf<Lottery>()
+        lotteriesRef.whereEqualTo("ownerID", ID).get()
+            .addOnSuccessListener { result ->
+                returnList = result.toObjects<Lottery>() as SnapshotStateList<Lottery>
+
+            }
+        return returnList
+    }
+
+    fun getLottery(ID: Int): Lottery{
+        var lotteryToReturn: Lottery? = null
+        lotteriesRef.document(ID.toString()).get().addOnSuccessListener {
+                result ->
+            lotteryToReturn = result.toObject<Lottery>()!!
+        }
+        return lotteryToReturn!!
+    }
+
 }
