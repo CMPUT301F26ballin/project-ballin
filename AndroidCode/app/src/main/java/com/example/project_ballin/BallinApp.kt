@@ -33,10 +33,10 @@ fun BallinApp() {
             CampsiteDetailScreen(navController, siteID, getSite = {campsiteList.getCampsite(it)})
         }
 
-        composable("CampsiteInputScreen/{CampID}") {
-            val siteID = it.arguments?.getInt("CampID")
-            CampsiteInputScreen(navController, siteID, getSite = {campsiteList.getCampsite(it)})
-        }
+//        composable("CampsiteInputScreen/{CampID}") {
+//            val siteID = it.arguments?.getInt("CampID")
+//            CampsiteInputScreen(navController, siteID, getSite = {campsiteList.getCampsite(it)})
+//        }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }
     }

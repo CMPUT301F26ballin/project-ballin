@@ -7,7 +7,7 @@ class Owner(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
-    val campsitesOwned: ArrayList<Int> = ArrayList()
+    private val campsitesOwned: ArrayList<Int> = ArrayList()
 ) : User {
 
     override fun updateName(newName: String) {
