@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+import kotlin.uuid.Uuid
+
 class Owner(
     override var name: String,
     override var phoneNum: String,
@@ -7,7 +9,8 @@ class Owner(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
-    private val campsitesOwned: ArrayList<Int> = ArrayList()
+    override val userID: Uuid,
+    private val campsitesOwned: ArrayList<Uuid> = ArrayList()
 ) : User {
 
     override fun updateName(newName: String) {
@@ -30,11 +33,11 @@ class Owner(
         TODO()
     }
 
-    fun addCampsite(campsiteID: Int) {
+    fun addCampsite(campsiteID: Uuid) {
         campsitesOwned.add(campsiteID)
     }
 
-    fun getCampsitesOwned(): ArrayList<Int> {
+    fun getCampsitesOwned(): ArrayList<Uuid> {
         return campsitesOwned
     }
 

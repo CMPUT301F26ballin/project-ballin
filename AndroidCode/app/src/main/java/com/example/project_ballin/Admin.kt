@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+import kotlin.uuid.Uuid
+
 /**
  * Stores information of an admin, and allows
  * special functionalities related to being an admin
@@ -25,6 +27,7 @@ class Admin(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
+    override val userID: Uuid,
     var currentMode: String = "Admin"
 ): User {
 
