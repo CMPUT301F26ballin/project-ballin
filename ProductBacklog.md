@@ -37,7 +37,7 @@
 - Story Points: 5
 - Risk: Medium
 
-**US 01.03.01 As an entrant, I want to receive a notification when I lose the campsite lottery.**
+**US 01.03.02 As an entrant, I want to receive a notification when I lose the campsite lottery.**
 - Story Points: 5
 - Risk: Medium
 

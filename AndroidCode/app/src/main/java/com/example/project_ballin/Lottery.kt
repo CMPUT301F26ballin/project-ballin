@@ -1,5 +1,8 @@
 package com.example.project_ballin
 
+import java.util.UUID
+
+
 /**
  * A class that stores all the information of a lottery
  *
@@ -20,8 +23,13 @@ class Lottery(
     private var numWinners: Int = 0,
     private var lotteryOwner: Owner,
     //private val dateRange: DateRange = TODO(),
-    private val associatedSites: MutableList<Campsite> = mutableListOf()
+    private val associatedSites: MutableList<Campsite> = mutableListOf(),
+    private val lotteryID: UUID = UUID.randomUUID()
 ) {
+
+    fun getLotteryID(): UUID {
+        return lotteryID
+    }
 
     fun setLotteryDrawNumber(newNumber: Int) {
         numWinners = newNumber
@@ -42,6 +50,7 @@ class Lottery(
     fun getWaitlist(): List<User> {
         return waitList
     }
+
 
     fun getOccupancy(): Int {
         return occupancy

@@ -19,23 +19,35 @@ fun BallinApp() {
         composable("profile"){ EditProfileScreen(navController) }
 
         composable("OwnerMenu/{OwnerID}") {
-            val ownerID = it.arguments!!.getInt("OwnerID")
-            OwnerMenuScreen(navController, ownerID)
+            val ownerID = it.arguments!!.getString("OwnerID")
+            OwnerMenuScreen(navController, ownerID!!)
         }
 
         composable("CampsiteListScreen/{OwnerID}") {
-            val ownerID = it.arguments!!.getInt("OwnerID")
-            CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
+            val ownerID = it.arguments!!.getString("OwnerID")
+            CampsiteListScreen(navController, ownerID!!, getOwnerSites = {campsiteList.getOwnerSites(it)})
         }
 
         composable("CampsiteDetailScreen/{CampID}") {
-            val siteID = it.arguments!!.getInt("CampID")
-            CampsiteDetailScreen(navController, siteID, getSite = {campsiteList.getCampsite(it)})
+            val siteID = it.arguments!!.getString("CampID")
+            val campsite = campsiteList.getCampsite(siteID!!)
+            CampsiteDetailScreen(navController, campsite,
+                )
         }
 
         composable("CampsiteInputScreen/{CampID}") {
-            val siteID = it.arguments?.getInt("CampID")
-            CampsiteInputScreen(navController, siteID, getSite = {campsiteList.getCampsite(it)})
+            val siteID = it.arguments?.getString("CampID")
+            var campsite: Campsite?
+            if(siteID == null){
+                campsite = null
+            }
+            else{
+                campsite = campsiteList.getCampsite(siteID)
+            }
+            val ownerID = loggedInUser!!.deviceId
+            CampsiteInputScreen(navController, campsite, ownerID,
+                addSite = {campsiteList.addCampsite(it)},
+                updateSite = {oldSite, newSite -> campsiteList.updateCampsite(oldSite, newSite)})
         }
 
         composable ("LotteryDetailScreen/{LotteryID}") {
@@ -43,6 +55,8 @@ fun BallinApp() {
         }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }
+
+        // composable("AdminMessageList") { MessageListScreen(navController, messageList)  }
     }
 
 }

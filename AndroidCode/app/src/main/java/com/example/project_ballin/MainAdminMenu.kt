@@ -1,10 +1,13 @@
 package com.example.project_ballin
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
+// Note: Might have to add a switch mode button at bottom to
+// switch modes (owner, entrant, admin), bc the top bar shows
+// the title of the screen, so find diff location
+
 /**
  *  The main home screen of admin, it displays different
  *  buttons and those buttons brings them to different screens
@@ -28,7 +35,7 @@ import androidx.navigation.compose.rememberNavController
 fun AdminMenuScreen(navController: NavController) {
     TopAppBar(
         navController = navController,
-        screenTitle = "AdminHomeScreen",
+        screenTitle = "Admin Home",
         backButton = false,
     ) {
 
@@ -36,8 +43,15 @@ fun AdminMenuScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+
+            Text(
+                text = "Welcome, Admin !",
+                fontSize = 34.sp
+            )
+            Spacer(modifier = Modifier.height(34.dp))
+
             // Still have to specify the destinations and names of test tags below
 
             FeatureTopicButton("CAMPSITES", "", "", navController)
@@ -70,14 +84,18 @@ fun FeatureTopicButton(name: String, destination: String, testTag: String, navCo
         onClick = {
             navController.navigate(destination)
         },
-        modifier = Modifier.testTag(testTag) // for UI testing
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .testTag(testTag) // for UI testing
+            .width(250.dp)
+            .height(85.dp)
     ) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(name)
             Text(
-                text = "Browse and Delete",
+                text = "(Browse and Delete)",
                 fontSize = 10.sp
             )
         }

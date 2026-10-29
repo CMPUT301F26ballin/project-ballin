@@ -32,12 +32,12 @@ Nick: worked on Entrant storyboard sequence, and some minor modifications to UI.
 
 Mies: Doing campsiteSearch, entrant, lottery, lotteryList, lotteryDrawer and user, but they are barebones missing some functions because I am still missing some classes
 
-Leighan: Doing admin class, admin home screen UI.
+Leighan: Doing admin class, admin home screen UI, implementing things related to message: classes, screens, etc.
 
 Yuming: doing admin class, doing profile class, profile list class, admin profile screen, confirm delete dialog, browse and remove profile
 
 Nick: making UI elements, such as initial start screen *lacks functionality*. made our "skeleton" for other UI elements, changed the colors to match our mockups.
 
-Peter: I plan to implement the Campsite List; being able to add and update campsite listings with at least most of the details.
+Peter: Added Campsite and campsiteList classes. Added views for campsite that implement most campsite addition and campsite detail viewing elements (proper testing is still needed and images still need implementation)
 
 Salix: Start implementing the lottery menus: view lotteries, add lottery (basic details)

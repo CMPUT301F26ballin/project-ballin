@@ -17,16 +17,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun CampsiteDetailScreen(navController: NavController, siteID: Int, getSite: (Int) -> Campsite){
+fun CampsiteDetailScreen(navController: NavController, site: Campsite){
     TopAppBar(navController, "Campsite Details"){
-        CampsiteDetailsView(navController, siteID, getSite = {getSite(it)})
+        CampsiteDetailsView(navController, site)
     }
 
 }
 
 @Composable
-fun CampsiteDetailsView(navController: NavController, siteID: Int, getSite: (Int) -> Campsite){
-    val site = getSite(siteID)
+fun CampsiteDetailsView(navController: NavController, site: Campsite){
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)) {
