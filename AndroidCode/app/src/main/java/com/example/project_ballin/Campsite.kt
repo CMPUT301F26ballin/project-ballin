@@ -43,8 +43,8 @@ class Campsite(
     var description: String,
     var occupancy: Int,
     //var images: MutableList<Image>?,
-    var ownerID: String,
-    //val lotteries: List<UUID>
+    var ownerID: Uuid,
+    //val lotteries: List<Uuid>
     )
 {
 }

@@ -50,7 +50,7 @@ import kotlin.uuid.Uuid
  * */
 
 @Composable
-fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID: String,
+fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID: Uuid,
                          addSite: (Campsite) -> Unit,
                          updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
     TopAppBar(navController, "Input Campsite Details"){
@@ -61,7 +61,7 @@ fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID:
 }
 
 @Composable
-fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID: String,
+fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID: Uuid,
                        addSite: (Campsite) -> Unit,
                        updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
     //initializing input variables (there's a lot of them)
