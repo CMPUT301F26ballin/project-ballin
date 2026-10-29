@@ -1,4 +1,4 @@
-package com.example.project_ballin
+package com.example.project_ballin.entrant.entantui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -8,6 +8,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
+import com.example.project_ballin.TopAppBar
+
 
 @Composable
 fun TestColumn(){
@@ -20,9 +22,11 @@ fun TestColumn(){
 
 @Composable
 fun EditProfileScreen(navController: NavController){
-    TopAppBar(navController,
+    TopAppBar(
+        navController,
         screenTitle = "Edit Profile",
-        profileButton = false){
+        profileButton = false
+    ) {
         TestColumn()
     }
 

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.entrant.entantui.EditProfileScreen
 
 @Composable
 fun BallinApp() {
@@ -12,8 +13,6 @@ fun BallinApp() {
     val navController = rememberNavController()
 
     val campsiteList = CampsiteList()
-
-    val loggedInUser: User? = null
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
@@ -52,6 +51,8 @@ fun BallinApp() {
         }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }
+
+        // composable("AdminMessageList") { MessageListScreen(navController, messageList)  }
     }
 
 }
