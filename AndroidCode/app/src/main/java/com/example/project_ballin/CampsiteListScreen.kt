@@ -35,7 +35,7 @@ import com.google.firebase.firestore.firestore
 
 
 @Composable
-fun CampsiteListView(navController: NavController, ownerID: Int, getOwnerSites: (Int) -> List<Campsite>){
+fun CampsiteListView(navController: NavController, ownerID: String, getOwnerSites: (String) -> List<Campsite>){
 
     val campsitesByOwner = getOwnerSites(ownerID)
 
@@ -61,7 +61,7 @@ fun CampsiteListView(navController: NavController, ownerID: Int, getOwnerSites: 
 
 
 @Composable
-fun CampsiteListScreen(navController: NavController, ownerID: Int, getOwnerSites: (Int) -> List<Campsite>){
+fun CampsiteListScreen(navController: NavController, ownerID: String, getOwnerSites: (String) -> List<Campsite>){
     TopAppBar(navController, "Your Campsites"){
         CampsiteListView(navController, ownerID, getOwnerSites = {getOwnerSites(it)})
     }
