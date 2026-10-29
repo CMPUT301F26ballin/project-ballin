@@ -9,7 +9,7 @@ class Owner(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
-    override val userID: Uuid,
+    override val userID: Uuid = Uuid.random(),
     private val campsitesOwned: ArrayList<Uuid> = ArrayList()
 ) : User {
 
