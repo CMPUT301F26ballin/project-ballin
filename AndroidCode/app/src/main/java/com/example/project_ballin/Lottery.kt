@@ -1,6 +1,7 @@
 package com.example.project_ballin
 
-import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
 /**
@@ -17,17 +18,18 @@ import java.util.UUID
  * @property associatedSites the associated campsites of the lottery
  *
  */
-class Lottery(
+class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
     private val waitList: MutableList<User> = mutableListOf(),
     private var occupancy: Int = 0,
     private var numWinners: Int = 0,
     private var lotteryOwner: Owner,
     //private val dateRange: DateRange = TODO(),
     private val associatedSites: MutableList<Campsite> = mutableListOf(),
-    private val lotteryID: UUID = UUID.randomUUID()
+    private val lotteryID: Uuid = Uuid.random()
 ) {
 
-    fun getLotteryID(): UUID {
+    @OptIn(ExperimentalUuidApi::class)
+    fun getLotteryID(): Uuid {
         return lotteryID
     }
 
