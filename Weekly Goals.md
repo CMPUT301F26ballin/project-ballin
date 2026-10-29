@@ -22,5 +22,6 @@ Peter: Implement proper testing on UI for campsite list, camp details, and add/u
 
 Leighan: notifications browsing and deletion
 
+Salix: Lottery creation and editing screens
 
 
