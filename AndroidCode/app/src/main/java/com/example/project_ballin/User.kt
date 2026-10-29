@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+var loggedInUser: User? = null
+
 interface User {
     var name: String
     var phoneNum: String

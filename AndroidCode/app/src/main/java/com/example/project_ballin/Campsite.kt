@@ -1,8 +1,10 @@
+@file:OptIn(ExperimentalUuidApi::class)
 package com.example.project_ballin
 
 import android.location.Location
 import android.media.Image
 import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 /** A class that stores all the information of a campsite

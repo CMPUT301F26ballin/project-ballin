@@ -1,7 +1,9 @@
 package com.example.project_ballin
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +19,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.Firebase
@@ -34,15 +37,15 @@ import com.google.firebase.firestore.firestore
 @Composable
 fun LotteryListScreen(
     navController: NavController,
-    ownerID: Int
+    ownerID: String,
+    getOwnerLotteries: (String) -> List<Lottery>
 ){
-    val lotteries = remember { mutableStateListOf<Lottery>() }
+    val lotteries = getOwnerLotteries(ownerID)
 
-    TopAppBar(navController, "Your Campsites"){
+    TopAppBar(navController, "My Lotteries"){
         LotteryListView(navController, lotteries)
     }
 }
-
 
 /**
  * Holds the list of all of the lotteries
@@ -65,10 +68,10 @@ fun LotteryListView(
 
 
         itemsIndexed(lotteries) { index, lottery ->
+            val ID = lottery.getLotteryID()
             LotteryItem(
                 lottery,
-                onClick = { navController.navigate("lotteryDetailScreen/${lottery.id}") })
-
+                onClick = { navController.navigate("LotteryDetailScreen/$ID")})
         }
     }
 }
@@ -83,16 +86,19 @@ fun LotteryListView(
 @Composable
 fun LotteryItem(
     lottery: Lottery,
-    onClick: () -> Unit)
-{
+    onClick: () -> Unit) {
     Row(
         modifier = Modifier.
-            fillMaxWidth().
-            clickable{ onClick() }.
-            padding(16.dp)
+            fillMaxWidth()
+            .border(2.dp, Color.Black)
+            .clickable{ onClick() }
+            .padding(16.dp)
     ) {
-        // information about the lottery
-        // site pic, reservation window, etc
-        Text(lottery.getLotteryDrawNumber().toString())
+        Column {
+            Text(lottery.getAssociatedSites().firstOrNull()?.name ?: "No sites associated")
+            Spacer(modifier = Modifier.height(8.dp))
+            Text("Lottery start and end dates")
+        }
+        Text(" Reservation dates")
     }
 }

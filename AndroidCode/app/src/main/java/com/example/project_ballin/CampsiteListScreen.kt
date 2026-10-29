@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalUuidApi::class)
 package com.example.project_ballin
 
 import androidx.compose.foundation.Image
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlin.uuid.ExperimentalUuidApi
 
 /**
  * The screen that shows a list of all the cities of the owner accessing

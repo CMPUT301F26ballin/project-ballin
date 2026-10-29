@@ -14,6 +14,8 @@ fun BallinApp() {
 
     val campsiteList = CampsiteList()
 
+    val lotteryList = LotteryList()
+
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
         composable("profile"){ EditProfileScreen(navController) }
@@ -50,8 +52,16 @@ fun BallinApp() {
                 updateSite = {oldSite, newSite -> campsiteList.updateCampsite(oldSite, newSite)})
         }
 
-        composable ("LotteryDetailScreen/{LotteryID}") {
+        composable("LotteryListScreen/{OwnerID}") {
+            val ownerID = it.arguments!!.getString("OwnerID")
+            LotteryListScreen(navController, ownerID!!, getOwnerLotteries = { lotteryList.getOwnerLotteries(it) })
+        }
 
+        composable("LotterySelectSitesScreen/{OwnerID}") {
+            //
+        }
+        composable ("LotteryDetailScreen/{LotteryID}") {
+            //
         }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }

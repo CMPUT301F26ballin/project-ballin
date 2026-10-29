@@ -1,3 +1,4 @@
+@file:OptIn(ExperimentalUuidApi::class)
 package com.example.project_ballin
 
 import androidx.compose.runtime.mutableStateListOf
@@ -6,6 +7,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
+import kotlin.uuid.ExperimentalUuidApi
 
 /**
  * A List connected to the Firestore database that contains

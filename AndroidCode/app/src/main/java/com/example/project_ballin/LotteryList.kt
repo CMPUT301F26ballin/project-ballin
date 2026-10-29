@@ -64,7 +64,7 @@ class LotteryList {
         lotteriesRef.document(lottery.getLotteryID().toString()).delete()
     }
 
-    fun getOwnerLotteries(ID: Int): List<Lottery>{
+    fun getOwnerLotteries(ID: String): List<Lottery>{
         var returnList = mutableStateListOf<Lottery>()
         lotteriesRef.whereEqualTo("ownerID", ID).get()
             .addOnSuccessListener { result ->
@@ -74,9 +74,9 @@ class LotteryList {
         return returnList
     }
 
-    fun getLottery(ID: Int): Lottery{
+    fun getLottery(ID: String): Lottery{
         var lotteryToReturn: Lottery? = null
-        lotteriesRef.document(ID.toString()).get().addOnSuccessListener {
+        lotteriesRef.document(ID).get().addOnSuccessListener {
                 result ->
             lotteryToReturn = result.toObject<Lottery>()!!
         }
