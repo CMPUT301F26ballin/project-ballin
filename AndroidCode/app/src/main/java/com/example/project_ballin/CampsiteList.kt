@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalUuidApi::class)
 package com.example.project_ballin
 
 import androidx.compose.runtime.mutableStateListOf
@@ -7,7 +6,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
-import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * A List connected to the Firestore database that contains
@@ -45,7 +44,7 @@ class CampsiteList {
         }
     }
 
-    val campsite: List<Campsite>
+    val campsites: List<Campsite>
         get() = _campsites
 
     /**
@@ -68,7 +67,7 @@ class CampsiteList {
         campsitesRef.document(site.ID.toString()).delete()
     }
 
-    fun getOwnerSites(ID: String): List<Campsite>{
+    fun getOwnerSites(ID: Uuid): List<Campsite>{
         var returnList = mutableStateListOf<Campsite>()
         campsitesRef.whereEqualTo("ownerID", ID).get()
             .addOnSuccessListener { result ->
@@ -78,7 +77,7 @@ class CampsiteList {
         return returnList
     }
 
-    fun getCampsite(ID: String): Campsite{
+    fun getCampsite(ID: Uuid): Campsite{
         var siteToReturn: Campsite? = null
         campsitesRef.document(ID.toString()).get().addOnSuccessListener {
             result ->

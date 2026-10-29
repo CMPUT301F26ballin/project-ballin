@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalUuidApi::class)
 package com.example.project_ballin
 
 import androidx.compose.foundation.Image
@@ -23,7 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * The screen that shows a list of all the cities of the owner accessing
@@ -37,7 +36,7 @@ import kotlin.uuid.ExperimentalUuidApi
 
 
 @Composable
-fun CampsiteListView(navController: NavController, ownerID: String, getOwnerSites: (String) -> List<Campsite>){
+fun CampsiteListView(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
 
     val campsitesByOwner = getOwnerSites(ownerID)
 
@@ -63,7 +62,7 @@ fun CampsiteListView(navController: NavController, ownerID: String, getOwnerSite
 
 
 @Composable
-fun CampsiteListScreen(navController: NavController, ownerID: String, getOwnerSites: (String) -> List<Campsite>){
+fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
     TopAppBar(navController, "Your Campsites"){
         CampsiteListView(navController, ownerID, getOwnerSites = {getOwnerSites(it)})
     }

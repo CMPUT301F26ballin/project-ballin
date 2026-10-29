@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalUuidApi::class)
 package com.example.project_ballin
 
 import android.graphics.Paint
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.w3c.dom.Text
 import java.nio.file.WatchEvent
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 /**

@@ -1,17 +1,17 @@
 package com.example.project_ballin
 
+import java.util.UUID
 import kotlin.uuid.Uuid
 
-var loggedInUser: User? = null
-
 interface User {
-    val userID: Uuid
     var name: String
     var phoneNum: String
     var email: String
     val deviceId: String
     val profilePic: String
     val appPolicy: String
+
+    val userID: Uuid
 
     fun updateName(newName: String)
     fun updatePhoneNum(newPhoneNum: String)

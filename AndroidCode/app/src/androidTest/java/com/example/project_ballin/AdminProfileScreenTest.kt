@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlin.uuid.Uuid
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -114,7 +113,7 @@ class AdminProfileScreenTest {
 
     @Test
     fun profileFromUser_keepsRole() {
-        val owner = Owner("Jane Keller", "", "jane@example.com", "device2", "", "", userID = Uuid.random())
+        val owner = Owner("Jane Keller", "", "jane@example.com", "device2", "", "")
         val profile = Profile.fromUser(owner)
         assertEquals("Owner", profile.role)
         assertTrue(profile.deviceId == "device2")

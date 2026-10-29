@@ -29,12 +29,14 @@ fun BallinApp() {
 
         composable("CampsiteListScreen/{OwnerID}") {
             val ownerIDString = it.arguments!!.getString("OwnerID")
-            CampsiteListScreen(navController, ownerIDString!!, getOwnerSites = {campsiteList.getOwnerSites(it)})
+            val ownerID = Uuid.parse(ownerIDString!!)
+            CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
         }
 
         composable("CampsiteDetailScreen/{CampID}") {
             val siteIDString = it.arguments!!.getString("CampID")
-            val campsite = campsiteList.getCampsite(siteIDString!!)
+            val siteID = Uuid.parse(siteIDString!!)
+            val campsite = campsiteList.getCampsite(siteID)
             CampsiteDetailScreen(navController, campsite)
         }
 
@@ -45,7 +47,8 @@ fun BallinApp() {
                 campsite = null
             }
             else{
-                campsite = campsiteList.getCampsite(siteIDString)
+                val siteID = Uuid.parse(siteIDString)
+                campsite = campsiteList.getCampsite(siteID)
             }
             val ownerID = Uuid.random() //CHANGE THIS ONCE WE FIGURE OUT USER IDS!
             CampsiteInputScreen(navController, campsite, ownerID,
@@ -71,4 +74,3 @@ fun BallinApp() {
     }
 
 }
-

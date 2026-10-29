@@ -27,7 +27,7 @@ class Admin(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
-    override val userID: Uuid = Uuid.random(),
+    override val userID: Uuid,
     var currentMode: String = "Admin"
 ): User {
 
