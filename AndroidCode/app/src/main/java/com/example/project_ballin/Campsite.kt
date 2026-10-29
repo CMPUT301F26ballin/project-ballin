@@ -2,6 +2,8 @@ package com.example.project_ballin
 
 import android.location.Location
 import android.media.Image
+import java.util.UUID
+import kotlin.uuid.Uuid
 
 /** A class that stores all the information of a campsite
 *
@@ -23,14 +25,14 @@ import android.media.Image
  * @property occupancy the occupancy limit of the campsite
  * @property images A list of promotional images for the campsite
  * @property ownerID the unique userID of the owner of the campsite
- *
+ * @property lotteries the lotteries this campsite is associated with
  *
 *
 * */
 
 class Campsite(
     var name: String,
-    val ID: String,
+    val ID: Uuid,
     //var location: Location,
     var tags: MutableList<String>,
     var price: Float,
@@ -39,7 +41,8 @@ class Campsite(
     var description: String,
     var occupancy: Int,
     //var images: MutableList<Image>?,
-    var ownerID: String
+    var ownerID: String,
+    //val lotteries: List<UUID>
     )
 {
 }
