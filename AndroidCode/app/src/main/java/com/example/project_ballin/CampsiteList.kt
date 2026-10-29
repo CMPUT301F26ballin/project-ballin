@@ -66,7 +66,7 @@ class CampsiteList {
         campsitesRef.document(site.ID.toString()).delete()
     }
 
-    fun getOwnerSites(ID: Int): List<Campsite>{
+    fun getOwnerSites(ID: String): List<Campsite>{
         var returnList = mutableStateListOf<Campsite>()
         campsitesRef.whereEqualTo("ownerID", ID).get()
             .addOnSuccessListener { result ->
@@ -76,7 +76,7 @@ class CampsiteList {
         return returnList
     }
 
-    fun getCampsite(ID: Int): Campsite{
+    fun getCampsite(ID: String): Campsite{
         var siteToReturn: Campsite? = null
         campsitesRef.document(ID.toString()).get().addOnSuccessListener {
             result ->

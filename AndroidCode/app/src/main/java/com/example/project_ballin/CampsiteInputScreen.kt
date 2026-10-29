@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.w3c.dom.Text
 import java.nio.file.WatchEvent
+import kotlin.uuid.Uuid
 
 /**
  * The screen where the owner can input the details of a campsite.
@@ -47,18 +48,18 @@ import java.nio.file.WatchEvent
  * */
 
 @Composable
-fun CampsiteInputScreen (navController: NavController, siteID: Int?, ownerID: String, getSite: (Int) -> Campsite,
+fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID: String,
                          addSite: (Campsite) -> Unit,
                          updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
     TopAppBar(navController, "Input Campsite Details"){
-        CampsiteInputView(navController, siteID, ownerID, getSite = {getSite(it)},
+        CampsiteInputView(navController, site, ownerID,
             addSite = {addSite(it)},
             updateSite = {oldSite, newSite -> updateSite(oldSite, newSite)})
     }
 }
 
 @Composable
-fun CampsiteInputView (navController: NavController, siteID: Int?, ownerID: String, getSite: (Int) -> Campsite,
+fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID: String,
                        addSite: (Campsite) -> Unit,
                        updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
     //initializing input variables (there's a lot of them)
@@ -74,9 +75,8 @@ fun CampsiteInputView (navController: NavController, siteID: Int?, ownerID: Stri
 
 
     //the old campsite (if we are updating) null if this is a new site.
-    var oldSite: Campsite? = null
-    if (siteID != null){
-        oldSite = getSite(siteID)
+    if (oldSite != null){
+
         campName = oldSite.name
         campPrice = oldSite.price.toString()
         campTags = oldSite.tags
@@ -195,7 +195,7 @@ fun CampsiteInputView (navController: NavController, siteID: Int?, ownerID: Stri
                         addSite(
                             Campsite(
                                 name = campName,
-                                ID = "INSERT ID", //FIGURE OUT ID IMPLEMENTATION
+                                ID = Uuid.random(), //FIGURE OUT ID IMPLEMENTATION
                                 ownerID = ownerID,
                                 price = campPrice.toFloat(),
                                 rating = null,
