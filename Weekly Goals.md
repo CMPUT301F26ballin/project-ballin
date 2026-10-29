@@ -24,4 +24,6 @@ Leighan: notifications browsing and deletion
 
 Salix: Lottery creation and editing screens
 
+Nick: searching for campsites + filters
+
 
