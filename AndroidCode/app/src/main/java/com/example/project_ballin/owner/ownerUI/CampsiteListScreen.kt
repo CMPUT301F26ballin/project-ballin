@@ -1,6 +1,5 @@
-package com.example.project_ballin
+package com.example.project_ballin.owner.ownerUI
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,15 +12,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
+import com.example.project_ballin.Campsite
 import kotlin.uuid.Uuid
 
 /**
@@ -63,8 +59,8 @@ fun CampsiteListView(navController: NavController, ownerID: Uuid, getOwnerSites:
 
 @Composable
 fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
-    TopAppBar(navController, "Your Campsites"){
-        CampsiteListView(navController, ownerID, getOwnerSites = {getOwnerSites(it)})
+    _root_ide_package_.com.example.project_ballin.TopAppBar(navController, "Your Campsites") {
+        CampsiteListView(navController, ownerID, getOwnerSites = { getOwnerSites(it) })
     }
 
 

@@ -22,7 +22,7 @@ class Entrant(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
-    override val userID: Uuid
+    override val userID: Uuid = Uuid.random()
 ) : User {
     private val activeLotteries = mutableListOf<Lottery>()
     //private val activeReservations = mutableListOf<Reservation>()
