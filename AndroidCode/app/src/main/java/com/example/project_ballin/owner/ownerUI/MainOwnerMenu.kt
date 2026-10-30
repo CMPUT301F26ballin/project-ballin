@@ -1,4 +1,4 @@
-package com.example.project_ballin
+package com.example.project_ballin.owner.ownerUI
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

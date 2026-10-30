@@ -14,7 +14,11 @@ import kotlin.uuid.Uuid
  * @property occupancy the occupancy limit of the lottery
  * @property numWinners the number of winners of the lottery
  * @property lotteryOwner the owner of the lottery
- * @property dateRange the date range of the lottery
+ * @property dateRange the date range of the lottery *** Replaced ***
+ * property registrationStart the start time of sign up period
+ * @property registrationEnd the end time of sign up period
+ * @property bookingStart the start time of booking period
+ * @property bookingEnd the end time of booking period
  * @property associatedSites the associated campsites of the lottery
  *
  */
@@ -24,6 +28,10 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
     private var numWinners: Int = 0,
     private var lotteryOwner: Owner,
     //private val dateRange: DateRange = TODO(),
+    private var registrationStart: Long? = null,
+    private var registrationEnd: Long? = null,
+    private var bookingStart: Long? = null,
+    private var bookingEnd: Long? = null,
     private val associatedSites: MutableList<Campsite> = mutableListOf(),
     private val lotteryID: Uuid = Uuid.random()
 ) {
@@ -70,6 +78,16 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
 
     fun getLotteryOwner(): Owner {
         return lotteryOwner
+    }
+
+    fun setRegistrationDates(newStart: Long, newEnd: Long) {
+        registrationStart = newStart
+        registrationEnd = newEnd
+    }
+
+    fun setBookingDates(newStart: Long, newEnd: Long) {
+        bookingStart = newStart
+        bookingEnd = newEnd
     }
 
     //fun setDateRange(newDateRange: DateRange) {

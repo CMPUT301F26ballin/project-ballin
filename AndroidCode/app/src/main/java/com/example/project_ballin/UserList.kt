@@ -62,7 +62,7 @@ class UserList() {
      * updates a given user with new information
      *
      * @param oldUser The user object being updated
-     * @param updatedUser The object storing the
+     * @param updatedUser The object storing the new user data
      * */
 
     fun updateUser(oldUser: User, updatedUser: User){

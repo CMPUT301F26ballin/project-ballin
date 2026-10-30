@@ -3,6 +3,7 @@ package com.example.project_ballin
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -59,13 +61,24 @@ fun LotteryListView(
     lotteries: List<Lottery>){
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         item {
-            Button(onClick = { navController.navigate("new lottery") } )
+            Button(onClick = { navController.navigate("LotteryDetailScreen") } )
             {
                 Text("Create new lottery")
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        if(lotteries.isEmpty()){
+            item {
+                Box(
+                    modifier = Modifier.fillParentMaxSize(),
+                    contentAlignment = Alignment.Center
+                ){
+                        Text("No active lotteries")
+                }
+
+            }
+    }
 
         itemsIndexed(lotteries) { index, lottery ->
             val ID = lottery.getLotteryID()

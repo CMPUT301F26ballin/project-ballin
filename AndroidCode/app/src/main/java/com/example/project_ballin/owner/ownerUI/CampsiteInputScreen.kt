@@ -1,8 +1,5 @@
-package com.example.project_ballin
+package com.example.project_ballin.owner.ownerUI
 
-import android.graphics.Paint
-import android.location.Location
-import android.media.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,18 +15,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import org.w3c.dom.Text
-import java.nio.file.WatchEvent
+import com.example.project_ballin.Campsite
 import kotlin.uuid.Uuid
 
 /**
@@ -51,10 +43,14 @@ import kotlin.uuid.Uuid
 fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID: Uuid,
                          addSite: (Campsite) -> Unit,
                          updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
-    TopAppBar(navController, "Input Campsite Details"){
-        CampsiteInputView(navController, site, ownerID,
-            addSite = {addSite(it)},
-            updateSite = {oldSite, newSite -> updateSite(oldSite, newSite)})
+    _root_ide_package_.com.example.project_ballin.TopAppBar(
+        navController,
+        "Input Campsite Details"
+    ) {
+        CampsiteInputView(
+            navController, site, ownerID,
+            addSite = { addSite(it) },
+            updateSite = { oldSite, newSite -> updateSite(oldSite, newSite) })
     }
 }
 

@@ -20,7 +20,7 @@ yuming: campsite deletion and viewing
 
 Peter: Implement proper testing on UI for campsite list, camp details, and add/update campsite views. Add proper testing for campsites and campsite list. Add elements to UML. Implement images and proper searching via UUID for campsites and owners on campsiteList
 
-Leighan: notifications browsing and deletion
+Leighan: notifications browsing and deletion, implementing UI testing for admin screens related to notifications/messages.
 
 Salix: Lottery creation and editing screens
 

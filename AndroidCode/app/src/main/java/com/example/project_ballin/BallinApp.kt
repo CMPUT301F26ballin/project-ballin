@@ -5,6 +5,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
+import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen
+import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
+import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
+import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
 import kotlin.uuid.Uuid
 
 @Composable
@@ -51,9 +55,10 @@ fun BallinApp() {
                 campsite = campsiteList.getCampsite(siteID)
             }
             val ownerID = Uuid.random() //CHANGE THIS ONCE WE FIGURE OUT USER IDS!
-            CampsiteInputScreen(navController, campsite, ownerID,
-                addSite = {campsiteList.addCampsite(it)},
-                updateSite = {oldSite, newSite -> campsiteList.updateCampsite(oldSite, newSite)})
+            CampsiteInputScreen(
+                navController, campsite, ownerID,
+                addSite = { campsiteList.addCampsite(it) },
+                updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite, newSite) })
         }
 
         composable("LotteryListScreen/{OwnerID}") {

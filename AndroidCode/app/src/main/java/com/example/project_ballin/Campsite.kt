@@ -41,7 +41,7 @@ class Campsite(
     var description: String,
     var occupancy: Int,
     //var images: MutableList<Image>?,
-    var ownerID: Uuid,
+    var ownerID: Uuid = Uuid.random(),
     //val lotteries: List<Uuid>
     )
 {

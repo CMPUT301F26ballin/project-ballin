@@ -1,4 +1,4 @@
-package com.example.project_ballin
+package com.example.project_ballin.owner
 
 import kotlin.uuid.Uuid
 
@@ -11,7 +11,7 @@ class Owner(
     override val appPolicy: String,
     override val userID: Uuid,
     private val campsitesOwned: ArrayList<Uuid> = ArrayList()
-) : User {
+) : com.example.project_ballin.User {
 
     override fun updateName(newName: String) {
         name = newName
