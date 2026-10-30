@@ -65,7 +65,8 @@ fun BallinApp() {
             //
         }
         composable ("LotteryDetailScreen/{LotteryID}") {
-            //
+            val lotteryID = it.arguments!!.getString("LotteryID")
+            LotteryDetailScreen(navController, lotteryID!!)
         }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }

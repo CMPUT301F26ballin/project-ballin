@@ -33,30 +33,30 @@ fun OwnerMenuScreen(navController: NavController, ownerID: Uuid) {
         ) {
 
             Text(
-                text = "Welcome, Admin !",
+                text = "Welcome",
                 fontSize = 34.sp
             )
             Spacer(modifier = Modifier.height(34.dp))
 
             // Still have to specify the destinations and names of test tags below
 
-            FeatureTopicButton(
+            OwnerOptionsButton(
                 "My Campsites",
                 "CampsiteListScreen/$ownerID",
                 "campsiteListButton",
                 navController
             )
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton(
+            OwnerOptionsButton(
                 "My Lotteries",
                 "LotteryListScreen/$ownerID",
                 "AdminProfiles",
                 navController
             )
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("Past Notifications", "", "", navController) // TODO
+            OwnerOptionsButton("Past Notifications", "", "", navController) // TODO
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("Active Reservations", "", "", navController) // TODO
+            OwnerOptionsButton("Active Reservations", "", "", navController) // TODO
         }
     }
 }
@@ -74,7 +74,7 @@ fun OwnerMenuScreen(navController: NavController, ownerID: Uuid) {
  * @param navController is the navController of the App
  */
 @Composable
-fun AdminButton(name: String, destination: String, testTag: String, navController: NavController) {
+fun OwnerOptionsButton(name: String, destination: String, testTag: String, navController: NavController) {
 
     Button(
         onClick = {
