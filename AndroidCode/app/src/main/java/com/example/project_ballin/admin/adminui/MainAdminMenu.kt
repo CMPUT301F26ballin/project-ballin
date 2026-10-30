@@ -54,13 +54,13 @@ fun AdminMenuScreen(navController: NavController) {
 
             // Still have to specify the destinations and names of test tags below
 
-            FeatureTopicButton("CAMPSITES", "", "", navController)
+            FeatureTopicButton("CAMPSITES", "AdminCampsites", "adminCampsitesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
             FeatureTopicButton("PROFILES", "AdminProfiles", "adminProfilesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("NOTIFICATIONS", "", "", navController)
+            FeatureTopicButton("NOTIFICATIONS", "AdminNotifications", "adminNotificationsButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("MESSAGES", "", "", navController)
+            FeatureTopicButton("MESSAGES", "AdminMessages", "adminMessagesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
             FeatureTopicButton("OWNERS VIOLATING POLICY", "", "", navController)
         }
