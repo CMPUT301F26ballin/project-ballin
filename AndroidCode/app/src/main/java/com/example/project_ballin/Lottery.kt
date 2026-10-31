@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import com.example.project_ballin.owner.Owner
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 

@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -38,7 +39,8 @@ fun CampsiteListView(navController: NavController, ownerID: Uuid, getOwnerSites:
 
     //Paste the skeleton pieces here once they are made.
     Button(onClick ={ val ID = null
-        navController.navigate("CampsiteInputScreen/$ID")} )
+        navController.navigate("CampsiteInputScreen/${ID}")},
+        modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("newCampsiteButton"))
     {
         Text("Create Campsite")
     }
@@ -81,7 +83,7 @@ fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSite
 @Composable
 fun CampsiteItem(site: Campsite, OnClick: () -> Unit)
 {
-    Row( modifier = Modifier.fillMaxWidth().clickable{OnClick()}.padding(16.dp)){
+    Row( modifier = Modifier.fillMaxWidth().clickable{OnClick()}.padding(16.dp).testTag("Campsite:${site.name}")){
 
         //Row needs the image
         Text(site.name)

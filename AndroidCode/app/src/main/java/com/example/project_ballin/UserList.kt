@@ -27,9 +27,9 @@ class UserList() {
      * a new site is added.
      * */
 
-    private val campsitesRef = db.collection("Campsites")
+    private val usersRef = db.collection("Users")
     init{
-        campsitesRef.addSnapshotListener { snapshots, error ->
+        usersRef.addSnapshotListener { snapshots, error ->
             if(error != null){
                 return@addSnapshotListener
             }
@@ -55,7 +55,7 @@ class UserList() {
      */
     fun addUser(user: User){
         //THIS MAY CHANGE BASED ON IF WE IMPLEMENT CAMPSITE IDs
-        campsitesRef.document(user.userID.toString()).set(user)
+        usersRef.document(user.userID.toString()).set(user)
     }
 
     /**
@@ -67,7 +67,7 @@ class UserList() {
 
     fun updateUser(oldUser: User, updatedUser: User){
         //THIS MAY CHANGE BASED ON IF WE IMPLEMENT CAMPSITE IDs
-        campsitesRef.document(oldUser.userID.toString()).set(updatedUser)
+        usersRef.document(oldUser.userID.toString()).set(updatedUser)
     }
 
     /**
@@ -79,7 +79,7 @@ class UserList() {
 
     // Would need to further handle how this affects owners/entrants
     fun deleteUser(user: User) {
-        campsitesRef.document(user.userID.toString()).delete()
+        usersRef.document(user.userID.toString()).delete()
     }
 
 }
