@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import java.util.Date
+import kotlin.uuid.Uuid
 
 // NOT COMPLETED YET
 // VERIFY onDelete parameter works properly
@@ -62,7 +63,7 @@ fun MessageDetailScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Message ${message.ID}",
+                text = "DETAILS",
                 fontSize = 34.sp,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -130,16 +131,19 @@ fun <T> MessageDetailRow(descriptionText: String, content: T) {
         )
     }
 }
+
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MessageDetailScreenPreview() {
     val navcontroller = rememberNavController()
+    val uuidRandom: Uuid = Uuid.random()
     val sampleMessage = Message(
-        1,
-        1,
+        uuidRandom,
+        uuidRandom,
         "Hello, this is the content of the message",
         Date(),
-        1)
+        uuidRandom)
 
     MessageDetailScreen(navcontroller, sampleMessage, onDelete = {})
 }
