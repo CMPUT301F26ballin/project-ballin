@@ -32,7 +32,7 @@ import kotlin.uuid.Uuid
 
 class Campsite(
     var name: String,
-    val ID: Uuid,
+    val ID: Uuid = Uuid.random(),
     //var location: Location,
     var tags: MutableList<String>,
     var price: Float,
@@ -41,7 +41,7 @@ class Campsite(
     var description: String,
     var occupancy: Int,
     //var images: MutableList<Image>?,
-    var ownerID: Uuid = Uuid.random(),
+    var ownerID: Uuid,
     //val lotteries: List<Uuid>
     )
 {
