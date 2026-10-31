@@ -3,6 +3,7 @@ package com.example.project_ballin
 import android.location.Location
 import android.media.Image
 import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 /** A class that stores all the information of a campsite
@@ -30,7 +31,7 @@ import kotlin.uuid.Uuid
 *
 * */
 
-class Campsite(
+class Campsite @OptIn(ExperimentalUuidApi::class) constructor(
     var name: String,
     val ID: Uuid = Uuid.random(),
     //var location: Location,
