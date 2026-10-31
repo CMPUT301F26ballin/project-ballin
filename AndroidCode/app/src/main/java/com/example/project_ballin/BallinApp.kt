@@ -5,11 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
-import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen
-import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
-import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
-import kotlin.uuid.Uuid
 
 @Composable
 fun BallinApp() {
@@ -24,39 +20,35 @@ fun BallinApp() {
         composable("profile"){ EditProfileScreen(navController) }
 
         composable("OwnerMenu/{OwnerID}") {
-            val ownerIDString = it.arguments!!.getString("OwnerID")
-            val ownerID = Uuid.parse(ownerIDString!!)
-            OwnerMenuScreen(navController, ownerID)
+            val ownerID = it.arguments!!.getString("OwnerID")
+            OwnerMenuScreen(navController, ownerID!!)
         }
 
         composable("CampsiteListScreen/{OwnerID}") {
-            val ownerIDString = it.arguments!!.getString("OwnerID")
-            val ownerID = Uuid.parse(ownerIDString!!)
-            CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
+            val ownerID = it.arguments!!.getString("OwnerID")
+            CampsiteListScreen(navController, ownerID!!, getOwnerSites = {campsiteList.getOwnerSites(it)})
         }
 
         composable("CampsiteDetailScreen/{CampID}") {
-            val siteIDString = it.arguments!!.getString("CampID")
-            val siteID = Uuid.parse(siteIDString!!)
-            val campsite = campsiteList.getCampsite(siteID)
-            CampsiteDetailScreen(navController, campsite)
+            val siteID = it.arguments!!.getString("CampID")
+            val campsite = campsiteList.getCampsite(siteID!!)
+            CampsiteDetailScreen(navController, campsite,
+                )
         }
 
         composable("CampsiteInputScreen/{CampID}") {
-            val siteIDString = it.arguments?.getString("CampID")
+            val siteID = it.arguments?.getString("CampID")
             var campsite: Campsite?
-            if(siteIDString == null){
+            if(siteID == null){
                 campsite = null
             }
             else{
-                val siteID = Uuid.parse(siteIDString)
                 campsite = campsiteList.getCampsite(siteID)
             }
-            val ownerID = Uuid.random() //CHANGE THIS ONCE WE FIGURE OUT USER IDS!
-            CampsiteInputScreen(
-                navController, campsite, ownerID,
-                addSite = { campsiteList.addCampsite(it) },
-                updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite, newSite) })
+//            val ownerID = loggedInUser!!.deviceId
+//            CampsiteInputScreen(navController, campsite, ownerID,
+//                addSite = {campsiteList.addCampsite(it)},
+//                updateSite = {oldSite, newSite -> campsiteList.updateCampsite(oldSite, newSite)})
         }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }

@@ -19,14 +19,11 @@
 // Modified by Nick Guimaraes on 10/26/26 to
 // add compadibility to our app and make resuable for other screens
 
-package com.example.project_ballin
+package com.example.project_ballin.reusableui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -34,8 +31,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
-import com.example.project_ballin.ui.theme.BallinSecondaryGreen
-import com.example.project_ballin.ui.theme.BallinWhite
 
 /**
  *

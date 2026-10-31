@@ -1,4 +1,4 @@
-package com.example.project_ballin.owner.ownerUI
+package com.example.project_ballin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,11 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.project_ballin.Campsite
-import java.nio.file.WatchEvent
+import com.example.project_ballin.reusableui.TopAppBar
 import kotlin.uuid.Uuid
 
 /**
@@ -42,13 +40,10 @@ import kotlin.uuid.Uuid
  * */
 
 @Composable
-fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID: Uuid,
+fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID: String,
                          addSite: (Campsite) -> Unit,
                          updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
-    _root_ide_package_.com.example.project_ballin.TopAppBar(
-        navController,
-        "Input Campsite Details"
-    ) {
+    TopAppBar(navController, "Input Campsite Details") {
         CampsiteInputView(
             navController, site, ownerID,
             addSite = { addSite(it) },
@@ -57,7 +52,7 @@ fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID:
 }
 
 @Composable
-fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID: Uuid,
+fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID: String,
                        addSite: (Campsite) -> Unit,
                        updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
     //initializing input variables (there's a lot of them)
@@ -97,7 +92,7 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                 value = campName,
                 onValueChange = { campName = it },
                 label = { Text("Site Name") },
-                modifier = Modifier.weight(1f).testTag("campName")
+                modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(16.dp))
             //Price Box
@@ -105,7 +100,7 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                 value = campPrice,
                 onValueChange = { campPrice = it },
                 label = { Text("Price Per Night") },
-                modifier = Modifier.weight(1f).testTag("campPrice")
+                modifier = Modifier.weight(1f)
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -121,7 +116,6 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .testTag("campRules")
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -137,7 +131,6 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .testTag("campDesc")
             )
         }
 
@@ -160,15 +153,13 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .testTag("tagInput")
             )
             Button(onClick = {
                 if(tagToAdd.isNotBlank()){
                     campTags.add(tagToAdd)
                     tagToAdd = ""
                 }
-            },
-                modifier = Modifier.padding(16.dp).testTag("addTag")) {
+            }) {
                 Text("Add Tag")
             }
 
@@ -179,7 +170,7 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
             value = campOccupancy,
             onValueChange = {campOccupancy = it},
             label = { Text("Occupancy") },
-            modifier = Modifier.weight(1f).testTag("campOccupancy")
+            modifier = Modifier.weight(1f)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row(modifier = Modifier
@@ -211,8 +202,7 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                         navController.popBackStack()
                     }
 
-                },
-                    modifier = Modifier.testTag("addSiteButton")) {
+                }) {
                     Text("Add Campsite")
                 }
             } else if (oldSite != null) {
@@ -240,8 +230,7 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                     }
 
 
-                },
-                    modifier = Modifier.testTag("updateSiteButton")) {
+                }) {
                     Text("Update Campsite")
                 }
             }
@@ -262,8 +251,7 @@ fun TagRow(tag: String, onDelete:(String)-> Unit){
         .padding(16.dp)){
         Text(tag)
         Spacer(modifier = Modifier.width(16.dp))
-        Button(onClick = {onDelete(tag)},
-            modifier = Modifier.testTag("removeTag")){
+        Button(onClick = {onDelete(tag)}){
             Text("x")
         }
     }
