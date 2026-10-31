@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.Campsite
+import com.example.project_ballin.TopAppBar
 import kotlin.uuid.Uuid
 
 /**
@@ -37,9 +38,10 @@ fun CampsiteListView(navController: NavController, ownerID: Uuid, getOwnerSites:
 
     val campsitesByOwner = getOwnerSites(ownerID)
 
-    //Paste the skeleton pieces here once they are made.
-    Button(onClick ={ val ID = null
-        navController.navigate("CampsiteInputScreen/${ID}")},
+    Button(onClick ={
+        val ID = null
+        navController.navigate("CampsiteInputScreen/${ID}")
+    },
         modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("newCampsiteButton"))
     {
         Text("Create Campsite")
@@ -61,7 +63,7 @@ fun CampsiteListView(navController: NavController, ownerID: Uuid, getOwnerSites:
 
 @Composable
 fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
-    _root_ide_package_.com.example.project_ballin.TopAppBar(navController, "Your Campsites") {
+    TopAppBar(navController, "Your Campsites") {
         CampsiteListView(navController, ownerID, getOwnerSites = { getOwnerSites(it) })
     }
 

@@ -9,6 +9,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.*
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import kotlin.uuid.Uuid
 
 /**
  *
@@ -57,7 +58,7 @@ fun Signup(navController: NavController){
 
         Button(
             onClick = {
-                /*TODO*/
+                navController.navigate("OwnerMenu/${Uuid.random()}")
             },
             modifier = Modifier.testTag("ownerSignin") // for testing
         ) {

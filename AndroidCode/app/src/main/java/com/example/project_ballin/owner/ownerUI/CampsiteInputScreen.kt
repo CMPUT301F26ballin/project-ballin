@@ -23,8 +23,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
+import com.example.project_ballin.TopAppBar
 import java.nio.file.WatchEvent
 import kotlin.uuid.Uuid
+
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 
 /**
  * The screen where the owner can input the details of a campsite.
@@ -45,7 +49,7 @@ import kotlin.uuid.Uuid
 fun CampsiteInputScreen (navController: NavController, site: Campsite?, ownerID: Uuid,
                          addSite: (Campsite) -> Unit,
                          updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
-    _root_ide_package_.com.example.project_ballin.TopAppBar(
+    TopAppBar(
         navController,
         "Input Campsite Details"
     ) {
