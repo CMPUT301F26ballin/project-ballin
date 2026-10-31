@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
 
+
+
 @Composable
 fun CampsiteDetailScreen(navController: NavController, site: Campsite){
     _root_ide_package_.com.example.project_ballin.TopAppBar(navController, "Campsite Details") {

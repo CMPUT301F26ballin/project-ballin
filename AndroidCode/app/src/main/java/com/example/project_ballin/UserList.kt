@@ -8,6 +8,8 @@ import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 import kotlin.uuid.Uuid
 
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 /**
  * The list that stores all of the users added to the app.
  *

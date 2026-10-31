@@ -11,6 +11,8 @@ import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
 import kotlin.uuid.Uuid
 
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 @Composable
 fun BallinApp() {
 
@@ -52,7 +54,7 @@ fun BallinApp() {
                 val siteID = Uuid.parse(siteIDString)
                 campsite = campsiteList.getCampsite(siteID)
             }
-            val ownerID = Uuid.random() //CHANGE THIS ONCE WE FIGURE OUT USER IDS!
+            val ownerID = Uuid.random()
             CampsiteInputScreen(
                 navController, campsite, ownerID,
                 addSite = { campsiteList.addCampsite(it) },

@@ -2,6 +2,9 @@ package com.example.project_ballin
 
 import kotlin.uuid.Uuid
 
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
+
 /**
  * A class that stores all the information of an entrant
  *
