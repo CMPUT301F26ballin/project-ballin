@@ -16,6 +16,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import java.util.Date
+import kotlin.uuid.Uuid
 
 // NOT COMPLETED YET
 // VERIFY onDelete parameter works properly
@@ -45,6 +50,8 @@ fun MessageDetailScreen(
     message: Message,
     onDelete: (Message) -> Unit
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
     TopAppBar(
         navController = navController,
         screenTitle = "Message Details"
@@ -56,7 +63,7 @@ fun MessageDetailScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Message ${message.ID}",
+                text = "DETAILS",
                 fontSize = 34.sp,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -83,8 +90,7 @@ fun MessageDetailScreen(
 
             Button(
                 onClick = {
-                    // Incomplete here
-                    navController.navigate("ConfirmDelete")
+                    showDialog = true
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
@@ -95,6 +101,16 @@ fun MessageDetailScreen(
                 Text("Delete Message")
             }
 
+            if (showDialog) {
+                ConfirmDeleteDialog(
+                    itemDescription = "the message ${message.ID}",
+                    onConfirm = {
+                        showDialog = false
+                        onDelete(message)
+                    },
+                    onCancel = { showDialog = false }
+                )
+            }
         }
     }
 }
@@ -115,16 +131,19 @@ fun <T> MessageDetailRow(descriptionText: String, content: T) {
         )
     }
 }
+
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MessageDetailScreenPreview() {
     val navcontroller = rememberNavController()
+    val uuidRandom: Uuid = Uuid.random()
     val sampleMessage = Message(
-        1,
-        1,
+        uuidRandom,
+        uuidRandom,
         "Hello, this is the content of the message",
         Date(),
-        1)
+        uuidRandom)
 
     MessageDetailScreen(navcontroller, sampleMessage, onDelete = {})
 }

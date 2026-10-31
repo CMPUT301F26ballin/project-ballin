@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+import com.example.project_ballin.owner.Owner
+
 /**
  * A user's profile as saved in the database.
  *

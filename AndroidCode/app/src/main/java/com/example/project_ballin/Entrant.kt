@@ -1,5 +1,10 @@
 package com.example.project_ballin
 
+import kotlin.uuid.Uuid
+
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
+
 /**
  * A class that stores all the information of an entrant
  *
@@ -19,7 +24,8 @@ class Entrant(
     override var email: String,
     override val deviceId: String,
     override var profilePic: String,
-    override val appPolicy: String
+    override val appPolicy: String,
+    override val userID: Uuid = Uuid.random()
 ) : User {
     private val activeLotteries = mutableListOf<Lottery>()
     //private val activeReservations = mutableListOf<Reservation>()

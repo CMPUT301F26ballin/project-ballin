@@ -8,6 +8,9 @@ import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
 
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
+
 /**
  * A List connected to the Firestore database that contains
  * every campsite added to the app. Users will access this list

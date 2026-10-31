@@ -30,10 +30,11 @@ import kotlin.uuid.Uuid
  *
 *
 * */
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 
 class Campsite @OptIn(ExperimentalUuidApi::class) constructor(
     var name: String,
-    val ID: Uuid,
+    val ID: Uuid = Uuid.random(),
     //var location: Location,
     var tags: MutableList<String>,
     var price: Float,
@@ -42,8 +43,8 @@ class Campsite @OptIn(ExperimentalUuidApi::class) constructor(
     var description: String,
     var occupancy: Int,
     //var images: MutableList<Image>?,
-    var ownerID: String,
-    //val lotteries: List<UUID>
+    var ownerID: Uuid,
+    //val lotteries: List<Uuid>
     )
 {
 }

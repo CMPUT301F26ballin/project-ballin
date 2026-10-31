@@ -1,6 +1,5 @@
-package com.example.project_ballin
+package com.example.project_ballin.owner.ownerUI
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,15 +12,15 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
+import com.example.project_ballin.Campsite
+import com.example.project_ballin.TopAppBar
+import kotlin.uuid.Uuid
 
 /**
  * The screen that shows a list of all the cities of the owner accessing
@@ -35,13 +34,15 @@ import com.google.firebase.firestore.firestore
 
 
 @Composable
-fun CampsiteListView(navController: NavController, ownerID: String, getOwnerSites: (String) -> List<Campsite>){
+fun CampsiteListView(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
 
     val campsitesByOwner = getOwnerSites(ownerID)
 
-    //Paste the skeleton pieces here once they are made.
-    Button(onClick ={ val ID = null
-        navController.navigate("CampsiteInputScreen/$ID")} )
+    Button(onClick ={
+        val ID = null
+        navController.navigate("CampsiteInputScreen/${ID}")
+    },
+        modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("newCampsiteButton"))
     {
         Text("Create Campsite")
     }
@@ -61,9 +62,9 @@ fun CampsiteListView(navController: NavController, ownerID: String, getOwnerSite
 
 
 @Composable
-fun CampsiteListScreen(navController: NavController, ownerID: String, getOwnerSites: (String) -> List<Campsite>){
-    TopAppBar(navController, "Your Campsites"){
-        CampsiteListView(navController, ownerID, getOwnerSites = {getOwnerSites(it)})
+fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
+    TopAppBar(navController, "Your Campsites") {
+        CampsiteListView(navController, ownerID, getOwnerSites = { getOwnerSites(it) })
     }
 
 
@@ -84,7 +85,7 @@ fun CampsiteListScreen(navController: NavController, ownerID: String, getOwnerSi
 @Composable
 fun CampsiteItem(site: Campsite, OnClick: () -> Unit)
 {
-    Row( modifier = Modifier.fillMaxWidth().clickable{OnClick()}.padding(16.dp)){
+    Row( modifier = Modifier.fillMaxWidth().clickable{OnClick()}.padding(16.dp).testTag("Campsite:${site.name}")){
 
         //Row needs the image
         Text(site.name)

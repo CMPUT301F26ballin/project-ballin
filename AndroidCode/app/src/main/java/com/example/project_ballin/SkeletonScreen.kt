@@ -1,3 +1,24 @@
+/*
+ * Copyright 2023 The Android Open Source Project
+ * Modifications copyright 2026 ballin
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://apache.org
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// NOTICES OF MODIFICATION
+// Modified by Nick Guimaraes on 10/26/26 to
+// add compadibility to our app and make resuable for other screens
+
 package com.example.project_ballin
 
 import androidx.compose.foundation.background

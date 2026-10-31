@@ -1,5 +1,11 @@
 package com.example.project_ballin
 
+import java.util.UUID
+import kotlin.uuid.Uuid
+
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
+
 interface User {
     var name: String
     var phoneNum: String
@@ -7,6 +13,8 @@ interface User {
     val deviceId: String
     val profilePic: String
     val appPolicy: String
+
+    val userID: Uuid
 
     fun updateName(newName: String)
     fun updatePhoneNum(newPhoneNum: String)
