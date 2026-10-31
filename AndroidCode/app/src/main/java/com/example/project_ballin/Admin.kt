@@ -29,6 +29,7 @@ class Admin(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
+    @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
     override val userID: Uuid,
     var currentMode: String = "Admin"
 ): User {

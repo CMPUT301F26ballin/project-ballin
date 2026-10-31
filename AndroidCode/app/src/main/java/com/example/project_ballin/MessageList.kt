@@ -1,11 +1,8 @@
 package com.example.project_ballin
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
-import com.google.firebase.firestore.toObjects
 
 /**
  * A list that that stores all the messages
