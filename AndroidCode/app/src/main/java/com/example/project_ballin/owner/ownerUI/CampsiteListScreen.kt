@@ -34,37 +34,27 @@ import kotlin.uuid.Uuid
 
 
 @Composable
-fun CampsiteListView(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
-
-    val campsitesByOwner = getOwnerSites(ownerID)
-
-    Button(onClick ={
-        val ID = null
-        navController.navigate("CampsiteInputScreen/${ID}")
-    },
-        modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("newCampsiteButton"))
-    {
-        Text("Create Campsite")
-    }
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-
-        itemsIndexed(campsitesByOwner){ index, campsite ->
-            val ID = campsite.ID
-            CampsiteItem(campsite, OnClick = {navController.navigate("CampsiteDetailScreen/$ID")})
-        }
-    }
-
-}
-
-
-
-@Composable
 fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
     TopAppBar(navController, "Your Campsites") {
-        CampsiteListView(navController, ownerID, getOwnerSites = { getOwnerSites(it) })
+        val campsitesByOwner = getOwnerSites(ownerID)
+        val ID = null
+        Button(onClick ={
+            navController.navigate("CampsiteInputScreen/${ID}")
+        },
+            modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("newCampsiteButton"))
+        {
+            Text("Create Campsite")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+
+            itemsIndexed(campsitesByOwner){ index, campsite ->
+                val ID = campsite.ID
+                CampsiteItem(campsite, OnClick = {navController.navigate("CampsiteDetailScreen/$ID")})
+            }
+        }
     }
 
 

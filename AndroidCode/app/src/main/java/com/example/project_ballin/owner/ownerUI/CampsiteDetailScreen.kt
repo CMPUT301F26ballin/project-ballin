@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.reusableui.TopAppBar
@@ -67,5 +69,15 @@ fun CampsiteDetailsView(navController: NavController, site: Campsite){
             .padding(16.dp)) {
             Text(site.rules)
         }
+
+        Spacer(Modifier.height(16.dp))
+
+        Row(modifier = Modifier.fillMaxWidth().padding(16.dp)){
+            Button(onClick = {navController.navigate("CampsiteInputScreen/${site.ID}")},
+                modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("updateCampsite")) {
+                Text("Update Campsite")
+            }
+        }
+
     }
 }
