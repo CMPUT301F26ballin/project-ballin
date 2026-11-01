@@ -19,11 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
+import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
-import kotlin.uuid.Uuid
 
 // Verify messages parameter type is correct
+// Also debating on if I should add a mini description
+// at top, to tell admin user what they can do on this screen
 
 /**
  * A composable that shows the overview of all the messages
@@ -47,6 +49,7 @@ fun MessageListScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text("Click on specific message to view more details")
 
             Spacer(modifier = Modifier.height(34.dp))
 
@@ -56,8 +59,8 @@ fun MessageListScreen(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                itemsIndexed(messages) { index, message ->
-                    MessageButtonRow(index, message, navController)
+                items(messages) { message ->
+                    MessageButtonRow(message, navController)
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
@@ -70,7 +73,7 @@ fun MessageListScreen(
  * it'll be a clickable button, showing ID and date sent only.
  */
 @Composable
-fun MessageButtonRow(index: Int, message: Message, navController: NavController) {
+fun MessageButtonRow(message: Message, navController: NavController) {
 
     Button(
         onClick = {
@@ -85,9 +88,7 @@ fun MessageButtonRow(index: Int, message: Message, navController: NavController)
         Column (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Arbitrary indexes, so no inherent order to them, just for sake of ui
-            // I didn't want to display the Uuid of Message
-            Text( "Message ${index + 1}")
+            Text( "Message ${message.ID}")
             Text(
                 text = "Date Sent: ${message.getFormattedDate()}",
                 fontSize = 10.sp
@@ -96,21 +97,16 @@ fun MessageButtonRow(index: Int, message: Message, navController: NavController)
     }
 }
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MessageListScreenPreview() {
     val navController = rememberNavController()
-
-    val uuidRandomOwnerID: Uuid = Uuid.random()
-    val uuidRandomEntrantID: Uuid = Uuid.random()
-    val uuidRandomID: Uuid = Uuid.random()
-    // using the same uuid for all of them btw just for preview
     // still need to get messages list
     // rn just using a static sampleMessages list
     val sampleMessages = listOf(
-        Message(uuidRandomOwnerID,uuidRandomEntrantID,"Hello", Date(), uuidRandomID),
-        Message(uuidRandomOwnerID,uuidRandomEntrantID,"Hi", Date(), uuidRandomID),
+        Message(1,1,"Hello", Date(), 1),
+        Message(2,2,"Hi", Date(), 2),
+        Message(3,3,"Bye", Date(), 3)
     )
     MessageListScreen(navController, sampleMessages)
 }

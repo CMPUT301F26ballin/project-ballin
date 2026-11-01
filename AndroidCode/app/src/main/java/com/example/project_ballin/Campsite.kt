@@ -3,7 +3,6 @@ package com.example.project_ballin
 import android.location.Location
 import android.media.Image
 import java.util.UUID
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 /** A class that stores all the information of a campsite
@@ -17,7 +16,8 @@ import kotlin.uuid.Uuid
 *
  * @property name the name of the campsite
  * @property ID the ID of the campsite
- * @property location the location of the campsite
+ * @property locationCoords the geolocation of the campsite
+ * @property locationName the name of the location of the campsite
  * @property tags the list of descriptive tags of the campsite
  * @property price the price per night of the campsite
  * @property rating the average rating of the campsite, ratings provided by users null if no ratings.
@@ -32,10 +32,11 @@ import kotlin.uuid.Uuid
 * */
 @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 
-class Campsite @OptIn(ExperimentalUuidApi::class) constructor(
+class Campsite(
     var name: String,
-    val ID: Uuid = Uuid.random(),
-    //var location: Location,
+    val ID: Uuid,
+    //var locationCoords: Location,
+    var locationName: String,
     var tags: MutableList<String>,
     var price: Float,
     var rating: Float?,
@@ -43,8 +44,8 @@ class Campsite @OptIn(ExperimentalUuidApi::class) constructor(
     var description: String,
     var occupancy: Int,
     //var images: MutableList<Image>?,
-    var ownerID: Uuid,
-    //val lotteries: List<Uuid>
+    var ownerID: String,
+    //val lotteries: List<UUID>
     )
 {
 }
