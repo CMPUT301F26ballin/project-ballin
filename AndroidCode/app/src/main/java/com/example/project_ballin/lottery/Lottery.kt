@@ -1,5 +1,7 @@
-package com.example.project_ballin
+package com.example.project_ballin.lottery
 
+import com.example.project_ballin.Campsite
+import com.example.project_ballin.User
 import com.example.project_ballin.owner.Owner
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

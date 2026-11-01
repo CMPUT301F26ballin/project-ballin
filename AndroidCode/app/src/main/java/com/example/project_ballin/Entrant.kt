@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import com.example.project_ballin.lottery.Lottery
 import kotlin.uuid.Uuid
 
 @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
