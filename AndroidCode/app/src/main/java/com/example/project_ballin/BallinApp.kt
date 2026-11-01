@@ -51,14 +51,17 @@ fun BallinApp() {
                 campsite = null
             }
             else{
-                val siteID = Uuid.parse(siteIDString)
+                val siteID = Uuid.parse(siteIDString!!)
                 campsite = campsiteList.getCampsite(siteID)
             }
             val ownerID = Uuid.random()
+
+            println("To input!")
+
             CampsiteInputScreen(
                 navController, campsite, ownerID,
                 addSite = { campsiteList.addCampsite(it) },
-                updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite, newSite) })
+                updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite = oldSite, newSite) })
         }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }

@@ -28,7 +28,7 @@ class campsiteAddTest() {
             12,
             ownerUid))
 
-        assert()
+        //assert()
 
         val findSite = campsiteList.getCampsite(campUid)
 
