@@ -1,6 +1,5 @@
 package com.example.project_ballin
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.reusableui.TopAppBar
 
 // Note: Might have to add a switch mode button at bottom to
 // switch modes (owner, entrant, admin), bc the top bar shows

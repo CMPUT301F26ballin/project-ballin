@@ -65,4 +65,6 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("androidx.navigation:navigation-compose:2.10.2")
     implementation("com.google.firebase:firebase-common-ktx:21.0.0")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
 }
