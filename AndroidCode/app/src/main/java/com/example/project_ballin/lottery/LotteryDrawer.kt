@@ -1,4 +1,6 @@
-package com.example.project_ballin
+package com.example.project_ballin.lottery
+
+import com.example.project_ballin.User
 
 /**
  * A class that draws the winners for a lottery, and
