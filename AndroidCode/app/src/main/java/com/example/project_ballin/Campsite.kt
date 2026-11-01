@@ -30,6 +30,7 @@ import kotlin.uuid.Uuid
  *
 *
 * */
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 
 class Campsite(
     var name: String,

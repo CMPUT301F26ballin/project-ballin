@@ -2,6 +2,9 @@ package com.example.project_ballin.owner
 
 import kotlin.uuid.Uuid
 
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
+
 class Owner(
     override var name: String,
     override var phoneNum: String,
