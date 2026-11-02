@@ -1,14 +1,14 @@
-package com.example.project_ballin
+package com.example.project_ballin.lottery
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
+import kotlin.uuid.ExperimentalUuidApi
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+@OptIn(ExperimentalUuidApi::class)
 
 
 /**
@@ -77,7 +77,7 @@ class LotteryList {
         return returnList
     }
 
-    fun getLottery(ID: Int): Lottery{
+    fun getLottery(ID: Int): Lottery {
         var lotteryToReturn: Lottery? = null
         lotteriesRef.document(ID.toString()).get().addOnSuccessListener {
                 result ->
