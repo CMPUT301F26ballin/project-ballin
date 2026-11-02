@@ -30,9 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.ConfirmDeleteDialog
-import com.example.project_ballin.Message
 import com.example.project_ballin.Notification
-import com.example.project_ballin.TopAppBar
+import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 import kotlin.uuid.Uuid
 
@@ -85,9 +84,9 @@ fun NotificationDetailScreen(
                     )
             ) {
                 Column {
-                    NotificationDetailRow("Date Sent", notification.getFormattedDate())
-                    NotificationDetailRow("Notification Content", notification.content)
-                    NotificationDetailRow("Notification ID", notification.ID)
+                    NotificationDetailRow("Date Sent", notification.getFormattedDate(), "dateSent${notification.getFormattedDate()}")
+                    NotificationDetailRow("Notification Content", notification.content, "notificationContent${notification.content}")
+                    NotificationDetailRow("Notification ID", notification.ID, "notificationID${notification.ID}")
                     // NotificationDetailRow("Recipient IDs", notification.recipientIDs)
                 }
             }
@@ -123,11 +122,12 @@ fun NotificationDetailScreen(
  * Shows a specific part of the notification and puts it in a row
  */
 @Composable
-fun <T> NotificationDetailRow(descriptionText: String, content: T) {
+fun <T> NotificationDetailRow(descriptionText: String, content: T, testTag: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag(testTag)
     ) {
         Text(
             text = "$descriptionText : $content",

@@ -5,6 +5,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.admin.adminui.NotificationDetailScreen
+import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
 //import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen commented out cuz its giving me an error -Nick
 import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
@@ -19,6 +21,8 @@ fun BallinApp() {
     val navController = rememberNavController()
 
     val campsiteList = CampsiteList()
+    val messageList = MessageList()
+    val notificationList = NotificationList()
 
     // remember = only create one ProfileList
     val profileList = remember { ProfileList() }
@@ -66,7 +70,7 @@ fun BallinApp() {
                 updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite = oldSite, newSite) })
         }
 
-        composable("AdminMenu") { AdminMenuScreen(navController) }
+        composable("Admin Menu Screen") { AdminMenuScreen(navController) }
 
         composable("AdminCampsites") {
             AdminCampsiteListScreen(
@@ -102,8 +106,22 @@ fun BallinApp() {
             )
         }
 
-        // composable("AdminMessageList") { MessageListScreen(navController, messageList)  }
-    }
+        composable("AdminMessages") { MessageListScreen(navController, messageList.getAllMessages()) }
 
+        composable("AdminMessageDetails/{MessageID}") {
+            val messageIDString = it.arguments!!.getString("MessageID")
+            val messageID = Uuid.parse(messageIDString!!)
+            MessageDetailScreen(navController, messageList.getMessage(messageID), onDelete = {messageList.deleteMessage(it)})
+        }
+
+        composable("AdminNotifications") { NotificationListScreen(navController, notificationList.getAllNotifications()) }
+
+        composable("AdminNotificationDetails/{NotificationID}") {
+            val notificationIDString = it.arguments!!.getString("NotificationID")
+            val notificationID = Uuid.parse(notificationIDString!!)
+            NotificationDetailScreen(navController, notificationList.getNotification(notificationID), onDelete = {notificationList.deleteNotification(it)})
+        }
+
+    }
 }
 
