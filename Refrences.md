@@ -15,7 +15,7 @@ https://towardsdev.com/date-picker-in-material-3-jetpack-compose-with-examples-e
 **Location Object:**
 https://developer.android.com/reference/kotlin/android/location/Location  
 **Navcontroller use and data passing:**  
-https://www.youtube.com/watch?v=AoU9EoHWpno
+https://www.youtube.com/watch?v=AoU9EoHWpno  
 **Debugging:**  
 https://www.geeksforgeeks.org/android/how-to-print-to-the-console-in-android-studio/  
 
@@ -26,4 +26,4 @@ https://medium.com/@niteshkrjhag/android-uris-explained-a-beginners-guide-18248f
 https://medium.com/@emmanuelmuturia/how-to-add-and-retrieve-images-from-firebase-storage-using-jetpack-compose-dedda31ff66d  
 
 **Scrolling:**  
-
+https://developer.android.com/develop/ui/compose/touch-input/scroll/scroll-modifiers  
