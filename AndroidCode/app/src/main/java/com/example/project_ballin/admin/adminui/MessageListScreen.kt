@@ -103,10 +103,10 @@ fun MessageListScreenPreview() {
     val navController = rememberNavController()
     // still need to get messages list
     // rn just using a static sampleMessages list
-    val sampleMessages = listOf(
-        Message(1,1,"Hello", Date(), 1),
-        Message(2,2,"Hi", Date(), 2),
-        Message(3,3,"Bye", Date(), 3)
+    val sampleMessages = listOf<Message>(
+        //Message(1,1,"Hello", Date(), 1),
+        //Message(2,2,"Hi", Date(), 2),
+        //Message(3,3,"Bye", Date(), 3)
     )
     MessageListScreen(navController, sampleMessages)
 }
