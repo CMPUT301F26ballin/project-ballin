@@ -3,6 +3,7 @@ package com.example.project_ballin
 import androidx.compose.runtime.mutableStateListOf
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlin.uuid.Uuid
 
 /**
  * A list that that stores all the notifications.
@@ -38,7 +39,7 @@ class NotificationList {
         }
     }
 
-    val notification: List<Notification>
+    val notifications: List<Notification>
         get() = _notifications
 
     /**
@@ -58,5 +59,25 @@ class NotificationList {
     // Would need to further handle how this affects owners/entrants
     fun deleteNotification(notification: Notification) {
         notificationsRef.document(notification.ID.toString()).delete()
+    }
+
+    fun getAllNotifications(): List<Notification>{
+        return notifications
+    }
+
+    /**
+     * Gets a notification from the database with specific ID
+     *
+     * @param ID the ID of the notification to get
+     * @return a notification object with the given ID
+     */
+    fun getNotification(ID: Uuid): Notification{
+        var notification: Notification? = null
+        notificationsRef.document(ID.toString())
+            .get()
+            .addOnSuccessListener {
+                    result -> notification = result.toObject(Notification::class.java)
+            }
+        return notification!!
     }
 }

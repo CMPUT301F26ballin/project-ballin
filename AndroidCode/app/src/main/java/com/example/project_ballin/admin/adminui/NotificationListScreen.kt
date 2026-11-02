@@ -41,7 +41,7 @@ fun NotificationListScreen(
 ) {
     TopAppBar(
         navController = navController,
-        screenTitle = "Notifications Home",
+        screenTitle = "Notifications",
     ) {
         Column(
             modifier = Modifier
@@ -76,11 +76,11 @@ fun NotificationButtonRow(index: Int, notification: Notification, navController:
 
     Button(
         onClick = {
-            navController.navigate("NotificationDetail")
+            navController.navigate("AdminNotificationDetails/${notification.ID}")
         },
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
-            .testTag("checkNotificationButton") // for UI testing
+            .testTag("checkNotification${index+1}") // for UI testing
             .width(250.dp)
             .height(85.dp)
     ) {
