@@ -1,8 +1,14 @@
 package com.example.project_ballin.entrant.entantui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
@@ -12,6 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.example.project_ballin.TopAppBar
+import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.lottery.Lottery
+import kotlin.uuid.ExperimentalUuidApi
 
 /**
  * The entant browse reservations page
@@ -109,7 +118,7 @@ fun DeclineBookButtons(chosenDates: List<Long>?) {
             },
             modifier = Modifier.padding(16.dp)
         ) {
-            Text("Decline")
+            Text("Cancel")
         }
 
 
@@ -125,6 +134,84 @@ fun DeclineBookButtons(chosenDates: List<Long>?) {
     }
 }
 
+@Composable
+fun ShowLotteries(entrant: Entrant) {
+    val activeLotteries = entrant.getActiveLotteries()
+    val wonLotteries = entrant.getWonLotteries()
+    val lostLotteries = entrant.getLostLotteries()
+
+    LazyColumn {
+        items(activeLotteries) { lottery ->
+            LotteryCard(lottery, entrant)
+        }
+
+    }
+
+
+
+}
+
+@OptIn(ExperimentalUuidApi::class)
+@Composable
+fun LotteryCard(lottery: Lottery, entrant: Entrant) {
+    if(entrant.getUuid() in lottery.getWinners()) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Lottery won: ${lottery.getAssociatedSites()[0].name}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Red),
+                        onClick = {
+
+                        },
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text("Decline")
+                    }
+
+
+                    Button(
+                        onClick = {
+
+                        },
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text("Select Dates")
+                    }
+                }
+
+            }
+        }
+    }
+
+    else if(entrant.getUuid() in lottery.getLosers()){
+
+    }
+
+    else{
+
+    }
+}
 
 
 @Preview(showBackground = true)

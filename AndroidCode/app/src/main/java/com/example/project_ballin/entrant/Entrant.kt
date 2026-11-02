@@ -1,9 +1,11 @@
-package com.example.project_ballin
+package com.example.project_ballin.entrant
 
+import com.example.project_ballin.User
 import com.example.project_ballin.lottery.Lottery
+import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+@OptIn(ExperimentalUuidApi::class)
 
 
 /**
@@ -29,6 +31,8 @@ class Entrant(
     override val userID: Uuid = Uuid.random()
 ) : User {
     private val activeLotteries = mutableListOf<Lottery>()
+    private val wonLotteries = mutableListOf<Lottery>()
+    private val lostLotteries = mutableListOf<Lottery>()
     //private val activeReservations = mutableListOf<Reservation>()
     //private val pastReservations = mutableListOf<Reservation>()
 
@@ -52,6 +56,19 @@ class Entrant(
         TODO()
     }
 
+    fun getActiveLotteries(): List<Lottery> {
+        return activeLotteries
+    }
 
+    fun getWonLotteries(): List<Lottery> {
+        return wonLotteries
+    }
 
+    fun getLostLotteries(): List<Lottery> {
+        return lostLotteries
+    }
+
+    fun getUuid(): Uuid {
+        return userID
+    }
 }
