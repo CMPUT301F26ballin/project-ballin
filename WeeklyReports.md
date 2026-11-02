@@ -41,3 +41,5 @@ Nick: making UI elements, such as initial start screen *lacks functionality*. ma
 Peter: Added Campsite and campsiteList classes. Added views for campsite that implement most campsite addition and campsite detail viewing elements (proper testing is still needed and images still need implementation)
 
 Salix: Start implementing the lottery menus: view lotteries, add lottery (basic details)
+
+# Week 4:
