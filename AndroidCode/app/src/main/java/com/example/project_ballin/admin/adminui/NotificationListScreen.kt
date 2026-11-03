@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
 import com.example.project_ballin.Notification
-import com.example.project_ballin.TopAppBar
+import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -41,7 +41,7 @@ fun NotificationListScreen(
 ) {
     TopAppBar(
         navController = navController,
-        screenTitle = "Notifications Home",
+        screenTitle = "Notifications",
     ) {
         Column(
             modifier = Modifier
@@ -76,11 +76,11 @@ fun NotificationButtonRow(index: Int, notification: Notification, navController:
 
     Button(
         onClick = {
-            navController.navigate("NotificationDetail")
+            navController.navigate("AdminNotificationDetails/${notification.ID}")
         },
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
-            .testTag("checkNotificationButton") // for UI testing
+            .testTag("checkNotification${index+1}") // for UI testing
             .width(250.dp)
             .height(85.dp)
     ) {

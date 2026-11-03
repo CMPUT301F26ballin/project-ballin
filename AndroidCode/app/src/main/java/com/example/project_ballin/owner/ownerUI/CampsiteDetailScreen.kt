@@ -1,4 +1,4 @@
-package com.example.project_ballin.owner.ownerUI
+package com.example.project_ballin
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,15 +13,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.project_ballin.Campsite
+import com.example.project_ballin.reusableui.TopAppBar
 
 
 
 @Composable
 fun CampsiteDetailScreen(navController: NavController, site: Campsite){
-    _root_ide_package_.com.example.project_ballin.TopAppBar(navController, "Campsite Details") {
+    TopAppBar(navController, "Campsite Details") {
         CampsiteDetailsView(navController, site)
     }
 
@@ -73,7 +74,8 @@ fun CampsiteDetailsView(navController: NavController, site: Campsite){
         Spacer(Modifier.height(16.dp))
 
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp)){
-            Button(onClick = {navController.navigate("CampsiteInputScreen/${site.ID}")}) {
+            Button(onClick = {navController.navigate("CampsiteInputScreen/${site.ID}")},
+                modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("updateCampsite")) {
                 Text("Update Campsite")
             }
         }

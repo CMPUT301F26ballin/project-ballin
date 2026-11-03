@@ -69,7 +69,7 @@ fun Signup(navController: NavController){
 
         Button(
             onClick = {
-                /*TODO*/
+                navController.navigate("Admin Menu Screen")
             },
             modifier = Modifier.testTag("adminSignin") // for testing
         ) {

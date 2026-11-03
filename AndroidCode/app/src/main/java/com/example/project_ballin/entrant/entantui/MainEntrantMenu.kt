@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
-import com.example.project_ballin.TopAppBar
+import com.example.project_ballin.reusableui.TopAppBar
 
 @Composable
 fun EntrantMenuScreen(navController: NavController){
@@ -25,6 +25,12 @@ fun EntrantMenuScreen(navController: NavController){
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(128.dp))
+            Text(
+                text = "Welcome",
+                fontSize = 34.sp
+            )
+            Spacer(modifier = Modifier.height(128.dp))
             EntrantHomeButton("BROWSE CAMPSITES", "", "", navController)
             Spacer(modifier = Modifier.height(16.dp))
             EntrantHomeButton("MY RESERVATIONS", "", "", navController)
@@ -45,7 +51,11 @@ fun EntrantHomeButton(name: String, destination: String, testTag: String, navCon
         onClick = {
             navController.navigate(destination)
         },
-        modifier = Modifier.testTag(testTag) // for UI testing
+        modifier = Modifier
+            .testTag(testTag) // for UI testing
+            .fillMaxWidth()
+            .height(64.dp)
+            .padding(horizontal = 16.dp)
     ) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally

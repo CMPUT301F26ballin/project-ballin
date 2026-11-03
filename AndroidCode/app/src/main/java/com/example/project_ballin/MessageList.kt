@@ -3,6 +3,7 @@ package com.example.project_ballin
 import androidx.compose.runtime.mutableStateListOf
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlin.uuid.Uuid
 
 /**
  * A list that that stores all the messages
@@ -39,7 +40,7 @@ class MessageList {
         }
     }
 
-    val message: List<Message>
+    val messages: List<Message>
         get() = _messages
 
     /**
@@ -59,5 +60,25 @@ class MessageList {
     // Would need to further handle how this affects owners/entrants
     fun deleteMessage(message: Message) {
         messagesRef.document(message.ID.toString()).delete()
+    }
+
+    fun getAllMessages(): List<Message>{
+        return messages
+    }
+
+    /**
+     * Gets a message from the database with specific ID
+     *
+     * @param ID the ID of the message to get
+     * @return a message object with the given ID
+     */
+    fun getMessage(ID: Uuid): Message{
+        var message: Message? = null
+        messagesRef.document(ID.toString())
+            .get()
+            .addOnSuccessListener {
+                result -> message = result.toObject(Message::class.java)
+            }
+        return message!!
     }
 }
