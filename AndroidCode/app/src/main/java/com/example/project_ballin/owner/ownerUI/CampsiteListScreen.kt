@@ -42,7 +42,6 @@ import kotlin.uuid.Uuid
 fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
     TopAppBar(navController, "Your Campsites") {
         val campsitesByOwner = getOwnerSites(ownerID)
-        val ID = null
         Column(modifier = Modifier.fillMaxSize()){
             Row(
                 modifier = Modifier
@@ -51,7 +50,7 @@ fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSite
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = {navController.navigate("CampsiteInputScreen/$ownerID")
+                    onClick = {navController.navigate("CampsiteInputScreen/none")
                         Log.d("Navigation", "I should go to input a site.")
                     },
                     modifier = Modifier

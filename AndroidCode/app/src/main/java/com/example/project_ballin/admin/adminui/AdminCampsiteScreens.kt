@@ -206,7 +206,7 @@ fun AdminCampsiteDetailView(site: Campsite?, onDelete: (Campsite) -> Unit) {
         CampsiteDetailRow("Rating", site.rating?.toString() ?: "No ratings yet")
         CampsiteDetailRow("Tags", site.tags.joinToString(", ").ifBlank { "None" })
         CampsiteDetailRow("Rules & cancellation policy", site.rules.ifBlank { "None" })
-        CampsiteDetailRow("Owner ID", site.ownerID)
+        CampsiteDetailRow("Owner ID", site.ownerID.toString())
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -255,17 +255,17 @@ fun CampsiteDetailRow(label: String, value: String) {
  */
 fun formatPrice(price: Float): String = "$" + String.format("%.2f", price)
 
-private val sampleCampsites = listOf(
-    Campsite(
+private val sampleCampsites = listOf<Campsite>(
+    /*Campsite(
         "Waterton Campground 1", Uuid.random(), "Waterton Lakes",
         mutableListOf("Lakeside", "Tents"), 25f, 4.5f,
         "No fires after 11pm. Free cancellation up to 2 days before.",
-        "A quiet lakeside site, perfect for tents.", 6, "owner1"
+        "A quiet lakeside site, perfect for tents.", 6, mutableListOf(), "owner1"
     ),
     Campsite(
         "Waterton Campground 2", Uuid.random(), "Waterton Lakes",
         mutableListOf(), 30f, null, "", "Close to the trails.", 4, "owner1"
-    )
+    )*/
 )
 
 @Preview(showBackground = true)
