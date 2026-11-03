@@ -275,7 +275,7 @@
 - Story Points: 2
 - Risk: Low
 
-**US 03.07.01 As an admin, I want to browse a log of messages sent by campsite owners to entrants.**
+**US 03.07.01 As an admin, I want to browse a log of messages sent by campsite owners to entrants.**  ✅
 - Story Points: 3
 - Risk: Medium
 
