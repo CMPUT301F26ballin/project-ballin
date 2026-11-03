@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.project_ballin.Campsite
 import com.example.project_ballin.entrant.entantui.BookingDateRangePicker
 import kotlin.uuid.Uuid
 
@@ -49,6 +50,7 @@ fun LotteryDetailScreen(
     navController: NavController,
     lottery: Lottery?, // null if creating a new lottery
     ownerID: String,
+    ownerSites: List<Campsite>,
     addLottery: (Lottery) -> Unit,
     updateLottery: (oldLottery: Lottery, newLottery: Lottery) -> Unit
 ){

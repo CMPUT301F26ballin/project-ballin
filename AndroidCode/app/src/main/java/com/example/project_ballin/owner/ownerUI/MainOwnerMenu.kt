@@ -52,7 +52,7 @@ fun OwnerMenuScreen(navController: NavController, ownerID: Uuid) {
             OwnerOptionsButton(
                 "My Lotteries",
                 "LotteryListScreen/$ownerID",
-                "AdminProfiles",
+                "toOwnerLotteries",
                 navController
             )
             Spacer(modifier = Modifier.height(16.dp))

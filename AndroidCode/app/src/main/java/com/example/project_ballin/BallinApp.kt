@@ -89,9 +89,6 @@ fun BallinApp() {
                 getOwnerLotteries = { lotteryList.getOwnerLotteries(it) })
         }
 
-        composable("LotterySelectSitesScreen/{OwnerID}") {
-            //
-        }
         composable(
             "LotteryDetailScreen/{OwnerID}?LotteryID={LotteryID}",
             arguments = listOf(navArgument("LotteryID") {
@@ -104,6 +101,7 @@ fun BallinApp() {
             val lottery: Lottery? = if (lotteryID == null) null else lotteryList.getLottery(lotteryID)
             LotteryDetailScreen(
                 navController, lottery, ownerID!!,
+                ownerSites = campsiteList.campsites.filter { it.ownerID.toString() == ownerID },
                 addLottery = { lotteryList.addLottery(it) },
                 updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }
