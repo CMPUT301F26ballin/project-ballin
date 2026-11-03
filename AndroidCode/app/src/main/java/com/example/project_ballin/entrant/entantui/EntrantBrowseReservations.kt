@@ -17,10 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
+import com.example.project_ballin.Campsite
 import com.example.project_ballin.TopAppBar
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.owner.Owner
 import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * The entant browse reservations page
@@ -30,7 +33,7 @@ import kotlin.uuid.ExperimentalUuidApi
  * @param navController the navigation controller for the app
  */
 @Composable
-fun EntrantBrowseReservations (navController: NavController) {
+fun EntrantBrowseReservations (navController: NavController, entrant: Entrant) {
 
     var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
 
@@ -50,19 +53,7 @@ fun EntrantBrowseReservations (navController: NavController) {
             ) {
                 ActivePastReservationButtons()
 
-                BookingDateRangePicker(
-                    availableDates = listOf(
-                        utcMillis(2027, 3, 19),
-                        utcMillis(2027, 3, 20),
-                        utcMillis(2027, 3, 21),
-                        utcMillis(2027, 3, 31)
-                    ),
-                    bookingYear = 2027,
-                    modifier = Modifier.weight(1f),
-                    chosenDates = { chosenDates = it }
-                )
-
-                DeclineBookButtons(chosenDates)
+                ShowLotteries(entrant)
             }
         }
     }
@@ -137,40 +128,34 @@ fun DeclineBookButtons(chosenDates: List<Long>?) {
 @Composable
 fun ShowLotteries(entrant: Entrant) {
     val activeLotteries = entrant.getActiveLotteries()
-    val wonLotteries = entrant.getWonLotteries()
-    val lostLotteries = entrant.getLostLotteries()
 
     LazyColumn {
         items(activeLotteries) { lottery ->
             LotteryCard(lottery, entrant)
         }
-
     }
-
-
-
 }
 
 @OptIn(ExperimentalUuidApi::class)
 @Composable
 fun LotteryCard(lottery: Lottery, entrant: Entrant) {
-    if(entrant.getUuid() in lottery.getWinners()) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        ){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    ) {
+        if (entrant.getUuid() in lottery.getWinners()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Lottery won: ${lottery.getAssociatedSites()[0].name}",
+                    text = "You have won a lottery for ${lottery.getAssociatedSites()[0].name}. Book it?",
                     style = MaterialTheme.typography.titleMedium
                 )
 
@@ -180,7 +165,8 @@ fun LotteryCard(lottery: Lottery, entrant: Entrant) {
                 ) {
                     Button(
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Red),
+                            containerColor = Color.Red
+                        ),
                         onClick = {
 
                         },
@@ -199,24 +185,131 @@ fun LotteryCard(lottery: Lottery, entrant: Entrant) {
                         Text("Select Dates")
                     }
                 }
-
             }
         }
-    }
 
-    else if(entrant.getUuid() in lottery.getLosers()){
+        else if (entrant.getUuid() in lottery.getLosers()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Text(
+                        text = "Unfortunately you lost the lottery for ${lottery.getAssociatedSites()[0].name}.",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Button(
+                        onClick = {
 
-    }
+                        }
 
-    else{
+                    ) {
+                        Text("Ok")
+                    }
 
+                }
+            }
+        }
+
+        else{
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "You are registered in a lottery for ${lottery.getAssociatedSites()[0].name}",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        }
     }
 }
 
 
+@OptIn(ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun EntrantBrowseReservationsPreview() {
     val navController = rememberNavController()
-    EntrantBrowseReservations(navController)
+    val entrant = Entrant(
+        name = "Mies",
+        phoneNum = "123",
+        email = "mies@ualberta.ca",
+        deviceId = "123456",
+        profilePic = "xy",
+        appPolicy = "abc",
+        userID = Uuid.random()
+    )
+
+    val owner = Owner(
+        name = "Nick",
+        phoneNum = "345",
+        email = "nick@ualberta.ca",
+        deviceId = "345",
+        profilePic = "zw",
+        appPolicy = "instagram",
+        userID = Uuid.random(),
+        campsitesOwned = arrayListOf(Uuid.random())
+    )
+
+    val campsite = Campsite(
+        name = "Campsite",
+        ID = Uuid.random(),
+        tags = mutableListOf("test"),
+        price = 1.toFloat(),
+        rating = 5.toFloat(),
+        rules = "no pooping",
+        description = "poop",
+        occupancy = 1,
+        ownerID = owner.getUuid(),
+    )
+        val lottery1 = Lottery(
+        waitList = mutableListOf(entrant),
+        occupancy = 1,
+        numWinners = 1,
+        lotteryOwner = owner,
+        associatedSites = mutableListOf(campsite),
+        lotteryID = Uuid.random(),
+        winners = mutableListOf(entrant.getUuid()),
+        losers = mutableListOf()
+    )
+    val lottery2 = Lottery(
+        waitList = mutableListOf(entrant),
+        occupancy = 1,
+        numWinners = 1,
+        lotteryOwner = owner,
+        associatedSites = mutableListOf(campsite),
+        lotteryID = Uuid.random(),
+        winners = mutableListOf(),
+        losers = mutableListOf(entrant.getUuid())
+    )
+
+    val lottery3 = Lottery(
+        waitList = mutableListOf(entrant),
+        occupancy = 1,
+        numWinners = 1,
+        lotteryOwner = owner,
+        associatedSites = mutableListOf(campsite),
+        lotteryID = Uuid.random(),
+        winners = mutableListOf(),
+        losers = mutableListOf()
+    )
+
+
+    entrant.addActiveLottery(lottery1)
+    entrant.addActiveLottery(lottery2)
+    entrant.addActiveLottery(lottery3)
+
+
+    EntrantBrowseReservations(navController, entrant)
 }
