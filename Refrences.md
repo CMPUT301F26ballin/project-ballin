@@ -3,6 +3,11 @@
 **The TopAppBar function in skeletonScreen.kt is derived from:**
 https://developer.android.com/develop/ui/compose/components/app-bars
 
+**SearchBar + Filters:**
+https://www.youtube.com/watch?v=CfL6Dl2_dAE 
+https://developer.android.com/develop/ui/compose/components/chip 
+https://dev.to/myougatheaxo/search-bar-in-compose-searchbar-filtering-debounce-554d
+
 ## Peter's References:
 
 **Advice for Uuids:**  
