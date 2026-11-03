@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 import kotlin.uuid.Uuid
 
@@ -81,10 +82,10 @@ fun MessageDetailScreen(
                     )
             ) {
                 Column {
-                    MessageDetailRow("Sent By Owner ID", message.ownerID)
-                    MessageDetailRow("Recieved By Entrant ID", message.entrantID)
-                    MessageDetailRow("Date Sent", message.getFormattedDate())
-                    MessageDetailRow("Message Content", message.content)
+                    MessageDetailRow("Sent By Owner ID", message.ownerID, "sentBy${message.ownerID}")
+                    MessageDetailRow("Recieved By Entrant ID", message.entrantID, "recievedBy${message.entrantID}")
+                    MessageDetailRow("Date Sent", message.getFormattedDate(), "dateSent${message.getFormattedDate()}")
+                    MessageDetailRow("Message Content", message.content, "messageContent${message.content}")
                 }
             }
 
@@ -119,11 +120,12 @@ fun MessageDetailScreen(
  * Shows a specific part of the message and puts it in a row
  */
 @Composable
-fun <T> MessageDetailRow(descriptionText: String, content: T) {
+fun <T> MessageDetailRow(descriptionText: String, content: T, testTag: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag(testTag)
     ) {
         Text(
             text = "${descriptionText} : ${content}",

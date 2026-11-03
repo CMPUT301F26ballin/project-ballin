@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
+import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 import kotlin.uuid.Uuid
 
@@ -30,6 +31,7 @@ import kotlin.uuid.Uuid
  * sent by an owner to an entrant.
  *
  * @param navController the navController of the app
+ * @param navController the navController of the app
  * @param messages the list of messages to iterate through
  */
 @Composable
@@ -39,7 +41,7 @@ fun MessageListScreen(
 ) {
     TopAppBar(
         navController = navController,
-        screenTitle = "Messages Home",
+        screenTitle = "Messages",
     ) {
         Column(
             modifier = Modifier
@@ -74,19 +76,17 @@ fun MessageButtonRow(index: Int, message: Message, navController: NavController)
 
     Button(
         onClick = {
-            navController.navigate("MessageDetail")
+            navController.navigate("AdminMessageDetails/${message.ID}")
         },
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
-            .testTag("checkMessageButton") // for UI testing
+            .testTag("checkMessage${index+1}") // for UI testing
             .width(250.dp)
             .height(85.dp)
     ) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Arbitrary indexes, so no inherent order to them, just for sake of ui
-            // I didn't want to display the Uuid of Message
             Text( "Message ${index + 1}")
             Text(
                 text = "Date Sent: ${message.getFormattedDate()}",
@@ -110,7 +110,7 @@ fun MessageListScreenPreview() {
     // rn just using a static sampleMessages list
     val sampleMessages = listOf(
         Message(uuidRandomOwnerID,uuidRandomEntrantID,"Hello", Date(), uuidRandomID),
-        Message(uuidRandomOwnerID,uuidRandomEntrantID,"Hi", Date(), uuidRandomID),
+        Message(uuidRandomOwnerID,uuidRandomEntrantID,"Hi", Date(), uuidRandomID)
     )
     MessageListScreen(navController, sampleMessages)
 }
