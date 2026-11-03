@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
+import androidx.navigation.compose.*
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
