@@ -7,16 +7,16 @@ import kotlin.uuid.Uuid
 
 
 interface User {
-    var name: String
+    var firstName: String
+    var lastName: String
     var phoneNum: String
     var email: String
     val deviceId: String
     val profilePic: String
-    val appPolicy: String
-
     val userID: Uuid
 
-    fun updateName(newName: String)
+    fun updateFirstName(newFirstName: String)
+    fun updateLastName(newLastName: String)
     fun updatePhoneNum(newPhoneNum: String)
     fun updateEmail(newEmail: String)
     fun updateProfilePic(newProfilePic: String)

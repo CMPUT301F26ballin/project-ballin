@@ -23,12 +23,12 @@ import kotlin.uuid.Uuid
 @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 
 class Admin(
-    override var name: String,
+    override var firstName: String,
+    override var lastName: String,
     override var phoneNum: String,
     override var email: String,
     override val deviceId: String,
     override var profilePic: String,
-    override val appPolicy: String,
     @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
     override val userID: Uuid,
     var currentMode: String = "Admin"
@@ -37,8 +37,12 @@ class Admin(
     // Might have to make Owner(), and Entrant() objects
     // Because Admin can be owner and entrant if they want
 
-    override fun updateName(newName: String) {
-        name = newName
+    override fun updateFirstName(newFirstName: String) {
+        firstName = newFirstName
+    }
+
+    override fun updateLastName(newLastName: String) {
+        lastName = newLastName
     }
 
     override fun updatePhoneNum(newPhoneNum: String) {
