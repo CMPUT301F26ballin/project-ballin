@@ -7,7 +7,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.admin.adminui.NotificationDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationListScreen
+import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
+import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
+import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 //import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen commented out cuz its giving me an error -Nick
 import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
 import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
@@ -121,6 +124,26 @@ fun BallinApp() {
             val notificationID = Uuid.parse(notificationIDString!!)
             NotificationDetailScreen(navController, notificationList.getNotification(notificationID), onDelete = {notificationList.deleteNotification(it)})
         }
+
+        composable("EntrantBrowseReservations/{UserID}"){
+            val userIDString = it.arguments!!.getString("UserID")
+            val user = UserList().getUser(Uuid.parse(userIDString!!))
+            EntrantBrowseReservations().BrowseReservations(navController, user as Entrant)
+        }
+
+        composable("EntrantSiteBooker/{UserID},{CampID}"){
+            val userIDString = it.arguments!!.getString("UserID")
+            val user = UserList().getUser(Uuid.parse(userIDString!!))
+
+            val campIDString = it.arguments!!.getString("CampID")
+            val campID = Uuid.parse(campIDString!!)
+            val campsite = campsiteList.getCampsite(campID)
+
+            EntrantSiteBooker().SiteBooker(navController, campsite, user as Entrant)
+        }
+
+
+
 
     }
 }

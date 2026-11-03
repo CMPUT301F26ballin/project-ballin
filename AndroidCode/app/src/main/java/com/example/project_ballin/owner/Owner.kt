@@ -44,8 +44,4 @@ class Owner(
         return campsitesOwned
     }
 
-    fun getUuid(): Uuid {
-        return userID
-    }
-
 }
