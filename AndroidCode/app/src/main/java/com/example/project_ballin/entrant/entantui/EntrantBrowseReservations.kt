@@ -84,6 +84,13 @@ class EntrantBrowseReservations{
         }
     }
 
+    /**
+     * Shows the active lotteries as a lazyColumn of cards
+     *
+     * @param entrant the entrant
+     * @param navController the navigation controller for the app
+     *
+     */
     @Composable
     fun ShowLotteries(entrant: Entrant, navController: NavController) {
         val activeLotteries = entrant.getActiveLotteries()
@@ -95,6 +102,16 @@ class EntrantBrowseReservations{
         }
     }
 
+    /**
+     * Shows a card for a lottery
+     * Entrants can book a campsite if they have won the lottery
+     * Entrants can dismiss a lost lottery
+     * Cards are displayed based on the lottery status
+     *
+     * @param lottery the lottery to show
+     * @param entrant the entrant
+     * @param navController the navigation controller for the app
+     */
     @OptIn(ExperimentalUuidApi::class)
     @Composable
     fun LotteryCard(lottery: Lottery, entrant: Entrant, navController: NavController) {
@@ -168,9 +185,8 @@ class EntrantBrowseReservations{
                     ) {
                         Button(
                             onClick = {
-
+                                entrant.removeActiveLottery(lottery)
                             }
-
                         ) {
                             Text("Ok")
                         }
@@ -189,6 +205,35 @@ class EntrantBrowseReservations{
                         text = "You are registered in a lottery for ${lottery.getAssociatedSites()[0].name}",
                         style = MaterialTheme.typography.titleMedium
                     )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Button(
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Red
+                            ),
+                            onClick = {
+
+                            },
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text("Leave Waiting List")
+                        }
+
+
+                        Button(
+                            onClick = {
+                                navController.navigate("EntrantSiteBooker")
+                            },
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text("Owner Messages")
+                        }
+                    }
+
+
                 }
             }
         }

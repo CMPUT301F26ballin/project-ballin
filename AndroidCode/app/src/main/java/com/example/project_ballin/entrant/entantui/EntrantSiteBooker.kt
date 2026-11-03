@@ -20,15 +20,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.Campsite
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.reusableui.TopAppBar
 
-
+/**
+ * The entant book site page
+ * Entrants can book a campsite from a date picker that shows the available days
+ *
+ * @param navController the navigation controller for the app
+ * @param campsite the campsite to book
+ * @param entrant the entrant
+ */
 class EntrantSiteBooker {
     @Composable
-    fun SiteBooker (navController: NavController, campsiteName: Campsite, entrant: Entrant) {
+    fun SiteBooker (navController: NavController, campsite: Campsite, entrant: Entrant) {
+
+
         var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
 
         Column(
@@ -58,7 +66,7 @@ class EntrantSiteBooker {
                         chosenDates = { chosenDates = it }
                     )
 
-                    CancelBookButtons(chosenDates)
+                    CancelBookButtons(navController, chosenDates)
                 }
             }
         }
@@ -70,9 +78,8 @@ class EntrantSiteBooker {
      * @param chosenDates the chosen dates for the reservation
      *
      */
-
     @Composable
-    fun CancelBookButtons(chosenDates: List<Long>?) {
+    fun CancelBookButtons(navController: NavController, chosenDates: List<Long>?) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -81,7 +88,7 @@ class EntrantSiteBooker {
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Red),
                 onClick = {
-
+                    navController.popBackStack()
                 },
                 modifier = Modifier.padding(16.dp)
             ) {

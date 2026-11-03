@@ -74,6 +74,17 @@ class Entrant(
         return lostLotteries
     }
 
+    fun removeActiveLottery(lottery: Lottery){
+        activeLotteries.remove(lottery)
+
+        if (lottery in wonLotteries){
+            wonLotteries.remove(lottery)
+        }
+        else if (lottery in lostLotteries){
+            lostLotteries.remove(lottery)
+        }
+    }
+
     fun getUuid(): Uuid {
         return userID
     }
