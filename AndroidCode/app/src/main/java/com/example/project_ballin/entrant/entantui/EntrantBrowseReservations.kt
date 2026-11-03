@@ -47,7 +47,7 @@ class EntrantBrowseReservations{
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ActivePastReservationButtons()
+                    ActivePastReservationButtons(navController)
 
                     ShowLotteries(entrant, navController)
                 }
@@ -59,14 +59,14 @@ class EntrantBrowseReservations{
      * Shows the active and past reservation buttons
      */
     @Composable
-    fun ActivePastReservationButtons() {
+    fun ActivePastReservationButtons(navController: NavController) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
                 onClick = {
-
+                    navController.navigate("ActiveReservationScreen")
                 },
                 modifier = Modifier.padding(16.dp)
             ) {
@@ -75,7 +75,7 @@ class EntrantBrowseReservations{
 
             Button(
                 onClick = {
-
+                    navController.navigate("PastReservationScreen")
                 },
                 modifier = Modifier.padding(16.dp)
             ) {

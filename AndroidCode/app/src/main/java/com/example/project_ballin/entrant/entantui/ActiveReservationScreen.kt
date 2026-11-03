@@ -8,13 +8,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.reusableui.TopAppBar
 
-
+/**
+ * The entrant active reservations page
+ * Entrants can look at their active reservations
+ *
+ * @param navController the navigation controller for the app
+ * @param entrant the entrant
+ */
 class ActiveReservationScreen {
 
     @Composable
-    fun ActiveReservations(navController: NavController){
+    fun ActiveReservations(navController: NavController, entrant: Entrant){
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -40,7 +47,5 @@ class ActiveReservationScreen {
     @Preview(showBackground = true)
     @Composable
     fun ActiveReservationScreenPreview() {
-        val navController = rememberNavController()
-        ActiveReservations(navController)
     }
 }
