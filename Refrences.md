@@ -7,7 +7,7 @@ https://developer.android.com/develop/ui/compose/components/app-bars
 
 **Advice for Uuids:**  
 https://kotlinlang.org/docs/uuids.html#compare-uuids  
-**Date Picker Design:**
+**Date Picker Design:**  
 https://www.baeldung.com/kotlin/dates  
 https://developer.android.com/develop/ui/compose/components/datepickers  
 https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.js/-date/  
@@ -24,6 +24,15 @@ https://medium.com/@enkosolutionsdeveloper/building-an-image-upload-app-using-ko
 https://developer.android.com/training/data-storage/shared/photo-picker/embedded  
 https://medium.com/@niteshkrjhag/android-uris-explained-a-beginners-guide-18248fa83a74  
 https://medium.com/@emmanuelmuturia/how-to-add-and-retrieve-images-from-firebase-storage-using-jetpack-compose-dedda31ff66d  
+https://developer.android.com/reference/java/io/BufferedReader#read(char[],%20int,%20int)  
+https://stackoverflow.com/questions/10296734/image-uri-to-bytesarray  
+https://developer.android.com/reference/android/content/ContentResolver#public-methods  
+https://developer.android.com/reference/android/content/ContentProvider  
+https://stackoverflow.com/questions/8741880/why-cant-i-create-a-content-resolver  
+https://developer.android.com/reference/android/content/Context#Context()  
+https://stackoverflow.com/questions/58743541/how-to-get-context-in-jetpack-compose  
+https://stackoverflow.com/questions/67223734/how-to-convert-byte-array-to-image-kotlin  
+https://stackoverflow.com/questions/69689168/how-can-i-display-a-bitmap-in-compose-image  
 
 **Scrolling:**  
 https://developer.android.com/develop/ui/compose/touch-input/scroll/scroll-modifiers  
