@@ -84,4 +84,13 @@ class UserList() {
         usersRef.document(user.userID.toString()).delete()
     }
 
+    fun getUser(userID: Uuid): User {
+        var userToReturn: User? = null
+        usersRef.document(userID.toString()).get().addOnSuccessListener {
+                result ->
+            userToReturn = result.toObject<User>()!!
+        }
+        return userToReturn!!
+    }
+
 }
