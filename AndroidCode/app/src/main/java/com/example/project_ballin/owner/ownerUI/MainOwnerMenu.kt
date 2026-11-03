@@ -1,5 +1,7 @@
 package com.example.project_ballin.owner.ownerUI
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,14 +21,17 @@ import kotlin.uuid.Uuid
 fun OwnerMenuScreen(navController: NavController, ownerID: Uuid){
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally){
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center){
 
-        Text(ownerID.toString())
+        Text("Welcome: ${ownerID.toString()}")
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { navController.navigate("CampsiteListScreen/$ownerID") },
+            onClick = { Log.d("Navigation", "I should go to the campsite List")
+                navController.navigate("CampsiteListScreen/$ownerID")
+                },
             modifier = Modifier
                 .padding(16.dp)
                 .testTag("toCampsiteList")

@@ -1,5 +1,7 @@
-package com.example.project_ballin
+package com.example.project_ballin.lottery
 
+import com.example.project_ballin.Campsite
+import com.example.project_ballin.User
 import com.example.project_ballin.owner.Owner
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -26,7 +28,9 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
     private var lotteryOwner: Owner,
     //private val dateRange: DateRange = TODO(),
     private val associatedSites: MutableList<Campsite> = mutableListOf(),
-    private val lotteryID: Uuid = Uuid.random()
+    private val lotteryID: Uuid = Uuid.random(),
+    private val winners: MutableList<Uuid> = mutableListOf(),
+    private val losers: MutableList<Uuid> = mutableListOf()
 ) {
 
     @OptIn(ExperimentalUuidApi::class)
@@ -87,6 +91,16 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
 
     fun addAssociatedSite(newSites: ArrayList<Campsite>) {
         associatedSites.addAll(newSites)
+    }
+
+    @OptIn(ExperimentalUuidApi::class)
+    fun getWinners(): List<Uuid> {
+        return winners
+    }
+
+    @OptIn(ExperimentalUuidApi::class)
+    fun getLosers(): List<Uuid> {
+        return losers
     }
 
 }

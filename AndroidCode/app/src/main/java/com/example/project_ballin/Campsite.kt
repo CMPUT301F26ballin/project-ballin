@@ -1,7 +1,9 @@
 package com.example.project_ballin
 
+import android.graphics.Bitmap
 import android.location.Location
 import android.media.Image
+import android.net.Uri
 import java.util.UUID
 import kotlin.uuid.Uuid
 
@@ -35,15 +37,15 @@ import kotlin.uuid.Uuid
 class Campsite(
     var name: String,
     val ID: Uuid,
-    //var locationCoords: Location,
-    var locationName: String,
+    //var locationCoords: location,
+    var locationName: String = "",
     var tags: MutableList<String>,
     var price: Float,
     var rating: Float?,
     var rules: String,
     var description: String,
     var occupancy: Int,
-    //var images: MutableList<Image>?,
+    var images: MutableList<ByteArray>,
     var ownerID: Uuid,
     //val lotteries: List<UUID>
     )
