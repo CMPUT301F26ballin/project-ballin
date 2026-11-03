@@ -49,7 +49,11 @@ class SearchViewModel: ViewModel() {
              rules = "No campfire after 10 PM",
              description = "Beautiful valley surrounded by pine trees.",
              occupancy = 4,
-             ownerID = Uuid.random()
+             ownerID = Uuid.random(),
+             location = TODO(),
+             images = TODO(),
+             availability = TODO(),
+             lotteries = TODO()
          ),
          Campsite(
              name = "Lakeside Retreat",
@@ -61,7 +65,11 @@ class SearchViewModel: ViewModel() {
              rules = "Catch and release only",
              description = "Right by the lake with amazing sunrise views.",
              occupancy = 6,
-             ownerID = Uuid.random()
+             ownerID = Uuid.random(),
+             location = TODO(),
+             images = TODO(),
+             availability = TODO(),
+             lotteries = TODO()
          ),
          Campsite(
              name = "Mountain Peak Camp",
@@ -73,7 +81,11 @@ class SearchViewModel: ViewModel() {
              rules = "Pack it in, pack it out",
              description = "High altitude camping for experienced hikers.",
              occupancy = 2,
-             ownerID = Uuid.random()
+             ownerID = Uuid.random(),
+             location = TODO(),
+             images = TODO(),
+             availability = TODO(),
+             lotteries = TODO()
          )
     ) //replace with actual sites
     //val allSites = listOf<Campsite>()

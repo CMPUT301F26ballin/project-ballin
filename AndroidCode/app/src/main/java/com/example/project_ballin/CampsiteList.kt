@@ -72,11 +72,9 @@ class CampsiteList {
 
     fun getOwnerSites(ID: Uuid): List<Campsite>{
         var returnList = mutableStateListOf<Campsite>()
-        campsitesRef.whereEqualTo("ownerID", ID).get()
-            .addOnSuccessListener { result ->
-                returnList = result.toObjects<Campsite>() as SnapshotStateList<Campsite>
-
-            }
+        campsites.forEach { campsite -> if (campsite.ownerID == ID){
+        returnList.add(campsite)}
+        }
         return returnList
     }
 

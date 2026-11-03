@@ -64,11 +64,12 @@ fun BallinApp() {
             }
             val ownerID = Uuid.random()
 
-            println("To input!")
+            Log.d("navigation","To input!")
 
             CampsiteInputScreen(
                 navController, campsite, ownerID,
-                addSite = { campsiteList.addCampsite(it) },
+                addSite = { Log.d("Site Addition", "Adding Site")
+                    campsiteList.addCampsite(it) },
                 updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite = oldSite, newSite) })
         }
 
