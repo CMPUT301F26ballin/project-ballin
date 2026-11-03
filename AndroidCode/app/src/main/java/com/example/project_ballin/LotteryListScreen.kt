@@ -1,5 +1,8 @@
 package com.example.project_ballin
 
+import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.reusableui.TopAppBar
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

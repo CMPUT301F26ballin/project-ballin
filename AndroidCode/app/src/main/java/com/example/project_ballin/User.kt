@@ -3,6 +3,9 @@ package com.example.project_ballin
 import java.util.UUID
 import kotlin.uuid.Uuid
 
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
+
 interface User {
     var name: String
     var phoneNum: String

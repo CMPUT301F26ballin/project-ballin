@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import android.net.Uri
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -20,15 +21,17 @@ class campsiteAddTest() {
         val ownerUid = Uuid.random()
         campsiteList.addCampsite(Campsite("HelloSite",
             campUid,
+            "Waterton",
             mutableListOf("tenting"),
             65f,
             null,
             "Have Fun!",
             "best",
             12,
+            mutableListOf<Uri>(),
             ownerUid))
 
-        campsiteList.campsites
+
 
         val findSite = campsiteList.getCampsite(campUid)
 
@@ -45,22 +48,26 @@ class campsiteAddTest() {
 
         campsiteList.addCampsite(Campsite("HelloSite",
             campUid,
+            "Waterton",
             mutableListOf("tenting"),
             65f,
             null,
             "Have Fun!",
             "best",
             12,
+            mutableListOf<Uri>(),
             ownerUid))
 
         campsiteList.deleteCampsite(Campsite("HelloSite",
             campUid,
+            "Waterton",
             mutableListOf("tenting"),
             65f,
             null,
             "Have Fun!",
             "best",
             12,
+            mutableListOf<Uri>(),
             ownerUid))
 
 
@@ -73,22 +80,26 @@ class campsiteAddTest() {
 
         val oldsite = Campsite("HelloSite",
             campUid,
+            "Wateron",
             mutableListOf("tenting"),
             65f,
             null,
             "Have Fun!",
             "best",
             12,
+            mutableListOf<Uri>(),
             ownerUid)
 
         val newsite = Campsite("HelloSite",
             campUid,
+            "waterton",
             mutableListOf("tenting"),
             65f,
             null,
             "Have Fun!",
             "best",
             20,
+            mutableListOf<Uri>(),
             ownerUid)
 
         campsiteList.addCampsite(oldsite)

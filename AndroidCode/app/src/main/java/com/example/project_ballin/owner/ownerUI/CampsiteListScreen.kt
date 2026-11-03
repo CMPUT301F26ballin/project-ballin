@@ -1,6 +1,9 @@
 package com.example.project_ballin.owner.ownerUI
 
+import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +16,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key.Companion.D
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.Campsite
+import com.example.project_ballin.reusableui.TopAppBar
+import com.google.apps.card.v1.Widget
 import kotlin.uuid.Uuid
 
 /**
@@ -32,35 +39,44 @@ import kotlin.uuid.Uuid
 
 
 @Composable
-fun CampsiteListView(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
-
-    val campsitesByOwner = getOwnerSites(ownerID)
-
-    //Paste the skeleton pieces here once they are made.
-    Button(onClick ={ val ID = null
-        navController.navigate("CampsiteInputScreen/$ID")} )
-    {
-        Text("Create Campsite")
-    }
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-
-        itemsIndexed(campsitesByOwner){ index, campsite ->
-            val ID = campsite.ID
-            CampsiteItem(campsite, OnClick = {navController.navigate("CampsiteDetailScreen/$ID")})
-        }
-    }
-
-}
-
-
-
-@Composable
 fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
-    _root_ide_package_.com.example.project_ballin.TopAppBar(navController, "Your Campsites") {
-        CampsiteListView(navController, ownerID, getOwnerSites = { getOwnerSites(it) })
+    TopAppBar(navController, "Your Campsites") {
+        val campsitesByOwner = getOwnerSites(ownerID)
+        Column(modifier = Modifier.fillMaxSize()){
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {navController.navigate("CampsiteInputScreen/none")
+                        Log.d("Navigation", "I should go to input a site.")
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .testTag("createCampsiteButton")
+                ) {
+                    Text("Create Campsite")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+
+                itemsIndexed(campsitesByOwner) { index, campsite ->
+                    val ID = campsite.ID
+                    CampsiteItem(
+                        campsite,
+                        OnClick = { navController.navigate("CampsiteDetailScreen/$ID") })
+                }
+            }
+        }
     }
 
 
@@ -81,7 +97,11 @@ fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSite
 @Composable
 fun CampsiteItem(site: Campsite, OnClick: () -> Unit)
 {
-    Row( modifier = Modifier.fillMaxWidth().clickable{OnClick()}.padding(16.dp)){
+    Row( modifier = Modifier
+        .fillMaxWidth()
+        .clickable { OnClick() }
+        .padding(16.dp)
+        .testTag("Campsite:${site.name}")){
 
         //Row needs the image
         Text(site.name)

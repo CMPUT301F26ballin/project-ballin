@@ -1,13 +1,18 @@
 package com.example.project_ballin
 
+import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.project_ballin.admin.adminui.NotificationDetailScreen
+import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
-import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen
+import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.lottery.LotteryList
+//import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen commented out cuz its giving me an error -Nick
 import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
 import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
@@ -20,6 +25,11 @@ fun BallinApp() {
     val navController = rememberNavController()
 
     val campsiteList = CampsiteList()
+    val messageList = MessageList()
+    val notificationList = NotificationList()
+
+    // remember = only create one ProfileList
+    val profileList = remember { ProfileList() }
 
     val lotteryList = LotteryList()
 
@@ -52,17 +62,21 @@ fun BallinApp() {
         composable("CampsiteInputScreen/{CampID}") {
             val siteIDString = it.arguments?.getString("CampID")
             var campsite: Campsite?
-            if (siteIDString == null) {
+            if (siteIDString == null || siteIDString == "none") {
+                Log.d("navigation", "no campsite")
                 campsite = null
             } else {
                 val siteID = Uuid.parse(siteIDString)
                 campsite = campsiteList.getCampsite(siteID)
             }
-            val ownerID = Uuid.random() //CHANGE THIS ONCE WE FIGURE OUT USER IDS!
+            val ownerID = Uuid.random()
+
+            println("To input!")
+
             CampsiteInputScreen(
                 navController, campsite, ownerID,
                 addSite = { campsiteList.addCampsite(it) },
-                updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite, newSite) })
+                updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite = oldSite, newSite) })
         }
 
         composable("LotteryListScreen/{OwnerID}") {
@@ -91,9 +105,57 @@ fun BallinApp() {
                 updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }
 
-        composable("AdminMenu") { AdminMenuScreen(navController) }
+        composable("Admin Menu Screen") { AdminMenuScreen(navController) }
 
-        // composable("AdminMessageList") { MessageListScreen(navController, messageList)  }
+        composable("AdminCampsites") {
+            AdminCampsiteListScreen(
+                navController,
+                campsites = campsiteList.campsites,
+                onDelete = { campsiteList.deleteCampsite(it) }
+            )
+        }
+
+        composable("AdminCampsiteDetail/{CampID}") {
+            val siteID = it.arguments?.getString("CampID") ?: ""
+            AdminCampsiteDetailScreen(
+                navController,
+                site = campsiteList.campsites.find { site -> site.ID.toString() == siteID },
+                onDelete = { campsiteList.deleteCampsite(it) }
+            )
+        }
+
+        composable("AdminProfiles") {
+            AdminProfileListScreen(
+                navController,
+                profiles = profileList.profiles,
+                onDelete = { profileList.deleteProfile(it) }
+            )
+        }
+
+        composable("AdminProfileDetail/{DeviceID}") {
+            val deviceID = it.arguments?.getString("DeviceID") ?: ""
+            AdminProfileDetailScreen(
+                navController,
+                profile = profileList.getProfile(deviceID),
+                onDelete = { profileList.deleteProfile(it) }
+            )
+        }
+
+        composable("AdminMessages") { MessageListScreen(navController, messageList.getAllMessages()) }
+
+        composable("AdminMessageDetails/{MessageID}") {
+            val messageIDString = it.arguments!!.getString("MessageID")
+            val messageID = Uuid.parse(messageIDString!!)
+            MessageDetailScreen(navController, messageList.getMessage(messageID), onDelete = {messageList.deleteMessage(it)})
+        }
+
+        composable("AdminNotifications") { NotificationListScreen(navController, notificationList.getAllNotifications()) }
+
+        composable("AdminNotificationDetails/{NotificationID}") {
+            val notificationIDString = it.arguments!!.getString("NotificationID")
+            val notificationID = Uuid.parse(notificationIDString!!)
+            NotificationDetailScreen(navController, notificationList.getNotification(notificationID), onDelete = {notificationList.deleteNotification(it)})
+        }
+
     }
-
 }

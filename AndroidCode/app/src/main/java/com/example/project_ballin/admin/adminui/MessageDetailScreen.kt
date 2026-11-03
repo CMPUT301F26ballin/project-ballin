@@ -29,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
+import kotlin.uuid.Uuid
 
 // NOT COMPLETED YET
 // VERIFY onDelete parameter works properly
@@ -62,7 +64,7 @@ fun MessageDetailScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Message ${message.ID}",
+                text = "DETAILS",
                 fontSize = 34.sp,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -80,10 +82,10 @@ fun MessageDetailScreen(
                     )
             ) {
                 Column {
-                    MessageDetailRow("Sent By Owner ID", message.ownerID)
-                    MessageDetailRow("Recieved By Entrant ID", message.entrantID)
-                    MessageDetailRow("Date Sent", message.getFormattedDate())
-                    MessageDetailRow("Message Content", message.content)
+                    MessageDetailRow("Sent By Owner ID", message.ownerID, "sentBy${message.ownerID}")
+                    MessageDetailRow("Recieved By Entrant ID", message.entrantID, "recievedBy${message.entrantID}")
+                    MessageDetailRow("Date Sent", message.getFormattedDate(), "dateSent${message.getFormattedDate()}")
+                    MessageDetailRow("Message Content", message.content, "messageContent${message.content}")
                 }
             }
 
@@ -118,11 +120,12 @@ fun MessageDetailScreen(
  * Shows a specific part of the message and puts it in a row
  */
 @Composable
-fun <T> MessageDetailRow(descriptionText: String, content: T) {
+fun <T> MessageDetailRow(descriptionText: String, content: T, testTag: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag(testTag)
     ) {
         Text(
             text = "${descriptionText} : ${content}",
@@ -130,16 +133,19 @@ fun <T> MessageDetailRow(descriptionText: String, content: T) {
         )
     }
 }
+
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MessageDetailScreenPreview() {
     val navcontroller = rememberNavController()
+    val uuidRandom: Uuid = Uuid.random()
     val sampleMessage = Message(
-        1,
-        1,
+        uuidRandom,
+        uuidRandom,
         "Hello, this is the content of the message",
         Date(),
-        1)
+        uuidRandom)
 
     MessageDetailScreen(navcontroller, sampleMessage, onDelete = {})
 }

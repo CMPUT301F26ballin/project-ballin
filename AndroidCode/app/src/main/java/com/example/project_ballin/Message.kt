@@ -2,6 +2,7 @@ package com.example.project_ballin
 
 import java.util.Date
 import java.text.SimpleDateFormat
+import kotlin.uuid.Uuid
 
 /**
  * A class that stores information shows information
@@ -16,19 +17,19 @@ import java.text.SimpleDateFormat
  * @property _ID the unique ID of the message
  */
 class Message (
-    private val _ownerID: Int,
-    private val _entrantID: Int,
+    private val _ownerID: Uuid,
+    private val _entrantID: Uuid,
     private val _content: String,
     private val _dateSent: Date,
-    private val _ID: Int
+    private val _ID: Uuid
 ) {
     // I did this below because then it creates
     // a public-read only for private attributes
     // it's basically a getter() for above
-    val ownerID: Int get() = _ownerID
-    val entrantID: Int get() = _entrantID
+    val ownerID: Uuid get() = _ownerID
+    val entrantID: Uuid get() = _entrantID
     val content: String get() = _content
-    val ID: Int get() = _ID
+    val ID: Uuid get() = _ID
 
     val sdf = SimpleDateFormat("dd/mm/yyyy")
     val sDate = sdf.format(_dateSent)

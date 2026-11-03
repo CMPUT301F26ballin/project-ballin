@@ -20,6 +20,8 @@ import kotlin.uuid.Uuid
  * @property currentMode the mode the admin user is in, by default they start off in admin mode
  *
  */
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 class Admin(
     override var name: String,
     override var phoneNum: String,
@@ -27,6 +29,7 @@ class Admin(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
+    @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
     override val userID: Uuid,
     var currentMode: String = "Admin"
 ): User {

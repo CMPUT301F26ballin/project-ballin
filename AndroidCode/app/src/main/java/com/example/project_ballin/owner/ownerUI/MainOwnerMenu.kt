@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.project_ballin.TopAppBar
+import com.example.project_ballin.reusableui.TopAppBar
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +45,7 @@ fun OwnerMenuScreen(navController: NavController, ownerID: Uuid) {
             OwnerOptionsButton(
                 "My Campsites",
                 "CampsiteListScreen/$ownerID",
-                "campsiteListButton",
+                "toCampsiteList",
                 navController
             )
             Spacer(modifier = Modifier.height(16.dp))

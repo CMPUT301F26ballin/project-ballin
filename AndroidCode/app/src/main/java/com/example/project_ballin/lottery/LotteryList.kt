@@ -1,12 +1,15 @@
-package com.example.project_ballin
+package com.example.project_ballin.lottery
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
+import kotlin.uuid.ExperimentalUuidApi
+
+@OptIn(ExperimentalUuidApi::class)
+
 
 /**
  * A List connected to the Firestore database that contains
@@ -74,7 +77,7 @@ class LotteryList {
         return returnList
     }
 
-    fun getLottery(ID: String): Lottery{
+    fun getLottery(ID: String): Lottery {
         var lotteryToReturn: Lottery? = null
         lotteriesRef.document(ID).get().addOnSuccessListener {
                 result ->

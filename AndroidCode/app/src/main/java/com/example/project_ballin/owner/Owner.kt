@@ -2,6 +2,9 @@ package com.example.project_ballin.owner
 
 import kotlin.uuid.Uuid
 
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
+
 class Owner(
     override var name: String,
     override var phoneNum: String,
@@ -9,7 +12,7 @@ class Owner(
     override val deviceId: String,
     override var profilePic: String,
     override val appPolicy: String,
-    override val userID: Uuid,
+    override val userID: Uuid = Uuid.random(),
     private val campsitesOwned: ArrayList<Uuid> = ArrayList()
 ) : com.example.project_ballin.User {
 
