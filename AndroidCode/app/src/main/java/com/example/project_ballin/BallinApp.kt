@@ -15,6 +15,8 @@ import com.example.project_ballin.lottery.LotteryList
 //import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen commented out cuz its giving me an error -Nick
 import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
 import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
+import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
+import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
 import kotlin.uuid.Uuid
 
@@ -100,7 +102,8 @@ fun BallinApp() {
             val ownerID = it.arguments!!.getString("OwnerID")
             val lotteryID = it.arguments?.getString("LotteryID")
             val lottery: Lottery? = if (lotteryID == null) null else lotteryList.getLottery(lotteryID)
-            LotteryDetailScreen(navController, lottery,
+            LotteryDetailScreen(
+                navController, lottery, ownerID!!,
                 addLottery = { lotteryList.addLottery(it) },
                 updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }
