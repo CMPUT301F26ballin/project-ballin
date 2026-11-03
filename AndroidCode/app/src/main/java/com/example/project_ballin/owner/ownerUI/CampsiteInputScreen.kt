@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
-import com.example.project_ballin.TopAppBar
+import com.example.project_ballin.reusableui.TopAppBar
 import java.nio.file.WatchEvent
 import kotlin.uuid.Uuid
 
@@ -202,6 +202,7 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                             Campsite(
                                 name = campName,
                                 ID = Uuid.random(), //FIGURE OUT ID IMPLEMENTATION
+                                locationName = "diddy camp", //change this just placeholder
                                 ownerID = ownerID,
                                 price = campPrice.toFloat(),
                                 rating = null,
@@ -231,6 +232,7 @@ fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID
                             oldSite, Campsite(
                                 name = campName,
                                 ID = oldSite.ID,
+                                locationName = "diddy camp", //change this, placeholder
                                 ownerID = oldSite.ownerID,
                                 price = campPrice.toFloat(),
                                 rating = oldSite.rating,
