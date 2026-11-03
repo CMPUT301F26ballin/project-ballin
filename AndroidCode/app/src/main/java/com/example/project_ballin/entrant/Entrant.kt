@@ -1,5 +1,6 @@
 package com.example.project_ballin.entrant
 
+import com.example.project_ballin.MainActivity
 import com.example.project_ballin.User
 import com.example.project_ballin.lottery.Lottery
 import kotlin.uuid.ExperimentalUuidApi
@@ -60,12 +61,28 @@ class Entrant(
         return activeLotteries
     }
 
+    fun addActiveLottery(lottery: Lottery){
+        activeLotteries.add(lottery)
+    }
+
+
     fun getWonLotteries(): List<Lottery> {
         return wonLotteries
     }
 
     fun getLostLotteries(): List<Lottery> {
         return lostLotteries
+    }
+
+    fun removeActiveLottery(lottery: Lottery){
+        activeLotteries.remove(lottery)
+
+        if (lottery in wonLotteries){
+            wonLotteries.remove(lottery)
+        }
+        else if (lottery in lostLotteries){
+            lostLotteries.remove(lottery)
+        }
     }
 
     fun getUuid(): Uuid {

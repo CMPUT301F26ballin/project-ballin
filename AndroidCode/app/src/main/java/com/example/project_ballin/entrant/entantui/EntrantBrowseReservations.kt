@@ -16,10 +16,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
-import androidx.navigation.compose.*
-import com.example.project_ballin.TopAppBar
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.reusableui.TopAppBar
 import kotlin.uuid.ExperimentalUuidApi
 
 /**
@@ -29,132 +28,93 @@ import kotlin.uuid.ExperimentalUuidApi
  *
  * @param navController the navigation controller for the app
  */
-@Composable
-fun EntrantBrowseReservations (navController: NavController) {
 
-    var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
+class EntrantBrowseReservations{
+    @Composable
+    fun BrowseReservations (navController: NavController, entrant: Entrant) {
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-        TopAppBar(
-            navController,
-            "Browse Reservations"
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+
+            TopAppBar(
+                navController,
+                "Browse Reservations"
             ) {
-                ActivePastReservationButtons()
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    ActivePastReservationButtons(navController)
 
-                BookingDateRangePicker(
-                    availableDates = listOf(
-                        utcMillis(2027, 3, 19),
-                        utcMillis(2027, 3, 20),
-                        utcMillis(2027, 3, 21),
-                        utcMillis(2027, 3, 31)
-                    ),
-                    bookingYear = 2027,
-                    modifier = Modifier.weight(1f),
-                    chosenDates = { chosenDates = it }
-                )
-
-                DeclineBookButtons(chosenDates)
+                    ShowLotteries(entrant, navController)
+                }
             }
         }
     }
-}
 
-/**
- * Shows the active and past reservation buttons
- */
-@Composable
-fun ActivePastReservationButtons() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Button(
-            onClick = {
-
-            },
-            modifier = Modifier.padding(16.dp)
+    /**
+     * Shows the active and past reservation buttons
+     */
+    @Composable
+    fun ActivePastReservationButtons(navController: NavController) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text("Active\nReservations")
-        }
+            Button(
+                onClick = {
+                    navController.navigate("ActiveReservationScreen")
+                },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("Active\nReservations")
+            }
 
-        Button(
-            onClick = {
-
-            },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Past\nReservations")
+            Button(
+                onClick = {
+                    navController.navigate("PastReservationScreen")
+                },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("Past\nReservations")
+            }
         }
     }
-}
 
-/**
- * Shows the decline and book buttons
- *
- * @param chosenDates the chosen dates for the reservation
- *
- */
+    /**
+     * Shows the active lotteries as a lazyColumn of cards
+     *
+     * @param entrant the entrant
+     * @param navController the navigation controller for the app
+     *
+     */
+    @Composable
+    fun ShowLotteries(entrant: Entrant, navController: NavController) {
+        val activeLotteries = entrant.getActiveLotteries()
 
-@Composable
-fun DeclineBookButtons(chosenDates: List<Long>?) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Button(
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Red),
-            onClick = {
-
-            },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Cancel")
-        }
-
-
-        Button(
-            onClick = {
-
-            },
-            enabled = chosenDates != null,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Book")
+        LazyColumn {
+            items(activeLotteries) { lottery ->
+                LotteryCard(lottery, entrant, navController)
+            }
         }
     }
-}
 
-@Composable
-fun ShowLotteries(entrant: Entrant) {
-    val activeLotteries = entrant.getActiveLotteries()
-    val wonLotteries = entrant.getWonLotteries()
-    val lostLotteries = entrant.getLostLotteries()
-
-    LazyColumn {
-        items(activeLotteries) { lottery ->
-            LotteryCard(lottery, entrant)
-        }
-
-    }
-
-
-
-}
-
-@OptIn(ExperimentalUuidApi::class)
-@Composable
-fun LotteryCard(lottery: Lottery, entrant: Entrant) {
-    if(entrant.getUuid() in lottery.getWinners()) {
+    /**
+     * Shows a card for a lottery
+     * Entrants can book a campsite if they have won the lottery
+     * Entrants can dismiss a lost lottery
+     * Cards are displayed based on the lottery status
+     *
+     * @param lottery the lottery to show
+     * @param entrant the entrant
+     * @param navController the navigation controller for the app
+     */
+    @OptIn(ExperimentalUuidApi::class)
+    @Composable
+    fun LotteryCard(lottery: Lottery, entrant: Entrant, navController: NavController) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,60 +123,126 @@ fun LotteryCard(lottery: Lottery, entrant: Entrant) {
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
-        ){
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "Lottery won: ${lottery.getAssociatedSites()[0].name}",
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            if (entrant.getUuid() in lottery.getWinners()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
-                    Button(
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Red),
-                        onClick = {
+                    Text(
+                        text = "You have won a lottery for ${lottery.getAssociatedSites()[0].name}. Book it?",
+                        style = MaterialTheme.typography.titleMedium
+                    )
 
-                        },
-                        modifier = Modifier.padding(16.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text("Decline")
-                    }
+                        Button(
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Red
+                            ),
+                            onClick = {
+
+                            },
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text("Decline")
+                        }
 
 
-                    Button(
-                        onClick = {
-
-                        },
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text("Select Dates")
+                        Button(
+                            onClick = {
+                                navController.navigate("EntrantSiteBooker")
+                            },
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text("Select Dates")
+                        }
                     }
                 }
+            }
 
+            else if (entrant.getUuid() in lottery.getLosers()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Text(
+                            text = "Unfortunately you lost the lottery for ${lottery.getAssociatedSites()[0].name}.",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Button(
+                            onClick = {
+                                entrant.removeActiveLottery(lottery)
+                            }
+                        ) {
+                            Text("Ok")
+                        }
+
+                    }
+                }
+            }
+
+            else{
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = "You are registered in a lottery for ${lottery.getAssociatedSites()[0].name}",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Button(
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Red
+                            ),
+                            onClick = {
+
+                            },
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text("Leave Waiting List")
+                        }
+
+
+                        Button(
+                            onClick = {
+                                navController.navigate("EntrantSiteBooker")
+                            },
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text("Owner Messages")
+                        }
+                    }
+
+
+                }
             }
         }
     }
 
-    else if(entrant.getUuid() in lottery.getLosers()){
 
-    }
-
-    else{
-
+    @Preview(showBackground = true)
+    @Composable
+    fun EntrantBrowseReservationsPreview() {
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun EntrantBrowseReservationsPreview() {
-    val navController = rememberNavController()
-    EntrantBrowseReservations(navController)
-}
