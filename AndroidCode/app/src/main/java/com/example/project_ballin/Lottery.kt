@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import com.example.project_ballin.owner.Owner
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -26,14 +27,13 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
     private val waitList: MutableList<User> = mutableListOf(),
     private var occupancy: Int = 0,
     private var numWinners: Int = 0,
-    private var lotteryOwner: Owner,
-    //private val dateRange: DateRange = TODO(),
     private var registrationStart: Long? = null,
     private var registrationEnd: Long? = null,
     private var bookingStart: Long? = null,
     private var bookingEnd: Long? = null,
     private val associatedSites: MutableList<Campsite> = mutableListOf(),
-    private val lotteryID: Uuid = Uuid.random()
+    private val lotteryID: Uuid = Uuid.random(),
+    private var lotteryOwnerID: String = ""
 ) {
 
     @OptIn(ExperimentalUuidApi::class)
@@ -72,17 +72,33 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
 
     }
 
-    fun setLotteryOwner(newOwner: Owner) {
-        lotteryOwner = newOwner
+    fun setLotteryOwner(ownerID: String) {
+        lotteryOwnerID = ownerID
     }
 
-    fun getLotteryOwner(): Owner {
-        return lotteryOwner
+    fun getLotteryOwner(): String {
+        return lotteryOwnerID
     }
 
     fun setRegistrationDates(newStart: Long, newEnd: Long) {
         registrationStart = newStart
         registrationEnd = newEnd
+    }
+
+    fun getRegistrationStart(): Long? {
+        return registrationStart
+    }
+
+    fun getRegistrationEnd(): Long? {
+        return registrationEnd
+    }
+
+    fun getBookingStart(): Long? {
+        return bookingStart
+    }
+
+    fun getBookingEnd(): Long? {
+        return bookingEnd
     }
 
     fun setBookingDates(newStart: Long, newEnd: Long) {

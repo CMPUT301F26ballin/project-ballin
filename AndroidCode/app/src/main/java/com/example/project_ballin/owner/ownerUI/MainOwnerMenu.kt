@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,8 +18,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.project_ballin.TopAppBar
 import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OwnerMenuScreen(navController: NavController, ownerID: Uuid) {
     TopAppBar(
@@ -37,8 +41,6 @@ fun OwnerMenuScreen(navController: NavController, ownerID: Uuid) {
                 fontSize = 34.sp
             )
             Spacer(modifier = Modifier.height(34.dp))
-
-            // Still have to specify the destinations and names of test tags below
 
             OwnerOptionsButton(
                 "My Campsites",

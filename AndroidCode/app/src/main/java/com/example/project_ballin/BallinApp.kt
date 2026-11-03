@@ -1,9 +1,11 @@
 package com.example.project_ballin
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen
 import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
@@ -23,7 +25,7 @@ fun BallinApp() {
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
-        composable("profile"){ EditProfileScreen(navController) }
+        composable("profile") { EditProfileScreen(navController) }
 
         composable("OwnerMenu/{OwnerID}") {
             val ownerIDString = it.arguments!!.getString("OwnerID")
@@ -34,7 +36,10 @@ fun BallinApp() {
         composable("CampsiteListScreen/{OwnerID}") {
             val ownerIDString = it.arguments!!.getString("OwnerID")
             val ownerID = Uuid.parse(ownerIDString!!)
-            CampsiteListScreen(navController, ownerID, getOwnerSites = {campsiteList.getOwnerSites(it)})
+            CampsiteListScreen(
+                navController,
+                ownerID,
+                getOwnerSites = { campsiteList.getOwnerSites(it) })
         }
 
         composable("CampsiteDetailScreen/{CampID}") {
@@ -47,10 +52,9 @@ fun BallinApp() {
         composable("CampsiteInputScreen/{CampID}") {
             val siteIDString = it.arguments?.getString("CampID")
             var campsite: Campsite?
-            if(siteIDString == null){
+            if (siteIDString == null) {
                 campsite = null
-            }
-            else{
+            } else {
                 val siteID = Uuid.parse(siteIDString)
                 campsite = campsiteList.getCampsite(siteID)
             }
@@ -63,15 +67,28 @@ fun BallinApp() {
 
         composable("LotteryListScreen/{OwnerID}") {
             val ownerID = it.arguments!!.getString("OwnerID")
-            LotteryListScreen(navController, ownerID!!, getOwnerLotteries = { lotteryList.getOwnerLotteries(it) })
+            LotteryListScreen(
+                navController,
+                ownerID!!,
+                getOwnerLotteries = { lotteryList.getOwnerLotteries(it) })
         }
 
         composable("LotterySelectSitesScreen/{OwnerID}") {
             //
         }
-        composable ("LotteryDetailScreen/{LotteryID}") {
-            val lotteryID = it.arguments!!.getString("LotteryID")
-            LotteryDetailScreen(navController, lotteryID!!)
+        composable(
+            "LotteryDetailScreen/{OwnerID}?LotteryID={LotteryID}",
+            arguments = listOf(navArgument("LotteryID") {
+                nullable = true
+                defaultValue = null
+            })
+        ) {
+            val ownerID = it.arguments!!.getString("OwnerID")
+            val lotteryID = it.arguments?.getString("LotteryID")
+            val lottery: Lottery? = if (lotteryID == null) null else lotteryList.getLottery(lotteryID)
+            LotteryDetailScreen(navController, lottery,
+                addLottery = { lotteryList.addLottery(it) },
+                updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }
 
         composable("AdminMenu") { AdminMenuScreen(navController) }

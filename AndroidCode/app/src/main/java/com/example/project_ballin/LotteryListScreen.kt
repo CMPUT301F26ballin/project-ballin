@@ -45,7 +45,7 @@ fun LotteryListScreen(
     val lotteries = getOwnerLotteries(ownerID)
 
     TopAppBar(navController, "My Lotteries"){
-        LotteryListView(navController, lotteries)
+        LotteryListView(navController, ownerID, lotteries)
     }
 }
 
@@ -53,19 +53,19 @@ fun LotteryListScreen(
  * Holds the list of all of the lotteries
  * and the new lottery button
  * @param navController the navController of the app
+ * @param ownerID the ID of the owner user accessing the list
  * @param lotteries the list of lotteries to display for this owner
  */
 @Composable
 fun LotteryListView(
     navController: NavController,
+    ownerID: String,
     lotteries: List<Lottery>){
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         item {
-            Button(onClick = { navController.navigate("LotteryDetailScreen") } )
-            {
-                Text("Create new lottery")
+            Box(modifier = Modifier.fillMaxWidth() ,contentAlignment = Alignment.CenterEnd){
+                NewLotteryButton(navController, ownerID )
             }
-            Spacer(modifier = Modifier.height(16.dp))
         }
 
         if(lotteries.isEmpty()){
@@ -76,17 +76,30 @@ fun LotteryListView(
                 ){
                         Text("No active lotteries")
                 }
-
             }
-    }
+        }
 
         itemsIndexed(lotteries) { index, lottery ->
             val ID = lottery.getLotteryID()
             LotteryItem(
                 lottery,
-                onClick = { navController.navigate("LotteryDetailScreen/$ID")})
+                onClick = { navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID")})
         }
     }
+}
+
+/**
+ * Create new lottery button
+ *
+ * @param navController the navController of the app
+ */
+@Composable
+fun NewLotteryButton(navController: NavController, ownerID: String) {
+    Button(onClick = { navController.navigate("LotteryDetailScreen/$ownerID") } )
+    {
+        Text("Create new lottery")
+    }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 /**
