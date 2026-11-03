@@ -1,9 +1,16 @@
 package com.example.project_ballin.owner.ownerUI
 
+import android.content.ContentResolver
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.widget.Button
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,21 +28,29 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.InternalComposeApi
+import androidx.compose.runtime.currentCompositionContext
+import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
 import com.example.project_ballin.reusableui.TopAppBar
 import java.nio.file.WatchEvent
+import kotlin.let
+import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+@OptIn(ExperimentalUuidApi::class, InternalComposeApi::class)
 
 
 /**
@@ -64,13 +79,14 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
         //initializing input variables (there's a lot of them)
         var campName by remember {mutableStateOf("")}
         //var campLocation by remember {mutableStateOf<Location>("")}
-        var campTags = mutableListOf<String>()
+        var campTags = remember { mutableStateListOf<String>() }
         var tagToAdd by remember { mutableStateOf("") }
         var campPrice by remember { mutableStateOf("") } //This will be changed to float.
         var campRules by remember {mutableStateOf("")}
         var campDesc by remember {mutableStateOf("")}
-        var campOccupancy by remember {mutableStateOf("")}
-        var campImages = mutableListOf<Uri>()
+        var campOccupancy by remember {mutableStateOf("")} //This will be changed to an int
+        var campImages = remember {mutableStateListOf<Uri>()}
+        val campByteArray = remember { mutableStateListOf<ByteArray>() }
 
         val pickerLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
@@ -87,11 +103,11 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
             campName = oldSite.name
             campPrice = oldSite.price.toString()
-            campTags = oldSite.tags
+            oldSite.tags.forEach {tag -> campTags.add(tag) }
             campRules = oldSite.rules
             campDesc = oldSite.description
             campOccupancy = oldSite.occupancy.toString()
-            campImages = oldSite.images
+            oldSite.images.forEach { byteArray -> campByteArray.add(byteArray) }
 
         }
 
@@ -109,7 +125,9 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                     value = campName,
                     onValueChange = { campName = it },
                     label = { Text("Site Name") },
-                    modifier = Modifier.weight(1f).testTag("campName")
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag("campName")
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 //Price Box
@@ -117,7 +135,9 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                     value = campPrice,
                     onValueChange = { campPrice = it },
                     label = { Text("Price Per Night") },
-                    modifier = Modifier.weight(1f).testTag("campPrice")
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag("campPrice")
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -156,15 +176,13 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
             Spacer(modifier = Modifier.height(16.dp))
 
             //Tags Addition
+
+            campTags.forEach { tag-> TagRow(tag, onDelete = {campTags.remove(tag)}) }
+
+
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)){
-                LazyColumn() {
-                    itemsIndexed(campTags){index, tag ->
-                        TagRow(tag, onDelete = {campTags.remove(tag)})
-                    }
-                }
-
                 OutlinedTextField(
                     value = tagToAdd,
                     onValueChange = { tagToAdd = it },
@@ -180,29 +198,64 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                         tagToAdd = ""
                     }
                 },
-                    modifier = Modifier.padding(16.dp).testTag("addTag")) {
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .testTag("addTag")) {
                     Text("Add Tag")
                 }
 
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            //OCCUPANCY
             OutlinedTextField(
                 value = campOccupancy,
                 onValueChange = {campOccupancy = it},
                 label = { Text("Occupancy") },
-                modifier = Modifier.weight(1f).testTag("campOccupancy")
+                modifier = Modifier
+                    .weight(1f)
+                    .testTag("campOccupancy")
+                    .fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            //LOCATION
+            OutlinedTextField(
+                value = campOccupancy,
+                onValueChange = {campOccupancy = it},
+                label = { Text("Location") },
+                modifier = Modifier
+                    .weight(1f)
+                    .testTag("campOccupancy")
+                    .fillMaxWidth()
             )
 
             //IMAGE DISPLAY
+
             Spacer(modifier = Modifier.height(16.dp))
-            Row(modifier = Modifier.padding(16.dp).fillMaxWidth().horizontalScroll(rememberScrollState())){
-                campImages.forEach {uri -> ImageRow(uri, OnDelete = {campImages.remove(it)})}
+            if(campImages.isNotEmpty()){
+                Row(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                ) {
+                    campImages.forEach { uri ->
+
+                        val context: Context = LocalContext.current
+                        val bytes: ByteArray = context.contentResolver.openInputStream(uri).use {it!!.buffered().readBytes()}
+                        campByteArray.add(bytes)
+                        ImageRow(
+                            bytes,
+                            OnDelete = { campByteArray.remove(it) })
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text("Click images to remove them.")
             }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text("Click images to remove them.")
-
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {pickerLauncher.launch("image/*")},
                 modifier = Modifier.fillMaxWidth()){
@@ -234,7 +287,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     rules = campRules,
                                     description = campDesc,
                                     occupancy = campOccupancy.toInt(),
-                                    images = campImages
+                                    images = campByteArray
                                     //Campsite needs other elements based on what is commented out in campsite object
                                 )
                             )
@@ -264,7 +317,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     rules = campRules,
                                     description = campDesc,
                                     occupancy = campOccupancy.toInt(),
-                                    images = campImages
+                                    images = campByteArray
                                 )
                             )
                             navController.popBackStack()
@@ -283,23 +336,14 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
     }
 }
 
+@OptIn(InternalComposeApi::class)
 @Composable
-fun CampsiteInputView (navController: NavController, oldSite: Campsite?, ownerID: Uuid,
-                       addSite: (Campsite) -> Unit,
-                       updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
-
-
-
-
-
-
-}
-
-@Composable
-fun ImageRow(image: Uri, OnDelete:(Uri) -> Unit){
-
-    Column(modifier = Modifier.padding(6.dp).clickable(onClick = {OnDelete(image)})){
-        //Display image
+fun ImageRow(image: ByteArray, OnDelete:(ByteArray) -> Unit){
+    val bitmap: Bitmap = BitmapFactory.decodeByteArray(image,0,image.size)
+    Column(modifier = Modifier
+        .padding(6.dp)
+        .clickable(onClick = { OnDelete(image) })){
+        Image(bitmap = bitmap.asImageBitmap(), contentDescription = "Camp Promo Image")
     }
 
 }

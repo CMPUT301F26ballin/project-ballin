@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
@@ -53,7 +54,8 @@ fun BallinApp() {
         composable("CampsiteInputScreen/{CampID}") {
             val siteIDString = it.arguments?.getString("CampID")
             var campsite: Campsite?
-            if(siteIDString == null){
+            if(siteIDString == "none"){
+                Log.d("navigation", "no campsite")
                 campsite = null
             }
             else{

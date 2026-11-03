@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import android.graphics.Bitmap
 import android.location.Location
 import android.media.Image
 import android.net.Uri
@@ -44,7 +45,7 @@ class Campsite(
     var rules: String,
     var description: String,
     var occupancy: Int,
-    var images: MutableList<Uri>,
+    var images: MutableList<ByteArray>,
     var ownerID: Uuid,
     //val lotteries: List<UUID>
     )
