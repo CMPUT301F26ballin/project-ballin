@@ -16,16 +16,13 @@ import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
-import com.example.project_ballin.UserList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 /**
  * The entant browse reservations page

@@ -74,9 +74,6 @@ class AdminList{
     val admins: List<Admin>
         get() = _admins
 
-    //a list of all admin ids
-    val ids: List<Uuid> get() = _admins.map { it.userID }
-
     /**
      * Adds an admin to the database
      *

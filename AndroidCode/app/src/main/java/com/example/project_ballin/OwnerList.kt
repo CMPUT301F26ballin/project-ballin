@@ -79,9 +79,6 @@ class OwnerList{
     val owners: List<Owner>
         get() = _owners
 
-    //a list of all owner ids
-    val ids: List<Uuid> get() = _owners.map { it.userID }
-
     /**
      * Adds an owner to the database
      *

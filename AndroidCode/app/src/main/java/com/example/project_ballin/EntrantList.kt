@@ -75,9 +75,6 @@ class EntrantList{
     val entrants: List<Entrant>
         get() = _entrants
 
-    //A list of all entrant ids
-    val ids: List<Uuid> get() = _entrants.map { it.userID }
-
     /**
      * Adds an entrant to the database
      *
