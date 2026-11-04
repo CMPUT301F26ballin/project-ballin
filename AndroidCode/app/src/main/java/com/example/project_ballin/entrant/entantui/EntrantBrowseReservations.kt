@@ -78,7 +78,9 @@ class EntrantBrowseReservations{
                 modifier = Modifier.weight(1f)
 
             ) {
-                Text("Active\nReservations", textAlign = TextAlign.Center)
+                Text("Active\nReservations",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium)
             }
 
 
@@ -91,7 +93,10 @@ class EntrantBrowseReservations{
                 modifier = Modifier.weight(1f)
 
             ) {
-                Text("Past\nReservations", textAlign = TextAlign.Center)
+                Text("Past\nReservations",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium)
+
             }
         }
     }

@@ -16,7 +16,6 @@ import kotlin.uuid.Uuid
  * @property email the email of the admin
  * @property deviceId the device ID of the admin
  * @property profilePic the profile picture of the admin
- * @property appPolicy the app policy for the app
  * @property currentMode the mode the admin user is in, by default they start off in admin mode
  *
  */
@@ -28,7 +27,6 @@ class Admin(
     override var email: String,
     override val deviceId: String,
     override var profilePic: String,
-    override val appPolicy: String,
     @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
     override val userID: Uuid,
     var currentMode: String = "Admin"

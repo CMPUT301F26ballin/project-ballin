@@ -12,8 +12,6 @@ interface User {
     var email: String
     val deviceId: String
     val profilePic: String
-    val appPolicy: String
-
     val userID: Uuid
 
     fun updateName(newName: String)

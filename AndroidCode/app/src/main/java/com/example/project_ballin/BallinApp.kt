@@ -35,14 +35,16 @@ fun BallinApp() {
     val messageList = remember { MessageList() }
     val notificationList = remember { NotificationList() }
     val profileList = remember { ProfileList() }
-    //val userList = remember { UserList() }
+    val entrantList = remember { EntrantList() }
+    val ownerList = remember { OwnerList() }
+    val adminList = remember { AdminList() }
 
     //temporary for testing
     var currentEntrant by remember {
         mutableStateOf<Entrant?>(
             Entrant(
                 name = "Nick", phoneNum = "123", email = "nick@ualberta.ca",
-                deviceId = "123", profilePic = "a", appPolicy = "no"
+                deviceId = "123", profilePic = "a"
             )
         )
     }
