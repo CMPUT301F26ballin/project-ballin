@@ -17,7 +17,11 @@ import kotlin.uuid.Uuid
  * @property occupancy the occupancy limit of the lottery
  * @property numWinners the number of winners of the lottery
  * @property lotteryOwner the owner of the lottery
- * @property dateRange the date range of the lottery
+ * @property dateRange the date range of the lottery *** Replaced ***
+ * property registrationStart the start time of sign up period
+ * @property registrationEnd the end time of sign up period
+ * @property bookingStart the start time of booking period
+ * @property bookingEnd the end time of booking period
  * @property associatedSites the associated campsites of the lottery
  *
  */
@@ -25,10 +29,13 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
     private val waitList: MutableList<User> = mutableListOf(),
     private var occupancy: Int = 0,
     private var numWinners: Int = 0,
-    private var lotteryOwner: Owner,
-    //private val dateRange: DateRange = TODO(),
+    private var registrationStart: Long? = null,
+    private var registrationEnd: Long? = null,
+    private var bookingStart: Long? = null,
+    private var bookingEnd: Long? = null,
     private val associatedSites: MutableList<Campsite> = mutableListOf(),
     private val lotteryID: Uuid = Uuid.random(),
+    private var lotteryOwnerID: String = "",
     private val winners: MutableList<Uuid> = mutableListOf(),
     private val losers: MutableList<Uuid> = mutableListOf()
 ) {
@@ -69,12 +76,38 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
 
     }
 
-    fun setLotteryOwner(newOwner: Owner) {
-        lotteryOwner = newOwner
+    fun setLotteryOwner(ownerID: String) {
+        lotteryOwnerID = ownerID
     }
 
-    fun getLotteryOwner(): Owner {
-        return lotteryOwner
+    fun getLotteryOwner(): String {
+        return lotteryOwnerID
+    }
+
+    fun setRegistrationDates(newStart: Long, newEnd: Long) {
+        registrationStart = newStart
+        registrationEnd = newEnd
+    }
+
+    fun getRegistrationStart(): Long? {
+        return registrationStart
+    }
+
+    fun getRegistrationEnd(): Long? {
+        return registrationEnd
+    }
+
+    fun getBookingStart(): Long? {
+        return bookingStart
+    }
+
+    fun getBookingEnd(): Long? {
+        return bookingEnd
+    }
+
+    fun setBookingDates(newStart: Long, newEnd: Long) {
+        bookingStart = newStart
+        bookingEnd = newEnd
     }
 
     //fun setDateRange(newDateRange: DateRange) {

@@ -18,7 +18,7 @@ import kotlin.uuid.Uuid
 *
  * @property name the name of the campsite
  * @property ID the ID of the campsite
- * @property locationCoords the geolocation of the campsite
+ * @property location the geolocation of the campsite
  * @property locationName the name of the location of the campsite
  * @property tags the list of descriptive tags of the campsite
  * @property price the price per night of the campsite
@@ -32,22 +32,23 @@ import kotlin.uuid.Uuid
  *
 *
 * */
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 
+@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 class Campsite(
-    var name: String,
-    val ID: Uuid,
-    //var locationCoords: location,
+    var name: String = "",
+    val ID: Uuid = Uuid.random(),
+    var location: Location = Location(""),
     var locationName: String = "",
-    var tags: MutableList<String>,
-    var price: Float,
-    var rating: Float?,
-    var rules: String,
-    var description: String,
-    var occupancy: Int,
-    var images: MutableList<ByteArray>,
-    var ownerID: Uuid,
-    //val lotteries: List<UUID>
+    var tags: MutableList<String> = mutableListOf<String>(),
+    var price: Float = 0.0f,
+    var rating: Float? = null,
+    var rules: String = "",
+    var description: String = "",
+    var occupancy: Int = 0,
+    var images: MutableList<ByteArray> = mutableListOf<ByteArray>(),
+    var ownerID: Uuid = Uuid.random(),
+    val availability : MutableList<Long> = mutableListOf<Long>(),
+    val lotteries: List<UUID> = emptyList()
     )
 {
 }

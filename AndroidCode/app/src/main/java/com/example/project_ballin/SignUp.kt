@@ -58,7 +58,8 @@ fun Signup(navController: NavController){
 
         Button(
             onClick = {
-                navController.navigate("OwnerMenu/${Uuid.random()}")
+                val ownerID = Uuid.random() // just for testing
+                navController.navigate("OwnerMenu/${ownerID}")
             },
             modifier = Modifier.testTag("ownerSignin") // for testing
         ) {

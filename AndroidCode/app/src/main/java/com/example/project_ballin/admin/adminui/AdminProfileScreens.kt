@@ -96,7 +96,7 @@ fun AdminProfileListView(
 
     profileToDelete?.let { profile ->
         ConfirmDeleteDialog(
-            itemDescription = "the profile of ${profile.name}",
+            itemDescription = "the profile of ${profile.firstName} ${profile.lastName}",
             onConfirm = {
                 onDelete(profile)
                 profileToDelete = null
@@ -126,7 +126,8 @@ fun ProfileItem(profile: Profile, onClick: () -> Unit, onRemoveClick: () -> Unit
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(profile.name, fontSize = 18.sp)
+                Text(profile.firstName, fontSize = 18.sp)
+                Text(profile.lastName, fontSize = 18.sp)
                 Text(profile.role, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
                 Text(profile.email, fontSize = 12.sp)
             }
@@ -189,7 +190,8 @@ fun AdminProfileDetailView(profile: Profile?, onDelete: (Profile) -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         // TODO: show profile picture
-        ProfileDetailRow("Name", profile.name)
+        ProfileDetailRow("First Name", profile.firstName)
+        ProfileDetailRow("Last Name", profile.lastName)
         ProfileDetailRow("Role", profile.role)
         ProfileDetailRow("Email", profile.email)
         ProfileDetailRow("Phone", profile.phoneNum.ifBlank { "Not provided" })
@@ -210,7 +212,7 @@ fun AdminProfileDetailView(profile: Profile?, onDelete: (Profile) -> Unit) {
 
     if (showDialog) {
         ConfirmDeleteDialog(
-            itemDescription = "the profile of ${profile.name}",
+            itemDescription = "the profile of ${profile.firstName} ${profile.lastName}",
             onConfirm = {
                 showDialog = false
                 onDelete(profile)
@@ -235,9 +237,9 @@ fun ProfileDetailRow(label: String, value: String) {
 }
 
 private val sampleProfiles = listOf(
-    Profile("device1", "John Ballin", "john@example.com", "780-555-0101", "", "Entrant"),
-    Profile("device2", "Jane Keller", "jane@example.com", "", "", "Owner"),
-    Profile("device3", "Brian Yu", "brian@example.com", "780-555-0199", "", "Entrant")
+    Profile("device1", "John",  "Ballin", "john@example.com", "780-555-0101", "", "Entrant"),
+    Profile("device2", "Jane", "Keller", "jane@example.com", "", "", "Owner"),
+    Profile("device3", "Brian",  "Yu", "brian@example.com", "780-555-0199", "", "Entrant")
 )
 
 @Preview(showBackground = true)

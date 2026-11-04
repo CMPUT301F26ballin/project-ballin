@@ -6,7 +6,8 @@ import kotlin.uuid.Uuid
 
 
 class Owner(
-    override var name: String,
+    override var firstName: String,
+    override var lastName: String,
     override var phoneNum: String,
     override var email: String,
     override val deviceId: String,
@@ -15,8 +16,12 @@ class Owner(
     val campsitesOwned: ArrayList<Uuid> = ArrayList(),
 ) : com.example.project_ballin.User {
 
-    override fun updateName(newName: String) {
-        name = newName
+    override fun updateFirstName(newFirstName: String) {
+        firstName = newFirstName
+    }
+
+    override fun updateLastName(newLastName: String) {
+        lastName = newLastName
     }
 
     override fun updatePhoneNum(newPhoneNum: String) {

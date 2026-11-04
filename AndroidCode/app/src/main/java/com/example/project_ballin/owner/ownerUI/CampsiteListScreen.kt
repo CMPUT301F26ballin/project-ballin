@@ -110,10 +110,3 @@ fun CampsiteItem(site: Campsite, OnClick: () -> Unit)
 
     }
 }
-
-@Preview (showBackground = true)
-@Composable
-fun CampsiteListScreenPreview(){
-    val navController = rememberNavController()
-
-}
