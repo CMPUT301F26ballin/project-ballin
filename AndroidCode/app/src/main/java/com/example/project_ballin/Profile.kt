@@ -35,7 +35,7 @@ data class Profile(
             }
             return Profile(
                 deviceId = user.deviceId,
-                name = user.name,
+                name = user.firstName,
                 email = user.email,
                 phoneNum = user.phoneNum,
                 profilePic = user.profilePic,

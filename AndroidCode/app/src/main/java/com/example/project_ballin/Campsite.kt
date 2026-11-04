@@ -35,19 +35,19 @@ import kotlin.uuid.Uuid
 
 @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 class Campsite(
-    var name: String,
-    val ID: Uuid,
-    var location: Location,
+    var name: String = "",
+    val ID: Uuid = Uuid.random(),
+    var location: Location = Location(""),
     var locationName: String = "",
-    var tags: MutableList<String>,
-    var price: Float,
-    var rating: Float?,
-    var rules: String,
-    var description: String,
-    var occupancy: Int,
-    var images: MutableList<ByteArray>,
-    var ownerID: Uuid,
-    val availability : MutableList<Long>,
+    var tags: MutableList<String> = mutableListOf<String>(),
+    var price: Float = 0.0f,
+    var rating: Float? = null,
+    var rules: String = "",
+    var description: String = "",
+    var occupancy: Int = 0,
+    var images: MutableList<ByteArray> = mutableListOf<ByteArray>(),
+    var ownerID: Uuid = Uuid.random(),
+    val availability : MutableList<Long> = mutableListOf<Long>(),
     val lotteries: List<UUID> = emptyList()
     )
 {
