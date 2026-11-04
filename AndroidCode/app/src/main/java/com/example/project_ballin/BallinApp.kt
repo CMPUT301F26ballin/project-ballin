@@ -48,8 +48,13 @@ fun BallinApp() {
     var currentEntrant by remember {
         mutableStateOf<Entrant?>(
             Entrant(
-                name = "Nick", phoneNum = "123", email = "nick@ualberta.ca",
-                deviceId = "123", profilePic = "a"
+                firstName = "Nick",
+                phoneNum = "123",
+                email = "nick@ualberta.ca",
+                deviceId = "123",
+                profilePic = "a",
+                lastName = "",
+                userID = Uuid.random()
             )
         )
     }

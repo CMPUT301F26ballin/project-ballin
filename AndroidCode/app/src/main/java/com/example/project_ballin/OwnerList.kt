@@ -20,6 +20,7 @@ import kotlin.uuid.Uuid
  */
 data class OwnerData(
     val name: String = "",
+    val lastName: String = "",
     val phoneNum: String = "",
     val email: String = "",
     val deviceId: String = "",
@@ -29,7 +30,8 @@ data class OwnerData(
 )
 
 fun Owner.toData() = OwnerData(
-    name,
+    firstName,
+    lastName,
     phoneNum,
     email,
     deviceId,
@@ -40,6 +42,7 @@ fun Owner.toData() = OwnerData(
 
 fun OwnerData.toOwner() = Owner(
     name,
+    lastName,
     phoneNum,
     email,
     deviceId,

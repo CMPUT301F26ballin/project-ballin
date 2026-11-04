@@ -23,12 +23,12 @@ import kotlin.uuid.Uuid
  *
  */
 class Entrant(
-    override var firstName: String,
-    override var lastName: String,
-    override var phoneNum: String,
-    override var email: String,
-    override val deviceId: String,
-    override var profilePic: String,
+    override var firstName: String = "",
+    override var lastName: String = "",
+    override var phoneNum: String = "",
+    override var email: String = "",
+    override val deviceId: String = "",
+    override var profilePic: String = "",
     override val userID: Uuid = Uuid.random(),
 ) : User {
     private val activeLotteries = mutableListOf<Lottery>()

@@ -19,6 +19,7 @@ import kotlin.uuid.Uuid
  */
 data class EntrantData(
     val name: String = "",
+    val lastName: String = "",
     val phoneNum: String = "",
     val email: String = "",
     val deviceId: String = "",
@@ -27,7 +28,8 @@ data class EntrantData(
 )
 
 fun Entrant.toData() = EntrantData(
-    name,
+    firstName,
+    lastName,
     phoneNum,
     email,
     deviceId,
@@ -37,6 +39,7 @@ fun Entrant.toData() = EntrantData(
 
 fun EntrantData.toEntrant() = Entrant(
     name,
+    lastName,
     phoneNum,
     email,
     deviceId,

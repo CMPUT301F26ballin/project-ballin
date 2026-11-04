@@ -18,6 +18,7 @@ import kotlin.uuid.Uuid
  * */
 data class AdminData(
     val name: String = "",
+    val lastname: String = "",
     val phoneNum: String = "",
     val email: String = "",
     val deviceId: String = "",
@@ -26,7 +27,8 @@ data class AdminData(
 )
 
 fun Admin.toData() = AdminData(
-    name,
+    firstName,
+    lastName,
     phoneNum,
     email,
     deviceId,
@@ -36,11 +38,12 @@ fun Admin.toData() = AdminData(
 
 fun AdminData.toAdmin() = Admin(
     name,
+    lastName = "",
     phoneNum,
-    email,
-    deviceId,
-    profilePic,
-    Uuid.parse(userID),
+    email = email,
+    deviceId= deviceId,
+    profilePic = profilePic,
+    userID = Uuid.parse(userID),
 )
 
 class AdminList{
