@@ -2,7 +2,10 @@ package com.example.project_ballin
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,6 +15,7 @@ import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
+import com.example.project_ballin.entrant.entantui.EntrantMenuScreen
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
 //import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen commented out cuz its giving me an error -Nick
@@ -26,12 +30,22 @@ fun BallinApp() {
 
     val navController = rememberNavController()
 
-    val campsiteList = CampsiteList()
-    val messageList = MessageList()
-    val notificationList = NotificationList()
-
     // remember = only create one ProfileList
+    val campsiteList = remember { CampsiteList() }
+    val messageList = remember { MessageList() }
+    val notificationList = remember { NotificationList() }
     val profileList = remember { ProfileList() }
+    //val userList = remember { UserList() }
+
+    //temporary for testing
+    var currentEntrant by remember {
+        mutableStateOf<Entrant?>(
+            Entrant(
+                name = "Nick", phoneNum = "123", email = "nick@ualberta.ca",
+                deviceId = "123", profilePic = "a", appPolicy = "no"
+            )
+        )
+    }
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
@@ -129,34 +143,39 @@ fun BallinApp() {
             NotificationDetailScreen(navController, notificationList.getNotification(notificationID), onDelete = {notificationList.deleteNotification(it)})
         }
 
-        composable("EntrantBrowseReservations/{UserID}"){
-            val userIDString = it.arguments!!.getString("UserID")
-            val user = UserList().getUser(Uuid.parse(userIDString!!))
-            EntrantBrowseReservations().BrowseReservations(navController, user as Entrant)
+        composable("MainEntrantMenu") {
+            EntrantMenuScreen(navController)
         }
 
-        composable("EntrantSiteBooker/{UserID},{CampID}"){
-            val userIDString = it.arguments!!.getString("UserID")
-            val user = UserList().getUser(Uuid.parse(userIDString!!))
-
-            val campIDString = it.arguments!!.getString("CampID")
-            val campID = Uuid.parse(campIDString!!)
-            val campsite = campsiteList.getCampsite(campID)
-
-            EntrantSiteBooker().SiteBooker(navController, campsite, user as Entrant)
+        composable("EntrantBrowseReservations") {
+            val entrant = currentEntrant
+            if (entrant != null) {
+                EntrantBrowseReservations().BrowseReservations(navController, entrant)
+            }
         }
 
-        composable("ActiveReservationScreen/{UserID}"){
-            val userIDString = it.arguments!!.getString("UserID")
-            val user = UserList().getUser(Uuid.parse(userIDString!!))
-            ActiveReservationScreen().ActiveReservations(navController, user as Entrant)
+        composable("ActiveReservationScreen") {
+            val entrant = currentEntrant
+            if (entrant != null) {
+                ActiveReservationScreen().ActiveReservations(navController, entrant)
+            }
         }
 
-        composable("PastReservationScreen/{UserID}") {
-            val userIDString = it.arguments!!.getString("UserID")
-            val user = UserList().getUser(Uuid.parse(userIDString!!))
-            PastReservationScreen().PastReservations(navController, user as Entrant)
+        composable("PastReservationScreen") {
+            val entrant = currentEntrant
+            if (entrant != null) {
+                PastReservationScreen().PastReservations(navController, entrant)
+            }
         }
+
+        composable("EntrantSiteBooker/{CampID}") { backStackEntry ->
+            val entrant = currentEntrant
+            val campID = Uuid.parse(backStackEntry.arguments!!.getString("CampID")!!)
+            if (entrant != null) {
+                EntrantSiteBooker().SiteBooker(navController, campID, entrant)
+            }
+        }
+
     }
 }
 

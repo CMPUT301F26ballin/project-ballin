@@ -47,7 +47,7 @@ fun Signup(navController: NavController){
 
         Button(
             onClick = {
-                /*TODO*/
+                navController.navigate("MainEntrantMenu")
             },
             modifier = Modifier.testTag("entrantSignin") // for testing
         ) {

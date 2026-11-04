@@ -1,12 +1,46 @@
 package com.example.project_ballin.entrant
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.*
-import androidx.navigation.compose.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.reusableui.TopAppBar
+
+@Composable
+fun QRCodeScanner(navController: NavController) {
+    TopAppBar(
+        navController = navController,
+        screenTitle = "Scan QR Code"
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "QR Code Scanner",
+                fontSize = 24.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Scan a campsite QR code to view details.",
+                fontSize = 16.sp
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QRCodeScannerPreview() {
+    val navController = rememberNavController()
+    QRCodeScanner(navController)
+}

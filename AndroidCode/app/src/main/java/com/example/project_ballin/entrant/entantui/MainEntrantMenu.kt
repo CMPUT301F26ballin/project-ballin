@@ -1,6 +1,7 @@
 package com.example.project_ballin.entrant.entantui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.*
@@ -15,7 +16,7 @@ import com.example.project_ballin.reusableui.TopAppBar
 @Composable
 fun EntrantMenuScreen(navController: NavController){
     TopAppBar(
-        navController = navController,
+        navController,
         screenTitle = "Home",
         backButton = false,
     ){
@@ -51,11 +52,11 @@ fun EntrantHomeButton(name: String, destination: String, testTag: String, navCon
         onClick = {
             navController.navigate(destination)
         },
+        shape = RoundedCornerShape(10.dp),
         modifier = Modifier
             .testTag(testTag) // for UI testing
-            .fillMaxWidth()
-            .height(64.dp)
-            .padding(horizontal = 16.dp)
+            .width(250.dp)
+            .height(85.dp)
     ) {
         Column (
             horizontalAlignment = Alignment.CenterHorizontally
