@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -13,7 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
@@ -64,24 +67,35 @@ class EntrantBrowseReservations{
     fun ActivePastReservationButtons(navController: NavController) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(
                 onClick = {
                     navController.navigate("ActiveReservationScreen")
                 },
-                modifier = Modifier.padding(16.dp)
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.weight(1f)
+
             ) {
-                Text("Active\nReservations")
+                Text("Active\nReservations",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium)
             }
+
+
 
             Button(
                 onClick = {
                     navController.navigate("PastReservationScreen")
                 },
-                modifier = Modifier.padding(16.dp)
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier.weight(1f)
+
             ) {
-                Text("Past\nReservations")
+                Text("Past\nReservations",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium)
+
             }
         }
     }
@@ -156,7 +170,8 @@ class EntrantBrowseReservations{
 
                         Button(
                             onClick = {
-                                navController.navigate("EntrantSiteBooker")
+                                val site = lottery.getAssociatedSites()[0]
+                                navController.navigate("EntrantSiteBooker/${site.ID}")
                             },
                             modifier = Modifier.padding(16.dp)
                         ) {

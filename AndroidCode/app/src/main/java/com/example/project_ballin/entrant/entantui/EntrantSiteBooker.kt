@@ -20,9 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.project_ballin.Campsite
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.reusableui.TopAppBar
+import kotlin.uuid.Uuid
 
 /**
  * The entant book site page
@@ -34,7 +34,7 @@ import com.example.project_ballin.reusableui.TopAppBar
  */
 class EntrantSiteBooker {
     @Composable
-    fun SiteBooker (navController: NavController, campsite: Campsite, entrant: Entrant) {
+    fun SiteBooker (navController: NavController, campsite: Uuid, entrant: Entrant) {
 
 
         var chosenDates by remember { mutableStateOf<List<Long>?>(null) }

@@ -1,5 +1,6 @@
 package com.example.project_ballin.entrant
 
+import androidx.compose.ui.semantics.Role
 import com.example.project_ballin.MainActivity
 import com.example.project_ballin.User
 import com.example.project_ballin.lottery.Lottery
@@ -19,7 +20,6 @@ import kotlin.uuid.Uuid
  * @property email the email of the entrant
  * @property deviceId the device ID of the entrant
  * @property profilePic the profile picture of the entrant
- * @property appPolicy the app policy for the app
  *
  */
 class Entrant(
@@ -29,7 +29,7 @@ class Entrant(
     override var email: String,
     override val deviceId: String,
     override var profilePic: String,
-    override val userID: Uuid = Uuid.random()
+    override val userID: Uuid = Uuid.random(),
 ) : User {
     private val activeLotteries = mutableListOf<Lottery>()
     private val wonLotteries = mutableListOf<Lottery>()

@@ -13,7 +13,7 @@ class Owner(
     override val deviceId: String,
     override var profilePic: String,
     override val userID: Uuid = Uuid.random(),
-    private val campsitesOwned: ArrayList<Uuid> = ArrayList()
+    val campsitesOwned: ArrayList<Uuid> = ArrayList(),
 ) : com.example.project_ballin.User {
 
     override fun updateFirstName(newFirstName: String) {
@@ -42,10 +42,6 @@ class Owner(
 
     fun addCampsite(campsiteID: Uuid) {
         campsitesOwned.add(campsiteID)
-    }
-
-    fun getCampsitesOwned(): ArrayList<Uuid> {
-        return campsitesOwned
     }
 
 }

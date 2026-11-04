@@ -50,10 +50,7 @@ class SearchViewModel: ViewModel() {
              description = "Beautiful valley surrounded by pine trees.",
              occupancy = 4,
              ownerID = Uuid.random(),
-             location = TODO(),
-             images = TODO(),
-             availability = TODO(),
-             lotteries = TODO()
+             images = mutableListOf()
          ),
          Campsite(
              name = "Lakeside Retreat",
@@ -66,10 +63,7 @@ class SearchViewModel: ViewModel() {
              description = "Right by the lake with amazing sunrise views.",
              occupancy = 6,
              ownerID = Uuid.random(),
-             location = TODO(),
-             images = TODO(),
-             availability = TODO(),
-             lotteries = TODO()
+             images = mutableListOf()
          ),
          Campsite(
              name = "Mountain Peak Camp",
@@ -82,10 +76,7 @@ class SearchViewModel: ViewModel() {
              description = "High altitude camping for experienced hikers.",
              occupancy = 2,
              ownerID = Uuid.random(),
-             location = TODO(),
-             images = TODO(),
-             availability = TODO(),
-             lotteries = TODO()
+             images = mutableListOf()
          )
     ) //replace with actual sites
     //val allSites = listOf<Campsite>()

@@ -15,6 +15,10 @@ private val DarkColorScheme = darkColorScheme(
     primary = BallinDarkGreen,
     onPrimary = BallinDarkWhite,
 
+    primaryContainer = BallinSecondaryGreen,
+    onPrimaryContainer = BallinDarkWhite,
+
+
     background = BallinDarkBackground,
     onBackground = BallinDarkBackgroundText,
 
@@ -23,6 +27,11 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = BallinGreen,
     onPrimary = BallinWhite,
+
+    primaryContainer = BallinDarkGreen,
+    onPrimaryContainer = BallinWhite,
+
+
 
     background = BallinBackground,
     onBackground = BallinBackgroundText,
