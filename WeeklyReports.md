@@ -43,6 +43,7 @@ Peter: Added Campsite and campsiteList classes. Added views for campsite that im
 Salix: Start implementing the lottery menus: view lotteries, add lottery (basic details)
 
 # Week 4:
+Yuming: delete and view campsite(admin)
 
 Mies: Doing the view reservations pages, as well as made a date picker to make bookings
 
