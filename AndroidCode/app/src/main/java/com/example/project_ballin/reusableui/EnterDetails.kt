@@ -18,6 +18,16 @@ import androidx.navigation.compose.*
 @Composable
 fun EnterDetails(){
 
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+    ){
+        Text(
+            text = "Before We Begin Please Enter Your Details:",
+            style = MaterialTheme.typography.titleLarge
+        )
+
+    }
+
     //user enters first name and last name
     //user enters email, phone number
         // android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()

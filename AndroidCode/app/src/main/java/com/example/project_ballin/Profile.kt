@@ -14,7 +14,8 @@ import com.example.project_ballin.owner.Owner
  */
 data class Profile(
     val deviceId: String = "",
-    val name: String = "",
+    val firstName: String = "",
+    val lastName: String = "",
     val email: String = "",
     val phoneNum: String = "",
     val profilePic: String = "",
@@ -35,7 +36,8 @@ data class Profile(
             }
             return Profile(
                 deviceId = user.deviceId,
-                name = user.name,
+                firstName = user.firstName,
+                lastName = user.lastName,
                 email = user.email,
                 phoneNum = user.phoneNum,
                 profilePic = user.profilePic,
