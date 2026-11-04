@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
-import com.example.project_ballin.entrant.entantui.BookingDateRangePicker
+import com.example.project_ballin.entrant.entantui.DateRangePicker
 import kotlin.uuid.Uuid
 
 /**
