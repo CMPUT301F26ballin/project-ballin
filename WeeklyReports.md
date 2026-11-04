@@ -43,5 +43,10 @@ Peter: Added Campsite and campsiteList classes. Added views for campsite that im
 Salix: Start implementing the lottery menus: view lotteries, add lottery (basic details)
 
 # Week 4:
+Yuming: delete and view campsite(admin)
 
 Mies: Doing the view reservations pages, as well as made a date picker to make bookings
+
+Peter: Implemented proper Navcontroller data passing to keep track of the Uuid of the logged in User, implemented OwnerMenu, CampsiteList, CampsiteDetail, and Campsiteinput screens. Verified proper input of campsite elements such as images, name, etc. (except for date, still figuring that out.) Verified input campsites go to firestore. (small bugs still present.)
+
+Leighan: Implemented classes relating to messages and notifications, and also made screens related to it for admin view. Also did UI tests for it.
