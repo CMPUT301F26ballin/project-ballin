@@ -29,3 +29,5 @@ Nick: searching for campsites + filters
 # Week 5 :  
 
 Peter: I plan to finish the date input for the campsites. I will properly test input and update campsite functionalities to make sure the UI is visually up to par. I will finish the tests and make sure they run as intended, and I will help finish the UML class diagram and update old UI elements with new stuff.
+
+Salix: Finish the lottery screens (view list, edit details, pick campsites). Also add lottery UML and code tests if possible 

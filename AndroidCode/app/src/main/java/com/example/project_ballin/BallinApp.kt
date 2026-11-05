@@ -24,6 +24,7 @@ import com.example.project_ballin.entrant.entantui.PastReservationScreen
 import com.example.project_ballin.lottery.Lottery
 
 import com.example.project_ballin.lottery.LotteryList
+import com.example.project_ballin.owner.Owner
 //import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen commented out cuz its giving me an error -Nick
 import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
 import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
@@ -59,6 +60,20 @@ fun BallinApp() {
                 profilePic = "a",
                 lastName = "",
                 userID = "1"
+            )
+        )
+    }
+    //temporary for testing
+    var currentOwner by remember {
+        mutableStateOf<Owner?>(
+            Owner(
+                firstName = "John",
+                phoneNum = "123",
+                email = "John@ballin.ca",
+                deviceId = "123",
+                profilePic = "a",
+                lastName = "",
+                userID = Uuid.random().toString()
             )
         )
     }
@@ -222,7 +237,7 @@ fun BallinApp() {
             CampsiteDetailScreen(navController, campsite!!, userID!!)
         }
 
-        composable("CampsiteInputScreen/{CampID}") {
+        composable("CampsiteInputScreen/{CampID}/{OwnerID}") {
             val siteIDString = it.arguments?.getString("CampID")
             var campsite: Campsite?
             if (siteIDString == null || siteIDString == "none") {
@@ -231,12 +246,12 @@ fun BallinApp() {
             } else {
                 campsite = campsiteList.getCampsite(siteIDString)
             }
-            val ownerID = Uuid.random().toString()
+            val ownerID = it.arguments!!.getString("OwnerID")
 
             Log.d("navigation","To input!")
 
             CampsiteInputScreen(
-                navController, campsite, ownerID,
+                navController, campsite, ownerID!!,
                 addSite = { Log.d("Site Addition", "Adding Site")
                     campsiteList.addCampsite(it) },
                 updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite = oldSite, newSite) })
