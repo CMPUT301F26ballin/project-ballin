@@ -1,5 +1,6 @@
 package com.example.project_ballin.entrant
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.semantics.Role
 import com.example.project_ballin.MainActivity
 import com.example.project_ballin.User
@@ -31,11 +32,11 @@ class Entrant(
     override var profilePic: String = "",
     override val userID: String = Uuid.random().toString(),
 ) : User {
-    private val activeLotteries = mutableListOf<Lottery>()
-    private val wonLotteries = mutableListOf<Lottery>()
-    private val lostLotteries = mutableListOf<Lottery>()
-    private val activeReservations = mutableListOf<Reservation>()
-    private val pastReservations = mutableListOf<Reservation>()
+    private val activeLotteries = mutableStateListOf<Lottery>()
+    private val wonLotteries = mutableStateListOf<Lottery>()
+    private val lostLotteries = mutableStateListOf<Lottery>()
+    private val activeReservations = mutableStateListOf<Reservation>()
+    private val pastReservations = mutableStateListOf<Reservation>()
 
     override fun updateFirstName(newFirstName: String) {
         firstName = newFirstName
@@ -99,5 +100,9 @@ class Entrant(
 
     fun remActiveReservation(reservation: Reservation){
         activeReservations.remove(reservation)
+    }
+
+    fun bookSite(reservation: Reservation){
+        activeReservations.add(reservation)
     }
 }

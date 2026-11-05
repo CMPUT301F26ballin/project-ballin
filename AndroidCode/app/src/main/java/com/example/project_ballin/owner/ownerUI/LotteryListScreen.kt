@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.project_ballin.lottery.LotteryList
 
 
 /**
@@ -77,7 +78,7 @@ fun LotteryListView(
         }
 
         itemsIndexed(lotteries) { index, lottery ->
-            val ID = lottery.getLotteryID()
+            val ID = lottery.lotteryID
             LotteryItem(
                 lottery,
                 onClick = { navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID")})
@@ -118,7 +119,7 @@ fun LotteryItem(
             .padding(16.dp)
     ) {
         Column {
-            Text(lottery.getAssociatedSites().firstOrNull()?.name ?: "No sites associated")
+            Text(LotteryList().getLottery(lottery.lotteryID)?.associatedSites?.firstOrNull() ?: "No sites associated")
             Spacer(modifier = Modifier.height(8.dp))
             Text("Lottery start and end dates")
         }

@@ -40,7 +40,7 @@ class LotteryList {
 
             snapshots?.documents?.forEach { document->
                 val lottery = document.toObject(Lottery::class.java)
-                if(lottery != null){
+                if (lottery != null){
                     _lotteries.add(lottery)
                 }
             }
@@ -55,35 +55,22 @@ class LotteryList {
      *
      * @param lottery The lottery object being added
      */
-    fun addLottery(lottery: Lottery){
-        lotteriesRef.document(lottery.getLotteryID().toString()).set(lottery)
+    fun addLottery(lottery: Lottery) {
+        lotteriesRef.document(lottery.lotteryID).set(lottery)
     }
 
-    fun updateLottery(oldLottery: Lottery, updatedLottery: Lottery){
-        lotteriesRef.document(oldLottery.getLotteryID().toString()).set(updatedLottery)
+    fun updateLottery(oldLottery: Lottery, updatedLottery: Lottery) {
+        lotteriesRef.document(oldLottery.lotteryID).set(updatedLottery)
     }
 
-    fun deleteCampsite(lottery: Lottery) {
-        lotteriesRef.document(lottery.getLotteryID().toString()).delete()
+    fun deleteLottery(lottery: Lottery) {
+        lotteriesRef.document(lottery.lotteryID).delete()
     }
 
-    fun getOwnerLotteries(ID: String): List<Lottery>{
-        var returnList = mutableStateListOf<Lottery>()
-        lotteriesRef.whereEqualTo("ownerID", ID).get()
-            .addOnSuccessListener { result ->
-                returnList = result.toObjects<Lottery>() as SnapshotStateList<Lottery>
+    fun getLottery(ID: String): Lottery? =
+        _lotteries.find { it.lotteryID == ID }
 
-            }
-        return returnList
-    }
-
-    fun getLottery(ID: String): Lottery {
-        var lotteryToReturn: Lottery? = null
-        lotteriesRef.document(ID).get().addOnSuccessListener {
-                result ->
-            lotteryToReturn = result.toObject<Lottery>()!!
-        }
-        return lotteryToReturn!!
-    }
+    fun getOwnerLotteries(ID: String): List<Lottery> =
+        _lotteries.filter { it.lotteryOwnerID == ID }
 
 }

@@ -130,8 +130,8 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
             campOccupancy = oldSite.occupancy.toString()
             oldSite.images.forEach { byteArray -> campByteArray.add(byteArray) }
             oldSite.availability.forEach { date -> campAvailableDates.add(date) }
-            campLat = oldSite.location.latitude.toString()
-            campLon = oldSite.location.longitude.toString()
+            //campLat = oldSite.location.latitude.toString()
+            //campLon = oldSite.location.longitude.toString()
 
         }
 
@@ -370,10 +370,10 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     occupancy = campOccupancy.toInt(),
                                     images = campByteArray,
                                     //Campsite needs other elements based on what is commented out in campsite object
-                                    location = location,
+                                    //location = location,
                                     locationName = "",
                                     availability = campAvailableDates,
-                                    lotteries = emptyList() //TODO
+                                    lotteries = mutableListOf() //TODO
                                 )
                             )
                             Log.d("Navigation", "Adding campsite and returning to list")
@@ -397,7 +397,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                             location.longitude = campLon.toDouble()
                             updateSite(
                                 oldSite, Campsite(
-                                    location = location,
+                                    //location = location,
                                     name = campName,
                                     ID = oldSite.ID,
                                     ownerID = oldSite.ownerID,
@@ -410,7 +410,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     images = campByteArray,
                                     locationName = "",
                                     availability = campAvailableDates,
-                                    lotteries = emptyList()//TODO
+                                    lotteries = mutableListOf()//TODO
                                 )
                             )
                             Log.d("Navigation", "Updating campsite and returning to campsite details")

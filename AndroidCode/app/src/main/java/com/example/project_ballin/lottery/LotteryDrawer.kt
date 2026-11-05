@@ -10,17 +10,17 @@ import com.example.project_ballin.entrant.Entrant
  */
 class LotteryDrawer {
 
-    fun draw(lottery: Lottery): List<Entrant> {
-        val waitlist = lottery.getWaitlist()
-        val numWinners = lottery.getLotteryDrawNumber()
-        val winners = mutableListOf<Entrant>()
-
-        for (i in 0 until numWinners) {
-            val winner = waitlist.random()
-            winners.add(winner)
-            lottery.removeFromWaitlist(winner)
+    fun draw(lottery: Lottery): List<String> {
+        val winners = lottery.waitList.shuffled().take(lottery.numWinners)
+        winners.forEach {
+            lottery.waitList.remove(it)
+            lottery.addWinner(it)
         }
-
+        // Everyone still on the waitlist lost
+        lottery.waitList.toList().forEach {
+            lottery.waitList.remove(it)
+            lottery.addLoser(it)
+        }
         return winners
     }
 }
