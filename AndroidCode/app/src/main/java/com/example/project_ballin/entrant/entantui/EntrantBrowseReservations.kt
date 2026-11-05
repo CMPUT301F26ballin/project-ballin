@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.*
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
@@ -34,7 +35,9 @@ class EntrantBrowseReservations{
      * @param navController the navigation controller for the app
      */
     @Composable
-    fun BrowseReservations (navController: NavController, entrant: Entrant) {
+    fun BrowseReservations (navController: NavController, campsiteList: CampsiteList ,entrant: Entrant) {
+
+        var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -52,8 +55,38 @@ class EntrantBrowseReservations{
                 ) {
                     ActivePastReservationButtons(navController)
 
-                    ShowLotteries(entrant, navController)
+                    val activeLotteries = entrant.activeLotteries
+                    val wonLotteries = entrant.wonLotteries
+                    val lostLotteries = entrant.lostLotteries
+
+
+                    LazyColumn {
+                        items(activeLotteries) { lottery ->
+                            LotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
+                        }
+                    }
                 }
+            }
+        }
+
+        //Looked up how to make a dialog in compose
+        //https://developer.android.com/develop/ui/compose/components/dialog#dialog-composable
+
+        //Pops up over the screen when user declines a lottery they won
+        lotteryToLeave?.let { lottery ->
+            Dialog(onDismissRequest = { lotteryToLeave = null }) {
+                ConfirmActionDialog().ConfirmAction(
+                    "Are you sure you want to decline booking this site??",
+                    confirm = { confirmed ->
+                        if (confirmed) {
+                            lottery.waitList.remove(entrant.userID)
+                            lottery.winners.remove(entrant.userID)
+                            entrant.activeLotteries.remove(lottery)
+                            entrant.wonLotteries.remove(lottery)
+                        }
+                        lotteryToLeave = null
+                    }
+                )
             }
         }
     }
@@ -102,24 +135,6 @@ class EntrantBrowseReservations{
     }
 
     /**
-     * Shows the active lotteries as a lazyColumn of cards
-     *
-     * @param entrant the entrant
-     * @param navController the navigation controller for the app
-     *
-     */
-    @Composable
-    fun ShowLotteries(entrant: Entrant, navController: NavController) {
-        val activeLotteries = entrant.activeLotteries
-
-        LazyColumn {
-            items(activeLotteries) { lottery ->
-                LotteryCard(lottery, entrant, navController)
-            }
-        }
-    }
-
-    /**
      * Shows a card for a lottery
      * Entrants can book a campsite if they have won the lottery
      * Entrants can dismiss a lost lottery
@@ -127,18 +142,16 @@ class EntrantBrowseReservations{
      *
      * @param lottery the lottery to show
      * @param entrant the entrant
+     * @param campsiteList the list of campsites
      * @param navController the navigation controller for the app
+     * @param onDeclineClick the function to run when the decline button is clicked
      */
     @Composable
-    fun LotteryCard(lottery: Lottery, entrant: Entrant, navController: NavController) {
+    fun LotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onDeclineClick: () -> Unit){
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+                .padding(16.dp)
         ) {
             if (entrant.userID in lottery.winners) {
                 Column(
@@ -147,7 +160,7 @@ class EntrantBrowseReservations{
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "You have won a lottery for ${CampsiteList().getCampsite(lottery.associatedSites[0])?.name}. Book it?",
+                        text = "You have won a lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}. Book it?",
                         style = MaterialTheme.typography.titleMedium
                     )
 
@@ -159,9 +172,8 @@ class EntrantBrowseReservations{
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.Red
                             ),
-                            onClick = {
-
-                            },
+                            onClick = onDeclineClick
+                            ,
                             modifier = Modifier.padding(16.dp)
                         ) {
                             Text("Decline")
@@ -192,7 +204,7 @@ class EntrantBrowseReservations{
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Text(
-                            text = "Unfortunately you lost the lottery for ${CampsiteList().getCampsite(lottery.associatedSites[0])?.name}.",
+                            text = "Unfortunately you lost the lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}.",
                             style = MaterialTheme.typography.titleMedium
                         )
                     }

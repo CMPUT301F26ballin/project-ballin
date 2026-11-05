@@ -43,6 +43,15 @@ class ConfirmActionDialog {
                 horizontalArrangement = Arrangement.Center
             ){
                 Button(
+                    onClick = {
+                        confirm(false)
+                    },
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text("Cancel")
+                }
+
+                Button(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red
                     ),
@@ -52,16 +61,6 @@ class ConfirmActionDialog {
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text("Confirm")
-                }
-
-
-                Button(
-                    onClick = {
-                        confirm(false)
-                    },
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text("Cancel")
                 }
             }
         }
