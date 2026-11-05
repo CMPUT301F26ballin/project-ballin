@@ -98,7 +98,7 @@ class EntrantSiteBooker {
 
             Button(
                 onClick = {
-                    entrant.bookSite(Reservation(campsiteID, chosenDates))
+                    entrant.activeReservations.add(Reservation(campsiteID,chosenDates))
                 },
                 enabled = chosenDates != null,
                 modifier = Modifier.padding(16.dp)

@@ -19,40 +19,12 @@ import kotlin.uuid.Uuid
  * @property currentMode the mode the admin user is in, by default they start off in admin mode
  *
  */
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
-
-class Admin(
+data class Admin(
     override var firstName: String = "",
     override var lastName: String = "",
     override var phoneNum: String = "",
     override var email: String = "",
     override val deviceId: String = "",
     override var profilePic: String = "",
-    @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
-    override val userID: String = Uuid.random().toString(),
-): User {
-
-    override fun updateFirstName(newFirstName: String) {
-        firstName = newFirstName
-    }
-
-    override fun updateLastName(newLastName: String) {
-        lastName = newLastName
-    }
-
-    override fun updatePhoneNum(newPhoneNum: String) {
-        phoneNum = newPhoneNum
-    }
-
-    override fun updateEmail(newEmail: String) {
-        email = newEmail
-    }
-
-    override fun updateProfilePic(newProfilePic: String) {
-        profilePic = newProfilePic
-    }
-
-    override fun deleteAccount() {
-        TODO("Not yet implemented")
-    }
-}
+    override val userID: String = "",
+): User

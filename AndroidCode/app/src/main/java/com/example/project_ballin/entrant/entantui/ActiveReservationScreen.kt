@@ -45,11 +45,11 @@ class ActiveReservationScreen {
                 "Active Reservations"
             ) {
                 LazyColumn {
-                    items(entrant.getActiveReservations()) { reservation ->
+                    items(entrant.activeReservations) { reservation ->
                         CurrentReservationCard(entrant, reservation, campsiteList, navController)
                     }
 
-                    items(entrant.getActiveLotteries()) { lottery ->
+                    items(entrant.activeLotteries) { lottery ->
                         ActiveLotteryCard(lottery, entrant, campsiteList, navController)
                     }
                 }
@@ -64,7 +64,7 @@ class ActiveReservationScreen {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            if (entrant.getUuid() in lottery.winners) {
+            if (entrant.userID in lottery.winners) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -105,7 +105,7 @@ class ActiveReservationScreen {
                 }
             }
 
-            else if (entrant.getUuid() in lottery.losers) {
+            else if (entrant.userID in lottery.losers) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -126,7 +126,7 @@ class ActiveReservationScreen {
                     ) {
                         Button(
                             onClick = {
-                                entrant.removeActiveLottery(lottery)
+                                entrant.activeLotteries.remove(lottery)
                             }
                         ) {
                             Text("Ok")
@@ -160,8 +160,8 @@ class ActiveReservationScreen {
                                 containerColor = Color.Red
                             ),
                             onClick = {
-                                lottery.waitList.remove(entrant.getUuid())
-                                entrant.removeActiveLottery(lottery)
+                                lottery.waitList.remove(entrant.userID)
+                                entrant.activeLotteries.remove(lottery)
                             },
                             modifier = Modifier.padding(16.dp)
                         ) {
