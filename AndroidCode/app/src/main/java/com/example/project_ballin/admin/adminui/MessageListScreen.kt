@@ -96,21 +96,14 @@ fun MessageButtonRow(index: Int, message: Message, navController: NavController)
     }
 }
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MessageListScreenPreview() {
     val navController = rememberNavController()
 
-    val uuidRandomOwnerID: Uuid = Uuid.random()
-    val uuidRandomEntrantID: Uuid = Uuid.random()
-    val uuidRandomID: Uuid = Uuid.random()
-    // using the same uuid for all of them btw just for preview
-    // still need to get messages list
-    // rn just using a static sampleMessages list
     val sampleMessages = listOf(
-        Message(uuidRandomOwnerID,uuidRandomEntrantID,"Hello", Date(), uuidRandomID),
-        Message(uuidRandomOwnerID,uuidRandomEntrantID,"Hi", Date(), uuidRandomID)
+        Message("1","1","Hello", Date(), "1"),
+        Message("2","2","Hi", Date(), "2")
     )
     MessageListScreen(navController, sampleMessages)
 }

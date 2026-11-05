@@ -49,7 +49,7 @@ class MessageList {
      * @param message The message being added
      */
     fun addMessage(message: Message){
-        messagesRef.document(message.ID.toString()).set(message)
+        messagesRef.document(message.ID).set(message)
     }
 
     /**
@@ -59,7 +59,7 @@ class MessageList {
      */
     // Would need to further handle how this affects owners/entrants
     fun deleteMessage(message: Message) {
-        messagesRef.document(message.ID.toString()).delete()
+        messagesRef.document(message.ID).delete()
     }
 
     fun getAllMessages(): List<Message>{
@@ -72,9 +72,9 @@ class MessageList {
      * @param ID the ID of the message to get
      * @return a message object with the given ID
      */
-    fun getMessage(ID: Uuid): Message{
+    fun getMessage(ID: String): Message{
         var message: Message? = null
-        messagesRef.document(ID.toString())
+        messagesRef.document(ID)
             .get()
             .addOnSuccessListener {
                 result -> message = result.toObject(Message::class.java)

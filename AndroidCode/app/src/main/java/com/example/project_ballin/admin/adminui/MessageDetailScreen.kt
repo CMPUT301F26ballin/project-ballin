@@ -134,18 +134,16 @@ fun <T> MessageDetailRow(descriptionText: String, content: T, testTag: String) {
     }
 }
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MessageDetailScreenPreview() {
     val navcontroller = rememberNavController()
-    val uuidRandom: Uuid = Uuid.random()
     val sampleMessage = Message(
-        uuidRandom,
-        uuidRandom,
+        "1",
+        "1",
         "Hello, this is the content of the message",
         Date(),
-        uuidRandom)
+        "1")
 
     MessageDetailScreen(navcontroller, sampleMessage, onDelete = {})
 }

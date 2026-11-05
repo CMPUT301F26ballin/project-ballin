@@ -18,12 +18,12 @@ import kotlin.uuid.Uuid
 class Notification (
     private val _content: String,
     private val _dateSent: Date,
-    private val _ID: Uuid,
+    private val _ID: String,
     // private val _recipientIDs: List<Uuid>
 ) {
 
     val content: String get() = _content
-    val ID: Uuid get() = _ID
+    val ID: String get() = _ID
     // val recipientIDs: List<Uuid> get() = _recipientIDs
 
     val sdf = SimpleDateFormat("dd/mm/yyyy")
