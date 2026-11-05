@@ -79,10 +79,12 @@ class SearchViewModel: ViewModel() {
              images = mutableListOf()
          )
     ) //replace with actual sites
-    //val allSites = listOf<Campsite>()
+    private val _campsites = MutableStateFlow<List<Campsite>>(emptyList())
 
-    // replace val with allSites need to find out if you take from firebase or local list
-    private val _campsites = MutableStateFlow(testSites)
+    fun updateCampsites(newList: List<Campsite>) {
+        _campsites.value = newList
+    }
+
     val campsites = combine(
         query, numOfGuests, locationFilter, _campsites
     ) { text, guestLimit, locationLimit, campsites ->
@@ -102,6 +104,6 @@ class SearchViewModel: ViewModel() {
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
-            _campsites.value
+            emptyList()
         )
 }

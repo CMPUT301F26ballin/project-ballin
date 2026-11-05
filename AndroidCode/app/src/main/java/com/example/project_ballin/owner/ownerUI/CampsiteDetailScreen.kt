@@ -21,15 +21,15 @@ import com.example.project_ballin.reusableui.TopAppBar
 
 
 @Composable
-fun CampsiteDetailScreen(navController: NavController, site: Campsite){
+fun CampsiteDetailScreen(navController: NavController, site: Campsite, userID: String){
     TopAppBar(navController, "Campsite Details") {
-        CampsiteDetailsView(navController, site)
+        CampsiteDetailsView(navController, site, userID)
     }
 
 }
 
 @Composable
-fun CampsiteDetailsView(navController: NavController, site: Campsite){
+fun CampsiteDetailsView(navController: NavController, site: Campsite, userID: String){
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -73,12 +73,13 @@ fun CampsiteDetailsView(navController: NavController, site: Campsite){
 
         Spacer(Modifier.height(16.dp))
 
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp)){
-            Button(onClick = {navController.navigate("CampsiteInputScreen/${site.ID}/${site.ownerID}")},
-                modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("updateCampsite")) {
-                Text("Update Campsite")
+        if(site.ownerID == userID){
+            Row(modifier = Modifier.fillMaxWidth().padding(16.dp)){
+                Button(onClick = {navController.navigate("CampsiteInputScreen/${site.ID}")},
+                    modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("updateCampsite")) {
+                    Text("Update Campsite")
+                }
             }
         }
-
     }
 }

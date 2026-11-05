@@ -17,13 +17,15 @@ import kotlin.uuid.Uuid
  * @property waitList the list of waitlist users
  * @property occupancy the occupancy limit of the lottery
  * @property numWinners the number of winners of the lottery
- * @property lotteryOwner the owner of the lottery
- * @property dateRange the date range of the lottery *** Replaced ***
  * @property registrationStart the start time of sign up period
  * @property registrationEnd the end time of sign up period
  * @property bookingStart the start time of booking period
  * @property bookingEnd the end time of booking period
  * @property associatedSites the associated campsites of the lottery
+ * @property lotteryID the ID of the lottery
+ * @property lotteryOwnerID the ID of the owner of the lottery
+ * @property winners the list of winners of the lottery
+ * @property losers the list of losers of the lottery
  *
  */
 data class Lottery(

@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.*
 import com.example.project_ballin.Campsite
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.project_ballin.CampsiteList
 
 /**
  * function to filter campsites by number of guests
@@ -102,16 +103,17 @@ fun DateFilter(){
 fun DisplayCampsite(
     navController: NavController,
     modifier: Modifier = Modifier,
-    campsite: Campsite
+    campsite: Campsite,
+    entrantID: String
 ){
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                //navController.navigate("CampsiteDetailScreen/${campsite.ID}")
-                TODO()
-2            },
+                navController.navigate("CampsiteDetailScreen/${campsite.ID},${entrantID}")
+
+            },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -150,10 +152,17 @@ fun DisplayCampsite(
 @Composable
 fun SearchBar(
     navController: NavController,
-    viewModel: SearchViewModel = viewModel()
+    viewModel: SearchViewModel = viewModel(),
+    entrantID: String,
+    campsiteList: CampsiteList
 ){
     val queryText by viewModel.query.collectAsState()
     val campsites by viewModel.campsites.collectAsState()
+
+    val allSites = campsiteList.campsites.toList()
+    LaunchedEffect(allSites) {
+        viewModel.updateCampsites(allSites)
+    }
 
     Column(
         modifier = Modifier
@@ -182,10 +191,11 @@ fun SearchBar(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            items(campsites) {campsites ->
+            items(campsites) {campsite ->
                 DisplayCampsite(
                     navController = navController,
-                    campsite = campsites
+                    campsite = campsite,
+                    entrantID = entrantID
                 )
             }
         }
