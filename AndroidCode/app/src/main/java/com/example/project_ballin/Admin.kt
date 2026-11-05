@@ -26,5 +26,5 @@ data class Admin(
     override var email: String = "",
     override val deviceId: String = "",
     override var profilePic: String = "",
-    override val userID: String = "",
+    override val userID: String = ""
 ): User
