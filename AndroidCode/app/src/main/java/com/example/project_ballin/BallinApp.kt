@@ -103,7 +103,7 @@ fun BallinApp() {
         lottery.associatedSites.add(campsite.ID)
         currentEntrant?.let {
             lottery.waitList.add(it.userID)
-            it.addActiveLottery(lottery)
+            it.activeLotteries.add(lottery)
         }
         campsiteList.addCampsite(campsite)
         lotteryList.addLottery(lottery)

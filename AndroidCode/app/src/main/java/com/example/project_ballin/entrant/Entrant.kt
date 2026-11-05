@@ -1,14 +1,8 @@
 package com.example.project_ballin.entrant
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.ui.semantics.Role
-import com.example.project_ballin.MainActivity
 import com.example.project_ballin.User
 import com.example.project_ballin.lottery.Lottery
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
-
-@OptIn(ExperimentalUuidApi::class)
 
 
 /**
@@ -23,86 +17,28 @@ import kotlin.uuid.Uuid
  * @property profilePic the profile picture of the entrant
  *
  */
-class Entrant(
+data class Entrant(
     override var firstName: String = "",
     override var lastName: String = "",
     override var phoneNum: String = "",
     override var email: String = "",
     override val deviceId: String = "",
     override var profilePic: String = "",
-    override val userID: String = Uuid.random().toString(),
-) : User {
-    private val activeLotteries = mutableStateListOf<Lottery>()
-    private val wonLotteries = mutableStateListOf<Lottery>()
-    private val lostLotteries = mutableStateListOf<Lottery>()
-    private val activeReservations = mutableStateListOf<Reservation>()
-    private val pastReservations = mutableStateListOf<Reservation>()
-
-    override fun updateFirstName(newFirstName: String) {
-        firstName = newFirstName
-    }
-
-    override fun updateLastName(newLastName: String) {
-        lastName = newLastName
-    }
-
-    override fun updatePhoneNum(newPhoneNum: String) {
-        phoneNum = newPhoneNum
-    }
-
-    override fun updateEmail(newEmail: String) {
-        email = newEmail
-    }
-
-    override fun updateProfilePic(newProfilePic: String) {
-        profilePic = newProfilePic
-    }
-
-    override fun deleteAccount() {
-        TODO()
-    }
-
-    fun getActiveLotteries(): List<Lottery> {
-        return activeLotteries
-    }
-
-    fun addActiveLottery(lottery: Lottery){
-        activeLotteries.add(lottery)
-    }
+    override val userID: String = "",
+    val activeLotteries: MutableList<Lottery> = mutableStateListOf(),
+    val wonLotteries: MutableList<Lottery> = mutableStateListOf(),
+    val lostLotteries: MutableList<Lottery> = mutableStateListOf(),
+    val activeReservations: MutableList<Reservation> = mutableStateListOf(),
+    val pastReservations: MutableList<Reservation> = mutableStateListOf(),
+) : User
 
 
-    fun getWonLotteries(): List<Lottery> {
-        return wonLotteries
-    }
 
-    fun getLostLotteries(): List<Lottery> {
-        return lostLotteries
-    }
 
-    fun removeActiveLottery(lottery: Lottery){
-        activeLotteries.remove(lottery)
 
-        if (lottery in wonLotteries){
-            wonLotteries.remove(lottery)
-        }
-        else if (lottery in lostLotteries){
-            lostLotteries.remove(lottery)
-        }
-    }
 
-    fun getUuid(): String {
-        return userID
-    }
 
-    fun getActiveReservations(): MutableList<Reservation> {
-        return activeReservations
-    }
 
-    fun remActiveReservation(reservation: Reservation){
-        activeReservations.remove(reservation)
-    }
 
-    fun bookSite(reservation: Reservation){
-        activeReservations.add(reservation)
-    }
-}
+
+

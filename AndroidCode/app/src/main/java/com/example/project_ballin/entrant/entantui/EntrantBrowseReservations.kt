@@ -110,7 +110,7 @@ class EntrantBrowseReservations{
      */
     @Composable
     fun ShowLotteries(entrant: Entrant, navController: NavController) {
-        val activeLotteries = entrant.getActiveLotteries()
+        val activeLotteries = entrant.activeLotteries
 
         LazyColumn {
             items(activeLotteries) { lottery ->
@@ -141,7 +141,7 @@ class EntrantBrowseReservations{
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         ) {
-            if (entrant.getUuid() in lottery.winners) {
+            if (entrant.userID in lottery.winners) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -182,7 +182,7 @@ class EntrantBrowseReservations{
                 }
             }
 
-            else if (entrant.getUuid() in lottery.losers) {
+            else if (entrant.userID in lottery.losers) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -203,7 +203,7 @@ class EntrantBrowseReservations{
                     ) {
                         Button(
                             onClick = {
-                                entrant.removeActiveLottery(lottery)
+                                entrant.activeLotteries.remove(lottery)
                             }
                         ) {
                             Text("Ok")
