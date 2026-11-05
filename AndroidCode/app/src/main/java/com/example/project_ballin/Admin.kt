@@ -29,7 +29,7 @@ class Admin(
     override val deviceId: String = "",
     override var profilePic: String = "",
     @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
-    override val userID: Uuid = Uuid.random(),
+    override val userID: String = Uuid.random().toString(),
 ): User {
 
     override fun updateFirstName(newFirstName: String) {

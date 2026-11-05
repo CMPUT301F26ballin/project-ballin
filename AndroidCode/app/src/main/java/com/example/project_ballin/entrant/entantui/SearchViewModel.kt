@@ -41,7 +41,7 @@ class SearchViewModel: ViewModel() {
      val testSites: List<Campsite> = listOf( // replace with actual sites
          Campsite(
              name = "Pine Valley Campsite",
-             ID = Uuid.random(),
+             ID = Uuid.random().toString(),
              locationName = "Banff National Park",
              tags = mutableListOf("Tent", "Scenic"),
              price = 35.0f,
@@ -49,12 +49,12 @@ class SearchViewModel: ViewModel() {
              rules = "No campfire after 10 PM",
              description = "Beautiful valley surrounded by pine trees.",
              occupancy = 4,
-             ownerID = Uuid.random(),
+             ownerID = Uuid.random().toString(),
              images = mutableListOf()
          ),
          Campsite(
              name = "Lakeside Retreat",
-             ID = Uuid.random(),
+             ID = Uuid.random().toString(),
              locationName = "Jasper",
              tags = mutableListOf("Lake", "Fishing"),
              price = 50.0f,
@@ -62,12 +62,12 @@ class SearchViewModel: ViewModel() {
              rules = "Catch and release only",
              description = "Right by the lake with amazing sunrise views.",
              occupancy = 6,
-             ownerID = Uuid.random(),
+             ownerID = Uuid.random().toString(),
              images = mutableListOf()
          ),
          Campsite(
              name = "Mountain Peak Camp",
-             ID = Uuid.random(),
+             ID = Uuid.random().toString(),
              locationName = "Rocky Mountains",
              tags = mutableListOf("Hiking", "Elevation"),
              price = 40.0f,
@@ -75,7 +75,7 @@ class SearchViewModel: ViewModel() {
              rules = "Pack it in, pack it out",
              description = "High altitude camping for experienced hikers.",
              occupancy = 2,
-             ownerID = Uuid.random(),
+             ownerID = Uuid.random().toString(),
              images = mutableListOf()
          )
     ) //replace with actual sites
@@ -91,7 +91,7 @@ class SearchViewModel: ViewModel() {
                     campsite.name.contains(text, ignoreCase = true)
 
             val matchesGuests = guestLimit == null ||
-                    campsite.occupancy == guestLimit
+                    campsite.occupancy >= guestLimit
 
             val matchesLocation = locationLimit == null ||
                     campsite.locationName == locationLimit

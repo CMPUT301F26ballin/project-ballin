@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateListOf
 import com.example.project_ballin.entrant.Entrant
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import kotlin.uuid.Uuid
 
 /**
  * The data class for an entrant.
@@ -25,26 +24,6 @@ data class EntrantData(
     val deviceId: String = "",
     val profilePic: String = "",
     val userID: String = "",
-)
-
-fun Entrant.toData() = EntrantData(
-    firstName,
-    lastName,
-    phoneNum,
-    email,
-    deviceId,
-    profilePic,
-    userID.toString(),
-)
-
-fun EntrantData.toEntrant() = Entrant(
-    name,
-    lastName,
-    phoneNum,
-    email,
-    deviceId,
-    profilePic,
-    Uuid.parse(userID),
 )
 
 class EntrantList{
@@ -84,7 +63,7 @@ class EntrantList{
      * @param entrant The entrant object being added
      */
     fun addEntrant(entrant: Entrant) {
-        entrantsRef.document(entrant.userID.toString()).set(entrant.toData())
+        entrantsRef.document(entrant.userID).set(entrant)
     }
 
     /**
@@ -93,7 +72,7 @@ class EntrantList{
      * @param entrant The entrant object being updated
      * */
     fun updateEntrant(entrant: Entrant) {
-        entrantsRef.document(entrant.userID.toString()).set(entrant.toData())
+        entrantsRef.document(entrant.userID).set(entrant)
     }
 
     /**
@@ -102,7 +81,7 @@ class EntrantList{
      * @param entrant The entrant being deleted
      * */
     fun deleteEntrant(entrant: Entrant) {
-        entrantsRef.document(entrant.userID.toString()).delete()
+        entrantsRef.document(entrant.userID).delete()
     }
 
     /**
@@ -110,7 +89,7 @@ class EntrantList{
      *
      * @param id the Uuid of the entrant
      */
-    fun getEntrant(id: Uuid): Entrant? = _entrants.find {
+    fun getEntrant(id: String): Entrant? = _entrants.find {
         it.userID == id
     }
 }

@@ -29,28 +29,6 @@ data class OwnerData(
     val campsitesOwned: ArrayList<String> = ArrayList(),
 )
 
-fun Owner.toData() = OwnerData(
-    firstName,
-    lastName,
-    phoneNum,
-    email,
-    deviceId,
-    profilePic,
-    userID,
-    campsitesOwned,
-)
-
-fun OwnerData.toOwner() = Owner(
-    name,
-    lastName,
-    phoneNum,
-    email,
-    deviceId,
-    profilePic,
-    userID,
-    campsitesOwned,
-)
-
 class OwnerList{
     private val _owners = mutableStateListOf<Owner>()
 
@@ -88,7 +66,7 @@ class OwnerList{
      * @param owner The owner object being added
      */
     fun addOwner(owner: Owner) {
-        ownersRef.document(owner.userID.toString()).set(owner.toData())
+        ownersRef.document(owner.userID).set(owner)
     }
 
     /**
@@ -97,7 +75,7 @@ class OwnerList{
      * @param owner The owner object being updated
      * */
     fun updateOwner(owner: Owner) {
-        ownersRef.document(owner.userID.toString()).set(owner.toData())
+        ownersRef.document(owner.userID).set(owner)
     }
 
     /**
@@ -106,7 +84,7 @@ class OwnerList{
      * @param owner The owner being deleted
      * */
     fun deleteOwner(owner: Owner) {
-        ownersRef.document(owner.userID.toString()).delete()
+        ownersRef.document(owner.userID).delete()
         //TODO: delete associated campsites and lotteries
     }
 

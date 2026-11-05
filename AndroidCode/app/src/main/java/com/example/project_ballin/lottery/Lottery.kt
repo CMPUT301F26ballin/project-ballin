@@ -36,8 +36,8 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
     private val associatedSites: MutableList<Campsite> = mutableListOf(),
     private val lotteryID: Uuid = Uuid.random(),
     private var lotteryOwnerID: String = "",
-    private val winners: MutableList<Uuid> = mutableListOf(),
-    private val losers: MutableList<Uuid> = mutableListOf()
+    private val winners: MutableList<String> = mutableListOf(),
+    private val losers: MutableList<String> = mutableListOf()
 ) {
 
     @OptIn(ExperimentalUuidApi::class)
@@ -126,13 +126,12 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
         associatedSites.addAll(newSites)
     }
 
-    @OptIn(ExperimentalUuidApi::class)
-    fun getWinners(): List<Uuid> {
+
+    fun getWinners(): List<String> {
         return winners
     }
 
-    @OptIn(ExperimentalUuidApi::class)
-    fun getLosers(): List<Uuid> {
+    fun getLosers(): List<String> {
         return losers
     }
 

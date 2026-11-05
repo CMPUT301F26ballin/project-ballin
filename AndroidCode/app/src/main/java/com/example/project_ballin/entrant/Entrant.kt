@@ -29,7 +29,7 @@ class Entrant(
     override var email: String = "",
     override val deviceId: String = "",
     override var profilePic: String = "",
-    override val userID: Uuid = Uuid.random(),
+    override val userID: String = Uuid.random().toString(),
 ) : User {
     private val activeLotteries = mutableListOf<Lottery>()
     private val wonLotteries = mutableListOf<Lottery>()
@@ -89,7 +89,7 @@ class Entrant(
         }
     }
 
-    fun getUuid(): Uuid {
+    fun getUuid(): String {
         return userID
     }
 }

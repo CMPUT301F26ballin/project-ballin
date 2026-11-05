@@ -32,7 +32,7 @@ fun EntrantMenuScreen(navController: NavController){
                 fontSize = 34.sp
             )
             Spacer(modifier = Modifier.height(128.dp))
-            EntrantHomeButton("BROWSE CAMPSITES", "", "", navController)
+            EntrantHomeButton("BROWSE CAMPSITES", "Browse Campsites", "", navController)
             Spacer(modifier = Modifier.height(16.dp))
             EntrantHomeButton("MY RESERVATIONS", "EntrantBrowseReservations", "", navController)
             Spacer(modifier = Modifier.height(16.dp))

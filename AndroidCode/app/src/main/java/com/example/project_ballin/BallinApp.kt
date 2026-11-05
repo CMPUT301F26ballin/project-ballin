@@ -15,6 +15,7 @@ import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
+import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantMenuScreen
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
@@ -54,7 +55,7 @@ fun BallinApp() {
                 deviceId = "123",
                 profilePic = "a",
                 lastName = "",
-                userID = Uuid.random()
+                userID = Uuid.random().toString()
             )
         )
     }
@@ -207,12 +208,16 @@ fun BallinApp() {
             }
         }
 
-        composable("EntrantSiteBooker/{CampID}") { backStackEntry ->
+        composable("EntrantSiteBooker/{CampID}") { siteToBook ->
             val entrant = currentEntrant
-            val campID = Uuid.parse(backStackEntry.arguments!!.getString("CampID")!!)
+            val campID = siteToBook.arguments?.getString("campID")
             if (entrant != null) {
                 EntrantSiteBooker().SiteBooker(navController, campID, entrant)
             }
+        }
+
+        composable("Browse Campsites"){
+            EntrantBrowseCampsites(navController)
         }
 
     }
