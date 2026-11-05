@@ -74,7 +74,7 @@ fun CampsiteDetailsView(navController: NavController, site: Campsite){
         Spacer(Modifier.height(16.dp))
 
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp)){
-            Button(onClick = {navController.navigate("CampsiteInputScreen/${site.ID}")},
+            Button(onClick = {navController.navigate("CampsiteInputScreen/${site.ID}/${site.ownerID}")},
                 modifier = Modifier.fillMaxWidth().padding(16.dp).testTag("updateCampsite")) {
                 Text("Update Campsite")
             }
