@@ -50,7 +50,7 @@ fun CampsiteListScreen(navController: NavController, ownerID: String, getOwnerSi
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = {navController.navigate("CampsiteInputScreen/none")
+                    onClick = {navController.navigate("CampsiteInputScreen/none/$ownerID")
                         Log.d("Navigation", "I should go to input a site.")
                     },
                     modifier = Modifier

@@ -122,7 +122,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
         //the old campsite (if we are updating) null if this is a new site.
         if (oldSite != null){
-
+            Log.d("campsite", "There is an old site")
             campName = oldSite.name
             campPrice = oldSite.price.toString()
             oldSite.tags.forEach {tag -> campTags.add(tag) }
@@ -328,7 +328,8 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                         campByteArray.add(Blob.fromBytes(bytes))
                         ImageRow(
                             Blob.fromBytes(bytes),
-                            OnDelete = { campByteArray.remove(it) })
+                            OnDelete = { campByteArray.remove(it)
+                            campImages.remove(uri)})
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
