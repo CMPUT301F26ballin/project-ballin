@@ -50,3 +50,5 @@ Mies: Doing the view reservations pages, as well as made a date picker to make b
 Peter: Implemented proper Navcontroller data passing to keep track of the Uuid of the logged in User, implemented OwnerMenu, CampsiteList, CampsiteDetail, and Campsiteinput screens. Verified proper input of campsite elements such as images, name, etc. (except for date, still figuring that out.) Verified input campsites go to firestore. (small bugs still present.)
 
 Leighan: Implemented classes relating to messages and notifications, and also made screens related to it for admin view. Also did UI tests for it.
+
+Nick: search bar with filters mostly finished - filter by dates, now working on account creation 
