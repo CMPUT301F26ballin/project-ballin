@@ -1,6 +1,5 @@
 package com.example.project_ballin
 
-import android.location.Location
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -216,10 +215,11 @@ fun BallinApp() {
                 getOwnerSites = { campsiteList.getOwnerSites(it) })
         }
 
-        composable("CampsiteDetailScreen/{CampID}") {
+        composable("CampsiteDetailScreen/{CampID},{userID}") {
             val siteIDString = it.arguments!!.getString("CampID")
             val campsite = campsiteList.getCampsite(siteIDString!!)
-            CampsiteDetailScreen(navController, campsite!!)
+            val userID = it.arguments!!.getString("userID")
+            CampsiteDetailScreen(navController, campsite!!, userID!!)
         }
 
         composable("CampsiteInputScreen/{CampID}") {
@@ -351,7 +351,7 @@ fun BallinApp() {
         }
 
         composable("Browse Campsites"){
-            EntrantBrowseCampsites(navController)
+            EntrantBrowseCampsites(navController, campsiteList, currentEntrant!!.userID)
         }
 
     }
