@@ -20,31 +20,34 @@ import kotlin.uuid.Uuid
  */
 data class OwnerData(
     val name: String = "",
+    val lastName: String = "",
     val phoneNum: String = "",
     val email: String = "",
     val deviceId: String = "",
     val profilePic: String = "",
     val userID: String = "",
-    val campsitesOwned: ArrayList<Uuid> = ArrayList(),
+    val campsitesOwned: ArrayList<String> = ArrayList(),
 )
 
 fun Owner.toData() = OwnerData(
-    name,
+    firstName,
+    lastName,
     phoneNum,
     email,
     deviceId,
     profilePic,
-    userID.toString(),
+    userID,
     campsitesOwned,
 )
 
 fun OwnerData.toOwner() = Owner(
     name,
+    lastName,
     phoneNum,
     email,
     deviceId,
     profilePic,
-    Uuid.parse(userID),
+    userID,
     campsitesOwned,
 )
 
@@ -112,7 +115,7 @@ class OwnerList{
      *
      * @param id the Uuid of the owner
      */
-    fun getOwner(id: Uuid): Owner? = _owners.find {
+    fun getOwner(id: String): Owner? = _owners.find {
         it.userID == id
     }
 }

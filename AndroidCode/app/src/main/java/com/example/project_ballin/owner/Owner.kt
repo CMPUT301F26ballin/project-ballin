@@ -6,14 +6,14 @@ import kotlin.uuid.Uuid
 
 
 class Owner(
-    override var firstName: String,
-    override var lastName: String,
-    override var phoneNum: String,
-    override var email: String,
-    override val deviceId: String,
-    override var profilePic: String,
-    override val userID: Uuid = Uuid.random(),
-    val campsitesOwned: ArrayList<Uuid> = ArrayList(),
+    override var firstName: String = "",
+    override var lastName: String = "",
+    override var phoneNum: String = "",
+    override var email: String = "",
+    override val deviceId: String = "",
+    override var profilePic: String = "",
+    override val userID: String = Uuid.random().toString(),
+    val campsitesOwned: ArrayList<String> = ArrayList(),
 ) : com.example.project_ballin.User {
 
     override fun updateFirstName(newFirstName: String) {
@@ -40,7 +40,7 @@ class Owner(
         TODO()
     }
 
-    fun addCampsite(campsiteID: Uuid) {
+    fun addCampsite(campsiteID: String) {
         campsitesOwned.add(campsiteID)
     }
 

@@ -48,8 +48,13 @@ fun BallinApp() {
     var currentEntrant by remember {
         mutableStateOf<Entrant?>(
             Entrant(
-                name = "Nick", phoneNum = "123", email = "nick@ualberta.ca",
-                deviceId = "123", profilePic = "a"
+                firstName = "Nick",
+                phoneNum = "123",
+                email = "nick@ualberta.ca",
+                deviceId = "123",
+                profilePic = "a",
+                lastName = "",
+                userID = Uuid.random()
             )
         )
     }
@@ -68,17 +73,15 @@ fun BallinApp() {
 
         composable("CampsiteListScreen/{OwnerID}") {
             val ownerIDString = it.arguments!!.getString("OwnerID")
-            val ownerID = Uuid.parse(ownerIDString!!)
             CampsiteListScreen(
                 navController,
-                ownerID,
+                ownerIDString!!,
                 getOwnerSites = { campsiteList.getOwnerSites(it) })
         }
 
         composable("CampsiteDetailScreen/{CampID}") {
             val siteIDString = it.arguments!!.getString("CampID")
-            val siteID = Uuid.parse(siteIDString!!)
-            val campsite = campsiteList.getCampsite(siteID)
+            val campsite = campsiteList.getCampsite(siteIDString!!)
             CampsiteDetailScreen(navController, campsite)
         }
 
@@ -89,10 +92,9 @@ fun BallinApp() {
                 Log.d("navigation", "no campsite")
                 campsite = null
             } else {
-                val siteID = Uuid.parse(siteIDString)
-                campsite = campsiteList.getCampsite(siteID)
+                campsite = campsiteList.getCampsite(siteIDString)
             }
-            val ownerID = Uuid.random()
+            val ownerID = Uuid.random().toString()
 
             Log.d("navigation","To input!")
 
