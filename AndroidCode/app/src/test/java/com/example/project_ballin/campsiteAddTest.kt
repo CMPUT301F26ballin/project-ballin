@@ -79,6 +79,7 @@ class campsiteAddTest() {
 
         campsiteList.updateCampsite(testSite, newsite)
         val site = campsiteList.getCampsite(campUid)
+        assert(testSite !in campsiteList.campsites)
         assertEquals(site, newsite)
 
 
