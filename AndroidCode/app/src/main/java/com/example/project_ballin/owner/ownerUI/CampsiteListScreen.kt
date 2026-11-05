@@ -39,7 +39,7 @@ import kotlin.uuid.Uuid
 
 
 @Composable
-fun CampsiteListScreen(navController: NavController, ownerID: Uuid, getOwnerSites: (Uuid) -> List<Campsite>){
+fun CampsiteListScreen(navController: NavController, ownerID: String, getOwnerSites: (String) -> List<Campsite>){
     TopAppBar(navController, "Your Campsites") {
         val campsitesByOwner = getOwnerSites(ownerID)
         Column(modifier = Modifier.fillMaxSize()){
