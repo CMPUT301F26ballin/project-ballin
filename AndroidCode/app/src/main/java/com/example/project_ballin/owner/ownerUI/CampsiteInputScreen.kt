@@ -84,7 +84,7 @@ import kotlin.uuid.Uuid
 
 
 @Composable
-fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, ownerID: Uuid,
+fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, ownerID: String,
                          addSite: (Campsite) -> Unit,
                          updateSite: (oldSite: Campsite, newSite: Campsite) -> Unit){
     TopAppBar(
@@ -360,7 +360,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                             addSite(
                                 Campsite(
                                     name = campName,
-                                    ID = Uuid.random(), //FIGURE OUT ID IMPLEMENTATION
+                                    ID = Uuid.random().toString(), //FIGURE OUT ID IMPLEMENTATION
                                     ownerID = ownerID,
                                     price = campPrice.toFloat(),
                                     rating = null,

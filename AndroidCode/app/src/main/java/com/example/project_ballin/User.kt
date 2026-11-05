@@ -13,7 +13,7 @@ interface User {
     var email: String
     val deviceId: String
     val profilePic: String
-    val userID: Uuid
+    val userID: String
 
     fun updateFirstName(newFirstName: String)
     fun updateLastName(newLastName: String)

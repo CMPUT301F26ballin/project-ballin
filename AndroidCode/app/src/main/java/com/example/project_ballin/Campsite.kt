@@ -36,7 +36,7 @@ import kotlin.uuid.Uuid
 @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 class Campsite(
     var name: String = "",
-    val ID: Uuid = Uuid.random(),
+    val ID: String = Uuid.random().toString(),
     var location: Location = Location(""),
     var locationName: String = "",
     var tags: MutableList<String> = mutableListOf<String>(),
@@ -46,9 +46,9 @@ class Campsite(
     var description: String = "",
     var occupancy: Int = 0,
     var images: MutableList<ByteArray> = mutableListOf<ByteArray>(),
-    var ownerID: Uuid = Uuid.random(),
+    var ownerID: String = Uuid.random().toString(),
     val availability : MutableList<Long> = mutableListOf<Long>(),
-    val lotteries: List<UUID> = emptyList()
+    val lotteries: List<String> = emptyList()
     )
 {
 }

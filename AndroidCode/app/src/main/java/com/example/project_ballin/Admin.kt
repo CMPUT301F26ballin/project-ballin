@@ -22,14 +22,14 @@ import kotlin.uuid.Uuid
 @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 
 class Admin(
-    override var firstName: String,
-    override var lastName: String,
-    override var phoneNum: String,
-    override var email: String,
-    override val deviceId: String,
-    override var profilePic: String,
+    override var firstName: String = "",
+    override var lastName: String = "",
+    override var phoneNum: String = "",
+    override var email: String = "",
+    override val deviceId: String = "",
+    override var profilePic: String = "",
     @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
-    override val userID: Uuid,
+    override val userID: Uuid = Uuid.random(),
 ): User {
 
     override fun updateFirstName(newFirstName: String) {

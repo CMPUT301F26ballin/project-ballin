@@ -57,20 +57,20 @@ class CampsiteList {
      */
     fun addCampsite(site: Campsite){
         //THIS MAY CHANGE BASED ON IF WE IMPLEMENT CAMPSITE IDs
-        campsitesRef.document(site.ID.toString()).set(site)
+        campsitesRef.document(site.ID).set(site)
     }
 
     fun updateCampsite(oldSite: Campsite, updatedSite: Campsite){
         //THIS MAY CHANGE BASED ON IF WE IMPLEMENT CAMPSITE IDs
-        campsitesRef.document(oldSite.ID.toString()).set(updatedSite)
+        campsitesRef.document(oldSite.ID).set(updatedSite)
     }
 
     // Would need to further handle how this affects owners/entrants
     fun deleteCampsite(site: Campsite) {
-        campsitesRef.document(site.ID.toString()).delete()
+        campsitesRef.document(site.ID).delete()
     }
 
-    fun getOwnerSites(ID: Uuid): List<Campsite>{
+    fun getOwnerSites(ID: String): List<Campsite>{
         var returnList = mutableStateListOf<Campsite>()
         campsites.forEach { campsite -> if (campsite.ownerID == ID){
         returnList.add(campsite)}
@@ -78,9 +78,9 @@ class CampsiteList {
         return returnList
     }
 
-    fun getCampsite(ID: Uuid): Campsite{
+    fun getCampsite(ID: String): Campsite{
         var siteToReturn: Campsite? = null
-        campsitesRef.document(ID.toString()).get().addOnSuccessListener {
+        campsitesRef.document(ID).get().addOnSuccessListener {
             result ->
             siteToReturn = result.toObject<Campsite>()!!
         }
