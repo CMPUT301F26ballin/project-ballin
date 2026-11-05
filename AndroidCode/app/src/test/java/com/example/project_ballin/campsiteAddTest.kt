@@ -1,6 +1,5 @@
 package com.example.project_ballin
 
-import android.net.Uri
 import junit.framework.TestCase.assertEquals
 import org.junit.After
 import org.junit.Before

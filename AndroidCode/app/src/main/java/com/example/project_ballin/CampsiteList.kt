@@ -1,12 +1,9 @@
 package com.example.project_ballin
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
-import com.google.firebase.firestore.toObjects
-import kotlin.uuid.Uuid
 
 @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 
@@ -78,13 +75,7 @@ class CampsiteList {
         return returnList
     }
 
-    fun getCampsite(ID: String): Campsite{
-        var siteToReturn: Campsite? = null
-        campsitesRef.document(ID).get().addOnSuccessListener {
-            result ->
-            siteToReturn = result.toObject<Campsite>()!!
-        }
-        return siteToReturn!!
-    }
+    fun getCampsite(ID: String?): Campsite? =
+        if (ID == null) null else _campsites.find { it.ID == ID }
 
 }

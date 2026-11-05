@@ -55,15 +55,15 @@ fun LotteryDetailScreen(
     updateLottery: (oldLottery: Lottery, newLottery: Lottery) -> Unit
 ){
     val registrationDateState = rememberDateRangePickerState(
-        initialSelectedStartDateMillis = lottery?.getRegistrationStart(),
-        initialSelectedEndDateMillis = lottery?.getRegistrationEnd()
+        initialSelectedStartDateMillis = lottery?.registrationStart,
+        initialSelectedEndDateMillis = lottery?.registrationEnd
     )
     val bookingDateState = rememberDateRangePickerState(
-        initialSelectedStartDateMillis = lottery?.getBookingStart(),
-        initialSelectedEndDateMillis = lottery?.getBookingEnd()
+        initialSelectedStartDateMillis = lottery?.bookingStart,
+        initialSelectedEndDateMillis = lottery?.bookingEnd
     )
-    var occupancy by remember { mutableStateOf(lottery?.getOccupancy()?.toString() ?: "") }
-    var numWinners by remember { mutableStateOf(lottery?.getLotteryDrawNumber()?.toString() ?: "") }
+    var occupancy by remember { mutableStateOf(lottery?.occupancy?.toString() ?: "") }
+    var numWinners by remember { mutableStateOf(lottery?.numWinners?.toString() ?: "") }
 
     TopAppBar(navController, if (lottery == null) "New Lottery Details" else "Edit Lottery Details"){
         Column(
@@ -109,7 +109,7 @@ fun LotteryDetailScreen(
                         bookingEnd = bookEnd,
                         occupancy = occ,
                         numWinners = winners,
-                        lotteryID = lottery?.getLotteryID() ?: Uuid.random()
+                        lotteryID = lottery?.lotteryID ?: Uuid.random().toString()
                     )
                     if (lottery == null) {
                         addLottery(newLottery)

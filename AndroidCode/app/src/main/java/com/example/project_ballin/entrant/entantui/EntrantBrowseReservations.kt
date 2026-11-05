@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
+import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
@@ -140,14 +141,14 @@ class EntrantBrowseReservations{
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         ) {
-            if (entrant.getUuid() in lottery.getWinners()) {
+            if (entrant.getUuid() in lottery.winners) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "You have won a lottery for ${lottery.getAssociatedSites()[0].name}. Book it?",
+                        text = "You have won a lottery for ${CampsiteList().getCampsite(lottery.associatedSites[0])?.name}. Book it?",
                         style = MaterialTheme.typography.titleMedium
                     )
 
@@ -170,8 +171,8 @@ class EntrantBrowseReservations{
 
                         Button(
                             onClick = {
-                                val site = lottery.getAssociatedSites()[0]
-                                navController.navigate("EntrantSiteBooker/${site.ID}")
+                                val site = lottery.associatedSites[0]
+                                navController.navigate("EntrantSiteBooker/${site}")
                             },
                             modifier = Modifier.padding(16.dp)
                         ) {
@@ -181,7 +182,7 @@ class EntrantBrowseReservations{
                 }
             }
 
-            else if (entrant.getUuid() in lottery.getLosers()) {
+            else if (entrant.getUuid() in lottery.losers) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -192,7 +193,7 @@ class EntrantBrowseReservations{
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Text(
-                            text = "Unfortunately you lost the lottery for ${lottery.getAssociatedSites()[0].name}.",
+                            text = "Unfortunately you lost the lottery for ${CampsiteList().getCampsite(lottery.associatedSites[0])?.name}.",
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
@@ -209,48 +210,6 @@ class EntrantBrowseReservations{
                         }
 
                     }
-                }
-            }
-
-            else{
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        text = "You are registered in a lottery for ${lottery.getAssociatedSites()[0].name}",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Button(
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Red
-                            ),
-                            onClick = {
-
-                            },
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text("Leave Waiting List")
-                        }
-
-
-                        Button(
-                            onClick = {
-                                navController.navigate("EntrantSiteBooker")
-                            },
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text("Owner Messages")
-                        }
-                    }
-
-
                 }
             }
         }

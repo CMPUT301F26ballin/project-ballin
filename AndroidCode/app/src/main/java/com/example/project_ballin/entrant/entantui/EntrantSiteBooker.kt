@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.reusableui.TopAppBar
 
 /**
@@ -33,7 +34,7 @@ import com.example.project_ballin.reusableui.TopAppBar
  */
 class EntrantSiteBooker {
     @Composable
-    fun SiteBooker (navController: NavController, campsite: String?, entrant: Entrant) {
+    fun SiteBooker (navController: NavController, campsiteID: String?, entrant: Entrant) {
 
 
         var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
@@ -65,7 +66,7 @@ class EntrantSiteBooker {
                         chosenDates = { chosenDates = it }
                     )
 
-                    CancelBookButtons(navController, chosenDates)
+                    CancelBookButtons(navController, chosenDates, entrant, campsiteID)
                 }
             }
         }
@@ -78,7 +79,7 @@ class EntrantSiteBooker {
      *
      */
     @Composable
-    fun CancelBookButtons(navController: NavController, chosenDates: List<Long>?) {
+    fun CancelBookButtons(navController: NavController, chosenDates: List<Long>?, entrant: Entrant, campsiteID: String?) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -97,7 +98,7 @@ class EntrantSiteBooker {
 
             Button(
                 onClick = {
-
+                    entrant.bookSite(Reservation(campsiteID, chosenDates))
                 },
                 enabled = chosenDates != null,
                 modifier = Modifier.padding(16.dp)
