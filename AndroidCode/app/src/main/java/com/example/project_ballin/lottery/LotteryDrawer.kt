@@ -1,6 +1,7 @@
 package com.example.project_ballin.lottery
 
 import com.example.project_ballin.User
+import com.example.project_ballin.entrant.Entrant
 
 /**
  * A class that draws the winners for a lottery, and
@@ -9,10 +10,10 @@ import com.example.project_ballin.User
  */
 class LotteryDrawer {
 
-    fun draw(lottery: Lottery): List<User> {
+    fun draw(lottery: Lottery): List<Entrant> {
         val waitlist = lottery.getWaitlist()
         val numWinners = lottery.getLotteryDrawNumber()
-        val winners = mutableListOf<User>()
+        val winners = mutableListOf<Entrant>()
 
         for (i in 0 until numWinners) {
             val winner = waitlist.random()

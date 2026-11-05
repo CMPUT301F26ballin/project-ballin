@@ -211,48 +211,6 @@ class EntrantBrowseReservations{
                     }
                 }
             }
-
-            else{
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        text = "You are registered in a lottery for ${lottery.getAssociatedSites()[0].name}",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Button(
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Red
-                            ),
-                            onClick = {
-
-                            },
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text("Leave Waiting List")
-                        }
-
-
-                        Button(
-                            onClick = {
-                                navController.navigate("EntrantSiteBooker")
-                            },
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text("Owner Messages")
-                        }
-                    }
-
-
-                }
-            }
         }
     }
 

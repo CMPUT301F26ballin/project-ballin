@@ -34,8 +34,8 @@ class Entrant(
     private val activeLotteries = mutableListOf<Lottery>()
     private val wonLotteries = mutableListOf<Lottery>()
     private val lostLotteries = mutableListOf<Lottery>()
-    //private val activeReservations = mutableListOf<Reservation>()
-    //private val pastReservations = mutableListOf<Reservation>()
+    private val activeReservations = mutableListOf<Reservation>()
+    private val pastReservations = mutableListOf<Reservation>()
 
     override fun updateFirstName(newFirstName: String) {
         firstName = newFirstName
@@ -91,5 +91,13 @@ class Entrant(
 
     fun getUuid(): String {
         return userID
+    }
+
+    fun getActiveReservations(): MutableList<Reservation> {
+        return activeReservations
+    }
+
+    fun remActiveReservation(reservation: Reservation){
+        activeReservations.remove(reservation)
     }
 }

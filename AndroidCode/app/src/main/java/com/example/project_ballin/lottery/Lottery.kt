@@ -2,6 +2,7 @@ package com.example.project_ballin.lottery
 
 import com.example.project_ballin.Campsite
 import com.example.project_ballin.User
+import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.owner.Owner
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -26,7 +27,7 @@ import kotlin.uuid.Uuid
  *
  */
 class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
-    private val waitList: MutableList<User> = mutableListOf(),
+    private val waitList: MutableList<Entrant> = mutableListOf(),
     private var occupancy: Int = 0,
     private var numWinners: Int = 0,
     private var registrationStart: Long? = null,
@@ -34,14 +35,13 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
     private var bookingStart: Long? = null,
     private var bookingEnd: Long? = null,
     private val associatedSites: MutableList<Campsite> = mutableListOf(),
-    private val lotteryID: Uuid = Uuid.random(),
+    private val lotteryID: String = Uuid.random().toString(),
     private var lotteryOwnerID: String = "",
     private val winners: MutableList<String> = mutableListOf(),
     private val losers: MutableList<String> = mutableListOf()
 ) {
 
-    @OptIn(ExperimentalUuidApi::class)
-    fun getLotteryID(): Uuid {
+    fun getLotteryID(): String {
         return lotteryID
     }
 
@@ -53,15 +53,15 @@ class Lottery @OptIn(ExperimentalUuidApi::class) constructor(
         return numWinners
     }
 
-    fun addToWaitlist(user: User) {
-        waitList.add(user)
+    fun addToWaitlist(entrant: Entrant) {
+        waitList.add(entrant)
     }
 
-    fun removeFromWaitlist(user: User) {
-        waitList.remove(user)
+    fun removeFromWaitlist(entrant: Entrant) {
+        waitList.remove(entrant)
     }
 
-    fun getWaitlist(): List<User> {
+    fun getWaitlist(): List<Entrant> {
         return waitList
     }
 

@@ -109,7 +109,7 @@ fun LotteryDetailScreen(
                         bookingEnd = bookEnd,
                         occupancy = occ,
                         numWinners = winners,
-                        lotteryID = lottery?.getLotteryID() ?: Uuid.random()
+                        lotteryID = lottery?.getLotteryID() ?: Uuid.random().toString()
                     )
                     if (lottery == null) {
                         addLottery(newLottery)
