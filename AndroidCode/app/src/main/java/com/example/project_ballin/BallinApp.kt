@@ -84,6 +84,9 @@ fun BallinApp() {
         Campsite(
             "campsite1",
             Uuid.random().toString(),
+            //Location(""),
+            lat = 0.0,
+            lon = 0.0,
             "Jasper",
             mutableListOf<String>(),
             1.00.toFloat(),

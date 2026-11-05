@@ -42,6 +42,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -106,6 +107,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
         var campImages = remember {mutableStateListOf<Uri>()}
         val campByteArray = remember { mutableStateListOf<Blob>() }
         val campAvailableDates = remember { mutableStateListOf<Long>() }
+        var copied by remember { mutableStateOf(0) }
 
 
 
@@ -121,7 +123,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
 
         //the old campsite (if we are updating) null if this is a new site.
-        if (oldSite != null){
+        if (oldSite != null && copied == 0){
             Log.d("campsite", "There is an old site")
             campName = oldSite.name
             campPrice = oldSite.price.toString()
@@ -131,9 +133,10 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
             campOccupancy = oldSite.occupancy.toString()
             oldSite.images.forEach { byteArray -> campByteArray.add(byteArray) }
             oldSite.availability.forEach { date -> campAvailableDates.add(date) }
-            //campLat = oldSite.location.latitude.toString()
-            //campLon = oldSite.location.longitude.toString()
-
+            campLat = oldSite.lat.toString()
+            campLon = oldSite.lon.toString()
+            campLocation = oldSite.locationName
+            copied = 1
         }
 
 
@@ -141,7 +144,8 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())) {
+            .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally) {
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)){
@@ -349,19 +353,20 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                 .padding(16.dp)){
                 if (oldSite == null) {
                     Button(onClick = {
+
                         if (campName.isNotBlank() &&
                             campDesc.isNotBlank() &&
                             campOccupancy.isNotBlank() &&
                             campPrice.isNotBlank() &&
                             campRules.isNotBlank()
+
                         ) {
                             //must assert numbers in price and occupancy
-                            val location = Location(campLocation)
-                            location.latitude = campLat.toDouble()
-                            location.longitude = campLon.toDouble()
                             addSite(
                                 Campsite(
                                     name = campName,
+                                    lon = campLon.toDouble(),
+                                    lat = campLat.toDouble(),
                                     ID = Uuid.random().toString(), //FIGURE OUT ID IMPLEMENTATION
                                     ownerID = ownerID,
                                     price = campPrice.toFloat(),
@@ -372,8 +377,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     occupancy = campOccupancy.toInt(),
                                     images = campByteArray,
                                     //Campsite needs other elements based on what is commented out in campsite object
-                                    //location = location,
-                                    locationName = "",
+                                    locationName = campLocation,
                                     availability = campAvailableDates,
                                     lotteries = mutableListOf() //TODO
                                 )
@@ -402,6 +406,8 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     //location = location,
                                     name = campName,
                                     ID = oldSite.ID,
+                                    lon = campLon.toDouble(),
+                                    lat = campLat.toDouble(),
                                     ownerID = oldSite.ownerID,
                                     price = campPrice.toFloat(),
                                     rating = oldSite.rating,
