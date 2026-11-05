@@ -1,7 +1,9 @@
 package com.example.project_ballin
 
+import android.location.Location
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +23,7 @@ import com.example.project_ballin.entrant.entantui.EntrantMenuScreen
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
 import com.example.project_ballin.lottery.Lottery
+
 import com.example.project_ballin.lottery.LotteryList
 //import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen commented out cuz its giving me an error -Nick
 import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
@@ -44,6 +47,7 @@ fun BallinApp() {
     val entrantList = remember { EntrantList() }
     val ownerList = remember { OwnerList() }
     val adminList = remember { AdminList() }
+    val lotteryList = remember { LotteryList() }
 
     //temporary for testing
     var currentEntrant by remember {
@@ -60,7 +64,52 @@ fun BallinApp() {
         )
     }
 
-    val lotteryList = LotteryList()
+    var campsite by remember { mutableStateOf<Campsite>(
+        Campsite(
+            "campsite1",
+            Uuid.random().toString(),
+            "Jasper",
+            mutableListOf<String>(),
+            1.00.toFloat(),
+            5.toFloat(),
+            "rules",
+            "description",
+            10,
+            mutableListOf<ByteArray>(),
+            Uuid.random().toString(),
+            mutableListOf<Long>(),
+            mutableListOf<String>()
+        )
+    ) }
+    var lottery by remember { mutableStateOf<Lottery>(
+        Lottery(
+            mutableListOf<String>(),
+            10,
+            5,
+            null,
+            null,
+            null,
+            null,
+            mutableListOf<String>(),
+            Uuid.random().toString(),
+            Uuid.random().toString(),
+            mutableListOf<String>(),
+            mutableListOf<String>()
+        )
+    ) }
+
+    LaunchedEffect(Unit) {
+        campsite.lotteries.add(lottery.lotteryID)
+        lottery.associatedSites.add(campsite.ID)
+        currentEntrant?.let {
+            lottery.waitList.add(it.userID)
+            it.addActiveLottery(lottery)
+        }
+        campsiteList.addCampsite(campsite)
+        lotteryList.addLottery(lottery)
+    }
+
+
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
@@ -83,7 +132,7 @@ fun BallinApp() {
         composable("CampsiteDetailScreen/{CampID}") {
             val siteIDString = it.arguments!!.getString("CampID")
             val campsite = campsiteList.getCampsite(siteIDString!!)
-            CampsiteDetailScreen(navController, campsite)
+            CampsiteDetailScreen(navController, campsite!!)
         }
 
         composable("CampsiteInputScreen/{CampID}") {
@@ -195,7 +244,7 @@ fun BallinApp() {
         composable("ActiveReservationScreen") {
             val entrant = currentEntrant
             if (entrant != null) {
-                ActiveReservationScreen().ActiveReservations(navController, entrant)
+                ActiveReservationScreen().ActiveReservations(navController, entrant, campsiteList)
             }
         }
 
@@ -206,7 +255,7 @@ fun BallinApp() {
             }
         }
 
-        composable("EntrantSiteBooker/{CampID}") { siteToBook ->
+        composable("EntrantSiteBooker/{campID}") { siteToBook ->
             val entrant = currentEntrant
             val campID = siteToBook.arguments?.getString("campID")
             if (entrant != null) {
