@@ -24,15 +24,16 @@ import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.reusableui.TopAppBar
 
-/**
- * The entant book site page
- * Entrants can book a campsite from a date picker that shows the available days
- *
- * @param navController the navigation controller for the app
- * @param campsite the campsite to book
- * @param entrant the entrant
- */
+
 class EntrantSiteBooker {
+    /**
+     * The entant book site page
+     * Entrants can book a campsite from a date picker that shows the available days
+     *
+     * @param navController the navigation controller for the app
+     * @param campsiteID the campsite to book
+     * @param entrant the entrant
+     */
     @Composable
     fun SiteBooker (navController: NavController, campsiteID: String?, entrant: Entrant) {
 
