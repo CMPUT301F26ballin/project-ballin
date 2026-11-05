@@ -52,3 +52,5 @@ Peter: Implemented proper Navcontroller data passing to keep track of the Uuid o
 Leighan: Implemented classes relating to messages and notifications, and also made screens related to it for admin view. Also did UI tests for it.
 
 Nick: search bar with filters mostly finished - filter by dates, now working on account creation 
+
+Salix: Added the basic implementation of the lottery screens and navigation
