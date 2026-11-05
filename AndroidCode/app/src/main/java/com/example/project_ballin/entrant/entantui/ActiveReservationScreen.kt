@@ -14,10 +14,15 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.entrant.Entrant
@@ -36,6 +41,8 @@ class ActiveReservationScreen {
 
     @Composable
     fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList){
+        var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -50,15 +57,33 @@ class ActiveReservationScreen {
                     }
 
                     items(entrant.activeLotteries) { lottery ->
-                        ActiveLotteryCard(lottery, entrant, campsiteList, navController)
+                        ActiveLotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
                     }
                 }
+            }
+        }
+
+
+        //Looked up how to make a dialog in compose
+        //https://developer.android.com/develop/ui/compose/components/dialog#dialog-composable
+        lotteryToLeave?.let { lottery ->
+            Dialog(onDismissRequest = { lotteryToLeave = null }) {
+                ConfirmActionDialog().ConfirmAction(
+                    "Are you sure you want to leave this waiting list?",
+                    confirm = { confirmed ->
+                        if (confirmed) {
+                                lottery.waitList.remove(entrant.userID)
+                            entrant.activeLotteries.remove(lottery)
+                        }
+                        lotteryToLeave = null
+                    }
+                )
             }
         }
     }
 
     @Composable
-    fun ActiveLotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController){
+    fun ActiveLotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onLeaveClick: () -> Unit){
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -159,10 +184,8 @@ class ActiveReservationScreen {
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.Red
                             ),
-                            onClick = {
-                                lottery.waitList.remove(entrant.userID)
-                                entrant.activeLotteries.remove(lottery)
-                            },
+                            onClick = onLeaveClick
+                            ,
                             modifier = Modifier.padding(16.dp)
                         ) {
                             Text("Leave Waiting List")
@@ -182,6 +205,7 @@ class ActiveReservationScreen {
             }
         }
     }
+
 
     @Composable
     fun CurrentReservationCard(entrant: Entrant, reservation: Reservation, campsiteList: CampsiteList, navController: NavController){

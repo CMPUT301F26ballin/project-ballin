@@ -59,7 +59,7 @@ fun BallinApp() {
                 deviceId = "123",
                 profilePic = "a",
                 lastName = "",
-                userID = Uuid.random().toString()
+                userID = "1"
             )
         )
     }
@@ -67,7 +67,7 @@ fun BallinApp() {
     var campsite by remember { mutableStateOf<Campsite>(
         Campsite(
             "campsite1",
-            Uuid.random().toString(),
+            "12",
             "Jasper",
             mutableListOf<String>(),
             1.00.toFloat(),
@@ -76,7 +76,7 @@ fun BallinApp() {
             "description",
             10,
             mutableListOf<ByteArray>(),
-            Uuid.random().toString(),
+            "123",
             mutableListOf<Long>(),
             mutableListOf<String>()
         )
@@ -91,7 +91,7 @@ fun BallinApp() {
             null,
             null,
             mutableListOf<String>(),
-            Uuid.random().toString(),
+            "1234",
             Uuid.random().toString(),
             mutableListOf<String>(),
             mutableListOf<String>()
