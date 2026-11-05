@@ -11,14 +11,13 @@ class campsiteAddTest() {
     private lateinit var campsiteList: CampsiteList
     private  lateinit var testSite: Campsite
 
-    private lateinit var ownerUid: Uuid
-    private lateinit var campUid: Uuid
-
+    private lateinit var ownerUid: String
+    private lateinit var campUid: String
     @Before
     fun setUpList(){
         campsiteList = CampsiteList()
-        ownerUid = Uuid.random()
-        campUid = Uuid.random()
+        ownerUid = Uuid.random().toString()
+        campUid = Uuid.random().toString()
         testSite = Campsite(name = "HelloSite",
             ID = campUid,
             locationName = "Waterton",

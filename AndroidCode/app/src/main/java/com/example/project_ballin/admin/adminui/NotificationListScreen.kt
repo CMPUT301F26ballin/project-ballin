@@ -98,15 +98,13 @@ fun NotificationButtonRow(index: Int, notification: Notification, navController:
     }
 }
 
-@OptIn(ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun NotificationListScreenPreview() {
     val navController = rememberNavController()
-    val uuidRandomID: Uuid = Uuid.random()
     val sampleNotifications = listOf(
-        Notification("Hello", Date(), uuidRandomID),
-        Notification("Hi", Date(), uuidRandomID),
+        Notification("Hello", Date(), "1"),
+        Notification("Hi", Date(), "2"),
     )
    NotificationListScreen(navController, sampleNotifications)
 }

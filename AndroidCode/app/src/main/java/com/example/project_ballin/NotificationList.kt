@@ -48,7 +48,7 @@ class NotificationList {
      * @param notification The notification being added
      */
     fun addNotification(notification: Notification){
-        notificationsRef.document(notification.ID.toString()).set(notification)
+        notificationsRef.document(notification.ID).set(notification)
     }
 
     /**
@@ -58,7 +58,7 @@ class NotificationList {
      */
     // Would need to further handle how this affects owners/entrants
     fun deleteNotification(notification: Notification) {
-        notificationsRef.document(notification.ID.toString()).delete()
+        notificationsRef.document(notification.ID).delete()
     }
 
     fun getAllNotifications(): List<Notification>{
@@ -71,9 +71,9 @@ class NotificationList {
      * @param ID the ID of the notification to get
      * @return a notification object with the given ID
      */
-    fun getNotification(ID: Uuid): Notification{
+    fun getNotification(ID: String): Notification{
         var notification: Notification? = null
-        notificationsRef.document(ID.toString())
+        notificationsRef.document(ID)
             .get()
             .addOnSuccessListener {
                     result -> notification = result.toObject(Notification::class.java)

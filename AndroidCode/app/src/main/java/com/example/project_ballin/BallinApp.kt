@@ -31,6 +31,7 @@ import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
 import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
+import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 
 @Composable
@@ -75,7 +76,7 @@ fun BallinApp() {
             "rules",
             "description",
             10,
-            mutableListOf<ByteArray>(),
+            mutableListOf<Blob>(),
             Uuid.random().toString(),
             mutableListOf<Long>(),
             mutableListOf<String>()
@@ -219,17 +220,15 @@ fun BallinApp() {
         composable("AdminMessages") { MessageListScreen(navController, messageList.getAllMessages()) }
 
         composable("AdminMessageDetails/{MessageID}") {
-            val messageIDString = it.arguments!!.getString("MessageID")
-            val messageID = Uuid.parse(messageIDString!!)
-            MessageDetailScreen(navController, messageList.getMessage(messageID), onDelete = {messageList.deleteMessage(it)})
+            val messageID = it.arguments!!.getString("MessageID")
+            MessageDetailScreen(navController, messageList.getMessage(messageID!!), onDelete = {messageList.deleteMessage(it)})
         }
 
         composable("AdminNotifications") { NotificationListScreen(navController, notificationList.getAllNotifications()) }
 
         composable("AdminNotificationDetails/{NotificationID}") {
-            val notificationIDString = it.arguments!!.getString("NotificationID")
-            val notificationID = Uuid.parse(notificationIDString!!)
-            NotificationDetailScreen(navController, notificationList.getNotification(notificationID), onDelete = {notificationList.deleteNotification(it)})
+            val notificationID = it.arguments!!.getString("NotificationID")
+            NotificationDetailScreen(navController, notificationList.getNotification(notificationID!!), onDelete = {notificationList.deleteNotification(it)})
         }
 
         composable("MainEntrantMenu") {

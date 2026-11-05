@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
 import com.example.project_ballin.reusableui.TopAppBar
+import com.google.firebase.firestore.Blob
 import java.nio.file.WatchEvent
 import kotlin.let
 import kotlin.uuid.ExperimentalUuidApi
@@ -103,7 +104,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
         var campDesc by remember {mutableStateOf("")}
         var campOccupancy by remember {mutableStateOf("")} //This will be changed to an int
         var campImages = remember {mutableStateListOf<Uri>()}
-        val campByteArray = remember { mutableStateListOf<ByteArray>() }
+        val campByteArray = remember { mutableStateListOf<Blob>() }
         val campAvailableDates = remember { mutableStateListOf<Long>() }
 
 
@@ -324,9 +325,9 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
                         val context: Context = LocalContext.current
                         val bytes: ByteArray = context.contentResolver.openInputStream(uri).use {it!!.buffered().readBytes()}
-                        campByteArray.add(bytes)
+                        campByteArray.add(Blob.fromBytes(bytes))
                         ImageRow(
-                            bytes,
+                            Blob.fromBytes(bytes),
                             OnDelete = { campByteArray.remove(it) })
                     }
                 }
@@ -432,8 +433,9 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
 @OptIn(InternalComposeApi::class)
 @Composable
-fun ImageRow(image: ByteArray, OnDelete:(ByteArray) -> Unit){
-    val bitmap: Bitmap = BitmapFactory.decodeByteArray(image,0,image.size)
+fun ImageRow(image: Blob, OnDelete:(Blob) -> Unit){
+    val imageBytes: ByteArray = image.toBytes()
+    val bitmap: Bitmap = BitmapFactory.decodeByteArray(imageBytes,0,imageBytes.size)
     Column(modifier = Modifier
         .padding(6.dp)
         .clickable(onClick = { OnDelete(image) })){
