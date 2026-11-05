@@ -136,17 +136,15 @@ fun <T> NotificationDetailRow(descriptionText: String, content: T, testTag: Stri
     }
 }
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 @Preview(showBackground = true)
 @Composable
 fun NotificationDetailScreenPreview() {
     val navcontroller = rememberNavController()
-    val uuidRandom: Uuid = Uuid.random()
 
     val sampleNotification = Notification(
         "Hello, this is the content of the notification",
         Date(),
-        uuidRandom
+        "1"
     )
 
     NotificationDetailScreen(navcontroller, sampleNotification, onDelete = {})

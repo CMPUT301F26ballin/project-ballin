@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.location.Location
 import android.media.Image
 import android.net.Uri
+import com.google.firebase.firestore.Blob
 import java.util.UUID
 import kotlin.uuid.Uuid
 
@@ -44,7 +45,7 @@ class Campsite(
     var rules: String = "",
     var description: String = "",
     var occupancy: Int = 0,
-    var images: MutableList<ByteArray> = mutableListOf(),
+    var images: MutableList<Blob> = mutableListOf(),
     var ownerID: String = "",
     val availability : MutableList<Long> = mutableListOf(),
     val lotteries: MutableList<String> = mutableListOf()
