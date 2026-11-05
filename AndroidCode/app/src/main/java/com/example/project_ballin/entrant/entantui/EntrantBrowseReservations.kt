@@ -19,23 +19,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
-import androidx.navigation.compose.*
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
-import com.example.project_ballin.reusableui.TopAppBar
-import kotlin.uuid.ExperimentalUuidApi
-
-/**
- * The entant browse reservations page
- * Entrants can look at their current reservations and past reservations
- * Entrants can book a campsite if they have won a lottery
- *
- * @param navController the navigation controller for the app
- */
 
 class EntrantBrowseReservations{
+
+    /**
+     * The entant browse reservations page
+     * Entrants can look at their current reservations and past reservations
+     * Entrants can book a campsite if they have won a lottery
+     *
+     * @param navController the navigation controller for the app
+     */
     @Composable
     fun BrowseReservations (navController: NavController, entrant: Entrant) {
 
@@ -63,6 +60,9 @@ class EntrantBrowseReservations{
 
     /**
      * Shows the active and past reservation buttons
+     * Entrants can look at their current reservations and past reservations by clicking the respective button
+     *
+     * @param navController the navigation controller for the app
      */
     @Composable
     fun ActivePastReservationButtons(navController: NavController) {
@@ -129,7 +129,6 @@ class EntrantBrowseReservations{
      * @param entrant the entrant
      * @param navController the navigation controller for the app
      */
-    @OptIn(ExperimentalUuidApi::class)
     @Composable
     fun LotteryCard(lottery: Lottery, entrant: Entrant, navController: NavController) {
         Card(

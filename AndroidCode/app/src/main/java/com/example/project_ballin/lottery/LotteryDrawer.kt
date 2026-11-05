@@ -1,8 +1,5 @@
 package com.example.project_ballin.lottery
 
-import com.example.project_ballin.User
-import com.example.project_ballin.entrant.Entrant
-
 /**
  * A class that draws the winners for a lottery, and
  * removes the winners from the pool after being drawn

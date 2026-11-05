@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -30,15 +29,17 @@ import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
 
-/**
- * The entrant active reservations page
- * Entrants can look at their active reservations
- *
- * @param navController the navigation controller for the app
- * @param entrant the entrant
- */
+
 class ActiveReservationScreen {
 
+    /**
+     * The entrant active reservations page
+     * Entrants can look at their active reservations
+     *
+     * @param navController the navigation controller for the app
+     * @param entrant the entrant
+     * @param campsiteList the list of campsites
+     */
     @Composable
     fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList){
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
@@ -82,6 +83,16 @@ class ActiveReservationScreen {
         }
     }
 
+
+    /**
+     * The entrant active lottery card
+     * Entrants can look at their active lotteries and leave them
+     * @param lottery the lottery
+     * @param entrant the entrant
+     * @param campsiteList the list of campsites
+     * @param navController the navigation controller for the app
+     * @param onLeaveClick the function to run when the leave button is clicked
+     */
     @Composable
     fun ActiveLotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onLeaveClick: () -> Unit){
         Card(
@@ -207,6 +218,16 @@ class ActiveReservationScreen {
     }
 
 
+    /**
+     * The entrant current reservation card
+     * Entrants can look at their current reservations
+     *
+     * @param entrant the entrant
+     * @param reservation the reservation
+     * @param campsiteList the list of campsites
+     * @param navController the navigation controller for the app
+     *
+     */
     @Composable
     fun CurrentReservationCard(entrant: Entrant, reservation: Reservation, campsiteList: CampsiteList, navController: NavController){
         val campsite = campsiteList.getCampsite(reservation.campsiteID)

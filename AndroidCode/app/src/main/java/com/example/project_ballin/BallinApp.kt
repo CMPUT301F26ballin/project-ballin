@@ -39,7 +39,6 @@ fun BallinApp() {
 
 
     val navController = rememberNavController()
-
     // remember = only create one ProfileList
     val campsiteList = remember { CampsiteList() }
     val messageList = remember { MessageList() }
