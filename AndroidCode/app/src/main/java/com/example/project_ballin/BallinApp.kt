@@ -81,11 +81,10 @@ fun BallinApp() {
     var campsite by remember { mutableStateOf<Campsite>(
         Campsite(
             "campsite1",
-            Uuid.random().toString(),
+            "2",
             //Location(""),
             lat = 0.0,
             lon = 0.0,
-            "2",
             "Jasper",
             mutableListOf<String>(),
             1.00.toFloat(),
@@ -104,6 +103,9 @@ fun BallinApp() {
         Campsite(
             "campsite2",
             "4",
+            lat = 0.0,
+            lon = 0.0,
+
             "Jasper",
             mutableListOf<String>(),
             1.00.toFloat(),
@@ -122,6 +124,8 @@ fun BallinApp() {
         Campsite(
             "campsite3",
             "5",
+            lat = 0.0,
+            lon = 0.0,
             "Jasper",
             mutableListOf<String>(),
             1.00.toFloat(),
