@@ -38,6 +38,7 @@ class SearchViewModel: ViewModel() {
         _selectedLocationFilter.value = locationFilter
     }
 
+    /*
      val testSites: List<Campsite> = listOf( // replace with actual sites
          Campsite(
              name = "Pine Valley Campsite",
@@ -79,6 +80,8 @@ class SearchViewModel: ViewModel() {
              images = mutableListOf()
          )
     ) //replace with actual sites
+
+     */
     private val _campsites = MutableStateFlow<List<Campsite>>(emptyList())
 
     fun updateCampsites(newList: List<Campsite>) {

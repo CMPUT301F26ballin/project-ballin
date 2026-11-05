@@ -36,7 +36,7 @@ import kotlin.uuid.Uuid
 
 class Campsite(
     var name: String = "",
-    var ID: String = " ",
+    var ID: String = "",
     //var location: Location = Location(""),
     var locationName: String = "",
     var tags: MutableList<String> = mutableListOf(),

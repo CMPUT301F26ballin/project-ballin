@@ -68,7 +68,6 @@ class ActiveReservationScreen {
         //Looked up how to make a dialog in compose
         //https://developer.android.com/develop/ui/compose/components/dialog#dialog-composable
         lotteryToLeave?.let { lottery ->
-            Dialog(onDismissRequest = { lotteryToLeave = null }) {
                 ConfirmActionDialog().ConfirmAction(
                     "Are you sure you want to leave this waiting list?",
                     confirm = { confirmed ->
@@ -81,7 +80,6 @@ class ActiveReservationScreen {
                 )
             }
         }
-    }
 
 
     /**
