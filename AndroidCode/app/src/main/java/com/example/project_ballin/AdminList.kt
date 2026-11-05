@@ -26,26 +26,6 @@ data class AdminData(
     val userID: String = "",
 )
 
-fun Admin.toData() = AdminData(
-    firstName,
-    lastName,
-    phoneNum,
-    email,
-    deviceId,
-    profilePic,
-    userID.toString(),
-)
-
-fun AdminData.toAdmin() = Admin(
-    name,
-    lastName = "",
-    phoneNum,
-    email = email,
-    deviceId= deviceId,
-    profilePic = profilePic,
-    userID = Uuid.parse(userID),
-)
-
 class AdminList{
     private val _admins = mutableStateListOf<Admin>()
 
@@ -83,7 +63,7 @@ class AdminList{
      * @param admin The admin object being added
      */
     fun addAdmin(admin: Admin) {
-        adminsRef.document(admin.userID.toString()).set(admin.toData())
+        adminsRef.document(admin.userID).set(admin)
     }
 
     /**
@@ -92,7 +72,7 @@ class AdminList{
      * @param admin The admin object being updated
      * */
     fun updateAdmin(admin: Admin) {
-        adminsRef.document(admin.userID.toString()).set(admin.toData())
+        adminsRef.document(admin.userID).set(admin)
     }
 
     /**
@@ -101,7 +81,7 @@ class AdminList{
      * @param admin The admin being deleted
      * */
     fun deleteAdmin(admin: Admin) {
-        adminsRef.document(admin.userID.toString()).delete()
+        adminsRef.document(admin.userID).delete()
     }
 
     /**
@@ -109,7 +89,7 @@ class AdminList{
      *
      * @param id the Uuid of the admin
      */
-    fun getAdmin(id: Uuid): Admin? = _admins.find {
+    fun getAdmin(id: String): Admin? = _admins.find {
         it.userID == id
     }
 }
