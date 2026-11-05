@@ -14,13 +14,4 @@ interface User {
     val deviceId: String
     val profilePic: String
     val userID: String
-
-    fun updateFirstName(newFirstName: String)
-    fun updateLastName(newLastName: String)
-    fun updatePhoneNum(newPhoneNum: String)
-    fun updateEmail(newEmail: String)
-    fun updateProfilePic(newProfilePic: String)
-
-    fun deleteAccount()
-
 }

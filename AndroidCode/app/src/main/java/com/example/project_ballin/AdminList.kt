@@ -6,26 +6,15 @@ import com.google.firebase.firestore.firestore
 import kotlin.uuid.Uuid
 
 /**
- * The data class for an admin.
- * Admins have a name, phone number, email, device ID, profile picture, and user ID.
+ * The Admin list class
+ * Stores admin profiles in firebase
  *
- * @property name the name of the admin
- * @property phoneNum the phone number of the admin
- * @property email the email of the admin
- * @property deviceId the device ID of the admin
- * @property profilePic the profile picture of the admin
- * @property userID the user ID of the admin
- * */
-data class AdminData(
-    val name: String = "",
-    val lastname: String = "",
-    val phoneNum: String = "",
-    val email: String = "",
-    val deviceId: String = "",
-    val profilePic: String = "",
-    val userID: String = "",
-)
-
+ * @property _admins the list of admins
+ * @property db the database
+ * @property adminsRef the reference to the admins collection
+ * @property admins the list of admins
+ *
+ */
 class AdminList{
     private val _admins = mutableStateListOf<Admin>()
 

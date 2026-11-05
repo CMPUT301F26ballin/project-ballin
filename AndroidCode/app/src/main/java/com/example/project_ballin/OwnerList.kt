@@ -7,28 +7,15 @@ import com.google.firebase.firestore.firestore
 import kotlin.uuid.Uuid
 
 /**
- * The data class for an owner.
- * Owners have a name, phone number, email, device ID, profile picture, and user ID.
+ * The Owner list class
+ * Stores owner profiles in firebase
  *
- * @property name the name of the owner
- * @property phoneNum the phone number of the owner
- * @property email the email of the owner
- * @property deviceId the device ID of the owner
- * @property profilePic the profile picture of the owner
- * @property userID the user ID of the owner
- * @property campsitesOwned the campsites owned by the owner
+ * @property _owners the list of owners
+ * @property db the database
+ * @property ownersRef the reference to the owners collection
+ * @property owners the list of owners
+ *
  */
-data class OwnerData(
-    val name: String = "",
-    val lastName: String = "",
-    val phoneNum: String = "",
-    val email: String = "",
-    val deviceId: String = "",
-    val profilePic: String = "",
-    val userID: String = "",
-    val campsitesOwned: ArrayList<String> = ArrayList(),
-)
-
 class OwnerList{
     private val _owners = mutableStateListOf<Owner>()
 
