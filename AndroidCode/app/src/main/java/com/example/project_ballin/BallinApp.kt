@@ -14,12 +14,14 @@ import androidx.navigation.navArgument
 import com.example.project_ballin.admin.adminui.NotificationDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.entrant.QRCodeScanner
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantMenuScreen
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
+import com.example.project_ballin.entrant.entantui.EntrantViewPolicies
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
 import com.example.project_ballin.lottery.Lottery
 
@@ -429,6 +431,14 @@ fun BallinApp() {
 
         composable("Browse Campsites"){
             EntrantBrowseCampsites(navController, campsiteList, currentEntrant!!.userID)
+        }
+
+        composable("Entrant Policy and Guidelines") {
+            EntrantViewPolicies(navController)
+        }
+
+        composable("Scan QR Code") {
+            QRCodeScanner(navController)
         }
 
     }

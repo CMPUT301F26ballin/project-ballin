@@ -35,13 +35,15 @@ fun GuestFilter(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+        ,
     ) {
         OutlinedTextField(
             value = selectedNumOfGuests?.toString() ?: "",
             onValueChange = viewModel::onNumOfGuestsChange,
             placeholder = { Text("Number of Guests") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.testTag("Occupancy Filter")
         )
     }
 }
@@ -68,6 +70,7 @@ fun LocationFilter(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .testTag("Location Filter")
     ) {
         items(locationOptions) { location ->
             FilterChip(
@@ -79,8 +82,10 @@ fun LocationFilter(
                         viewModel.onSelectedLocationFilterChange(location)
                     }
               },
-                label = { Text(location) }
+                label = { Text(location) } ,
+                modifier = Modifier.testTag("Location Chip: $location")
             )
+
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,7 +29,7 @@ import com.example.project_ballin.reusableui.TopAppBar
 
 class EntrantSiteBooker {
     /**
-     * The entant book site page
+     * The entrant book site page
      * Entrants can book a campsite from a date picker that shows the available days
      *
      * @param navController the navigation controller for the app
@@ -58,7 +59,6 @@ class EntrantSiteBooker {
 
                     DateRangePicker().BookingDateRangePicker(
                         availableDates = campsiteList.getCampsite(campsiteID)!!.availability,
-                        bookingYear = 2027,
                         modifier = Modifier.weight(1f),
                         chosenDates = { chosenDates = it }
                     )
@@ -83,7 +83,8 @@ class EntrantSiteBooker {
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red),
+                    containerColor = MaterialTheme.colorScheme.error
+                ),
                 onClick = {
                     navController.popBackStack()
                 },

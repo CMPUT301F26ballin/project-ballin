@@ -57,9 +57,6 @@ class EntrantBrowseReservations{
                     ActivePastReservationButtons(navController)
 
                     val activeLotteries = entrant.activeLotteries
-                    val wonLotteries = entrant.wonLotteries
-                    val lostLotteries = entrant.lostLotteries
-
 
                     LazyColumn {
                         items(activeLotteries) { lottery ->
@@ -75,20 +72,18 @@ class EntrantBrowseReservations{
 
         //Pops up over the screen when user declines a lottery they won
         lotteryToLeave?.let { lottery ->
-            Dialog(onDismissRequest = { lotteryToLeave = null }) {
-                ConfirmActionDialog().ConfirmAction(
-                    "Are you sure you want to decline booking this site??",
-                    confirm = { confirmed ->
-                        if (confirmed) {
-                            lottery.waitList.remove(entrant.userID)
-                            lottery.winners.remove(entrant.userID)
-                            entrant.activeLotteries.remove(lottery)
-                            entrant.wonLotteries.remove(lottery)
-                        }
-                        lotteryToLeave = null
+            ConfirmActionDialog().ConfirmAction(
+                "Are you sure you want to decline booking this site??",
+                confirm = { confirmed ->
+                    if (confirmed) {
+                        lottery.waitList.remove(entrant.userID)
+                        lottery.winners.remove(entrant.userID)
+                        entrant.activeLotteries.remove(lottery)
+                        entrant.wonLotteries.remove(lottery)
                     }
-                )
-            }
+                    lotteryToLeave = null
+                }
+            )
         }
     }
 
@@ -117,7 +112,6 @@ class EntrantBrowseReservations{
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium)
             }
-
 
 
             Button(
@@ -168,13 +162,15 @@ class EntrantBrowseReservations{
                         style = MaterialTheme.typography.titleMedium
                     )
 
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Button(
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Red
+                                containerColor = MaterialTheme.colorScheme.error
                             ),
                             onClick = onDeclineClick
                             ,
@@ -215,6 +211,9 @@ class EntrantBrowseReservations{
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -234,7 +233,6 @@ class EntrantBrowseReservations{
             }
         }
     }
-
 
     @Preview(showBackground = true)
     @Composable
