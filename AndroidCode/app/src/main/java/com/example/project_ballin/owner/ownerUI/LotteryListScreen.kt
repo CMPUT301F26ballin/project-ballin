@@ -5,6 +5,7 @@ import com.example.project_ballin.reusableui.TopAppBar
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.project_ballin.Campsite
 import com.example.project_ballin.lottery.LotteryList
 
 
@@ -38,12 +42,13 @@ import com.example.project_ballin.lottery.LotteryList
 fun LotteryListScreen(
     navController: NavController,
     ownerID: String,
-    getOwnerLotteries: (String) -> List<Lottery>
+    getOwnerLotteries: (String) -> List<Lottery>,
+    getCampsite: (String) -> Campsite?,
 ){
     val lotteries = getOwnerLotteries(ownerID)
 
     TopAppBar(navController, "My Lotteries"){
-        LotteryListView(navController, ownerID, lotteries)
+        LotteryListView(navController, ownerID, lotteries, getCampsite)
     }
 }
 
@@ -58,8 +63,13 @@ fun LotteryListScreen(
 fun LotteryListView(
     navController: NavController,
     ownerID: String,
-    lotteries: List<Lottery>){
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    lotteries: List<Lottery>,
+    getCampsite: (String) -> Campsite?){
+    LazyColumn(modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         item {
             Box(modifier = Modifier.fillMaxWidth() ,contentAlignment = Alignment.Center){
                 NewLotteryButton(navController, ownerID )
@@ -81,7 +91,8 @@ fun LotteryListView(
             Spacer(modifier = Modifier.height(16.dp))
             LotteryItem(
                 lottery,
-                onClick = { navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID")}
+                onClick = { navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID")},
+                getCampsite = getCampsite
             )
         }
     }
@@ -110,12 +121,12 @@ fun NewLotteryButton(navController: NavController, ownerID: String) {
 @Composable
 fun LotteryItem(
     lottery: Lottery,
-    onClick: () -> Unit) {
+    onClick: () -> Unit,
+    getCampsite: (String) -> Campsite?) {
     Row(
-        modifier = Modifier.
-            fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
             .border(2.dp, Color.Black)
-            .clickable{ onClick() }
+            .clickable { onClick() }
             .padding(16.dp)
     ) {
         Column {
@@ -128,8 +139,15 @@ fun LotteryItem(
                         "to ${formatDateMillisToDMY(lottery.bookingEnd!!)}"
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(lottery.associatedSites.firstOrNull() ?: "No sites associated")
+
             // list of the sites
+            if (lottery.associatedSites.isEmpty()) Text("No sites associated")
+            lottery.associatedSites.forEach { id ->
+                val campsite = getCampsite(id)
+                if (campsite != null) Text("${campsite.name} - ${campsite.description}")
+                else Text("Deleted campsite")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

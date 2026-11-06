@@ -112,12 +112,13 @@ fun LotteryDetailScreen(
                         // TODO alert user of the error
                     }
 
+                    // TODO book the availability of the campsites selected
+
                     // start with the existing lottery or make a new one
                     val baseLottery = lottery ?: Lottery(
                         lotteryID = Uuid.random().toString(),
                         lotteryOwnerID = ownerID
                     )
-
                     val newLottery = baseLottery.copy(
                         registrationStart = regStart,
                         registrationEnd = regEnd,
@@ -181,16 +182,20 @@ fun LotteryDetailScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Text("Campsites")
 
-            ownerSites.forEach{
-                val isSelected = selectedSiteIDs.contains(it.ID)
+            if (ownerSites.isEmpty()) Text("You don't have any campsites")
+            else {
+                ownerSites.forEach {
+                    val isSelected = selectedSiteIDs.contains(it.ID)
 
-                CampsiteSelectable(campsite = it, isSelected = isSelected,
-                    onClick = {
-                    selectedSiteIDs = if (isSelected) selectedSiteIDs - it.ID
-                        else selectedSiteIDs + it.ID
-                    }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                    CampsiteSelectable(
+                        campsite = it, isSelected = isSelected,
+                        onClick = {
+                            selectedSiteIDs = if (isSelected) selectedSiteIDs - it.ID
+                            else selectedSiteIDs + it.ID
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     }
@@ -213,6 +218,7 @@ fun CampsiteSelectable(
             Text(campsite.name)
             Text(campsite.description)
 
+            // TODO actually check if the campsite is available
             Text("\nCampsite available for this booking window✅")
         }
     }

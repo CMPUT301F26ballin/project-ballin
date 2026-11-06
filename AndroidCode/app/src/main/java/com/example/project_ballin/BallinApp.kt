@@ -317,7 +317,9 @@ fun BallinApp() {
             LotteryListScreen(
                 navController,
                 ownerID!!,
-                getOwnerLotteries = { lotteryList.getOwnerLotteries(it) })
+                getOwnerLotteries = { lotteryList.getOwnerLotteries(it) },
+                getCampsite = { campsiteList.getCampsite(it) }
+            )
         }
 
         composable(
