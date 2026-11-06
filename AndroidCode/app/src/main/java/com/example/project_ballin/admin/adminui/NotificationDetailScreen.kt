@@ -105,18 +105,15 @@ fun NotificationDetailScreen(
         }
 
         notificationToDelete?.let { notification ->
-            Dialog(onDismissRequest = { notificationToDelete = null }) {
-                ConfirmActionDialog().ConfirmAction(
-                    message = "Are you sure you want to delete this notification?",
-                    confirm = { confirmed ->
-                        if (confirmed) {
-                            onDelete(notification)
-                            navController.popBackStack()
-                        }
-                        notificationToDelete = null
-                    }
-                )
-            }
+            ConfirmDeleteDialog(
+                itemDescription = "the notification",
+                onConfirm = {
+                    onDelete(notification)
+                    notificationToDelete = null
+                    navController.popBackStack()
+                },
+                onCancel = { notificationToDelete = null }
+            )
         }
     }
 }
