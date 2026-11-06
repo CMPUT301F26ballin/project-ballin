@@ -57,15 +57,36 @@ class CampsiteList {
         campsitesRef.document(site.ID).set(site)
     }
 
+    /**
+     * A function that takes the campsite to be updated and a campsite with new
+     * values and sets the database entry of the first campsite to the second one.
+     * NOT TO BE USED BY TWO SITES WITH DIFFERENT UUIDS!
+     *
+     * @param oldSite the campsite entry that will be updated.
+     * @param updatedSite the campsite values that will be entered instead.
+     * */
     fun updateCampsite(oldSite: Campsite, updatedSite: Campsite){
         //THIS MAY CHANGE BASED ON IF WE IMPLEMENT CAMPSITE IDs
         campsitesRef.document(oldSite.ID).set(updatedSite)
     }
 
+    /**
+     * A function that takes a campsite and deletes it from the firestore.
+     *
+     * @param site the campsite to be deleted.
+     * */
+
     // Would need to further handle how this affects owners/entrants
     fun deleteCampsite(site: Campsite) {
         campsitesRef.document(site.ID).delete()
     }
+
+    /**
+     * A function that takes a Uuid string and returns a list of all the sites owned
+     * by the user associated with that ID.
+     *
+     * @param ID The string Uuid of the owner.
+     * */
 
     fun getOwnerSites(ID: String): List<Campsite>{
         var returnList = mutableStateListOf<Campsite>()
@@ -74,7 +95,12 @@ class CampsiteList {
         }
         return returnList
     }
-
+    /**
+     * A function that takes a campsite Uuid and returns the associated
+     * site from firestore.
+     *
+     * @param ID the string Uuid of the campsite being accessed.
+     * */
     fun getCampsite(ID: String?): Campsite? =
         if (ID == null) null else _campsites.find { it.ID == ID }
 

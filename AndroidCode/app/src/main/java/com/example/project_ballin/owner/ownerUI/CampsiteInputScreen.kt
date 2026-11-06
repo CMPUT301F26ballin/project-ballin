@@ -66,6 +66,8 @@ import java.sql.Date
 import kotlin.let
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+import androidx.core.graphics.scale
+import java.io.ByteArrayOutputStream
 
 @OptIn(ExperimentalUuidApi::class, InternalComposeApi::class)
 
@@ -96,6 +98,12 @@ import kotlin.uuid.Uuid
  * Inquirer: user13296045 (April 15, 2020)
  * Responder: Alex Mamo (April 16, 2020)
  * https://stackoverflow.com/questions/61230610/how-to-set-bytes-type-to-field-in-firestore
+ *
+ * Title: How to save bitmap to Firebase
+ * Inquirer: wiki wi (Nov 30, 2016)
+ * Responder: Haythem BEN AICHA (Nov 30, 2016)
+ * https://stackoverflow.com/questions/40885860/how-to-save-bitmap-to-firebase
+ *
  *
  *
  *
@@ -362,9 +370,14 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
                         val context: Context = LocalContext.current
                         val bytes: ByteArray = context.contentResolver.openInputStream(uri).use {it!!.buffered().readBytes()}
-                        campByteArray.add(Blob.fromBytes(bytes))
+                        val initBitmap: Bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+                        val newBitmap = resizePhoto(initBitmap)
+                        val baos = ByteArrayOutputStream()
+                        newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                        val newByteArray = baos.toByteArray()
+                        campByteArray.add(Blob.fromBytes(newByteArray))
                         ImageRow(
-                            Blob.fromBytes(bytes),
+                            Blob.fromBytes(newByteArray),
                             onDelete = { campByteArray.remove(it)
                             campImages.remove(uri)})
                     }
@@ -517,4 +530,24 @@ fun TagRow(tag: String, onDelete:(String)-> Unit){
         }
     }
 
+}
+
+/**
+ * Simple function that compresses images to a reasonable size (Because it looks terrible otherwise.)
+ *
+ * Title: Resize the image programmatically using kotlin in Android
+ * Author: Tausif Uddin Ahmed
+ * Written: October 23, 2020
+ * https://tausif11235.medium.com/resize-the-image-programmatically-using-kotlin-in-android-7b8cd7928e0c
+ *
+ *
+ * */
+
+fun resizePhoto(bitmap: Bitmap): Bitmap{
+    val w = bitmap.width
+    val h = bitmap.height
+    val ratio = w/h
+    val W = 400 //HARDCODE VALUE THAT WORKS
+    val H = W * ratio
+    return bitmap.scale(W, H, false)
 }
