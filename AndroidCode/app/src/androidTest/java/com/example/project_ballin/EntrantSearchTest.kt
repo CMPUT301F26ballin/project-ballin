@@ -132,6 +132,31 @@ class EntrantSearchTest {
             .assertExists()
     }
 
+    @Test
+    fun NavigateToSearhScreen_ClickCampsiteCard_GoToCampsiteDetailScreen(){
+        composeTestRule
+            .onNodeWithTag("entrantSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("BROWSE CAMPSITES")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Search Campsites")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Campsite: Waterton Campground 1")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Campsite Details")
+            .assertExists()
+    }
+
 
     @After
     fun cleanUp() {

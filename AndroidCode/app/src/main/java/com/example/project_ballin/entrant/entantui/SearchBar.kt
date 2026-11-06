@@ -100,7 +100,6 @@ fun DateFilter(){
  * function to display the campsites
  *
  * @param navController the navigation controller to use for navigation,
- * will take the user to the campsite's details screen once implemented
  * @param modifier the modifier to apply to the filter
  * @param campsite the campsites to display
  *
@@ -117,7 +116,7 @@ fun DisplayCampsite(
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                navController.navigate("CampsiteDetailScreen/${campsite.ID},${entrantID}")
+                navController.navigate("CampsiteDetailScreen/${campsite.ID}/${entrantID}")
 
             }
             .testTag("Campsite: ${campsite.name}"),

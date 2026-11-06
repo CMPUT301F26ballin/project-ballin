@@ -11,7 +11,7 @@ import com.example.project_ballin.reusableui.TopAppBar
 
 
 /**
- * The entant browse campsites page
+ * The entrant browse campsites page
  * Entrants can search for campsites by name, location, and number of occupants (so far)
  *
  * @param navController the navigation controller for the app
