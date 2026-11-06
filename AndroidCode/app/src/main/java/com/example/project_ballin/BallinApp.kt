@@ -447,5 +447,9 @@ fun BallinApp() {
         composable("PoliciesAndGuidelines"){
             PolicyGuidelinesScreen().PolicyGuidelines(navController)
         }
+    
+        composable("Scan QR Code") {
+            QRCodeScanner(navController)
+        } 
     }
 }

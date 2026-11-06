@@ -7,6 +7,8 @@ import androidx.compose.ui.test.performClick
 import org.junit.Rule
 import org.junit.Test
 
+
+//Test to make sure path to each screen works correctly
 class EntrantScreensTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
@@ -18,11 +20,8 @@ class EntrantScreensTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("BROWSE CAMPSITES")
+            .onNodeWithTag("BROWSE CAMPSITES")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithText("BROWSE CAMPSITES")
             .performClick()
 
         composeTestRule
@@ -41,11 +40,8 @@ class EntrantScreensTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
+            .onNodeWithTag("MY RESERVATIONS")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
             .performClick()
 
         composeTestRule
@@ -55,9 +51,6 @@ class EntrantScreensTest {
         composeTestRule
             .onNodeWithTag("Active Reservation Button")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithTag("Active Reservation Button")
             .performClick()
 
         composeTestRule
@@ -97,11 +90,8 @@ class EntrantScreensTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("SCAN QR CODE")
+            .onNodeWithTag("SCAN QR CODE")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithText("SCAN QR CODE")
             .performClick()
 
         composeTestRule
@@ -116,11 +106,8 @@ class EntrantScreensTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("POLICY AND GUIDELINES")
+            .onNodeWithTag("POLICY AND GUIDELINES")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithText("POLICY AND GUIDELINES")
             .performClick()
 
         composeTestRule

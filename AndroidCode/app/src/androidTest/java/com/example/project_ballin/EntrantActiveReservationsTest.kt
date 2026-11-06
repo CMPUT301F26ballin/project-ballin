@@ -12,6 +12,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+
+//Test for checking what shows up in the active reservations screen
 class EntrantActiveReservationsTest {
     private lateinit var campsiteList: CampsiteList
     private lateinit var entrant: Entrant
@@ -147,11 +149,8 @@ class EntrantActiveReservationsTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
+            .onNodeWithTag("MY RESERVATIONS")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
             .performClick()
 
         composeTestRule

@@ -58,5 +58,5 @@ class Campsite(
     var images: MutableList<Blob> = mutableListOf(),
     var ownerID: String = "",
     val availability : MutableList<Long> = mutableListOf(),
-    val lotteries: MutableList<String> = mutableListOf()
+    val lotteries: MutableList<String> = mutableListOf(),
     )

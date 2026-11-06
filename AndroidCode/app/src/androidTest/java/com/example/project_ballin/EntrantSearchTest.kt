@@ -13,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 
 
+//Test to make sure that the search correctly returns results
 class EntrantSearchTest {
     private lateinit var campsiteList: CampsiteList
     private lateinit var entrant: Entrant
@@ -53,17 +54,14 @@ class EntrantSearchTest {
 
 
     @Test
-    fun NavigateToSearchScreen_EnterText_ResultsShow(){
+    fun NavigateToSearchScreen_EnterText_CheckResults(){
         composeTestRule
             .onNodeWithTag("entrantSignin")
             .performClick()
 
         composeTestRule
-            .onNodeWithText("BROWSE CAMPSITES")
+            .onNodeWithTag("BROWSE CAMPSITES")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithText("BROWSE CAMPSITES")
             .performClick()
 
         composeTestRule
@@ -74,11 +72,66 @@ class EntrantSearchTest {
             .onNodeWithTag("Search Bar")
             .performTextInput("Waterton")
 
+        composeTestRule
+            .onNodeWithTag("Campsite: Waterton Campground 1")
+            .assertExists()
+
+    }
+
+    @Test
+    fun NavigateToSearhScreen_EnterOccupancyFilter_CheckResults(){
+        composeTestRule
+            .onNodeWithTag("entrantSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("BROWSE CAMPSITES")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Search Campsites")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Occupancy Filter")
+            .assertExists()
+            .performTextInput("1")
 
         composeTestRule
             .onNodeWithTag("Campsite: Waterton Campground 1")
             .assertExists()
     }
+
+    @Test
+    fun NavigateToSearhScreen_EnterLocationFilter_CheckResults(){
+        composeTestRule
+            .onNodeWithTag("entrantSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("BROWSE CAMPSITES")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Search Campsites")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Location Filter")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Location Chip: OnePlace")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("Campsite: Waterton Campground 1")
+            .assertExists()
+    }
+
 
     @After
     fun cleanUp() {

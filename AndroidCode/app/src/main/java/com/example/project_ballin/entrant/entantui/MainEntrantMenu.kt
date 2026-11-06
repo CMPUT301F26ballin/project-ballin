@@ -15,6 +15,16 @@ import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.example.project_ballin.reusableui.TopAppBar
 
+/**
+ * The entrant menu screen
+ * Has the main four items for entrant:
+ * - Browse campsites
+ * - my reservations
+ * - scan QR code
+ * - policies and guidelines
+ *
+ * @param navController the navigation controller for the app
+ */
 @Composable
 fun EntrantMenuScreen(navController: NavController){
     TopAppBar(
@@ -35,19 +45,26 @@ fun EntrantMenuScreen(navController: NavController){
                 fontSize = 34.sp
             )
             Spacer(modifier = Modifier.height(128.dp))
-            EntrantHomeButton("BROWSE CAMPSITES", "Browse Campsites", "", navController)
+            EntrantHomeButton("BROWSE CAMPSITES", "Browse Campsites", "BROWSE CAMPSITES", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            EntrantHomeButton("MY RESERVATIONS", "EntrantBrowseReservations", "", navController)
+            EntrantHomeButton("MY RESERVATIONS", "EntrantBrowseReservations", "MY RESERVATIONS", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            EntrantHomeButton("SCAN QR CODE", "", "", navController)
+            EntrantHomeButton("SCAN QR CODE", "Scan QR Code", "SCAN QR CODE", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            EntrantHomeButton("POLICY AND GUIDELINES", "PoliciesAndGuidelines", "", navController)
+            EntrantHomeButton("POLICY AND GUIDELINES", "PoliciesAndGuidelines", "POLICY AND GUIDELINES", navController)
         }
 
 
     }
 }
 
+/**
+ * A button template for the entrant menu screen
+ *
+ * @param name the name of the button
+ * @param destination the destination of the button
+ * @param testTag the test tag of the button
+ */
 @Composable
 fun EntrantHomeButton(name: String, destination: String, testTag: String, navController: NavController) {
 
