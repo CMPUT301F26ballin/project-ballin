@@ -62,7 +62,7 @@ fun CampsiteListScreen(navController: NavController, ownerID: String, getOwnerSi
                     },
                     modifier = Modifier
                         .padding(16.dp)
-                        .testTag("createCampsiteButton")
+                        .testTag("newCampsiteButton")
                 ) {
                     Text("Create Campsite")
                 }
@@ -111,7 +111,7 @@ fun CampsiteItem(site: Campsite, onClick: () -> Unit)
         .fillMaxWidth()
         .clickable { onClick() }
         .padding(16.dp)
-        .testTag("Campsite:${site.name}")){
+        .testTag("Campsite!")){
 
 
         Row(modifier = Modifier
