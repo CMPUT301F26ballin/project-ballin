@@ -429,7 +429,7 @@ fun BallinApp() {
             val entrant = currentEntrant
             val campID = siteToBook.arguments?.getString("campID")
             if (entrant != null) {
-                EntrantSiteBooker().SiteBooker(navController, campID, entrant)
+                EntrantSiteBooker().SiteBooker(navController, campID, campsiteList, entrant)
             }
         }
 
