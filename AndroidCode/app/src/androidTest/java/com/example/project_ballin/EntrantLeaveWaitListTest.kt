@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+//Test for allowing a user to leave a lottery waitlist
 class EntrantLeaveWaitListTest {
     private lateinit var campsiteList: CampsiteList
     private lateinit var entrant: Entrant
@@ -83,7 +84,7 @@ class EntrantLeaveWaitListTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
+            .onNodeWithTag("MY RESERVATIONS")
             .assertExists()
             .performClick()
 

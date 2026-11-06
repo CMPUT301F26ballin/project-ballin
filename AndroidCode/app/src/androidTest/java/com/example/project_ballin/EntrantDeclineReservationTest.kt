@@ -12,6 +12,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+
+//Test for declining a reservation in the browse reservations screen when a user wins a lottery
 class EntrantDeclineReservationTest {
     private lateinit var campsiteList: CampsiteList
     private lateinit var entrant: Entrant
@@ -98,11 +100,8 @@ class EntrantDeclineReservationTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
+            .onNodeWithTag("MY RESERVATIONS")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
             .performClick()
 
         composeTestRule

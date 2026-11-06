@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,6 +73,10 @@ fun AdminProfileListView(
     // Profile waiting for delete confirmation (null = no pop-up)
     var profileToDelete by remember { mutableStateOf<Profile?>(null) }
 
+    // What the admin typed in the search box (kept when the screen rotates)
+    var query by rememberSaveable { mutableStateOf("") }
+    val results = profiles.filter { it.matchesSearch(query) }
+
     if (profiles.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -80,16 +85,27 @@ fun AdminProfileListView(
             Text("There are no profiles yet.", modifier = Modifier.testTag("noProfiles"))
         }
     } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp).testTag("profileList"),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(profiles, key = { it.userID }) { profile ->
-                ProfileItem(
-                    profile = profile,
-                    onClick = { onProfileClick(profile) },
-                    onRemoveClick = { profileToDelete = profile }
+        Column(modifier = Modifier.fillMaxSize()) {
+            AdminSearchField(query, onQueryChange = { query = it }, placeholder = "Search profiles")
+
+            if (results.isEmpty()) {
+                Text(
+                    "No profiles match \"${query.trim()}\".",
+                    modifier = Modifier.padding(16.dp).testTag("noSearchResults")
                 )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(16.dp).testTag("profileList"),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(results, key = { it.userID }) { profile ->
+                        ProfileItem(
+                            profile = profile,
+                            onClick = { onProfileClick(profile) },
+                            onRemoveClick = { profileToDelete = profile }
+                        )
+                    }
+                }
             }
         }
     }

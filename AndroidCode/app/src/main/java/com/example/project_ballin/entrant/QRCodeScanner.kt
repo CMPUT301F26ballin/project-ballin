@@ -12,6 +12,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.reusableui.TopAppBar
 
+/**
+ * The QR code scanner page
+ * Will allow entrants to scan QR codes to view campsite details
+ *
+ * @param navController the navigation controller for the app
+ */
 @Composable
 fun QRCodeScanner(navController: NavController) {
     TopAppBar(

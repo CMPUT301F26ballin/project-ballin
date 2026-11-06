@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -82,6 +83,10 @@ fun AdminCampsiteListView(
     // Campsite waiting for delete confirmation (null = no pop-up)
     var siteToDelete by remember { mutableStateOf<Campsite?>(null) }
 
+    // What the admin typed in the search box (kept when the screen rotates)
+    var query by rememberSaveable { mutableStateOf("") }
+    val results = campsites.filter { it.matchesSearch(query) }
+
     if (campsites.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -90,16 +95,27 @@ fun AdminCampsiteListView(
             Text("There are no campsites yet.", modifier = Modifier.testTag("noCampsites"))
         }
     } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp).testTag("adminCampsiteList"),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(campsites, key = { it.ID }) { site ->
-                AdminCampsiteItem(
-                    site = site,
-                    onClick = { onCampsiteClick(site) },
-                    onRemoveClick = { siteToDelete = site }
+        Column(modifier = Modifier.fillMaxSize()) {
+            AdminSearchField(query, onQueryChange = { query = it }, placeholder = "Search campsites")
+
+            if (results.isEmpty()) {
+                Text(
+                    "No campsites match \"${query.trim()}\".",
+                    modifier = Modifier.padding(16.dp).testTag("noSearchResults")
                 )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(16.dp).testTag("adminCampsiteList"),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(results, key = { it.ID }) { site ->
+                        AdminCampsiteItem(
+                            site = site,
+                            onClick = { onCampsiteClick(site) },
+                            onRemoveClick = { siteToDelete = site }
+                        )
+                    }
+                }
             }
         }
     }
