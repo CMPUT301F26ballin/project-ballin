@@ -36,115 +36,134 @@ import java.util.Date
 import kotlin.uuid.Uuid
 
 
-/**
- * A composable that shows the details of a specific message
- * that was clicked on from the messages list screen.
- *
- * @param navController the navController of the app
- * @param message the message to show the details of
- * @param onDelete runs when the delete button is pressed
- */
-@Composable
-fun MessageDetailScreen(
-    navController: NavController,
-    message: Message,
-    onDelete: (Message) -> Unit
-) {
-    var messageToDelete by remember { mutableStateOf<Message?>(null) }
-
-    TopAppBar(
-        navController = navController,
-        screenTitle = "Message Details"
+class MessageDetailScreen {
+    /**
+     * A composable that shows the details of a specific message
+     * that was clicked on from the messages list screen.
+     *
+     * @param navController the navController of the app
+     * @param message the message to show the details of
+     * @param onDelete runs when the delete button is pressed
+     */
+    @Composable
+    fun MessageDetail(
+        navController: NavController,
+        message: Message,
+        onDelete: (Message) -> Unit
     ) {
-        Column(
+        var messageToDelete by remember { mutableStateOf<Message?>(null) }
+
+        TopAppBar(
+            navController = navController,
+            screenTitle = "Message Details"
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "DETAILS",
+                    fontSize = 34.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(fraction = 0.8f)
+                        .padding(16.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                ) {
+                    Column {
+                        MessageDetailRow(
+                            "Sent By Owner ID",
+                            message.ownerID,
+                            "sentBy${message.ownerID}"
+                        )
+                        MessageDetailRow(
+                            "Recieved By Entrant ID",
+                            message.entrantID,
+                            "recievedBy${message.entrantID}"
+                        )
+                        MessageDetailRow(
+                            "Date Sent",
+                            message.getFormattedDate(),
+                            "dateSent${message.getFormattedDate()}"
+                        )
+                        MessageDetailRow(
+                            "Message Content",
+                            message.content,
+                            "messageContent${message.content}"
+                        )
+                    }
+                }
+
+                Button(
+                    onClick = {
+                        messageToDelete = message
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.testTag("deleteMessage") // for UI testing
+                ) {
+                    Text("Delete Message")
+                }
+
+            }
+
+            messageToDelete?.let { message ->
+                ConfirmDeleteDialog(
+                    itemDescription = "the message",
+                    onConfirm = {
+                        onDelete(message)
+                        messageToDelete = null
+                        navController.popBackStack()
+                    },
+                    onCancel = { messageToDelete = null }
+                )
+            }
+        }
+    }
+
+    /**
+     * Shows a specific part of the message and puts it in a row
+     */
+    @Composable
+    fun <T> MessageDetailRow(descriptionText: String, content: T, testTag: String) {
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .padding(16.dp)
+                .testTag(testTag)
         ) {
             Text(
-                text = "DETAILS",
-                fontSize = 34.sp,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(fraction = 0.8f)
-                    .padding(16.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-            ) {
-                Column {
-                    MessageDetailRow("Sent By Owner ID", message.ownerID, "sentBy${message.ownerID}")
-                    MessageDetailRow("Recieved By Entrant ID", message.entrantID, "recievedBy${message.entrantID}")
-                    MessageDetailRow("Date Sent", message.getFormattedDate(), "dateSent${message.getFormattedDate()}")
-                    MessageDetailRow("Message Content", message.content, "messageContent${message.content}")
-                }
-            }
-
-            Button(
-                onClick = {
-                    messageToDelete = message
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.testTag("deleteMessage") // for UI testing
-            ) {
-                Text("Delete Message")
-            }
-
-        }
-
-        messageToDelete?.let { message ->
-            ConfirmDeleteDialog(
-                itemDescription = "the message",
-                onConfirm = {
-                    onDelete(message)
-                    messageToDelete = null
-                    navController.popBackStack()
-                },
-                onCancel = { messageToDelete = null }
+                text = "${descriptionText} : ${content}",
+                color = Color(255, 255, 255)
             )
         }
     }
-}
 
-/**
- * Shows a specific part of the message and puts it in a row
- */
-@Composable
-fun <T> MessageDetailRow(descriptionText: String, content: T, testTag: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .testTag(testTag)
-    ) {
-        Text(
-            text = "${descriptionText} : ${content}",
-            color = Color(255,255,255)
+    @Preview(showBackground = true)
+    @Composable
+    fun MessageDetailScreenPreview() {
+        val navcontroller = rememberNavController()
+        val sampleMessage = Message(
+            "1",
+            "1",
+            "Hello, this is the content of the message",
+            Date(),
+            "1"
         )
+
+        MessageDetail(navcontroller, sampleMessage, onDelete = {})
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MessageDetailScreenPreview() {
-    val navcontroller = rememberNavController()
-    val sampleMessage = Message(
-        "1",
-        "1",
-        "Hello, this is the content of the message",
-        Date(),
-        "1")
-
-    MessageDetailScreen(navcontroller, sampleMessage, onDelete = {})
 }

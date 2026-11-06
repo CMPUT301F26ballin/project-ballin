@@ -14,14 +14,12 @@ import androidx.navigation.navArgument
 import com.example.project_ballin.admin.adminui.NotificationDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.Entrant
-import com.example.project_ballin.entrant.QRCodeScanner
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantMenuScreen
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
-import com.example.project_ballin.entrant.entantui.EntrantViewPolicies
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
 import com.example.project_ballin.lottery.Lottery
 
@@ -344,6 +342,7 @@ fun BallinApp() {
         composable("Admin Menu Screen") { AdminMenuScreen(navController) }
 
         composable("AdminCampsites") {
+            AdminCampsiteScreens().
             AdminCampsiteListScreen(
                 navController,
                 campsites = campsiteList.campsites,
@@ -353,6 +352,7 @@ fun BallinApp() {
 
         composable("AdminCampsiteDetail/{CampID}") {
             val siteID = it.arguments?.getString("CampID") ?: ""
+            AdminCampsiteScreens().
             AdminCampsiteDetailScreen(
                 navController,
                 site = campsiteList.getCampsite(siteID),
@@ -361,6 +361,7 @@ fun BallinApp() {
         }
 
         composable("AdminProfiles") {
+            AdminProfilesScreens().
             AdminProfileListScreen(
                 navController,
                 profiles = profileList.profiles,
@@ -370,6 +371,7 @@ fun BallinApp() {
 
         composable("AdminProfileDetail/{UserID}") {
             val userID = it.arguments?.getString("UserID") ?: ""
+            AdminProfilesScreens().
             AdminProfileDetailScreen(
                 navController,
                 profile = profileList.getProfile(userID),
@@ -377,26 +379,28 @@ fun BallinApp() {
             )
         }
 
-        composable("AdminMessages") { MessageListScreen(navController, messageList.getAllMessages()) }
+        composable("AdminMessages") { MessageListScreen().MessageList(navController, messageList.getAllMessages()) }
 
         composable("AdminMessageDetails/{MessageID}") {
             val messageID = it.arguments!!.getString("MessageID")
             val message = messageList.getMessage(messageID!!)
             if (message != null) {
-                MessageDetailScreen(
+                MessageDetailScreen().
+                MessageDetail(
                     navController,
                     message,
                     onDelete = { messageList.deleteMessage(it) })
             }
         }
 
-        composable("AdminNotifications") { NotificationListScreen(navController, notificationList.getAllNotifications()) }
+        composable("AdminNotifications") { NotificationListScreen().NotificationList(navController, notificationList.getAllNotifications()) }
 
         composable("AdminNotificationDetails/{NotificationID}") {
             val notificationID = it.arguments!!.getString("NotificationID")
             val notification = notificationList.getNotification(notificationID!!)
             if (notification != null) {
-                NotificationDetailScreen(
+                NotificationDetailScreen().
+                NotificationDetail(
                     navController,
                     notification,
                     onDelete = { notificationList.deleteNotification(it) })
@@ -440,13 +444,12 @@ fun BallinApp() {
             EntrantBrowseCampsites(navController, campsiteList, currentEntrant!!.userID)
         }
 
-        composable("PoliciesAndGuidelines") {
-            EntrantViewPolicies(navController)
+        composable("PoliciesAndGuidelines"){
+            PolicyGuidelinesScreen().PolicyGuidelines(navController)
         }
-
+    
         composable("Scan QR Code") {
             QRCodeScanner(navController)
-        }
-
+        } 
     }
 }
