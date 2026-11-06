@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -23,9 +28,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.reusableui.TopAppBar
-import kotlin.uuid.Uuid
+import com.google.firebase.firestore.Blob
 
 /**
  * Admin screen listing every campsite in the app, each with a Remove button.
@@ -75,6 +83,10 @@ fun AdminCampsiteListView(
     // Campsite waiting for delete confirmation (null = no pop-up)
     var siteToDelete by remember { mutableStateOf<Campsite?>(null) }
 
+    // What the admin typed in the search box (kept when the screen rotates)
+    var query by rememberSaveable { mutableStateOf("") }
+    val results = campsites.filter { it.matchesSearch(query) }
+
     if (campsites.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -83,16 +95,27 @@ fun AdminCampsiteListView(
             Text("There are no campsites yet.", modifier = Modifier.testTag("noCampsites"))
         }
     } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp).testTag("adminCampsiteList"),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(campsites, key = { it.ID.toString() }) { site ->
-                AdminCampsiteItem(
-                    site = site,
-                    onClick = { onCampsiteClick(site) },
-                    onRemoveClick = { siteToDelete = site }
+        Column(modifier = Modifier.fillMaxSize()) {
+            AdminSearchField(query, onQueryChange = { query = it }, placeholder = "Search campsites")
+
+            if (results.isEmpty()) {
+                Text(
+                    "No campsites match \"${query.trim()}\".",
+                    modifier = Modifier.padding(16.dp).testTag("noSearchResults")
                 )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(16.dp).testTag("adminCampsiteList"),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(results, key = { it.ID }) { site ->
+                        AdminCampsiteItem(
+                            site = site,
+                            onClick = { onCampsiteClick(site) },
+                            onRemoveClick = { siteToDelete = site }
+                        )
+                    }
+                }
             }
         }
     }
@@ -196,8 +219,6 @@ fun AdminCampsiteDetailView(site: Campsite?, onDelete: (Campsite) -> Unit) {
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        // TODO: show the image gallery once campsites have images
-        // TODO: show the QR code once campsites have one
         CampsiteDetailRow("Name", site.name)
         CampsiteDetailRow("Location", site.locationName)
         CampsiteDetailRow("Description", site.description)
@@ -206,7 +227,9 @@ fun AdminCampsiteDetailView(site: Campsite?, onDelete: (Campsite) -> Unit) {
         CampsiteDetailRow("Rating", site.rating?.toString() ?: "No ratings yet")
         CampsiteDetailRow("Tags", site.tags.joinToString(", ").ifBlank { "None" })
         CampsiteDetailRow("Rules & cancellation policy", site.rules.ifBlank { "None" })
-        CampsiteDetailRow("Owner ID", site.ownerID.toString())
+        CampsiteDetailRow("Owner ID", site.ownerID)
+        CampsiteImageGallery(site.images)
+        // TODO: show the QR code once campsites have one
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -234,6 +257,62 @@ fun AdminCampsiteDetailView(site: Campsite?, onDelete: (Campsite) -> Unit) {
 }
 
 /**
+ * A row of the campsite's images that scrolls sideways.
+ *
+ * @param images the campsite's images
+ */
+@Composable
+fun CampsiteImageGallery(images: List<Blob>) {
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+        Text("Images", fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+
+        if (images.isEmpty()) {
+            Text("No images", fontSize = 18.sp, modifier = Modifier.testTag("noCampsiteImages"))
+        } else {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(top = 4.dp).testTag("campsiteImageGallery")
+            ) {
+                itemsIndexed(images) { index, image ->
+                    CampsiteImage(image, index)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * One campsite image. Shows a message instead if the image can't be read.
+ *
+ * @param image the image's bytes
+ * @param index the image's position in the gallery, used for its test tag
+ */
+@Composable
+fun CampsiteImage(image: Blob, index: Int) {
+    // Only decode the image again if it changes
+    val bitmap = remember(image) {
+        val bytes = image.toBytes()
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
+
+    if (bitmap == null) {
+        Box(
+            modifier = Modifier.size(150.dp).testTag("campsiteImage_$index"),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Can't show image", fontSize = 12.sp)
+        }
+    } else {
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = "Campsite image ${index + 1}",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.size(150.dp).testTag("campsiteImage_$index")
+        )
+    }
+}
+
+/**
  * One labelled line of campsite info, e.g. "Location" and the place.
  *
  * @param label the field name
@@ -255,17 +334,28 @@ fun CampsiteDetailRow(label: String, value: String) {
  */
 fun formatPrice(price: Float): String = "$" + String.format("%.2f", price)
 
-private val sampleCampsites = listOf<Campsite>(
-    /*Campsite(
-        "Waterton Campground 1", Uuid.random(), "Waterton Lakes",
-        mutableListOf("Lakeside", "Tents"), 25f, 4.5f,
-        "No fires after 11pm. Free cancellation up to 2 days before.",
-        "A quiet lakeside site, perfect for tents.", 6, mutableListOf(), "owner1"
+private val sampleCampsites = listOf(
+    Campsite(
+        name = "Waterton Campground 1",
+        ID = "site1",
+        locationName = "Waterton Lakes",
+        tags = mutableListOf("Lakeside", "Tents"),
+        price = 25f,
+        rating = 4.5f,
+        rules = "No fires after 11pm. Free cancellation up to 2 days before.",
+        description = "A quiet lakeside site, perfect for tents.",
+        occupancy = 6,
+        ownerID = "owner1"
     ),
     Campsite(
-        "Waterton Campground 2", Uuid.random(), "Waterton Lakes",
-        mutableListOf(), 30f, null, "", "Close to the trails.", 4, "owner1"
-    )*/
+        name = "Waterton Campground 2",
+        ID = "site2",
+        locationName = "Waterton Lakes",
+        price = 30f,
+        description = "Close to the trails.",
+        occupancy = 4,
+        ownerID = "owner1"
+    )
 )
 
 @Preview(showBackground = true)

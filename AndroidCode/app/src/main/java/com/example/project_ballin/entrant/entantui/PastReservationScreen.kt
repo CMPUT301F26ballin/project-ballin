@@ -9,16 +9,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.reusableui.TopAppBar
-import kotlin.uuid.Uuid
 
-/**
- * The entrant past reservations page
- * Entrants can look at their past reservations
- *
- * @param navController the navigation controller for the app
- * @param entrant the entrant
- */
 class PastReservationScreen {
+    /**
+     * The entrant past reservations page
+     * Entrants can look at their past reservations
+     *
+     * @param navController the navigation controller for the app
+     * @param entrant the entrant
+     */
     @Composable
     fun PastReservations(navController: NavController, entrant: Entrant){
         Column(

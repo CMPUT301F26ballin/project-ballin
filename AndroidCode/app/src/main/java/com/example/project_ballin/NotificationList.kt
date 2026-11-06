@@ -56,7 +56,6 @@ class NotificationList {
      *
      * @param notification The notification being deleted
      */
-    // Would need to further handle how this affects owners/entrants
     fun deleteNotification(notification: Notification) {
         notificationsRef.document(notification.ID).delete()
     }
@@ -71,13 +70,7 @@ class NotificationList {
      * @param ID the ID of the notification to get
      * @return a notification object with the given ID
      */
-    fun getNotification(ID: String): Notification{
-        var notification: Notification? = null
-        notificationsRef.document(ID)
-            .get()
-            .addOnSuccessListener {
-                    result -> notification = result.toObject(Notification::class.java)
-            }
-        return notification!!
-    }
+    fun getNotification(ID: String): Notification? =
+        _notifications.find { it.ID == ID }
+
 }

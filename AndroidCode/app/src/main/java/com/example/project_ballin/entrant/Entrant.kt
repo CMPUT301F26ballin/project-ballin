@@ -12,7 +12,8 @@ import kotlin.uuid.Uuid
  *
  * Entrants have a name, phone number, email, device ID, profile picture, and app policy.
  *
- * @property name the name of the entrant
+ * @property firstName the name of the entrant
+ * @property lastName the last name of the entrant
  * @property phoneNum the phone number of the entrant
  * @property email the email of the entrant
  * @property deviceId the device ID of the entrant

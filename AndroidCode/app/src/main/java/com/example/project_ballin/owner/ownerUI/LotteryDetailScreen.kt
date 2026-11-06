@@ -1,10 +1,12 @@
 package com.example.project_ballin.owner.ownerUI
 
-import android.R
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
@@ -27,6 +33,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -51,6 +59,7 @@ fun LotteryDetailScreen(
     lottery: Lottery?, // null if creating a new lottery
     ownerID: String,
     ownerSites: List<Campsite>,
+    getCampsite: (String) -> Campsite?,
     addLottery: (Lottery) -> Unit,
     updateLottery: (oldLottery: Lottery, newLottery: Lottery) -> Unit
 ){
@@ -64,17 +73,16 @@ fun LotteryDetailScreen(
     )
     var occupancy by remember { mutableStateOf(lottery?.occupancy?.toString() ?: "") }
     var numWinners by remember { mutableStateOf(lottery?.numWinners?.toString() ?: "") }
+    var selectedSiteIDs by remember { mutableStateOf(lottery?.associatedSites ?: listOf()) }
 
     TopAppBar(navController, if (lottery == null) "New Lottery Details" else "Edit Lottery Details"){
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-                Button(onClick = {
-                    //navController.navigate("LotteryDetailScreen")
-                } ) {
-                    Text("Select Campsites")
-                }
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
                 Button(onClick = {
                     // confirms the lottery details are valid
                     // and either creates a new lottery or updates an existing one
@@ -85,6 +93,7 @@ fun LotteryDetailScreen(
                     val bookEnd = bookingDateState.selectedEndDateMillis
                     val occ = occupancy.toIntOrNull()
                     val winners = numWinners.toIntOrNull()
+                    val sites = selectedSiteIDs
 
                     if (
                         regStart == null ||
@@ -93,6 +102,7 @@ fun LotteryDetailScreen(
                         bookEnd == null ||
                         occ == null ||  //waitlist capacity is allowed to be null
                         winners == null ||
+                        sites.isEmpty() ||
                         regEnd < regStart ||
                         bookEnd < bookStart ||
                         bookStart < regEnd // registration still active while booking started
@@ -101,27 +111,34 @@ fun LotteryDetailScreen(
                         // invalid lottery details
                         // TODO alert user of the error
                     }
-                    val newLottery = Lottery(
-                        lotteryOwnerID = ownerID,
+
+                    // start with the existing lottery or make a new one
+                    val baseLottery = lottery ?: Lottery(
+                        lotteryID = Uuid.random().toString(),
+                        lotteryOwnerID = ownerID
+                    )
+
+                    val newLottery = baseLottery.copy(
                         registrationStart = regStart,
                         registrationEnd = regEnd,
                         bookingStart = bookStart,
                         bookingEnd = bookEnd,
                         occupancy = occ,
                         numWinners = winners,
-                        lotteryID = lottery?.lotteryID ?: Uuid.random().toString()
+                        associatedSites = sites.toMutableList()
                     )
                     if (lottery == null) {
                         addLottery(newLottery)
                     } else {
                         updateLottery(lottery, newLottery)
                     }
-                    navController.navigate("LotteryListScreen/$ownerID")
+                    navController.popBackStack()
                 } ) {
                     Text("Confirm Lottery")
                 }
 
             }
+
             Spacer(modifier = Modifier.height(16.dp))
             DateRangeSelectionButton("Registration Dates", registrationDateState)
             Spacer(modifier = Modifier.height(16.dp))
@@ -143,7 +160,60 @@ fun LotteryDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
-            //Text("${registrationDateState.selectedStartDateMillis} to ${registrationDateState.selectedEndDateMillis}")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .border(1.dp, Color.Gray)
+                .padding(8.dp)
+            ) {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Text("Selected Campsites")
+                    if (selectedSiteIDs.isEmpty()) Text("No sites selected")
+                    selectedSiteIDs.forEach{ id ->
+                        val campsite = getCampsite(id)
+                        if (campsite != null) Text("${campsite.name} - ${campsite.description}")
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Campsites")
+
+            ownerSites.forEach{
+                val isSelected = selectedSiteIDs.contains(it.ID)
+
+                CampsiteSelectable(campsite = it, isSelected = isSelected,
+                    onClick = {
+                    selectedSiteIDs = if (isSelected) selectedSiteIDs - it.ID
+                        else selectedSiteIDs + it.ID
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+
+@Composable
+fun CampsiteSelectable(
+    campsite: Campsite,
+    isSelected: Boolean,
+    onClick: () -> Unit) {
+    Row(
+        modifier = Modifier.
+        fillMaxWidth()
+            .border(2.dp, if (isSelected) Color.Blue else Color.Black)
+            .clickable{ onClick() }
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(campsite.name)
+            Text(campsite.description)
+
+            Text("\nCampsite available for this booking window✅")
         }
     }
 }

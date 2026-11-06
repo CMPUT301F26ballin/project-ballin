@@ -6,24 +6,22 @@ import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
-import androidx.navigation.compose.*
+import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 
 
 @Composable
-fun EntrantBrowseCampsites (navController: NavController) {
+fun EntrantBrowseCampsites (navController: NavController, campsiteList: CampsiteList, entrantID: String) {
     TopAppBar(
         navController,
         "Browse Campsites"){
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(navController)
+        SearchBar(navController, campsiteList = campsiteList, entrantID = entrantID)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun EntrantBrowseCampsitesPreview() {
-    val navController = rememberNavController()
-    EntrantBrowseCampsites(navController)
 
 }

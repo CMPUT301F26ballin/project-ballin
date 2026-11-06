@@ -19,7 +19,8 @@ import kotlin.uuid.Uuid
 *
  * @property name the name of the campsite
  * @property ID the ID of the campsite
- * @property location the geolocation of the campsite
+ * @property lat the latitude of the campsite's location
+ * @property lon the longitude of the campsite's location
  * @property locationName the name of the location of the campsite
  * @property tags the list of descriptive tags of the campsite
  * @property price the price per night of the campsite
@@ -31,13 +32,22 @@ import kotlin.uuid.Uuid
  * @property ownerID the unique userID of the owner of the campsite
  * @property lotteries the lotteries this campsite is associated with
  *
+ * Sources Used:
+ * Title: UUIDs
+ * https://kotlinlang.org/docs/uuids.html
+ *
+ * Sources Used:
+ *
+ *
+ *
 *
 * */
 
 class Campsite(
     var name: String = "",
     var ID: String = " ",
-    //var location: Location = Location(""),
+    var lat: Double = 0.0,
+    var lon: Double = 0.0,
     var locationName: String = "",
     var tags: MutableList<String> = mutableListOf(),
     var price: Float = 0.0f,

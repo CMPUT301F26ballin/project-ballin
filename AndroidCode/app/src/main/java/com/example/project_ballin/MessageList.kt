@@ -57,7 +57,6 @@ class MessageList {
      *
      * @param message The message being deleted
      */
-    // Would need to further handle how this affects owners/entrants
     fun deleteMessage(message: Message) {
         messagesRef.document(message.ID).delete()
     }
@@ -72,13 +71,7 @@ class MessageList {
      * @param ID the ID of the message to get
      * @return a message object with the given ID
      */
-    fun getMessage(ID: String): Message{
-        var message: Message? = null
-        messagesRef.document(ID)
-            .get()
-            .addOnSuccessListener {
-                result -> message = result.toObject(Message::class.java)
-            }
-        return message!!
-    }
+    fun getMessage(ID: String): Message? =
+         _messages.find { it.ID == ID }
+
 }

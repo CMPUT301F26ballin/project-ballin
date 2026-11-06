@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -52,17 +57,51 @@ fun MessageListScreen(
 
             Spacer(modifier = Modifier.height(34.dp))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                itemsIndexed(messages) { index, message ->
-                    MessageButtonRow(index, message, navController)
-                    Spacer(modifier = Modifier.height(16.dp))
+            if (messages.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No messages to browse through")
+                }
+            } else {
+                // What the admin typed in the search box (kept when the screen rotates)
+                var query by rememberSaveable { mutableStateOf("") }
+                val results = messages.filter { it.matchesSearch(query) }
+
+                AdminSearchField(query, onQueryChange = { query = it }, placeholder = "Search messages")
+
+                if (results.isEmpty()) {
+                    Text(
+                        "No messages match \"${query.trim()}\".",
+                        modifier = Modifier.padding(16.dp).testTag("noSearchResults")
+                    )
+                } else {
+                    ListMessages(navController, results)
                 }
             }
+
+        }
+    }
+}
+
+/**
+ * Shows all the messages in a list.
+ *
+ * @param navController the navController of the app
+ * @param messages the list of messages to iterate through
+ */
+@Composable
+fun ListMessages(navController: NavController, messages: List<Message>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        itemsIndexed(messages) { index, message ->
+            MessageButtonRow(index, message, navController)
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -70,6 +109,10 @@ fun MessageListScreen(
 /**
  * Shows the general overview of a specific message,
  * it'll be a clickable button, showing ID and date sent only.
+ *
+ * @param index the index of the message in the list
+ * @param message the message to show
+ * @param navController the navController of the app
  */
 @Composable
 fun MessageButtonRow(index: Int, message: Message, navController: NavController) {

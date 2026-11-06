@@ -10,30 +10,23 @@ import kotlin.uuid.Uuid
  * Notifications have content, dateSent, and ID and a list
  * of recipients.
  *
- * @property _content the content of the notification
- * @property _dateSent the date the notification was sent
- * @property _ID the unique ID of the notification
- * @property _recipientIDs a list of Users Uuids, which are the recipients of the notification
+ * @property content the content of the notification
+ * @property dateSent the date the notification was sent
+ * @property ID the unique ID of the notification
+ * @property recipientID a list of Users Uuids, which are the recipients of the notification
  */
 class Notification (
-    private val _content: String,
-    private val _dateSent: Date,
-    private val _ID: String,
-    // private val _recipientIDs: List<Uuid>
+    var content: String = "",
+    var dateSent: Date = Date(),
+    var ID: String = "",
+    var recipientID: String = ""
 ) {
-
-    val content: String get() = _content
-    val ID: String get() = _ID
-    // val recipientIDs: List<Uuid> get() = _recipientIDs
-
-    val sdf = SimpleDateFormat("dd/mm/yyyy")
-    val sDate = sdf.format(_dateSent)
 
     /**
      * Returns the date sent in a readable format.
      * Date() in java gives unnecessary data.
      */
     fun getFormattedDate(): String {
-        return sDate
+        return SimpleDateFormat("dd/MM/yyyy").format(dateSent) // MM = month (mm would be minutes)
     }
 }

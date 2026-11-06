@@ -23,12 +23,12 @@
 //    val composeRule = createComposeRule()
 //
 //    private val site1 = Campsite(
-//        "Waterton Campground 1", Uuid.random().toString(), "Waterton Lakes",
+//        "Waterton Campground 1", Uuid.random(), "Waterton Lakes",
 //        mutableListOf("Lakeside", "Tents"), 25f, 4.5f,
 //        "No fires after 11pm", "A quiet lakeside site", 6, "owner1"
 //    )
 //    private val site2 = Campsite(
-//        "Banff Hilltop", Uuid.random().toString(), "Banff",
+//        "Banff Hilltop", Uuid.random(), "Banff",
 //        mutableListOf(), 40f, null, "", "Great views", 4, "owner2"
 //    )
 //
