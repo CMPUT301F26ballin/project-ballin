@@ -45,7 +45,7 @@ Salix: Start implementing the lottery menus: view lotteries, add lottery (basic 
 # Week 4:
 Yuming: delete and view campsite(admin)
 
-Mies: Doing the view reservations pages, as well as made a date picker to make bookings. Redid the user storage, and made an entrant able to leave an active lottery. Made the campsite search index the firestore, and you can look at campsitedetails by clicking on the cards=
+Mies: Doing the view reservations pages, as well as made a date picker to make bookings. Redid the user storage, and made an entrant able to leave an active lottery. Made the campsite search index the firestore, and you can look at campsitedetails by clicking on the cards (now broken but used to be able to). Made tests for Entrant items, refined comments, made cards for active lotteries, won lotteries, lost lotteries, and active reservations, users can leave/dismiss these, but not actually book anything yet.
 
 Peter: Implemented proper Navcontroller data passing to keep track of the Uuid of the logged in User, implemented OwnerMenu, CampsiteList, CampsiteDetail, and Campsiteinput screens. Verified proper input of campsite elements such as images, name, etc. (except for date, still figuring that out.) Verified input campsites go to firestore. (small bugs still present.)
 
