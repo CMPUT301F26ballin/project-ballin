@@ -39,6 +39,8 @@ import kotlin.uuid.Uuid
 
 
 class NotificationDetailScreen {
+
+    val confirmDeleteDialog = ConfirmDeleteDialog()
     /**
      * A composable that shows the details of a specific notification
      * that was clicked on from the notifications list screen.
@@ -106,7 +108,7 @@ class NotificationDetailScreen {
             }
 
             notificationToDelete?.let { notification ->
-                ConfirmDeleteDialog(
+                confirmDeleteDialog.ConfirmDeleteDialog(
                     itemDescription = "the notification",
                     onConfirm = {
                         onDelete(notification)

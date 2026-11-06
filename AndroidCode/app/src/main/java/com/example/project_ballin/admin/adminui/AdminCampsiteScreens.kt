@@ -44,6 +44,9 @@ import com.example.project_ballin.reusableui.TopAppBar
 import com.google.firebase.firestore.Blob
 
 class AdminCampsiteScreens {
+
+    val adminSearch = AdminSearch()
+    val confirmDeleteDialog = ConfirmDeleteDialog()
     /**
      * Admin screen listing every campsite in the app, each with a Remove button.
      *
@@ -67,7 +70,14 @@ class AdminCampsiteScreens {
             )
         }
     }
-
+    /**
+     * Searches a campsite by name, location, description, tags, and owner ID.
+     *
+     * @param query the search text
+     * @return true if the campsite matches the search
+     */
+    fun Campsite.matchesSearch(query: String): Boolean =
+        adminSearch.matchesQuery(query, name, locationName, description, tags.joinToString(" "), ownerID)
     /**
      * The campsite list itself (no top bar), so it can be tested on its own.
      *
@@ -97,7 +107,7 @@ class AdminCampsiteScreens {
             }
         } else {
             Column(modifier = Modifier.fillMaxSize()) {
-                AdminSearchField(
+                adminSearch.AdminSearchField(
                     query,
                     onQueryChange = { query = it },
                     placeholder = "Search campsites"
@@ -127,7 +137,7 @@ class AdminCampsiteScreens {
         }
 
         siteToDelete?.let { site ->
-            ConfirmDeleteDialog(
+            confirmDeleteDialog.ConfirmDeleteDialog(
                 itemDescription = "the campsite \"${site.name}\"",
                 onConfirm = {
                     onDelete(site)
@@ -255,7 +265,7 @@ class AdminCampsiteScreens {
         }
 
         if (showDialog) {
-            ConfirmDeleteDialog(
+            confirmDeleteDialog.ConfirmDeleteDialog(
                 itemDescription = "the campsite \"${site.name}\"",
                 onConfirm = {
                     showDialog = false
