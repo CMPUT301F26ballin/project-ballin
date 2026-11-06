@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
@@ -35,9 +36,11 @@ fun EntrantMenuScreen(navController: NavController){
             EntrantHomeButton("BROWSE CAMPSITES", "Browse Campsites", "", navController)
             Spacer(modifier = Modifier.height(16.dp))
             EntrantHomeButton("MY RESERVATIONS", "EntrantBrowseReservations", "", navController)
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp)
+                .testTag("My Reservations"))
             EntrantHomeButton("SCAN QR CODE", "", "", navController)
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp)
+                .testTag("Scan QR Code"))
             EntrantHomeButton("POLICY AND GUIDELINES", "", "", navController)
         }
 

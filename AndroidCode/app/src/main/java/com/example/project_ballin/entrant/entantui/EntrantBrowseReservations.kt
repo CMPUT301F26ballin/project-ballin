@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
@@ -56,9 +57,6 @@ class EntrantBrowseReservations{
                     ActivePastReservationButtons(navController)
 
                     val activeLotteries = entrant.activeLotteries
-                    val wonLotteries = entrant.wonLotteries
-                    val lostLotteries = entrant.lostLotteries
-
 
                     LazyColumn {
                         items(activeLotteries) { lottery ->
@@ -107,6 +105,7 @@ class EntrantBrowseReservations{
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.weight(1f)
+                    .testTag("Active Reservation Button")
 
             ) {
                 Text("Active\nReservations",
@@ -122,6 +121,7 @@ class EntrantBrowseReservations{
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.weight(1f)
+                    .testTag("Past Reservation Button")
 
             ) {
                 Text("Past\nReservations",
@@ -149,13 +149,14 @@ class EntrantBrowseReservations{
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             if (entrant.userID in lottery.winners) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
+                        .testTag("Won Lottery Card")
                 ) {
                     Text(
                         text = "You have won a lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}. Book it?",
@@ -196,6 +197,7 @@ class EntrantBrowseReservations{
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
+                        .testTag("Lost Lottery Card")
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
