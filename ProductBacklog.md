@@ -162,11 +162,11 @@
 - Story Points: 5 
 - Risk: High
 
-**US 02.06.01 As a campsite owner, I want to view the currently booked dates for my campsite**  ✅
+**US 02.06.01 As a campsite owner, I want to view the currently booked dates for my campsite**  
 - Story Points: 2
 - Risk: High
 
-**US 02.07.01 As a campsite owner, I want to view a list of active reservations.**  ✅
+**US 02.07.01 As a campsite owner, I want to view a list of active reservations.**  
 - Story Points: 2 
 - Risk: Medium
 
