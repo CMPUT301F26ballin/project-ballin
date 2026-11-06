@@ -1,5 +1,7 @@
 package com.example.project_ballin.entrant.entantui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.rememberDateRangePickerState
@@ -7,25 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.Calendar
 import java.util.TimeZone
 
 
 class DateRangePicker {
-
-    /**
-     * Converts a date to UTC-midnight millis.
-     *
-     * @param year the year
-     * @param month the month
-     * @param day the day
-     */
-    fun utcMillis(year: Int, month: Int, day: Int): Long =
-        Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
-            clear()
-            set(year, month - 1, day)
-        }.timeInMillis
-
     /**
      * Shows a date range picker that only allows the given dates.
      *
@@ -45,7 +35,6 @@ class DateRangePicker {
     @Composable
     fun BookingDateRangePicker(
         availableDates: List<Long>,
-        bookingYear: Int,
         modifier: Modifier = Modifier,
         chosenDates: (List<Long>?) -> Unit
     ) {
@@ -57,9 +46,6 @@ class DateRangePicker {
             selectableDates = object : SelectableDates {
                 override fun isSelectableDate(utcTimeMillis: Long): Boolean =
                     utcTimeMillis in available
-
-                override fun isSelectableYear(year: Int): Boolean =
-                    year == bookingYear
             }
         )
 
@@ -84,18 +70,9 @@ class DateRangePicker {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Preview(showBackground = true)
     @Composable
     fun CalendarPreview() {
-        BookingDateRangePicker(
-            availableDates = listOf(
-                utcMillis(2027, 3, 19),
-                utcMillis(2027, 3, 20),
-                utcMillis(2027, 3, 21),
-                utcMillis(2027, 3, 31)
-            ),
-            bookingYear = 2027,
-            chosenDates = { }
-        )
     }
 }

@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
@@ -56,9 +57,6 @@ class EntrantBrowseReservations{
                     ActivePastReservationButtons(navController)
 
                     val activeLotteries = entrant.activeLotteries
-                    val wonLotteries = entrant.wonLotteries
-                    val lostLotteries = entrant.lostLotteries
-
 
                     LazyColumn {
                         items(activeLotteries) { lottery ->
@@ -74,20 +72,20 @@ class EntrantBrowseReservations{
 
         //Pops up over the screen when user declines a lottery they won
         lotteryToLeave?.let { lottery ->
-                ConfirmActionDialog().ConfirmAction(
-                    "Are you sure you want to decline booking this site?",
-                    confirm = { confirmed ->
-                        if (confirmed) {
-                            lottery.waitList.remove(entrant.userID)
-                            lottery.winners.remove(entrant.userID)
-                            entrant.activeLotteries.remove(lottery)
-                            entrant.wonLotteries.remove(lottery)
-                        }
-                        lotteryToLeave = null
+            ConfirmActionDialog().ConfirmAction(
+                "Are you sure you want to decline booking this site??",
+                confirm = { confirmed ->
+                    if (confirmed) {
+                        lottery.waitList.remove(entrant.userID)
+                        lottery.winners.remove(entrant.userID)
+                        entrant.activeLotteries.remove(lottery)
+                        entrant.wonLotteries.remove(lottery)
                     }
-                )
-            }
+                    lotteryToLeave = null
+                }
+            )
         }
+    }
 
     /**
      * Shows the active and past reservation buttons
@@ -107,6 +105,7 @@ class EntrantBrowseReservations{
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.weight(1f)
+                    .testTag("Active Reservation Button"),
 
             ) {
                 Text("Active\nReservations",
@@ -115,13 +114,13 @@ class EntrantBrowseReservations{
             }
 
 
-
             Button(
                 onClick = {
                     navController.navigate("PastReservationScreen")
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.weight(1f)
+                    .testTag("Past Reservation Button"),
 
             ) {
                 Text("Past\nReservations",
@@ -156,11 +155,14 @@ class EntrantBrowseReservations{
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
+                        .testTag("Won Lottery Card")
                 ) {
                     Text(
                         text = "You have won a lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}. Book it?",
                         style = MaterialTheme.typography.titleMedium
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -168,11 +170,12 @@ class EntrantBrowseReservations{
                     ) {
                         Button(
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Red
+                                containerColor = MaterialTheme.colorScheme.error
                             ),
                             onClick = onDeclineClick
                             ,
                             modifier = Modifier.padding(16.dp)
+                                .testTag("Decline Button")
                         ) {
                             Text("Decline")
                         }
@@ -184,6 +187,7 @@ class EntrantBrowseReservations{
                                 navController.navigate("EntrantSiteBooker/${site}")
                             },
                             modifier = Modifier.padding(16.dp)
+                                .testTag("Select Dates Button")
                         ) {
                             Text("Select Dates")
                         }
@@ -196,6 +200,7 @@ class EntrantBrowseReservations{
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
+                        .testTag("Lost Lottery Card")
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -206,6 +211,9 @@ class EntrantBrowseReservations{
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -213,9 +221,11 @@ class EntrantBrowseReservations{
                         Button(
                             onClick = {
                                 entrant.activeLotteries.remove(lottery)
-                            }
+                            },
+                            modifier = Modifier.padding(16.dp)
+                                .testTag("Dismiss Button")
                         ) {
-                            Text("Ok")
+                            Text("Dismiss")
                         }
 
                     }
@@ -223,7 +233,6 @@ class EntrantBrowseReservations{
             }
         }
     }
-
 
     @Preview(showBackground = true)
     @Composable

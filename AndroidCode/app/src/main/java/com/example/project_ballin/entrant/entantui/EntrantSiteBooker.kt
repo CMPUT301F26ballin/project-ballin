@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.reusableui.TopAppBar
@@ -27,7 +29,7 @@ import com.example.project_ballin.reusableui.TopAppBar
 
 class EntrantSiteBooker {
     /**
-     * The entant book site page
+     * The entrant book site page
      * Entrants can book a campsite from a date picker that shows the available days
      *
      * @param navController the navigation controller for the app
@@ -35,7 +37,7 @@ class EntrantSiteBooker {
      * @param entrant the entrant
      */
     @Composable
-    fun SiteBooker (navController: NavController, campsiteID: String?, entrant: Entrant) {
+    fun SiteBooker (navController: NavController, campsiteID: String?, campsiteList: CampsiteList, entrant: Entrant) {
 
 
         var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
@@ -56,13 +58,7 @@ class EntrantSiteBooker {
 
 
                     DateRangePicker().BookingDateRangePicker(
-                        availableDates = listOf(
-                            DateRangePicker().utcMillis(2027, 3, 19),
-                            DateRangePicker().utcMillis(2027, 3, 20),
-                            DateRangePicker().utcMillis(2027, 3, 21),
-                            DateRangePicker().utcMillis(2027, 3, 31)
-                        ),
-                        bookingYear = 2027,
+                        availableDates = campsiteList.getCampsite(campsiteID)!!.availability,
                         modifier = Modifier.weight(1f),
                         chosenDates = { chosenDates = it }
                     )
@@ -87,7 +83,8 @@ class EntrantSiteBooker {
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red),
+                    containerColor = MaterialTheme.colorScheme.error
+                ),
                 onClick = {
                     navController.popBackStack()
                 },

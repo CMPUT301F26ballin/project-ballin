@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.*
 import com.example.project_ballin.Campsite
@@ -34,13 +35,15 @@ fun GuestFilter(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+        ,
     ) {
         OutlinedTextField(
             value = selectedNumOfGuests?.toString() ?: "",
             onValueChange = viewModel::onNumOfGuestsChange,
             placeholder = { Text("Number of Guests") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.testTag("Occupancy Filter")
         )
     }
 }
@@ -67,6 +70,7 @@ fun LocationFilter(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .testTag("Location Filter")
     ) {
         items(locationOptions) { location ->
             FilterChip(
@@ -78,8 +82,10 @@ fun LocationFilter(
                         viewModel.onSelectedLocationFilterChange(location)
                     }
               },
-                label = { Text(location) }
+                label = { Text(location) } ,
+                modifier = Modifier.testTag("Location Chip: $location")
             )
+
         }
     }
 }
@@ -94,7 +100,6 @@ fun DateFilter(){
  * function to display the campsites
  *
  * @param navController the navigation controller to use for navigation,
- * will take the user to the campsite's details screen once implemented
  * @param modifier the modifier to apply to the filter
  * @param campsite the campsites to display
  *
@@ -111,9 +116,10 @@ fun DisplayCampsite(
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
-                navController.navigate("CampsiteDetailScreen/${campsite.ID},${entrantID}")
+                navController.navigate("CampsiteDetailScreen/${campsite.ID}/${entrantID}")
 
-            },
+            }
+            .testTag("Campsite: ${campsite.name}"),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -172,7 +178,8 @@ fun SearchBar(
         OutlinedTextField(
             value = queryText,
             onValueChange = viewModel::onSearchTextChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .testTag("Search Bar"),
             placeholder = { Text("Search Campsites") }
         )
         Spacer(modifier = Modifier.height(8.dp))

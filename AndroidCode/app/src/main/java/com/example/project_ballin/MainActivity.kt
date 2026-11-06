@@ -27,7 +27,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BallinApp()
+                    val ballinApp = BallinApp()
+                    ballinApp.BallinApp()
                 }
             }
         }

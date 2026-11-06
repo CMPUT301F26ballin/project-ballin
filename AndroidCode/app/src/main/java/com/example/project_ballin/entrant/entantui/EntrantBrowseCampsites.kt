@@ -10,6 +10,15 @@ import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 
 
+/**
+ * The entrant browse campsites page
+ * Entrants can search for campsites by name, location, and number of occupants (so far)
+ *
+ * @param navController the navigation controller for the app
+ * @param campsiteList the list of campsites
+ * @param entrantID the ID of the entrant
+ *
+ */
 @Composable
 fun EntrantBrowseCampsites (navController: NavController, campsiteList: CampsiteList, entrantID: String) {
     TopAppBar(

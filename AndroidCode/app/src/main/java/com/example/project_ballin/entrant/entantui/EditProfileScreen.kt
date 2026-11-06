@@ -9,7 +9,9 @@ import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.example.project_ballin.reusableui.TopAppBar
 
-
+/**
+ * Just there for testing
+ */
 @Composable
 fun TestColumn(){
     Column(
@@ -19,6 +21,13 @@ fun TestColumn(){
     }
 }
 
+/**
+ * Edit profile screen
+ * Will be where users can edit their profile
+ * So fat does not do anything though
+ *
+ * @param navController the navigation controller for the app
+ */
 @Composable
 fun EditProfileScreen(navController: NavController){
     TopAppBar(

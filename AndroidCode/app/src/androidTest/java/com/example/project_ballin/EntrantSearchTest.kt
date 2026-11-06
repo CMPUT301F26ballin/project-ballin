@@ -1,0 +1,165 @@
+package com.example.project_ballin
+
+
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import com.example.project_ballin.entrant.Entrant
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+
+
+//Test to make sure that the search correctly returns results
+class EntrantSearchTest {
+    private lateinit var campsiteList: CampsiteList
+    private lateinit var entrant: Entrant
+    private lateinit var campsite: Campsite
+
+
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
+
+    @Before
+    fun createEntrant(){
+        entrant = Entrant()
+    }
+
+    @Before
+    fun createCampsite(){
+        campsite = Campsite(
+            "Waterton Campground 1",
+            "1",
+            1.toDouble(),
+            1.toDouble(),
+            "OnePlace",
+            mutableListOf("One", "1"),
+            1.toFloat(),
+            1.toFloat(),
+            "only 1",
+            "one and only",
+            1,
+        )
+    }
+
+    @Before
+    fun createCampsiteList(){
+        campsiteList = CampsiteList()
+        campsiteList.addCampsite(campsite)
+    }
+
+
+
+    @Test
+    fun NavigateToSearchScreen_EnterText_CheckResults(){
+        composeTestRule
+            .onNodeWithTag("entrantSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("BROWSE CAMPSITES")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Search Campsites")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Search Bar")
+            .performTextInput("Waterton")
+
+        composeTestRule
+            .onNodeWithTag("Campsite: Waterton Campground 1")
+            .assertExists()
+
+    }
+
+    @Test
+    fun NavigateToSearhScreen_EnterOccupancyFilter_CheckResults(){
+        composeTestRule
+            .onNodeWithTag("entrantSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("BROWSE CAMPSITES")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Search Campsites")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Occupancy Filter")
+            .assertExists()
+            .performTextInput("1")
+
+        composeTestRule
+            .onNodeWithTag("Campsite: Waterton Campground 1")
+            .assertExists()
+    }
+
+    @Test
+    fun NavigateToSearhScreen_EnterLocationFilter_CheckResults(){
+        composeTestRule
+            .onNodeWithTag("entrantSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("BROWSE CAMPSITES")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Search Campsites")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Location Filter")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Location Chip: OnePlace")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("Campsite: Waterton Campground 1")
+            .assertExists()
+    }
+
+    @Test
+    fun NavigateToSearhScreen_ClickCampsiteCard_GoToCampsiteDetailScreen(){
+        composeTestRule
+            .onNodeWithTag("entrantSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("BROWSE CAMPSITES")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Search Campsites")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("Campsite: Waterton Campground 1")
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Campsite Details")
+            .assertExists()
+    }
+
+
+    @After
+    fun cleanUp() {
+        campsiteList.deleteCampsite(campsite)
+    }
+}

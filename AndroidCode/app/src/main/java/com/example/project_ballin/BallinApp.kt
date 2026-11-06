@@ -31,6 +31,7 @@ import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
 import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
+import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
@@ -343,6 +344,7 @@ fun BallinApp() {
         composable("Admin Menu Screen") { AdminMenuScreen(navController) }
 
         composable("AdminCampsites") {
+            AdminCampsiteScreens().
             AdminCampsiteListScreen(
                 navController,
                 campsites = campsiteList.campsites,
@@ -352,6 +354,7 @@ fun BallinApp() {
 
         composable("AdminCampsiteDetail/{CampID}") {
             val siteID = it.arguments?.getString("CampID") ?: ""
+            AdminCampsiteScreens().
             AdminCampsiteDetailScreen(
                 navController,
                 site = campsiteList.getCampsite(siteID),
@@ -360,6 +363,7 @@ fun BallinApp() {
         }
 
         composable("AdminProfiles") {
+            AdminProfilesScreens().
             AdminProfileListScreen(
                 navController,
                 profiles = profileList.profiles,
@@ -369,6 +373,7 @@ fun BallinApp() {
 
         composable("AdminProfileDetail/{UserID}") {
             val userID = it.arguments?.getString("UserID") ?: ""
+            AdminProfilesScreens().
             AdminProfileDetailScreen(
                 navController,
                 profile = profileList.getProfile(userID),
@@ -376,26 +381,28 @@ fun BallinApp() {
             )
         }
 
-        composable("AdminMessages") { MessageListScreen(navController, messageList.getAllMessages()) }
+        composable("AdminMessages") { MessageListScreen().MessageList(navController, messageList.getAllMessages()) }
 
         composable("AdminMessageDetails/{MessageID}") {
             val messageID = it.arguments!!.getString("MessageID")
             val message = messageList.getMessage(messageID!!)
             if (message != null) {
-                MessageDetailScreen(
+                MessageDetailScreen().
+                MessageDetail(
                     navController,
                     message,
                     onDelete = { messageList.deleteMessage(it) })
             }
         }
 
-        composable("AdminNotifications") { NotificationListScreen(navController, notificationList.getAllNotifications()) }
+        composable("AdminNotifications") { NotificationListScreen().NotificationList(navController, notificationList.getAllNotifications()) }
 
         composable("AdminNotificationDetails/{NotificationID}") {
             val notificationID = it.arguments!!.getString("NotificationID")
             val notification = notificationList.getNotification(notificationID!!)
             if (notification != null) {
-                NotificationDetailScreen(
+                NotificationDetailScreen().
+                NotificationDetail(
                     navController,
                     notification,
                     onDelete = { notificationList.deleteNotification(it) })
@@ -431,7 +438,7 @@ fun BallinApp() {
             val entrant = currentEntrant
             val campID = siteToBook.arguments?.getString("campID")
             if (entrant != null) {
-                EntrantSiteBooker().SiteBooker(navController, campID, entrant)
+                EntrantSiteBooker().SiteBooker(navController, campID, campsiteList, entrant)
             }
         }
 
@@ -439,5 +446,12 @@ fun BallinApp() {
             EntrantBrowseCampsites(navController, campsiteList, currentEntrant!!.userID)
         }
 
+        composable("PoliciesAndGuidelines"){
+            PolicyGuidelinesScreen().PolicyGuidelines(navController)
+        }
+    
+        composable("Scan QR Code") {
+            QRCodeScanner(navController)
+        } 
     }
 }
