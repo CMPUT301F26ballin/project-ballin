@@ -332,7 +332,8 @@ fun BallinApp() {
             val lottery: Lottery? = if (lotteryID == null) null else lotteryList.getLottery(lotteryID)
             LotteryDetailScreen(
                 navController, lottery, ownerID!!,
-                ownerSites = campsiteList.campsites.filter { it.ownerID.toString() == ownerID },
+                ownerSites = campsiteList.getOwnerSites(ownerID),
+                getCampsite = { campsiteList.getCampsite(it) },
                 addLottery = { lotteryList.addLottery(it) },
                 updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }
