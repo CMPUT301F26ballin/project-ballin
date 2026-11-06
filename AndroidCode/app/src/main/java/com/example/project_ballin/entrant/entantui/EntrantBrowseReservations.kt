@@ -74,9 +74,8 @@ class EntrantBrowseReservations{
 
         //Pops up over the screen when user declines a lottery they won
         lotteryToLeave?.let { lottery ->
-            Dialog(onDismissRequest = { lotteryToLeave = null }) {
                 ConfirmActionDialog().ConfirmAction(
-                    "Are you sure you want to decline booking this site??",
+                    "Are you sure you want to decline booking this site?",
                     confirm = { confirmed ->
                         if (confirmed) {
                             lottery.waitList.remove(entrant.userID)
@@ -89,7 +88,6 @@ class EntrantBrowseReservations{
                 )
             }
         }
-    }
 
     /**
      * Shows the active and past reservation buttons
