@@ -14,7 +14,8 @@ class ConfirmActionDialog {
      * Allows the user to confirm an action
      *
      * @param message the message to display
-     * @param confirm the function to run when the user confirms
+     * @param confirm the function to run when the user confirms,
+     * says whether item should be removed or not
      */
     @Composable
     fun ConfirmAction(message: String, confirm: (Boolean) -> Unit){

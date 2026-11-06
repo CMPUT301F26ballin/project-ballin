@@ -38,117 +38,116 @@ import java.util.Date
 import kotlin.uuid.Uuid
 
 
-/**
- * A composable that shows the details of a specific notification
- * that was clicked on from the notifications list screen.
- *
- * @param navController the navController of the app
- * @param notification the notification to show the details of
- * @param onDelete runs when the delete button is pressed
- */
-@Composable
-fun NotificationDetailScreen(
-    navController: NavController,
-    notification: Notification,
-    onDelete: (Notification) -> Unit
-) {
-    var notificationToDelete by remember { mutableStateOf<Notification?>(null) }
-
-    TopAppBar(
-        navController = navController,
-        screenTitle = "Notification Details"
+class NotificationDetailScreen {
+    /**
+     * A composable that shows the details of a specific notification
+     * that was clicked on from the notifications list screen.
+     *
+     * @param navController the navController of the app
+     * @param notification the notification to show the details of
+     * @param onDelete runs when the delete button is pressed
+     */
+    @Composable
+    fun NotificationDetail(
+        navController: NavController,
+        notification: Notification,
+        onDelete: (Notification) -> Unit
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        var notificationToDelete by remember { mutableStateOf<Notification?>(null) }
+
+        TopAppBar(
+            navController = navController,
+            screenTitle = "Notification Details"
         ) {
-            Text(
-                text = "DETAILS",
-                fontSize = 34.sp,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Box(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(fraction = 0.8f)
-                    .padding(16.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(10.dp)
-                    )
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column {
-                    NotificationDetailRow("Date Sent", notification.getFormattedDate(), "dateSent${notification.getFormattedDate()}")
-                    NotificationDetailRow("Notification Content", notification.content, "notificationContent${notification.content}")
-                    NotificationDetailRow("Notification ID", notification.ID, "notificationID${notification.ID}")
-                    NotificationDetailRow("Recipient ID", notification.recipientID, "recipientID${notification.recipientID}")
+                Text(
+                    text = "DETAILS",
+                    fontSize = 34.sp,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(fraction = 0.8f)
+                        .padding(16.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                ) {
+                    Column {
+                        NotificationDetailRow("Date Sent", notification.getFormattedDate(), "dateSent${notification.getFormattedDate()}")
+                        NotificationDetailRow("Notification Content", notification.content, "notificationContent${notification.content}")
+                        NotificationDetailRow("Notification ID", notification.ID, "notificationID${notification.ID}")
+                        NotificationDetailRow("Recipient ID", notification.recipientID, "recipientID${notification.recipientID}")
+                    }
+                }
+
+                Button(
+                    onClick = {
+                        notificationToDelete = notification
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.testTag("deleteNotification") // for UI testing
+                ) {
+                    Text("Delete Notification")
                 }
             }
 
-            Button(
-                onClick = {
-                    notificationToDelete = notification
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.testTag("deleteNotification") // for UI testing
-            ) {
-                Text("Delete Notification")
-            }
-        }
-
-        notificationToDelete?.let { notification ->
-            Dialog(onDismissRequest = { notificationToDelete = null }) {
-                ConfirmActionDialog().ConfirmAction(
-                    message = "Are you sure you want to delete this notification?",
-                    confirm = { confirmed ->
-                        if (confirmed) {
-                            onDelete(notification)
-                            navController.popBackStack()
-                        }
+            notificationToDelete?.let { notification ->
+                ConfirmDeleteDialog(
+                    itemDescription = "the notification",
+                    onConfirm = {
+                        onDelete(notification)
                         notificationToDelete = null
-                    }
+                        navController.popBackStack()
+                    },
+                    onCancel = { notificationToDelete = null }
                 )
             }
         }
     }
-}
 
-/**
- * Shows a specific part of the notification and puts it in a row
- */
-@Composable
-fun <T> NotificationDetailRow(descriptionText: String, content: T, testTag: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .testTag(testTag)
-    ) {
-        Text(
-            text = "$descriptionText : $content",
-            color = Color(255,255,255)
-        )
+    /**
+     * Shows a specific part of the notification and puts it in a row
+     */
+    @Composable
+    fun <T> NotificationDetailRow(descriptionText: String, content: T, testTag: String) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .testTag(testTag)
+        ) {
+            Text(
+                text = "$descriptionText : $content",
+                color = Color(255,255,255)
+            )
+        }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun NotificationDetailScreenPreview() {
-    val navcontroller = rememberNavController()
+    @Preview(showBackground = true)
+    @Composable
+    fun NotificationDetailScreenPreview() {
+        val navcontroller = rememberNavController()
 
-    val sampleNotification = Notification(
-        "Hello, this is the content of the notification",
-        Date(),
-        "1", "1"
-    )
+        val sampleNotification = Notification(
+            "Hello, this is the content of the notification",
+            Date(),
+            "1", "1"
+        )
 
-    NotificationDetailScreen(navcontroller, sampleNotification, onDelete = {})
+        NotificationDetail(navcontroller, sampleNotification, onDelete = {})
+    }
 }
