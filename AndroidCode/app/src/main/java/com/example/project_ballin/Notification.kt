@@ -16,9 +16,9 @@ import kotlin.uuid.Uuid
  * @property _recipientIDs a list of Users Uuids, which are the recipients of the notification
  */
 class Notification (
-    private val _content: String,
-    private val _dateSent: Date,
-    private val _ID: String,
+    private val _content: String = "",
+    private val _dateSent: Date = Date(),
+    private val _ID: String = "",
     // private val _recipientIDs: List<Uuid>
 ) {
 
