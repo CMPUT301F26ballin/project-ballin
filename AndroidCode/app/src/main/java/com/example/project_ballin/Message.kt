@@ -17,11 +17,11 @@ import kotlin.uuid.Uuid
  * @property _ID the unique ID of the message
  */
 class Message (
-    private val _ownerID: String,
-    private val _entrantID: String,
-    private val _content: String,
-    private val _dateSent: Date,
-    private val _ID: String
+    private val _ownerID: String = "",
+    private val _entrantID: String = "",
+    private val _content: String = "",
+    private val _dateSent: Date = Date(),
+    private val _ID: String = Uuid.random().toString()
 ) {
     // I did this below because then it creates
     // a public-read only for private attributes

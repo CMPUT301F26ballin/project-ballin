@@ -34,6 +34,25 @@ import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 
+/**
+ * The main composable function that holds the mappings for the navController.
+ * Any function that calls navController to a new location passes through here
+ *
+ *
+ *
+ * Sources Used:
+ *
+ * Title: Pass Arguments to Destinations : Jetpack Compose Navigation
+ * Author: Sagar Malhotra
+ * Published: April 15, 2023
+ * https://sagar0-0.medium.com/pass-arguments-to-destinations-jetpack-compose-navigation-7c29d4c73ce5
+ *
+ *
+ *
+ * */
+
+
+
 @Composable
 fun BallinApp() {
 

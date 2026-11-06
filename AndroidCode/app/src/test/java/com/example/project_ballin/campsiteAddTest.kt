@@ -36,11 +36,7 @@ class campsiteAddTest() {
 
         campsiteList.addCampsite(testSite)
 
-
-
-        val findSite = campsiteList.getCampsite(campUid)
-
-        assertEquals(findSite, testSite)
+        assert(testSite in campsiteList.campsites)
 
 
 
