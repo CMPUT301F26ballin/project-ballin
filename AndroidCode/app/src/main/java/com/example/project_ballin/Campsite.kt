@@ -31,13 +31,22 @@ import kotlin.uuid.Uuid
  * @property ownerID the unique userID of the owner of the campsite
  * @property lotteries the lotteries this campsite is associated with
  *
+ * Sources Used:
+ * Title: UUIDs
+ * https://kotlinlang.org/docs/uuids.html
+ *
+ * Sources Used:
+ *
+ *
+ *
 *
 * */
 
 class Campsite(
     var name: String = "",
     var ID: String = " ",
-    //var location: Location = Location(""),
+    var lat: Double = 0.0,
+    var lon: Double = 0.0,
     var locationName: String = "",
     var tags: MutableList<String> = mutableListOf(),
     var price: Float = 0.0f,

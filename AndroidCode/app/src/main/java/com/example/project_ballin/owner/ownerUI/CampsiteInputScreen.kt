@@ -1,5 +1,7 @@
 package com.example.project_ballin.owner.ownerUI
 
+import android.R
+import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
@@ -15,6 +17,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,9 +32,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DateRangePicker
+import androidx.compose.material3.DateRangePickerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.InternalComposeApi
@@ -42,6 +48,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -51,9 +58,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
+import com.example.project_ballin.DatePick
 import com.example.project_ballin.reusableui.TopAppBar
 import com.google.firebase.firestore.Blob
 import java.nio.file.WatchEvent
+import java.sql.Date
 import kotlin.let
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -71,12 +80,22 @@ import kotlin.uuid.Uuid
  * @param ownerID the UserID of the owner
  * @param getSite the function to return the site details depending on the site ID. Only gets called
  * if site is not null.
- * @param addSite the function that adds a campsite to the
+ * @param addSite the function that adds a campsite to the firestore
+ * @param updateSite the function that updates a campsite in the firestore.
  *
  *
- * sources used
+ * Sources Used (Organized for ease of reading):
  *
+ * Images:
  *
+ * Title: Blob
+ * Last Updated: 2026-10-07 UTC
+ * https://firebase.google.com/docs/reference/android/com/google/firebase/firestore/Blob#fromBytes%28byte[]%29
+ *
+ * Title: How to set bytes type to field in firestore
+ * Inquirer: user13296045 (April 15, 2020)
+ * Responder: Alex Mamo (April 16, 2020)
+ * https://stackoverflow.com/questions/61230610/how-to-set-bytes-type-to-field-in-firestore
  *
  *
  *
@@ -106,6 +125,10 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
         var campImages = remember {mutableStateListOf<Uri>()}
         val campByteArray = remember { mutableStateListOf<Blob>() }
         val campAvailableDates = remember { mutableStateListOf<Long>() }
+        var copied by remember { mutableStateOf(0) }
+
+        var showDatePicker by remember { mutableStateOf(false) }
+        var addDate by remember { mutableStateOf(true) }
 
 
 
@@ -121,7 +144,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
 
         //the old campsite (if we are updating) null if this is a new site.
-        if (oldSite != null){
+        if (oldSite != null && copied == 0){
             Log.d("campsite", "There is an old site")
             campName = oldSite.name
             campPrice = oldSite.price.toString()
@@ -131,9 +154,10 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
             campOccupancy = oldSite.occupancy.toString()
             oldSite.images.forEach { byteArray -> campByteArray.add(byteArray) }
             oldSite.availability.forEach { date -> campAvailableDates.add(date) }
-            //campLat = oldSite.location.latitude.toString()
-            //campLon = oldSite.location.longitude.toString()
-
+            campLat = oldSite.lat.toString()
+            campLon = oldSite.lon.toString()
+            campLocation = oldSite.locationName
+            copied = 1
         }
 
 
@@ -141,7 +165,8 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())) {
+            .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally) {
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)){
@@ -165,7 +190,6 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                         .testTag("campPrice")
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
 
             //Rules Box
             Row(modifier = Modifier
@@ -181,7 +205,6 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                         .testTag("campRules")
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
 
             //Description box
             Row(modifier = Modifier
@@ -197,8 +220,6 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                         .testTag("campDesc")
                 )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             //Tags Addition
 
@@ -231,8 +252,6 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             //OCCUPANCY
             Row(modifier = Modifier.padding(16.dp)){
                 OutlinedTextField(
@@ -246,13 +265,31 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             //AVAILABLE DATES
-            /*Spacer(modifier = Modifier.height(16.dp))
 
-            Row(modifier = Modifier.padding(16.dp).fillMaxWidth()){
-                DatePick(campAvailableDates, chosenDates = {val placeholder = 0})
+            if(showDatePicker){
+                DatePick(campAvailableDates,
+                    onDismiss = {showDatePicker = false},
+                    onSelect = {
+
+                        if(addDate){
+
+                            it.forEach{ date->
+                                if (date !in campAvailableDates) {
+                                    campAvailableDates.add(date)
+                                }
+                            }
+                         }
+                        else{
+                            it.forEach{ date->
+                                if (date in campAvailableDates) {
+                                    campAvailableDates.remove(date)
+                                }
+                            }
+                        }
+                },
+                    adding = addDate)
+
             }
 
 
@@ -260,18 +297,19 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                 .padding(16.dp)
                 .fillMaxWidth()){
                 Button(
-                    onClick = {val plaeholder = 0},
+                    onClick = {addDate = true
+                    showDatePicker = true},
                     modifier = Modifier.testTag("addDateButton")){
-                    Text("Add Availability Date")
+                    Text("Add Availability")
                 }
-                Spacer(modifier = Modifier.width(12.dp))
                 Button(
-                    onClick = {val placeholder = 0},
+                    onClick = {addDate = false
+                    showDatePicker = true},
                     modifier = Modifier.testTag("removeDateButton")
                 ){
-                    Text("Remove Availability Date")
+                    Text("Remove Availability")
                 }
-            }*/
+            }
 
 
 
@@ -313,7 +351,6 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
             //IMAGE DISPLAY
 
-            Spacer(modifier = Modifier.height(16.dp))
             if(campImages.isNotEmpty()){
                 Row(
                     modifier = Modifier
@@ -328,7 +365,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                         campByteArray.add(Blob.fromBytes(bytes))
                         ImageRow(
                             Blob.fromBytes(bytes),
-                            OnDelete = { campByteArray.remove(it)
+                            onDelete = { campByteArray.remove(it)
                             campImages.remove(uri)})
                     }
                 }
@@ -343,25 +380,25 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
             }
 
 
-            Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)){
                 if (oldSite == null) {
                     Button(onClick = {
+
                         if (campName.isNotBlank() &&
                             campDesc.isNotBlank() &&
                             campOccupancy.isNotBlank() &&
                             campPrice.isNotBlank() &&
                             campRules.isNotBlank()
+
                         ) {
                             //must assert numbers in price and occupancy
-                            val location = Location(campLocation)
-                            location.latitude = campLat.toDouble()
-                            location.longitude = campLon.toDouble()
                             addSite(
                                 Campsite(
                                     name = campName,
+                                    lon = campLon.toDouble(),
+                                    lat = campLat.toDouble(),
                                     ID = Uuid.random().toString(), //FIGURE OUT ID IMPLEMENTATION
                                     ownerID = ownerID,
                                     price = campPrice.toFloat(),
@@ -372,8 +409,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     occupancy = campOccupancy.toInt(),
                                     images = campByteArray,
                                     //Campsite needs other elements based on what is commented out in campsite object
-                                    //location = location,
-                                    locationName = "",
+                                    locationName = campLocation,
                                     availability = campAvailableDates,
                                     lotteries = mutableListOf() //TODO
                                 )
@@ -402,6 +438,8 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     //location = location,
                                     name = campName,
                                     ID = oldSite.ID,
+                                    lon = campLon.toDouble(),
+                                    lat = campLat.toDouble(),
                                     ownerID = oldSite.ownerID,
                                     price = campPrice.toFloat(),
                                     rating = oldSite.rating,
@@ -433,57 +471,44 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 }
 
 @OptIn(InternalComposeApi::class)
+
+
+/**
+ * The composable collumns that show the uploaded campsite images.
+ *
+ * @param image a blob dataclass of the image being shown
+ * @param onDelete the function that tells the composable what to delete
+ *
+ *
+ * */
+
 @Composable
-fun ImageRow(image: Blob, OnDelete:(Blob) -> Unit){
+fun ImageRow(image: Blob, onDelete:(Blob) -> Unit){
     val imageBytes: ByteArray = image.toBytes()
     val bitmap: Bitmap = BitmapFactory.decodeByteArray(imageBytes,0,imageBytes.size)
     Column(modifier = Modifier
         .padding(6.dp)
-        .clickable(onClick = { OnDelete(image) })){
+        .clickable(onClick = { onDelete(image) })){
         Image(bitmap = bitmap.asImageBitmap(), contentDescription = "Camp Promo Image")
     }
 
 }
 
-@Composable
-fun DatePick(campAvailableDates: List<Long>, chosenDates:(List<Long>?) -> Unit){
-
-    val datestate = rememberDateRangePickerState(
-        initialDisplayedMonthMillis = System.currentTimeMillis(),
-        selectableDates = object : SelectableDates{
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean =
-                utcTimeMillis in campAvailableDates //change this to NOT
-        }
 
 
-    )
-    val startDate = datestate.selectedStartDateMillis
-    val endDate = datestate.selectedEndDateMillis
-
-    val rangeIsAvailable = startDate != null && endDate != null &&
-            generateSequence(startDate) { it + 24 * 60 * 60 * 1000 }
-                .takeWhile { it <= endDate }
-                .all { it !in campAvailableDates } //CHANGE TO NOT
-
-    chosenDates(
-        if (rangeIsAvailable) listOf(startDate, endDate)
-        else null
-    )
-
-    DateRangePicker(
-        state = datestate,
-        showModeToggle = false,
-        modifier = Modifier
-    )
-
-}
-
-
+/**
+ * A composable row that shows which tags the Campsite currently has.
+ * Each tag can be individually deleted by a button next to it.
+ *
+ * @param tag the String holding the tag name. Tags are mostly created and defined by the owners
+ * @param onDelete the function that tells the composable what tag to delete.
+ * */
 @Composable
 fun TagRow(tag: String, onDelete:(String)-> Unit){
     Row(modifier = Modifier
         .fillMaxWidth()
-        .padding(16.dp)){
+        .padding(16.dp),
+        horizontalArrangement = Arrangement.Center){
         Text(tag)
         Spacer(modifier = Modifier.width(16.dp))
         Button(onClick = {onDelete(tag)},
