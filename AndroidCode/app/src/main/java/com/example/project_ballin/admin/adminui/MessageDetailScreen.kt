@@ -37,6 +37,8 @@ import kotlin.uuid.Uuid
 
 
 class MessageDetailScreen {
+
+    val confirmDeleteDialog = ConfirmDeleteDialog()
     /**
      * A composable that shows the details of a specific message
      * that was clicked on from the messages list screen.
@@ -121,7 +123,7 @@ class MessageDetailScreen {
             }
 
             messageToDelete?.let { message ->
-                ConfirmDeleteDialog(
+                confirmDeleteDialog.ConfirmDeleteDialog(
                     itemDescription = "the message",
                     onConfirm = {
                         onDelete(message)
