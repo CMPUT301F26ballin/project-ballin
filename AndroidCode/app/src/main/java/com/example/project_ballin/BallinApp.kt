@@ -51,6 +51,8 @@ import java.util.Date
  *
  *
  *
+ *
+ *
  * */
 
 
@@ -94,7 +96,7 @@ fun BallinApp() {
                 deviceId = "123",
                 profilePic = "a",
                 lastName = "",
-                userID = Uuid.random().toString()
+                userID = "Test1"
             )
         )
     }
@@ -268,8 +270,7 @@ fun BallinApp() {
 
         composable("OwnerMenu/{OwnerID}") {
             val ownerIDString = it.arguments!!.getString("OwnerID")
-            val ownerID = Uuid.parse(ownerIDString!!)
-            OwnerMenuScreen(navController, ownerID)
+            OwnerMenuScreen(navController, ownerIDString!!)
         }
 
         composable("CampsiteListScreen/{OwnerID}") {
@@ -305,6 +306,10 @@ fun BallinApp() {
                 addSite = { Log.d("Site Addition", "Adding Site")
                     campsiteList.addCampsite(it) },
                 updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite = oldSite, newSite) })
+        }
+        composable("CampsiteActiveReservations/{SiteID}") {
+            val siteIDString = it.arguments!!.getString("SiteID")
+
         }
 
         composable("LotteryListScreen/{OwnerID}") {
