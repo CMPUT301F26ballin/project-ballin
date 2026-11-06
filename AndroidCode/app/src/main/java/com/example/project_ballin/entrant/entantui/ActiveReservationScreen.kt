@@ -3,14 +3,17 @@ package com.example.project_ballin.entrant.entantui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,18 +72,16 @@ class ActiveReservationScreen {
         //Looked up how to make a dialog in compose
         //https://developer.android.com/develop/ui/compose/components/dialog#dialog-composable
         lotteryToLeave?.let { lottery ->
-            Dialog(onDismissRequest = { lotteryToLeave = null }) {
-                ConfirmActionDialog().ConfirmAction(
-                    "Are you sure you want to leave this waiting list?",
-                    confirm = { confirmed ->
-                        if (confirmed) {
-                                lottery.waitList.remove(entrant.userID)
-                            entrant.activeLotteries.remove(lottery)
-                        }
-                        lotteryToLeave = null
+            ConfirmActionDialog().ConfirmAction(
+                "Are you sure you want to leave this waiting list?",
+                confirm = { confirmed ->
+                    if (confirmed) {
+                            lottery.waitList.remove(entrant.userID)
+                        entrant.activeLotteries.remove(lottery)
                     }
-                )
-            }
+                    lotteryToLeave = null
+                }
+            )
         }
     }
 
@@ -118,17 +119,19 @@ class ActiveReservationScreen {
                         style = MaterialTheme.typography.titleMedium
                     )
 
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Button(
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Red
+                                containerColor = MaterialTheme.colorScheme.error
                             ),
                             onClick = onLeaveClick
                             ,
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
                                 .testTag("Leave Waiting List Button")
                         ) {
                             Text("Leave Waiting List")
@@ -139,7 +142,7 @@ class ActiveReservationScreen {
                             onClick = {
 
                             },
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
                                 .testTag("Owner Messages Button")
                         ) {
                             Text("Owner Messages")
@@ -180,6 +183,7 @@ class ActiveReservationScreen {
                 style = MaterialTheme.typography.titleMedium
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -187,12 +191,12 @@ class ActiveReservationScreen {
             ) {
                 Button(
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Red
+                        containerColor = MaterialTheme.colorScheme.error
                     ),
                     onClick = {
 
                     },
-                    modifier = Modifier.padding(16.dp)
+
                 ) {
                     Text("Cancel Registration")
                 }
@@ -202,7 +206,7 @@ class ActiveReservationScreen {
                     onClick = {
 
                     },
-                    modifier = Modifier.padding(16.dp)
+
                 ) {
                     Text("Owner Messages")
                 }

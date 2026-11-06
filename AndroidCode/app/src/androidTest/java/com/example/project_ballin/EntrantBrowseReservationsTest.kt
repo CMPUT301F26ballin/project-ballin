@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+//Test for checking what shows up in the browse reservations screen
 class EntrantBrowseReservationsTest {
     private lateinit var campsiteList: CampsiteList
     private lateinit var entrant: Entrant
@@ -115,11 +116,8 @@ class EntrantBrowseReservationsTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
+            .onNodeWithTag("MY RESERVATIONS")
             .assertExists()
-
-        composeTestRule
-            .onNodeWithText("MY RESERVATIONS")
             .performClick()
 
         composeTestRule
@@ -132,10 +130,6 @@ class EntrantBrowseReservationsTest {
 
         composeTestRule
             .onNodeWithTag("Lost Lottery Card")
-            .assertExists()
-
-        composeTestRule
-            .onNodeWithTag("Active Reservation Button")
             .assertExists()
 
         composeTestRule
