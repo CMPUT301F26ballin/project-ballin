@@ -29,124 +29,130 @@ import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 import kotlin.uuid.Uuid
 
-// Verify messages parameter type is correct
 
-/**
- * A composable that shows the overview of all the messages
- * sent by an owner to an entrant.
- *
- * @param navController the navController of the app
- * @param navController the navController of the app
- * @param messages the list of messages to iterate through
- */
-@Composable
-fun MessageListScreen(
-    navController: NavController,
-    messages: List<Message>
-) {
-    TopAppBar(
-        navController = navController,
-        screenTitle = "Messages",
+
+class MessageListScreen {
+    /**
+     * A composable that shows the overview of all the messages
+     * sent by an owner to an entrant.
+     *
+     * @param navController the navController of the app
+     * @param navController the navController of the app
+     * @param messages the list of messages to iterate through
+     */
+    @Composable
+    fun MessageList(
+        navController: NavController,
+        messages: List<Message>
     ) {
-        Column(
+        TopAppBar(
+            navController = navController,
+            screenTitle = "Messages",
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+
+                Spacer(modifier = Modifier.height(34.dp))
+
+                if (messages.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("No messages to browse through")
+                    }
+                } else {
+                    // What the admin typed in the search box (kept when the screen rotates)
+                    var query by rememberSaveable { mutableStateOf("") }
+                    val results = messages.filter { it.matchesSearch(query) }
+
+                    AdminSearchField(
+                        query,
+                        onQueryChange = { query = it },
+                        placeholder = "Search messages"
+                    )
+
+                    if (results.isEmpty()) {
+                        Text(
+                            "No messages match \"${query.trim()}\".",
+                            modifier = Modifier.padding(16.dp).testTag("noSearchResults")
+                        )
+                    } else {
+                        ListMessages(navController, results)
+                    }
+                }
+
+            }
+        }
+    }
+
+    /**
+     * Shows all the messages in a list.
+     *
+     * @param navController the navController of the app
+     * @param messages the list of messages to iterate through
+     */
+    @Composable
+    fun ListMessages(navController: NavController, messages: List<Message>) {
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-
-            Spacer(modifier = Modifier.height(34.dp))
-
-            if (messages.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("No messages to browse through")
-                }
-            } else {
-                // What the admin typed in the search box (kept when the screen rotates)
-                var query by rememberSaveable { mutableStateOf("") }
-                val results = messages.filter { it.matchesSearch(query) }
-
-                AdminSearchField(query, onQueryChange = { query = it }, placeholder = "Search messages")
-
-                if (results.isEmpty()) {
-                    Text(
-                        "No messages match \"${query.trim()}\".",
-                        modifier = Modifier.padding(16.dp).testTag("noSearchResults")
-                    )
-                } else {
-                    ListMessages(navController, results)
-                }
-            }
-
-        }
-    }
-}
-
-/**
- * Shows all the messages in a list.
- *
- * @param navController the navController of the app
- * @param messages the list of messages to iterate through
- */
-@Composable
-fun ListMessages(navController: NavController, messages: List<Message>) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        itemsIndexed(messages) { index, message ->
-            MessageButtonRow(index, message, navController)
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}
-
-/**
- * Shows the general overview of a specific message,
- * it'll be a clickable button, showing ID and date sent only.
- *
- * @param index the index of the message in the list
- * @param message the message to show
- * @param navController the navController of the app
- */
-@Composable
-fun MessageButtonRow(index: Int, message: Message, navController: NavController) {
-
-    Button(
-        onClick = {
-            navController.navigate("AdminMessageDetails/${message.ID}")
-        },
-        shape = RoundedCornerShape(10.dp),
-        modifier = Modifier
-            .testTag("checkMessage${index+1}") // for UI testing
-            .width(250.dp)
-            .height(85.dp)
-    ) {
-        Column (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text( "Message ${index + 1}")
-            Text(
-                text = "Date Sent: ${message.getFormattedDate()}",
-                fontSize = 10.sp
-            )
+            itemsIndexed(messages) { index, message ->
+                MessageButtonRow(index, message, navController)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun MessageListScreenPreview() {
-    val navController = rememberNavController()
+    /**
+     * Shows the general overview of a specific message,
+     * it'll be a clickable button, showing ID and date sent only.
+     *
+     * @param index the index of the message in the list
+     * @param message the message to show
+     * @param navController the navController of the app
+     */
+    @Composable
+    fun MessageButtonRow(index: Int, message: Message, navController: NavController) {
 
-    val sampleMessages = listOf(
-        Message("1","1","Hello", Date(), "1"),
-        Message("2","2","Hi", Date(), "2")
-    )
-    MessageListScreen(navController, sampleMessages)
+        Button(
+            onClick = {
+                navController.navigate("AdminMessageDetails/${message.ID}")
+            },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .testTag("checkMessage${index + 1}") // for UI testing
+                .width(250.dp)
+                .height(85.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Message ${index + 1}")
+                Text(
+                    text = "Date Sent: ${message.getFormattedDate()}",
+                    fontSize = 10.sp
+                )
+            }
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun MessageListScreenPreview() {
+        val navController = rememberNavController()
+
+        val sampleMessages = listOf(
+            Message("1", "1", "Hello", Date(), "1"),
+            Message("2", "2", "Hi", Date(), "2")
+        )
+        MessageList(navController, sampleMessages)
+    }
 }

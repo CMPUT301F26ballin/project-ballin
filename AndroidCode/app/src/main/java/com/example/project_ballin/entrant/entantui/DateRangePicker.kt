@@ -35,7 +35,6 @@ class DateRangePicker {
     @Composable
     fun BookingDateRangePicker(
         availableDates: List<Long>,
-        bookingYear: Int,
         modifier: Modifier = Modifier,
         chosenDates: (List<Long>?) -> Unit
     ) {
@@ -47,9 +46,6 @@ class DateRangePicker {
             selectableDates = object : SelectableDates {
                 override fun isSelectableDate(utcTimeMillis: Long): Boolean =
                     utcTimeMillis in available
-
-                override fun isSelectableYear(year: Int): Boolean =
-                    year == bookingYear
             }
         )
 

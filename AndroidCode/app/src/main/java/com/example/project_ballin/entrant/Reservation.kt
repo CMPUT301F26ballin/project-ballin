@@ -1,12 +1,12 @@
 package com.example.project_ballin.entrant
+
 /**
- * A singular reservation indicating a User's booking of a campsite in a
- * specific set of dates
+ * A class that stores all the information of a reservation
+ * Does not store much right now
  *
- * @param campsiteID the Uuid of the campsite being reserved
- * @param dates a list of the dates that have been reserved for the camp
- *
- * */
+ * @property campsiteID the ID of the campsite that the reservation is for
+ * @property dates the dates that the reservation is for
+ */
 data class Reservation(
     val campsiteID: String?,
     val dates: List<Long>?,
