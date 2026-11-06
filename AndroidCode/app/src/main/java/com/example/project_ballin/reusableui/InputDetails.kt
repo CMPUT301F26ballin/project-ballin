@@ -1,5 +1,6 @@
 package com.example.project_ballin.reusableui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
@@ -67,6 +68,7 @@ fun SelectProfileRole(
     }
 }
 
+//@SuppressLint("SuspiciousIndentation")
 @Composable
 fun InputDetails(
     navController: NavController,
@@ -82,7 +84,6 @@ fun InputDetails(
     val deviceId = Settings.Secure.getString(context.contentResolver,
         Settings.Secure.ANDROID_ID) ?: ""
         viewModel.setDeviceId(deviceId)
-
 
     Column(
         modifier = Modifier
