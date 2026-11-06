@@ -315,7 +315,7 @@ fun BallinApp() {
 
         composable("LotteryListScreen/{OwnerID}") {
             val ownerID = it.arguments!!.getString("OwnerID")
-            LotteryListScreen.LotteryListScreen(
+            LotteryListScreen().LotteryListScreen(
                 navController,
                 ownerID!!,
                 getOwnerLotteries = { lotteryList.getOwnerLotteries(it) },
@@ -333,7 +333,7 @@ fun BallinApp() {
             val ownerID = it.arguments!!.getString("OwnerID")
             val lotteryID = it.arguments?.getString("LotteryID")
             val lottery: Lottery? = if (lotteryID == null) null else lotteryList.getLottery(lotteryID)
-            LotteryDetailScreen.LotteryDetailScreen(
+            LotteryDetailScreen().LotteryDetailScreen(
                 navController, lottery, ownerID!!,
                 ownerSites = campsiteList.getOwnerSites(ownerID),
                 getCampsite = { campsiteList.getCampsite(it) },
