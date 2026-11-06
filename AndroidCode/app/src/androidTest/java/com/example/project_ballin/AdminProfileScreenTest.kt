@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.project_ballin.owner.Owner
+import com.example.project_ballin.owner.Owner
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -23,8 +24,14 @@ class AdminProfileScreenTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private val john = Profile("device1", "John Ballin", "john@example.com", "780-555-0101", "", "Entrant")
-    private val jane = Profile("device2", "Jane Keller", "jane@example.com", "", "", "Owner")
+    private val john = Profile(
+        deviceId = "device1", firstName = "John", lastName = "Ballin", email = "john@example.com",
+        phoneNum = "780-555-0101", role = "Entrant", userID = "user1"
+    )
+    private val jane = Profile(
+        deviceId = "device2", firstName = "Jane", lastName = "Keller", email = "jane@example.com",
+        role = "Owner", userID = "user2"
+    )
 
     @Test
     fun browseProfiles_showsEveryProfile() {
@@ -50,7 +57,7 @@ class AdminProfileScreenTest {
         composeRule.setContent {
             AdminProfileListView(listOf(john, jane), onProfileClick = { clicked = it }, onDelete = {})
         }
-        composeRule.onNodeWithTag("profileItem_device2").performClick()
+        composeRule.onNodeWithTag("profileItem_user2").performClick()
         assertEquals(jane, clicked)
     }
 
@@ -60,7 +67,7 @@ class AdminProfileScreenTest {
         composeRule.setContent {
             AdminProfileListView(profiles, onProfileClick = {}, onDelete = { profiles.remove(it) })
         }
-        composeRule.onNodeWithTag("removeProfile_device1").performClick()
+        composeRule.onNodeWithTag("removeProfile_user1").performClick()
         composeRule.onNodeWithTag("confirmDeleteDialog").assertIsDisplayed()
         composeRule.onNodeWithTag("confirmDelete").performClick()
 
@@ -74,7 +81,7 @@ class AdminProfileScreenTest {
         composeRule.setContent {
             AdminProfileListView(profiles, onProfileClick = {}, onDelete = { profiles.remove(it) })
         }
-        composeRule.onNodeWithTag("removeProfile_device1").performClick()
+        composeRule.onNodeWithTag("removeProfile_user1").performClick()
         composeRule.onNodeWithTag("cancelDelete").performClick()
 
         composeRule.onNodeWithTag("confirmDeleteDialog").assertDoesNotExist()
@@ -87,9 +94,11 @@ class AdminProfileScreenTest {
         composeRule.setContent {
             AdminProfileDetailView(john, onDelete = {})
         }
-        composeRule.onNodeWithText("John Ballin").assertIsDisplayed()
+        composeRule.onNodeWithText("John").assertIsDisplayed()
+        composeRule.onNodeWithText("Ballin").assertIsDisplayed()
         composeRule.onNodeWithText("john@example.com").assertIsDisplayed()
         composeRule.onNodeWithText("780-555-0101").assertIsDisplayed()
+        composeRule.onNodeWithText("user1").assertIsDisplayed()
         composeRule.onNodeWithText("device1").assertIsDisplayed()
     }
 
@@ -114,9 +123,14 @@ class AdminProfileScreenTest {
 
     @Test
     fun profileFromUser_keepsRole() {
-        val owner = Owner("Jane Keller", "", "jane@example.com", "device2", "", "")
+        val owner = Owner(
+            firstName = "Jane", lastName = "Keller", email = "jane@example.com",
+            deviceId = "device2", userID = "user2"
+        )
         val profile = Profile.fromUser(owner)
         assertEquals("Owner", profile.role)
         assertTrue(profile.deviceId == "device2")
+        assertEquals("user2", profile.userID)
+        assertEquals("Jane Keller", profile.fullName)
     }
 }

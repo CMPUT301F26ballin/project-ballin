@@ -49,7 +49,7 @@ fun AdminProfileListScreen(
         AdminProfileListView(
             profiles = profiles,
             onProfileClick = { profile ->
-                navController.navigate("AdminProfileDetail/${profile.deviceId}")
+                navController.navigate("AdminProfileDetail/${profile.userID}")
             },
             onDelete = onDelete
         )
@@ -84,7 +84,7 @@ fun AdminProfileListView(
             modifier = Modifier.fillMaxSize().padding(16.dp).testTag("profileList"),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(profiles, key = { it.deviceId }) { profile ->
+            items(profiles, key = { it.userID }) { profile ->
                 ProfileItem(
                     profile = profile,
                     onClick = { onProfileClick(profile) },
@@ -96,7 +96,7 @@ fun AdminProfileListView(
 
     profileToDelete?.let { profile ->
         ConfirmDeleteDialog(
-            itemDescription = "the profile of ${profile.firstName} ${profile.lastName}",
+            itemDescription = "the profile of ${profile.fullName}",
             onConfirm = {
                 onDelete(profile)
                 profileToDelete = null
@@ -119,15 +119,14 @@ fun ProfileItem(profile: Profile, onClick: () -> Unit, onRemoveClick: () -> Unit
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .testTag("profileItem_${profile.deviceId}")
+            .testTag("profileItem_${profile.userID}")
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(profile.firstName, fontSize = 18.sp)
-                Text(profile.lastName, fontSize = 18.sp)
+                Text(profile.fullName, fontSize = 18.sp)
                 Text(profile.role, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
                 Text(profile.email, fontSize = 12.sp)
             }
@@ -136,7 +135,7 @@ fun ProfileItem(profile: Profile, onClick: () -> Unit, onRemoveClick: () -> Unit
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
                 ),
-                modifier = Modifier.testTag("removeProfile_${profile.deviceId}")
+                modifier = Modifier.testTag("removeProfile_${profile.userID}")
             ) {
                 Text("Remove")
             }
@@ -195,6 +194,7 @@ fun AdminProfileDetailView(profile: Profile?, onDelete: (Profile) -> Unit) {
         ProfileDetailRow("Role", profile.role)
         ProfileDetailRow("Email", profile.email)
         ProfileDetailRow("Phone", profile.phoneNum.ifBlank { "Not provided" })
+        ProfileDetailRow("User ID", profile.userID)
         ProfileDetailRow("Device ID", profile.deviceId)
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -212,7 +212,7 @@ fun AdminProfileDetailView(profile: Profile?, onDelete: (Profile) -> Unit) {
 
     if (showDialog) {
         ConfirmDeleteDialog(
-            itemDescription = "the profile of ${profile.firstName} ${profile.lastName}",
+            itemDescription = "the profile of ${profile.fullName}",
             onConfirm = {
                 showDialog = false
                 onDelete(profile)
@@ -237,9 +237,18 @@ fun ProfileDetailRow(label: String, value: String) {
 }
 
 private val sampleProfiles = listOf(
-    Profile("device1", "John",  "Ballin", "john@example.com", "780-555-0101", "", "Entrant"),
-    Profile("device2", "Jane", "Keller", "jane@example.com", "", "", "Owner"),
-    Profile("device3", "Brian",  "Yu", "brian@example.com", "780-555-0199", "", "Entrant")
+    Profile(
+        deviceId = "device1", firstName = "John", lastName = "Ballin", email = "john@example.com",
+        phoneNum = "780-555-0101", role = "Entrant", userID = "user1"
+    ),
+    Profile(
+        deviceId = "device2", firstName = "Jane", lastName = "Keller", email = "jane@example.com",
+        role = "Owner", userID = "user2"
+    ),
+    Profile(
+        deviceId = "device3", firstName = "Brian", lastName = "Yu", email = "brian@example.com",
+        phoneNum = "780-555-0199", role = "Entrant", userID = "user3"
+    )
 )
 
 @Preview(showBackground = true)
