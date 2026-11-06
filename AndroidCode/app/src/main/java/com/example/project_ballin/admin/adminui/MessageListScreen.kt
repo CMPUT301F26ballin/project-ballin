@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,17 +53,38 @@ fun MessageListScreen(
 
             Spacer(modifier = Modifier.height(34.dp))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                itemsIndexed(messages) { index, message ->
-                    MessageButtonRow(index, message, navController)
-                    Spacer(modifier = Modifier.height(16.dp))
+            if (messages.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No messages to browse through")
                 }
+            } else {
+                ListMessages(navController, messages)
             }
+
+        }
+    }
+}
+
+/**
+ * Shows all the messages in a list.
+ *
+ * @param navController the navController of the app
+ * @param messages the list of messages to iterate through
+ */
+@Composable
+fun ListMessages(navController: NavController, messages: List<Message>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        itemsIndexed(messages) { index, message ->
+            MessageButtonRow(index, message, navController)
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -70,6 +92,10 @@ fun MessageListScreen(
 /**
  * Shows the general overview of a specific message,
  * it'll be a clickable button, showing ID and date sent only.
+ *
+ * @param index the index of the message in the list
+ * @param message the message to show
+ * @param navController the navController of the app
  */
 @Composable
 fun MessageButtonRow(index: Int, message: Message, navController: NavController) {

@@ -17,11 +17,9 @@ class AdminMessageScreensTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val uuidRandomOwnerID: Uuid = Uuid.random()
-    private val uuidRandomEntrantID: Uuid = Uuid.random()
-    private val uuidRandomID: Uuid = Uuid.random()
+
     private val sampleMessages = mutableListOf(
-        Message(uuidRandomOwnerID,uuidRandomEntrantID,"Hello", Date(), uuidRandomID),
+        Message("1","1","Hello", Date(), "1"),
     )
 
     @Test
@@ -68,11 +66,11 @@ class AdminMessageScreensTest {
         }
 
         composeTestRule
-            .onNodeWithTag("sentBy${uuidRandomOwnerID}")
+            .onNodeWithTag("sentBy${sampleMessages[0].ownerID}")
             .assertExists()
 
         composeTestRule
-            .onNodeWithTag("recievedBy${uuidRandomEntrantID}")
+            .onNodeWithTag("recievedBy${sampleMessages[0].entrantID}")
             .assertExists()
 
         composeTestRule

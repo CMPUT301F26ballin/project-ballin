@@ -65,7 +65,6 @@ fun LotteryListView(
                 NewLotteryButton(navController, ownerID )
             }
         }
-
         if(lotteries.isEmpty()){
             item {
                 Box(
@@ -79,9 +78,11 @@ fun LotteryListView(
 
         itemsIndexed(lotteries) { index, lottery ->
             val ID = lottery.lotteryID
+            Spacer(modifier = Modifier.height(16.dp))
             LotteryItem(
                 lottery,
-                onClick = { navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID")})
+                onClick = { navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID")}
+            )
         }
     }
 }
@@ -97,7 +98,6 @@ fun NewLotteryButton(navController: NavController, ownerID: String) {
     {
         Text("Create new lottery")
     }
-    Spacer(modifier = Modifier.height(16.dp))
 }
 
 /**
@@ -119,10 +119,17 @@ fun LotteryItem(
             .padding(16.dp)
     ) {
         Column {
-            Text(LotteryList().getLottery(lottery.lotteryID)?.associatedSites?.firstOrNull() ?: "No sites associated")
+            Text(
+                "Lottery period: ${formatDateMillisToDMY(lottery.registrationStart!!)} " +
+                        "to ${formatDateMillisToDMY(lottery.registrationEnd!!)}"
+            )
+            Text(
+                "Booking period: ${formatDateMillisToDMY(lottery.bookingStart!!)} " +
+                        "to ${formatDateMillisToDMY(lottery.bookingEnd!!)}"
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Text("Lottery start and end dates")
+            Text(lottery.associatedSites.firstOrNull() ?: "No sites associated")
+            // list of the sites
         }
-        Text(" Reservation dates")
     }
 }

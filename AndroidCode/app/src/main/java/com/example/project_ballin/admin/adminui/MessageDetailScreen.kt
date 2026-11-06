@@ -27,15 +27,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.entrant.entantui.ConfirmActionDialog
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 import kotlin.uuid.Uuid
 
-// NOT COMPLETED YET
-// VERIFY onDelete parameter works properly
-// VERIFY that the delete message brings user to confirmDeleteDialog
 
 /**
  * A composable that shows the details of a specific message
@@ -51,7 +50,7 @@ fun MessageDetailScreen(
     message: Message,
     onDelete: (Message) -> Unit
 ) {
-    var showDialog by remember { mutableStateOf(false) }
+    var messageToDelete by remember { mutableStateOf<Message?>(null) }
 
     TopAppBar(
         navController = navController,
@@ -69,12 +68,12 @@ fun MessageDetailScreen(
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(fraction = 0.5f)
+                    .fillMaxHeight(fraction = 0.8f)
                     .padding(16.dp)
                     .background(
                         color = MaterialTheme.colorScheme.primary,
@@ -91,25 +90,29 @@ fun MessageDetailScreen(
 
             Button(
                 onClick = {
-                    showDialog = true
+                    messageToDelete = message
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
+                    containerColor = Color.Red
                 ),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.testTag("deleteMessage") // for UI testing
             ) {
                 Text("Delete Message")
             }
+        }
 
-            if (showDialog) {
-                ConfirmDeleteDialog(
-                    itemDescription = "the message ${message.ID}",
-                    onConfirm = {
-                        showDialog = false
-                        onDelete(message)
-                    },
-                    onCancel = { showDialog = false }
+        messageToDelete?.let { message ->
+            Dialog(onDismissRequest = { messageToDelete = null }) {
+                ConfirmActionDialog().ConfirmAction(
+                    message = "Are you sure you want to delete this message?",
+                    confirm = { confirmed ->
+                        if (confirmed) {
+                            onDelete(message)
+                            navController.popBackStack()
+                        }
+                        messageToDelete = null
+                    }
                 )
             }
         }
