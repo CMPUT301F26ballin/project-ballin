@@ -6,10 +6,11 @@
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="EntrantScreensTest">
+      <SelectionState runConfigName="addCampsite_inputAllFields_ConfirmCampsiteIsSeen()">
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />
       </SelectionState>
+      <SelectionState runConfigName="campsiteAddUiTest">
       <SelectionState runConfigName="EntrantLeaveWaitListTest">
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />

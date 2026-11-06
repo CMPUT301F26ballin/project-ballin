@@ -2,23 +2,20 @@ package com.example.project_ballin
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class campsiteAddUiTest {
-
-    private lateinit var campsiteList: CampsiteList
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
-
-    @Before
-    fun createCampsiteList(){
-        campsiteList = CampsiteList()
-    }
 
     @Test
     fun addCampsite_inputAllFields_ConfirmCampsiteIsSeen(){
@@ -96,11 +93,23 @@ class campsiteAddUiTest {
             .performTextInput("15")
 
         composeTestRule
+            .onNodeWithTag("campLat")
+            .performTextInput("12")
+
+        composeTestRule
+            .onNodeWithTag("campLon")
+            .performTextInput("12")
+
+        composeTestRule
+            .onNodeWithTag("campLocName")
+            .performTextInput("Waterton")
+
+        composeTestRule
             .onNodeWithTag("addSiteButton")
             .performClick()
 
         composeTestRule
-            .onNodeWithTag("Campsite:Hello")
+            .onNodeWithText("Hello")
             .assertExists()
 
 
@@ -121,15 +130,66 @@ class campsiteAddUiTest {
             .onNodeWithTag("toCampsiteList")
             .performClick()
 
-        //add campsite
+        composeTestRule
+            .onNodeWithTag("newCampsiteButton")
+            .performClick()
+
 
         composeTestRule
-            .onNodeWithTag("Campsite:Hello")
+            .onNodeWithTag("campName")
+            .performTextInput("Hello")
+
+        composeTestRule
+            .onNodeWithTag("campPrice")
+            .performTextInput("65")
+
+        composeTestRule
+            .onNodeWithTag("campRules")
+            .performTextInput("Have Fun!")
+
+        composeTestRule
+            .onNodeWithTag("campDesc")
+            .performTextInput("The best campsite ever!")
+
+        composeTestRule
+            .onNodeWithTag("tagInput")
+            .performTextInput("Tents")
+
+        composeTestRule
+            .onNodeWithTag("addTag")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("campOccupancy")
+            .performTextInput("15")
+
+        composeTestRule
+            .onNodeWithTag("campLat")
+            .performTextInput("12")
+
+        composeTestRule
+            .onNodeWithTag("campLon")
+            .performTextInput("12")
+
+        composeTestRule
+            .onNodeWithTag("campLocName")
+            .performTextInput("Waterton")
+
+        composeTestRule
+            .onNodeWithTag("addSiteButton")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Hello")
             .assertExists()
 
         composeTestRule
-            .onNodeWithTag("Campsite:Hello")
+            .onNodeWithText("Hello")
             .performClick()
+
+        composeTestRule
+            .onNodeWithText("Campsite Details")
+            .assertExists()
 
         //check some other values
 
@@ -150,11 +210,75 @@ class campsiteAddUiTest {
 
         composeTestRule
             .onNodeWithTag("updateSiteButton")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("updateSiteButton")
             .performClick()
+
+        composeTestRule
+            .onNodeWithText("Campsite Name: Hello2")
+            .assertExists()
     }
 
     @Test
     fun viewCampsiteDetails_backToCampsites_AddNewCampsite_viewNewCampsiteDetails(){
+        composeTestRule
+            .onNodeWithTag("ownerSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("toCampsiteList")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("newCampsiteButton")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("campName")
+            .performTextInput("Hello")
+
+        composeTestRule
+            .onNodeWithTag("campPrice")
+            .performTextInput("65")
+
+        composeTestRule
+            .onNodeWithTag("campRules")
+            .performTextInput("Have Fun!")
+
+        composeTestRule
+            .onNodeWithTag("campDesc")
+            .performTextInput("The best campsite ever!")
+
+        composeTestRule
+            .onNodeWithTag("tagInput")
+            .performTextInput("Tents")
+
+        composeTestRule
+            .onNodeWithTag("addTag")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("campOccupancy")
+            .performTextInput("15")
+
+        composeTestRule
+            .onNodeWithTag("campLat")
+            .performTextInput("12")
+
+        composeTestRule
+            .onNodeWithTag("campLon")
+            .performTextInput("12")
+
+        composeTestRule
+            .onNodeWithTag("campLocName")
+            .performTextInput("Waterton")
+
+        composeTestRule
+            .onNodeWithTag("addSiteButton")
+            .performClick()
+
 
     }
 

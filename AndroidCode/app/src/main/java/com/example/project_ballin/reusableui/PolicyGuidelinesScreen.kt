@@ -48,12 +48,11 @@ fun PolicyGuidelinesScreen(
                 2. Offensive language,actions, and content are prohibited
                 3. Users must not impersonate another person
                 4. Entrants can't manipulate,and abuse lotteries/lottery system
-                5. Entrants must obey the campsite rules set by owners
-                6. Owners can't make duplicate listings of campsites
-                7. Owners must only post relevant promotional images for listings
-                8. Owners must ensure accurate and up-to-date campsite details
+                5. Owners can't make duplicate listings of campsites
+                6. Owners must only post relevant promotional images for listings
+                7. Owners must ensure accurate and up-to-date campsite details
                   and availabilities
-                9. Violation of policies may result in account deletion by administration
+                8. Violation of policies may result in account deletion by administration
             """.trimIndent()
 
             Box (
@@ -78,7 +77,6 @@ fun PolicyGuidelinesScreen(
                 2. Cancel reservations promptly if you are unable to attend
                 3. Keep profile information up-to-date
                 4. Only join lotteries you are interested in
-                5. Read the rules and cancellation policy of each campsite beforehand
             """.trimIndent()
 
             Box (
