@@ -1,5 +1,6 @@
 package com.example.project_ballin.owner.ownerUI
 
+import android.R
 import android.app.DatePickerDialog
 import android.content.ContentResolver
 import android.content.Context
@@ -57,9 +58,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
+import com.example.project_ballin.DatePick
 import com.example.project_ballin.reusableui.TopAppBar
 import com.google.firebase.firestore.Blob
 import java.nio.file.WatchEvent
+import java.sql.Date
 import kotlin.let
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -268,11 +271,21 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                 DatePick(campAvailableDates,
                     onDismiss = {showDatePicker = false},
                     onSelect = {
+
                         if(addDate){
-                            it.forEach { date-> if (date in campAvailableDates){ campAvailableDates.remove(date) }}
+
+                            it.forEach{ date->
+                                if (date !in campAvailableDates) {
+                                    campAvailableDates.add(date)
+                                }
+                            }
                          }
                         else{
-                            it.forEach { date-> if (date in campAvailableDates){ campAvailableDates.remove(date) } }
+                            it.forEach{ date->
+                                if (date in campAvailableDates) {
+                                    campAvailableDates.remove(date)
+                                }
+                            }
                         }
                 },
                     adding = addDate)
@@ -481,84 +494,7 @@ fun ImageRow(image: Blob, onDelete:(Blob) -> Unit){
 
 }
 
-/**
- * The calendar composable used to select dates to add or remove from camp's availability
- *
- * @param campAvailableDates the current dates the campsite is available. If dates are being added, these dates will be unavailable
- * if the dates are being deleted, these dates will be available.
- * @param onDismiss the function that dismisses the pop-up.
- * @param onSelect the function that determines what happens with the given dates.
- * @param adding A boolean that tells the composable whether dates are being added or removed.
- *
- * Sources Used:
- *
- * Title: Date Pickers
- * https://developer.android.com/develop/ui/compose/components/datepickers
- *
- * Title: Date Picker in Material 3 Jetpack Compose (with Examples)
- * Author: Kumar Komati
- * Published: Dec 1, 2024
- * https://towardsdev.com/date-picker-in-material-3-jetpack-compose-with-examples-ed0a939c8b80?sk=5002ed239ae7846ec511540bba625a6b
- * */
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePick(campAvailableDates: List<Long>, onDismiss:() -> Unit, onSelect:(List<Long>)->Unit, adding: Boolean){
-
-    var dateState: DateRangePickerState
-    if(adding){
-        dateState = rememberDateRangePickerState(
-            initialDisplayedMonthMillis = System.currentTimeMillis(),
-            selectableDates = object : SelectableDates {
-                override fun isSelectableDate(utcTimeMillis: Long): Boolean =
-                    utcTimeMillis !in campAvailableDates
-                
-            }
-        )
-    }
-    else{
-        dateState = rememberDateRangePickerState(
-            initialDisplayedMonthMillis = System.currentTimeMillis(),
-            selectableDates = object : SelectableDates {
-                override fun isSelectableDate(utcTimeMillis: Long): Boolean =
-                    utcTimeMillis in campAvailableDates
-
-            }
-        )
-    }
-
-
-
-    val startDate = dateState.selectedStartDateMillis
-    val endDate = dateState.selectedEndDateMillis
-
-
-    androidx.compose.material3.DatePickerDialog(
-        onDismissRequest = {onDismiss()},
-        confirmButton = {
-            TextButton(onClick = {
-                if(startDate != null && endDate != null){
-                    onSelect(listOf(startDate, endDate))
-                    onDismiss()}}
-            ) {
-                Text("Confirm")
-            }
-
-        },
-        dismissButton = { TextButton(onClick = {onDismiss()}){
-                Text("Cancel")
-            }
-        }
-
-    ){
-        DateRangePicker(
-            state = dateState,
-            showModeToggle = false,
-            modifier = Modifier
-        )
-
-    }
-}
 
 /**
  * A composable row that shows which tags the Campsite currently has.

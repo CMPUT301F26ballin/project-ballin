@@ -257,7 +257,7 @@ fun BallinApp() {
                 getOwnerSites = { campsiteList.getOwnerSites(it) })
         }
 
-        composable("CampsiteDetailScreen/{CampID},{userID}") {
+        composable("CampsiteDetailScreen/{CampID}/{userID}") {
             val siteIDString = it.arguments!!.getString("CampID")
             val campsite = campsiteList.getCampsite(siteIDString!!)
             val userID = it.arguments!!.getString("userID")
