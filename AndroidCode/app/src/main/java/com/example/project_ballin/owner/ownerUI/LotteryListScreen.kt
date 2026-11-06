@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
@@ -74,7 +75,6 @@ class LotteryListScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState())
         ) {
             item {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -97,7 +97,8 @@ class LotteryListScreen() {
                 Spacer(modifier = Modifier.height(16.dp))
                 LotteryItem(
                     lottery,
-                    onClick = { navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID") },
+                    onClick = {
+                        navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID") },
                     getCampsite = getCampsite
                 )
             }
@@ -115,7 +116,10 @@ class LotteryListScreen() {
         navController: NavController,
         ownerID: String
     ) {
-        Button(onClick = { navController.navigate("LotteryDetailScreen/$ownerID") })
+        Button(
+            modifier = Modifier
+                .testTag("newLotteryButton"),
+            onClick = { navController.navigate("LotteryDetailScreen/$ownerID") })
         {
             Text("Create new lottery")
         }
@@ -136,10 +140,12 @@ class LotteryListScreen() {
         getCampsite: (String) -> Campsite?
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .border(2.dp, Color.Black)
                 .clickable { onClick() }
                 .padding(16.dp)
+                .testTag("lotteryItem_${lottery.lotteryID}"),
         ) {
             Column {
                 Text(
