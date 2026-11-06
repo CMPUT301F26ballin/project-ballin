@@ -48,7 +48,7 @@ fun EntrantMenuScreen(navController: NavController){
             Spacer(modifier = Modifier.height(16.dp))
             EntrantHomeButton("SCAN QR CODE", "Scan QR Code", "SCAN QR CODE", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            EntrantHomeButton("POLICY AND GUIDELINES", "Entrant Policy and Guidelines", "POLICY AND GUIDELINES", navController)
+            EntrantHomeButton("POLICY AND GUIDELINES", "PoliciesAndGuidelines", "POLICY AND GUIDELINES", navController)
         }
 
 

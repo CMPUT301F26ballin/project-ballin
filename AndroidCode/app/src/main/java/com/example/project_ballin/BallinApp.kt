@@ -439,7 +439,7 @@ fun BallinApp() {
             EntrantBrowseCampsites(navController, campsiteList, currentEntrant!!.userID)
         }
 
-        composable("Entrant Policy and Guidelines") {
+        composable("PoliciesAndGuidelines") {
             EntrantViewPolicies(navController)
         }
 
