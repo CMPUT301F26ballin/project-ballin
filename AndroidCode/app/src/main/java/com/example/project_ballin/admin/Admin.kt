@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import com.example.project_ballin.entrant.Entrant
 import kotlin.uuid.Uuid
 
 /**
@@ -26,5 +27,28 @@ data class Admin(
     override var email: String = "",
     override val deviceId: String = "",
     override var profilePic: String = "",
-    override val userID: String = ""
-): User
+    override val userID: String = Uuid.random().toString(),
+    ): User{
+    override fun updateDetails(
+        firstName: String,
+        lastName: String,
+        phoneNum: String,
+        email: String,
+        profilePic: String
+    ): Admin = copy(
+        firstName = firstName,
+        lastName = lastName,
+        phoneNum = phoneNum,
+        email = email,
+        profilePic = profilePic
+    )
+    override fun deleteProfile() {
+        AdminList().deleteAdmin(this)
+    }
+    override fun editProfile() {
+        AdminList().updateAdmin(this)
+    }
+    override fun createProfile() {
+        AdminList().addAdmin(this)
+    }
+}

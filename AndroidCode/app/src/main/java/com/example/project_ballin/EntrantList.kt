@@ -6,15 +6,17 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
 /**
- * The Entrant list class
- * Stores entrant profiles in firebase
+ * The data class for an entrant.
+ * Entrants have a name, phone number, email, device ID, profile picture, and user ID.
  *
- * @property _entrants the list of entrants
- * @property db the database
- * @property entrantsRef the reference to the entrants collection
- * @property entrants the list of entrants
- *
+ * @property name the name of the entrant
+ * @property phoneNum the phone number of the entrant
+ * @property email the email of the entrant
+ * @property deviceId the device ID of the entrant
+ * @property profilePic the profile picture of the entrant
+ * @property userID the user ID of the entrant
  */
+
 class EntrantList{
     private val _entrants = mutableStateListOf<Entrant>()
 

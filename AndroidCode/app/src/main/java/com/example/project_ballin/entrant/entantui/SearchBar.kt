@@ -111,7 +111,7 @@ fun DisplayCampsite(
             .clickable {
                 //navController.navigate("CampsiteDetailScreen/${campsite.ID}")
                 TODO()
-2            },
+            },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant

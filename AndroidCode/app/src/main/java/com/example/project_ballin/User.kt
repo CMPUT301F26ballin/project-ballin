@@ -14,4 +14,16 @@ interface User {
     val deviceId: String
     val profilePic: String
     val userID: String
+
+    fun updateDetails(
+        firstName: String = this.firstName,
+        lastName: String = this.lastName,
+        phoneNum: String = this.phoneNum,
+        email: String = this.email,
+        profilePic: String = this.profilePic
+    ): User
+
+    fun deleteProfile()
+    fun editProfile()
+    fun createProfile()
 }

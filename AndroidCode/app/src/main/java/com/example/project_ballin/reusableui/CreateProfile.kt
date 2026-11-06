@@ -11,27 +11,37 @@ import androidx.navigation.compose.*
 
 /**
  *
- * screen for the user (anyone) to enter their details in order to sign in and
+ * screen for the user (anyone) to enter their details in order to sign in
  *
  */
 
 @Composable
-fun EnterDetails(){
-
+fun IntroText(){
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ){
         Text(
-            text = "Before We Begin Please Enter Your Details:",
-            style = MaterialTheme.typography.titleLarge
+            text = "Before We Begin, Please Enter Your Details:",
+            fontSize = 24.sp,
         )
+        Spacer(modifier = Modifier.height(16.dp))
 
     }
+}
 
-    //user enters first name and last name
-    //user enters email, phone number
-        // android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        //Patterns.PHONE.matcher(phoneNumber).matches()
+@Composable
+fun CreateProfile(navController: NavController){
+    TopAppBar(
+        navController,
+        "Sign-In Details",
+        profileButton = false) {
+        IntroText()
+        val mode = "create"
+        InputDetails(navController, mode = mode)
+    }
+
     //create function to get the user's device ID
     //create function to generate a UUID for the user
     //store everything in firebase
@@ -42,6 +52,7 @@ fun EnterDetails(){
 
 @Preview(showBackground = true)
 @Composable
-fun EnterDetailsPreview() {
-    EnterDetails()
+fun CreateProfilePreview() {
+    val navController = rememberNavController()
+    CreateProfile(navController)
 }

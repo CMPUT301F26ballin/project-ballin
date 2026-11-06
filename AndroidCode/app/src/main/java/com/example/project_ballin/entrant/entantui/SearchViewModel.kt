@@ -2,12 +2,17 @@ package com.example.project_ballin.entrant.entantui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.copy
 import com.example.project_ballin.Campsite
+import com.example.project_ballin.entrant.Entrant
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlin.uuid.Uuid
 
 /**
@@ -38,51 +43,27 @@ class SearchViewModel: ViewModel() {
         _selectedLocationFilter.value = locationFilter
     }
 
-     val testSites: List<Campsite> = listOf( // replace with actual sites
-         Campsite(
-             name = "Pine Valley Campsite",
-             ID = Uuid.random().toString(),
-             locationName = "Banff National Park",
-             tags = mutableListOf("Tent", "Scenic"),
-             price = 35.0f,
-             rating = 4.5f,
-             rules = "No campfire after 10 PM",
-             description = "Beautiful valley surrounded by pine trees.",
-             occupancy = 4,
-             ownerID = Uuid.random().toString(),
-             images = mutableListOf()
-         ),
-         Campsite(
-             name = "Lakeside Retreat",
-             ID = Uuid.random().toString(),
-             locationName = "Jasper",
-             tags = mutableListOf("Lake", "Fishing"),
-             price = 50.0f,
-             rating = 4.8f,
-             rules = "Catch and release only",
-             description = "Right by the lake with amazing sunrise views.",
-             occupancy = 6,
-             ownerID = Uuid.random().toString(),
-             images = mutableListOf()
-         ),
-         Campsite(
-             name = "Mountain Peak Camp",
-             ID = Uuid.random().toString(),
-             locationName = "Rocky Mountains",
-             tags = mutableListOf("Hiking", "Elevation"),
-             price = 40.0f,
-             rating = 4.2f,
-             rules = "Pack it in, pack it out",
-             description = "High altitude camping for experienced hikers.",
-             occupancy = 2,
-             ownerID = Uuid.random().toString(),
-             images = mutableListOf()
-         )
-    ) //replace with actual sites
-    //val allSites = listOf<Campsite>()
+    private val _db = Firebase.firestore
+    private val _campsiteRef = _db.collection("Campsites")
+    private val _campsites = MutableStateFlow<List<Campsite>>(emptyList())
 
-    // replace val with allSites need to find out if you take from firebase or local list
-    private val _campsites = MutableStateFlow(testSites)
+    init {
+        _campsiteRef.addSnapshotListener { snapshots, error ->
+            if(error != null){
+                return@addSnapshotListener
+            }
+
+            val fetchedSites = mutableListOf<Campsite>()
+            snapshots?.documents?.forEach { document ->
+                val campsite = document.toObject(Campsite::class.java)
+                if (campsite != null) {
+                    fetchedSites.add(campsite)
+                }
+            }
+            _campsites.value = fetchedSites
+        }
+    }
+
     val campsites = combine(
         query, numOfGuests, locationFilter, _campsites
     ) { text, guestLimit, locationLimit, campsites ->

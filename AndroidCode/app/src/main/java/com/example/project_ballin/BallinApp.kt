@@ -32,6 +32,7 @@ import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
 import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
+import com.example.project_ballin.reusableui.CreateProfile
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 
@@ -129,6 +130,8 @@ fun BallinApp() {
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
+        composable("createprofile") {CreateProfile(navController) }
+
         composable("profile") { EditProfileScreen(navController) }
 
         composable("OwnerMenu/{OwnerID}") {

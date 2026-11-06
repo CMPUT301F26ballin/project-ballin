@@ -9,8 +9,12 @@ import androidx.navigation.*
 import androidx.navigation.compose.*
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.project_ballin.entrant.Entrant
 import kotlin.uuid.Uuid
 
+enum class UserRole {
+    ENTRANT, OWNER, ADMIN
+}
 /**
  *
  * the first screen a user will see, need to implement something that will
@@ -47,7 +51,7 @@ fun Signup(navController: NavController){
 
         Button(
             onClick = {
-                navController.navigate("MainEntrantMenu")
+                navController.navigate("createprofile")
             },
             modifier = Modifier.testTag("entrantSignin") // for testing
         ) {
