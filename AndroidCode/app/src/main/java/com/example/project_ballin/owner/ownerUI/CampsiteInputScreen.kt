@@ -59,7 +59,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
-import com.example.project_ballin.generalDatePicker
+import com.example.project_ballin.GeneralDatePicker
 import com.example.project_ballin.reusableui.TopAppBar
 import com.google.firebase.firestore.Blob
 import java.nio.file.WatchEvent
@@ -148,7 +148,7 @@ class CampsiteInputScreen(){
             var showDatePicker by remember { mutableStateOf(false) }
             var addDate by remember { mutableStateOf(true) }
 
-            val datePicker = generalDatePicker()
+            val datePicker = GeneralDatePicker()
 
 
             val context: Context = LocalContext.current
