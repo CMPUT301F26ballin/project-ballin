@@ -73,7 +73,7 @@ fun CampsiteListScreen(navController: NavController, ownerID: String, getOwnerSi
                     val ID = campsite.ID
                     CampsiteItem(
                         campsite,
-                        OnClick = { navController.navigate("CampsiteDetailScreen/$ID") })
+                        OnClick = { navController.navigate("CampsiteDetailScreen/$ID/$ownerID") })
                 }
             }
         }
