@@ -30,7 +30,7 @@ import kotlin.uuid.Uuid
  */
 data class Lottery(
     var waitList: MutableList<String> = mutableListOf(),
-    var occupancy: Int = 0,
+    var occupancy: Int? = null,
     var numWinners: Int = 0,
     var registrationStart: Long? = null,
     var registrationEnd: Long? = null,
