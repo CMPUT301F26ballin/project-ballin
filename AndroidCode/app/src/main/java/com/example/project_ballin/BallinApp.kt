@@ -333,7 +333,7 @@ fun BallinApp() {
             LotteryDetailScreen(
                 navController, lottery, ownerID!!,
                 ownerSites = campsiteList.getOwnerSites(ownerID),
-                getCampsite = { campsiteList.getCampsite(it)!! },
+                getCampsite = { campsiteList.getCampsite(it) },
                 addLottery = { lotteryList.addLottery(it) },
                 updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }

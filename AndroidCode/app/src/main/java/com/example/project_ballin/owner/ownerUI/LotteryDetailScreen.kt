@@ -1,12 +1,12 @@
 package com.example.project_ballin.owner.ownerUI
 
-import android.R
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
@@ -56,7 +59,7 @@ fun LotteryDetailScreen(
     lottery: Lottery?, // null if creating a new lottery
     ownerID: String,
     ownerSites: List<Campsite>,
-    getCampsite: (String) -> Campsite,
+    getCampsite: (String) -> Campsite?,
     addLottery: (Lottery) -> Unit,
     updateLottery: (oldLottery: Lottery, newLottery: Lottery) -> Unit
 ){
@@ -74,14 +77,12 @@ fun LotteryDetailScreen(
 
     TopAppBar(navController, if (lottery == null) "New Lottery Details" else "Edit Lottery Details"){
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-                Button(onClick = {
-                    //navController.navigate("LotteryDetailScreen")
-                } ) {
-                    Text("Select Campsites")
-                }
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
                 Button(onClick = {
                     // confirms the lottery details are valid
                     // and either creates a new lottery or updates an existing one
@@ -110,15 +111,21 @@ fun LotteryDetailScreen(
                         // invalid lottery details
                         // TODO alert user of the error
                     }
-                    val newLottery = Lottery(
-                        lotteryOwnerID = ownerID,
+
+                    // start with the existing lottery or make a new one
+                    val baseLottery = lottery ?: Lottery(
+                        lotteryID = Uuid.random().toString(),
+                        lotteryOwnerID = ownerID
+                    )
+
+                    val newLottery = baseLottery.copy(
                         registrationStart = regStart,
                         registrationEnd = regEnd,
                         bookingStart = bookStart,
                         bookingEnd = bookEnd,
                         occupancy = occ,
                         numWinners = winners,
-                        lotteryID = lottery?.lotteryID ?: Uuid.random().toString()
+                        associatedSites = sites.toMutableList()
                     )
                     if (lottery == null) {
                         addLottery(newLottery)
@@ -154,15 +161,26 @@ fun LotteryDetailScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Selected Campsites")
-            selectedSiteIDs.forEach{
-                val campsite = getCampsite(it)
-                Text(campsite.name)
+
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .border(1.dp, Color.Gray)
+                .padding(8.dp)
+            ) {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Text("Selected Campsites")
+                    if (selectedSiteIDs.isEmpty()) Text("No sites selected")
+                    selectedSiteIDs.forEach{ id ->
+                        val campsite = getCampsite(id)
+                        if (campsite != null) Text("${campsite.name} - ${campsite.description}")
+                    }
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-
             Text("Campsites")
+
             ownerSites.forEach{
                 val isSelected = selectedSiteIDs.contains(it.ID)
 
@@ -187,7 +205,7 @@ fun CampsiteSelectable(
     Row(
         modifier = Modifier.
         fillMaxWidth()
-            .border(2.dp, Color.Black)
+            .border(2.dp, if (isSelected) Color.Blue else Color.Black)
             .clickable{ onClick() }
             .padding(16.dp)
     ) {

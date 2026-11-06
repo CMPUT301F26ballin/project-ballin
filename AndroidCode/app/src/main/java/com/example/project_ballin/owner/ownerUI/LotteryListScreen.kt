@@ -61,7 +61,7 @@ fun LotteryListView(
     lotteries: List<Lottery>){
     LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         item {
-            Box(modifier = Modifier.fillMaxWidth() ,contentAlignment = Alignment.CenterEnd){
+            Box(modifier = Modifier.fillMaxWidth() ,contentAlignment = Alignment.Center){
                 NewLotteryButton(navController, ownerID )
             }
         }
