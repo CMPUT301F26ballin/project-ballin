@@ -21,9 +21,19 @@ import androidx.navigation.NavController
 import com.example.project_ballin.reusableui.TopAppBar
 import kotlin.uuid.Uuid
 
+/**
+ * The Main menu for when an Owner account logs in. It features buttons to go to campsites,
+ * lotteries, viewing past notifications, and viewing your active reservations.
+ *
+ *
+ *
+ *
+ *
+ * */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OwnerMenuScreen(navController: NavController, ownerID: Uuid) {
+fun OwnerMenuScreen(navController: NavController, ownerID: String) {
     TopAppBar(
         navController = navController,
         screenTitle = "Owner Homepage",
@@ -37,7 +47,7 @@ fun OwnerMenuScreen(navController: NavController, ownerID: Uuid) {
         ) {
 
             Text(
-                text = "Welcome",
+                text = "Welcome Owner",
                 fontSize = 34.sp
             )
             Spacer(modifier = Modifier.height(34.dp))
