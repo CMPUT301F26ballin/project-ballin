@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,26 +47,30 @@ fun AdminMenuScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            Spacer(modifier = Modifier.height(128.dp))
             Text(
-                text = "Welcome",
+                text = "Welcome Admin",
                 fontSize = 34.sp
             )
-            Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.height(128.dp))
 
-            FeatureTopicButton("CAMPSITES", "AdminCampsites", "adminCampsitesButton", navController)
+            AdminOptionButton("CAMPSITES\nBROWSE AND DELETE", "AdminCampsites", "adminCampsitesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("PROFILES", "AdminProfiles", "adminProfilesButton", navController)
+            AdminOptionButton("PROFILES\nBROWSE AND DELETE", "AdminProfiles", "adminProfilesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("NOTIFICATIONS", "AdminNotifications", "adminNotificationsButton", navController)
+            AdminOptionButton("NOTIFICATIONS\nBROWSE AND DELETE", "AdminNotifications", "adminNotificationsButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("MESSAGES", "AdminMessages", "adminMessagesButton", navController)
+            AdminOptionButton("MESSAGES\nBROWSE AND DELETE", "AdminMessages", "adminMessagesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            FeatureTopicButton("OWNERS VIOLATING POLICY", "", "", navController)
+            AdminOptionButton("OWNERS VIOLATING POLICY\nBROWSE AND DELETE", "", "ownersViolatingPolicyButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
+            AdminOptionButton("SWITCH MODES", "", "switchModesButton", navController)
+            Spacer(modifier = Modifier.height(16.dp))
+            AdminOptionButton("POLICY AND GUIDELINES", "PoliciesAndGuidelines", "policyGuidelinesButton", navController)
 
         }
     }
@@ -81,7 +87,7 @@ fun AdminMenuScreen(navController: NavController) {
  * @param navController is the navController of the App
  */
 @Composable
-fun FeatureTopicButton(name: String, destination: String, testTag: String, navController: NavController) {
+fun AdminOptionButton(name: String, destination: String, testTag: String, navController: NavController) {
 
     Button(
         onClick = {
@@ -97,9 +103,6 @@ fun FeatureTopicButton(name: String, destination: String, testTag: String, navCo
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(name)
-            Text(
-                text = "Browse and Delete",
-            )
         }
     }
 }

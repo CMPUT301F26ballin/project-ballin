@@ -31,6 +31,7 @@ import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
 import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
+import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
@@ -332,7 +333,8 @@ fun BallinApp() {
             val lottery: Lottery? = if (lotteryID == null) null else lotteryList.getLottery(lotteryID)
             LotteryDetailScreen(
                 navController, lottery, ownerID!!,
-                ownerSites = campsiteList.campsites.filter { it.ownerID.toString() == ownerID },
+                ownerSites = campsiteList.getOwnerSites(ownerID),
+                getCampsite = { campsiteList.getCampsite(it) },
                 addLottery = { lotteryList.addLottery(it) },
                 updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }
@@ -428,12 +430,16 @@ fun BallinApp() {
             val entrant = currentEntrant
             val campID = siteToBook.arguments?.getString("campID")
             if (entrant != null) {
-                EntrantSiteBooker().SiteBooker(navController, campID, entrant)
+                EntrantSiteBooker().SiteBooker(navController, campID, campsiteList, entrant)
             }
         }
 
         composable("Browse Campsites"){
             EntrantBrowseCampsites(navController, campsiteList, currentEntrant!!.userID)
+        }
+
+        composable("PoliciesAndGuidelines"){
+            PolicyGuidelinesScreen(navController)
         }
 
     }
