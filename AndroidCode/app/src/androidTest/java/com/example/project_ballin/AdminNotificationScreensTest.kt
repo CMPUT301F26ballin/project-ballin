@@ -46,7 +46,7 @@ class AdminNotificationScreensTest {
     @Test
     fun notifications_screen_appear_correctly() {
         composeTestRule.setContent {
-            NotificationListScreen(
+            NotificationListScreen().NotificationList(
                 navController = rememberNavController(),
                 notifications = sampleNotifications
             )
@@ -60,7 +60,7 @@ class AdminNotificationScreensTest {
     @Test
     fun details_of_notification_appear_correctly() {
         composeTestRule.setContent {
-            NotificationDetailScreen(
+            NotificationDetailScreen().NotificationDetail(
                 navController = rememberNavController(),
                 notification = sampleNotifications[0],
                 onDelete = {}
@@ -87,7 +87,7 @@ class AdminNotificationScreensTest {
     @Test
     fun delete_notification_verify_deleted_and_logs_screen_updated() {
         composeTestRule.setContent {
-            NotificationDetailScreen(
+            NotificationDetailScreen().NotificationDetail(
                 navController = rememberNavController(),
                 notification = sampleNotifications[0],
                 onDelete = { sampleNotifications.remove(it) }

@@ -44,7 +44,7 @@ class AdminMessageScreensTest {
     @Test
     fun messages_screen_appear_correctly(){
         composeTestRule.setContent {
-            MessageListScreen(
+            MessageListScreen().MessageList(
                 navController = rememberNavController(),
                 messages = sampleMessages
             )
@@ -58,7 +58,7 @@ class AdminMessageScreensTest {
     @Test
     fun details_of_message_appear_correctly() {
         composeTestRule.setContent {
-            MessageDetailScreen(
+            MessageDetailScreen().MessageDetail(
                 navController = rememberNavController(),
                 message = sampleMessages[0],
                 onDelete = {}
@@ -89,7 +89,7 @@ class AdminMessageScreensTest {
     @Test
     fun delete_message_verify_deleted_and_logs_screen_updated() {
         composeTestRule.setContent {
-            MessageDetailScreen(
+            MessageDetailScreen().MessageDetail(
                 navController = rememberNavController(),
                 message = sampleMessages[0],
                 onDelete = { sampleMessages.remove(it) }
