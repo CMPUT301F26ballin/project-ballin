@@ -100,21 +100,19 @@ fun MessageDetailScreen(
             ) {
                 Text("Delete Message")
             }
+
         }
 
         messageToDelete?.let { message ->
-            Dialog(onDismissRequest = { messageToDelete = null }) {
-                ConfirmActionDialog().ConfirmAction(
-                    message = "Are you sure you want to delete this message?",
-                    confirm = { confirmed ->
-                        if (confirmed) {
-                            onDelete(message)
-                            navController.popBackStack()
-                        }
-                        messageToDelete = null
-                    }
-                )
-            }
+            ConfirmDeleteDialog(
+                itemDescription = "the message",
+                onConfirm = {
+                    onDelete(message)
+                    messageToDelete = null
+                    navController.popBackStack()
+                },
+                onCancel = { messageToDelete = null }
+            )
         }
     }
 }

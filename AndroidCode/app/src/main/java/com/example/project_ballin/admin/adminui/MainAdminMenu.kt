@@ -66,9 +66,11 @@ fun AdminMenuScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
             AdminOptionButton("MESSAGES\nBROWSE AND DELETE", "AdminMessages", "adminMessagesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            AdminOptionButton("OWNERS VIOLATING POLICY\nBROWSE AND DELETE", "", "ownersViolatingPolicyButton", navController)
+            //Put temporary destination so it doesn't crash rn
+            AdminOptionButton("OWNERS VIOLATING POLICY\nBROWSE AND DELETE", "Admin Menu Screen", "ownersViolatingPolicyButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
-            AdminOptionButton("SWITCH MODES", "", "switchModesButton", navController)
+            //Put temporary destination so it doesn't crash rn
+            AdminOptionButton("SWITCH MODES", "Admin Menu Screen", "switchModesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
             AdminOptionButton("POLICY AND GUIDELINES", "PoliciesAndGuidelines", "policyGuidelinesButton", navController)
 
