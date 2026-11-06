@@ -10,7 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.*
 import com.example.project_ballin.Campsite
@@ -173,8 +172,7 @@ fun SearchBar(
         OutlinedTextField(
             value = queryText,
             onValueChange = viewModel::onSearchTextChange,
-            modifier = Modifier.fillMaxWidth()
-                .testTag("Search Bar"),
+            modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("Search Campsites") }
         )
         Spacer(modifier = Modifier.height(8.dp))
