@@ -162,8 +162,8 @@ class LotteryListScreen() {
                 if (lottery.associatedSites.isEmpty()) Text("No sites associated")
                 lottery.associatedSites.forEach { id ->
                     val campsite = getCampsite(id)
-                    if (campsite != null) Text("${campsite.name} - ${campsite.description}")
-                    else Text("Deleted campsite")
+                    if (campsite != null)  { Text("${campsite.name} - ${campsite.description}") }
+                    else { Text("Deleted campsite") }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }

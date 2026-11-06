@@ -289,6 +289,9 @@ class BallinApp(){
         val campsiteDetailScreen = CampsiteDetailScreen()
         val campsiteListScreen = CampsiteListScreen()
 
+        val lotteryDetailScreen = LotteryDetailScreen()
+        val lotteryListScreen = LotteryListScreen()
+
         val QRCodeScanner = QRCodeScanner()
 
         //PROFILE SCREEN OBJECTS
