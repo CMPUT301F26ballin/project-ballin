@@ -1,7 +1,9 @@
 package com.example.project_ballin.entrant.entantui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.*
@@ -33,12 +35,13 @@ fun EntrantMenuScreen(navController: NavController){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(128.dp))
             Text(
-                text = "Welcome",
+                text = "Welcome Entrant",
                 fontSize = 34.sp
             )
             Spacer(modifier = Modifier.height(128.dp))
