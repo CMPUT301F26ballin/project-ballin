@@ -26,9 +26,11 @@ class AdminSearchTest {
     @get:Rule
     val composeRule = createComposeRule()
 
+    private val adminSearch = AdminSearch()
+
     private val john = Profile(
         firstName = "John", lastName = "Ballin", email = "john@example.com",
-        role = "Entrant", userID = "user1"
+        phoneNum = "780-555-0101", role = "Entrant", userID = "user1"
     )
     private val jane = Profile(
         firstName = "Jane", lastName = "Keller", email = "jane@example.com",
@@ -37,40 +39,92 @@ class AdminSearchTest {
 
     private val waterton = Campsite(
         name = "Waterton Campground", ID = "site1", locationName = "Waterton Lakes",
-        tags = mutableListOf("Lakeside"), ownerID = "owner1"
+        tags = mutableListOf("Lakeside"), description = "Quiet sites by the water", ownerID = "owner1"
     )
     private val banff = Campsite(
         name = "Banff Hilltop", ID = "site2", locationName = "Banff",
         tags = mutableListOf("Mountain"), ownerID = "owner2"
     )
 
-    // ---------- Matching rules ----------
+    private val fireMessage = Message("owner1", "entrant1", "Fire ban this weekend", Date(), "m1")
+    private val welcomeMessage = Message("owner2", "entrant2", "Welcome to the campsite", Date(), "m2")
+
+    private val wonNotification = Notification("You won the lottery!", Date(), "n1", "entrant1")
+    private val cancelledNotification = Notification("Your reservation was cancelled", Date(), "n2", "entrant2")
+
+    // ---------- matchesQuery (the shared matching rule) ----------
 
     @Test
-    fun matchesQuery_ignoresCaseAndSpaces() {
-        assertTrue(matchesQuery("  WATER ", "Waterton Lakes"))
-        assertFalse(matchesQuery("banff", "Waterton Lakes"))
+    fun matchesQuery_ignoresUpperAndLowerCase() {
+        assertTrue(adminSearch.matchesQuery("WATERTON", "Waterton Lakes"))
+        assertTrue(adminSearch.matchesQuery("waterton", "Waterton Lakes"))
+    }
+
+    @Test
+    fun matchesQuery_ignoresSpacesAtStartAndEnd() {
+        assertTrue(adminSearch.matchesQuery("  lakes  ", "Waterton Lakes"))
+    }
+
+    @Test
+    fun matchesQuery_findsTextInTheMiddleOfAField() {
+        assertTrue(adminSearch.matchesQuery("ball", "John Ballin"))
     }
 
     @Test
     fun matchesQuery_emptySearchMatchesEverything() {
-        assertTrue(matchesQuery("", "anything"))
-        assertTrue(matchesQuery("   ", "anything"))
+        assertTrue(adminSearch.matchesQuery("", "anything"))
+        assertTrue(adminSearch.matchesQuery("   ", "anything"))
     }
 
     @Test
-    fun profileSearch_checksNameEmailAndRole() {
-        assertTrue(john.matchesSearch("john ballin"))
-        assertTrue(jane.matchesSearch("jane@"))
-        assertTrue(jane.matchesSearch("owner"))
-        assertFalse(john.matchesSearch("owner"))
+    fun matchesQuery_checksEveryField() {
+        assertTrue(adminSearch.matchesQuery("banff", "Waterton", "Banff", "Jasper"))
+        assertFalse(adminSearch.matchesQuery("canmore", "Waterton", "Banff", "Jasper"))
+    }
+
+    // ---------- matchesSearch for each kind of item ----------
+
+    @Test
+    fun profileSearch_checksNameEmailPhoneRoleAndID() {
+        with(AdminProfilesScreens()) {
+            assertTrue(john.matchesSearch("john ballin")) // full name
+            assertTrue(jane.matchesSearch("jane@"))       // email
+            assertTrue(john.matchesSearch("555-0101"))    // phone number
+            assertTrue(jane.matchesSearch("owner"))       // role
+            assertTrue(jane.matchesSearch("user2"))       // user ID
+            assertFalse(john.matchesSearch("owner"))
+        }
     }
 
     @Test
-    fun campsiteSearch_checksNameLocationAndTags() {
-        assertTrue(waterton.matchesSearch("lakes"))
-        assertTrue(banff.matchesSearch("mountain"))
-        assertFalse(banff.matchesSearch("lakeside"))
+    fun campsiteSearch_checksNameLocationDescriptionTagsAndOwner() {
+        with(AdminCampsiteScreens()) {
+            assertTrue(banff.matchesSearch("hilltop"))     // name
+            assertTrue(waterton.matchesSearch("lakes"))    // location
+            assertTrue(waterton.matchesSearch("quiet"))    // description
+            assertTrue(banff.matchesSearch("mountain"))    // tag
+            assertTrue(banff.matchesSearch("owner2"))      // owner ID
+            assertFalse(banff.matchesSearch("lakeside"))
+        }
+    }
+
+    @Test
+    fun messageSearch_checksContentSenderAndReceiver() {
+        with(MessageListScreen()) {
+            assertTrue(fireMessage.matchesSearch("fire ban")) // content
+            assertTrue(fireMessage.matchesSearch("owner1"))   // sender
+            assertTrue(fireMessage.matchesSearch("entrant1")) // receiver
+            assertFalse(fireMessage.matchesSearch("welcome"))
+        }
+    }
+
+    @Test
+    fun notificationSearch_checksContentAndRecipient() {
+        with(NotificationListScreen()) {
+            assertTrue(wonNotification.matchesSearch("lottery"))  // content
+            assertTrue(wonNotification.matchesSearch("entrant1")) // recipient
+            assertFalse(wonNotification.matchesSearch("cancelled"))
+        }
     }
 
     // ---------- Profiles screen ----------
@@ -78,7 +132,7 @@ class AdminSearchTest {
     @Test
     fun searchProfiles_showsOnlyMatches() {
         composeRule.setContent {
-            AdminProfileListView(listOf(john, jane), onProfileClick = {}, onDelete = {})
+            AdminProfilesScreens().AdminProfileListView(listOf(john, jane), onProfileClick = {}, onDelete = {})
         }
         composeRule.onNodeWithTag("adminSearch").performTextInput("keller")
 
@@ -87,16 +141,28 @@ class AdminSearchTest {
     }
 
     @Test
-    fun searchProfiles_noMatchShowsMessage_andClearBringsEveryoneBack() {
+    fun searchProfiles_noMatchShowsMessage() {
         composeRule.setContent {
-            AdminProfileListView(listOf(john, jane), onProfileClick = {}, onDelete = {})
+            AdminProfilesScreens().AdminProfileListView(listOf(john, jane), onProfileClick = {}, onDelete = {})
         }
         composeRule.onNodeWithTag("adminSearch").performTextInput("zzz")
-        composeRule.onNodeWithTag("noSearchResults").assertIsDisplayed()
 
+        composeRule.onNodeWithTag("noSearchResults").assertIsDisplayed()
+        composeRule.onNodeWithText("John Ballin").assertDoesNotExist()
+        composeRule.onNodeWithText("Jane Keller").assertDoesNotExist()
+    }
+
+    @Test
+    fun searchProfiles_clearBringsEveryoneBack() {
+        composeRule.setContent {
+            AdminProfilesScreens().AdminProfileListView(listOf(john, jane), onProfileClick = {}, onDelete = {})
+        }
+        composeRule.onNodeWithTag("adminSearch").performTextInput("keller")
         composeRule.onNodeWithTag("clearSearch").performClick()
+
         composeRule.onNodeWithText("John Ballin").assertIsDisplayed()
         composeRule.onNodeWithText("Jane Keller").assertIsDisplayed()
+        composeRule.onNodeWithTag("clearSearch").assertDoesNotExist() // Clear hides when the box is empty
     }
 
     // ---------- Campsites screen ----------
@@ -104,7 +170,7 @@ class AdminSearchTest {
     @Test
     fun searchCampsites_showsOnlyMatches() {
         composeRule.setContent {
-            AdminCampsiteListView(listOf(waterton, banff), onCampsiteClick = {}, onDelete = {})
+            AdminCampsiteScreens().AdminCampsiteListView(listOf(waterton, banff), onCampsiteClick = {}, onDelete = {})
         }
         composeRule.onNodeWithTag("adminSearch").performTextInput("banff")
 
@@ -112,16 +178,22 @@ class AdminSearchTest {
         composeRule.onNodeWithText("Waterton Campground").assertDoesNotExist()
     }
 
+    @Test
+    fun searchCampsites_noMatchShowsMessage() {
+        composeRule.setContent {
+            AdminCampsiteScreens().AdminCampsiteListView(listOf(waterton, banff), onCampsiteClick = {}, onDelete = {})
+        }
+        composeRule.onNodeWithTag("adminSearch").performTextInput("zzz")
+
+        composeRule.onNodeWithTag("noSearchResults").assertIsDisplayed()
+    }
+
     // ---------- Messages screen ----------
 
     @Test
     fun searchMessages_showsOnlyMatches() {
-        val messages = listOf(
-            Message("owner1", "entrant1", "Fire ban this weekend", Date(), "m1"),
-            Message("owner2", "entrant2", "Welcome to the campsite", Date(), "m2")
-        )
         composeRule.setContent {
-            MessageListScreen(rememberNavController(), messages)
+            MessageListScreen().MessageList(rememberNavController(), listOf(fireMessage, welcomeMessage))
         }
         composeRule.onNodeWithTag("adminSearch").performTextInput("fire")
 
@@ -131,11 +203,11 @@ class AdminSearchTest {
 
     @Test
     fun searchMessages_noMatchShowsMessage() {
-        val messages = listOf(Message("owner1", "entrant1", "Hello", Date(), "m1"))
         composeRule.setContent {
-            MessageListScreen(rememberNavController(), messages)
+            MessageListScreen().MessageList(rememberNavController(), listOf(fireMessage, welcomeMessage))
         }
         composeRule.onNodeWithTag("adminSearch").performTextInput("zzz")
+
         composeRule.onNodeWithTag("noSearchResults").assertIsDisplayed()
     }
 
@@ -143,16 +215,26 @@ class AdminSearchTest {
 
     @Test
     fun searchNotifications_showsOnlyMatches() {
-        val notifications = listOf(
-            Notification("You won the lottery!", Date(), "n1", "entrant1"),
-            Notification("Your reservation was cancelled", Date(), "n2", "entrant2")
-        )
         composeRule.setContent {
-            NotificationListScreen(rememberNavController(), notifications)
+            NotificationListScreen().NotificationList(
+                rememberNavController(), listOf(wonNotification, cancelledNotification)
+            )
         }
         composeRule.onNodeWithTag("adminSearch").performTextInput("lottery")
 
         composeRule.onNodeWithTag("checkNotification1").assertIsDisplayed()
         composeRule.onNodeWithTag("checkNotification2").assertDoesNotExist()
+    }
+
+    @Test
+    fun searchNotifications_noMatchShowsMessage() {
+        composeRule.setContent {
+            NotificationListScreen().NotificationList(
+                rememberNavController(), listOf(wonNotification, cancelledNotification)
+            )
+        }
+        composeRule.onNodeWithTag("adminSearch").performTextInput("zzz")
+
+        composeRule.onNodeWithTag("noSearchResults").assertIsDisplayed()
     }
 }
