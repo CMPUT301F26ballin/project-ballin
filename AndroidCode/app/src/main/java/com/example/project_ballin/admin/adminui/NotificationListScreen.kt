@@ -32,115 +32,124 @@ import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 
 
-
-/**
- * A composable that shows the overview of all the notifications
- *
- * @param navController the navController of the app
- * @param notifications the list of messages to iterate through
- */
-@Composable
-fun NotificationListScreen(
-    navController: NavController,
-    notifications: List<Notification>
-) {
-    TopAppBar(
-        navController = navController,
-        screenTitle = "Notifications",
+class NotificationListScreen {
+    /**
+     * A composable that shows the overview of all the notifications
+     *
+     * @param navController the navController of the app
+     * @param notifications the list of messages to iterate through
+     */
+    @Composable
+    fun NotificationList(
+        navController: NavController,
+        notifications: List<Notification>
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        TopAppBar(
+            navController = navController,
+            screenTitle = "Notifications",
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
 
-            Spacer(modifier = Modifier.height(34.dp))
+                Spacer(modifier = Modifier.height(34.dp))
 
-            if (notifications.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("No notifications to browse through")
-                }
-            } else {
-                // What the admin typed in the search box (kept when the screen rotates)
-                var query by rememberSaveable { mutableStateOf("") }
-                val results = notifications.filter { it.matchesSearch(query) }
-
-                AdminSearchField(query, onQueryChange = { query = it }, placeholder = "Search notifications")
-
-                if (results.isEmpty()) {
-                    Text(
-                        "No notifications match \"${query.trim()}\".",
-                        modifier = Modifier.padding(16.dp).testTag("noSearchResults")
-                    )
+                if (notifications.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("No notifications to browse through")
+                    }
                 } else {
-                    ListNotifications(navController, results)
+                    // What the admin typed in the search box (kept when the screen rotates)
+                    var query by rememberSaveable { mutableStateOf("") }
+                    val results = notifications.filter { it.matchesSearch(query) }
+
+                    AdminSearchField(
+                        query,
+                        onQueryChange = { query = it },
+                        placeholder = "Search notifications"
+                    )
+
+                    if (results.isEmpty()) {
+                        Text(
+                            "No notifications match \"${query.trim()}\".",
+                            modifier = Modifier.padding(16.dp).testTag("noSearchResults")
+                        )
+                    } else {
+                        ListNotifications(navController, results)
+                    }
                 }
             }
         }
     }
-}
 
-@Composable
-fun ListNotifications(navController: NavController, notifications: List<Notification>) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        itemsIndexed(notifications) { index, notification->
-            NotificationButtonRow(index, notification, navController)
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}
-
-/**
- * Shows the general overview of a specific notification,
- * it'll be a clickable button, showing ID and date sent only.
- *
- * @param index the index of the notification in the list
- * @param notification the notification to show
- * @param navController the navController of the app
- */
-@Composable
-fun NotificationButtonRow(index: Int, notification: Notification, navController: NavController) {
-
-    Button(
-        onClick = {
-            navController.navigate("AdminNotificationDetails/${notification.ID}")
-        },
-        shape = RoundedCornerShape(10.dp),
-        modifier = Modifier
-            .testTag("checkNotification${index+1}") // for UI testing
-            .width(250.dp)
-            .height(85.dp)
-    ) {
-        Column (
+    @Composable
+    fun ListNotifications(navController: NavController, notifications: List<Notification>) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Arbitrary indexes, so no inherent order to them, just for sake of ui
-            // I didn't want to display the Uuid of Notification
-            Text( "Notification ${index + 1}")
-            Text(
-                text = "Date Sent: ${notification.getFormattedDate()}",
-                fontSize = 10.sp
-            )
+            itemsIndexed(notifications) { index, notification ->
+                NotificationButtonRow(index, notification, navController)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun NotificationListScreenPreview() {
-    val navController = rememberNavController()
-    val sampleNotifications = listOf(
-        Notification("Hello", Date(), "1", "1"),
-        Notification("Hi", Date(), "2", "2"),
-    )
-   NotificationListScreen(navController, sampleNotifications)
+    /**
+     * Shows the general overview of a specific notification,
+     * it'll be a clickable button, showing ID and date sent only.
+     *
+     * @param index the index of the notification in the list
+     * @param notification the notification to show
+     * @param navController the navController of the app
+     */
+    @Composable
+    fun NotificationButtonRow(
+        index: Int,
+        notification: Notification,
+        navController: NavController
+    ) {
+
+        Button(
+            onClick = {
+                navController.navigate("AdminNotificationDetails/${notification.ID}")
+            },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .testTag("checkNotification${index + 1}") // for UI testing
+                .width(250.dp)
+                .height(85.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Arbitrary indexes, so no inherent order to them, just for sake of ui
+                // I didn't want to display the Uuid of Notification
+                Text("Notification ${index + 1}")
+                Text(
+                    text = "Date Sent: ${notification.getFormattedDate()}",
+                    fontSize = 10.sp
+                )
+            }
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun NotificationListScreenPreview() {
+        val navController = rememberNavController()
+        val sampleNotifications = listOf(
+            Notification("Hello", Date(), "1", "1"),
+            Notification("Hi", Date(), "2", "2"),
+        )
+        NotificationList(navController, sampleNotifications)
+    }
 }
