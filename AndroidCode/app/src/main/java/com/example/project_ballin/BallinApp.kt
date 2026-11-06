@@ -346,7 +346,7 @@ fun BallinApp() {
             val siteID = it.arguments?.getString("CampID") ?: ""
             AdminCampsiteDetailScreen(
                 navController,
-                site = campsiteList.campsites.find { site -> site.ID.toString() == siteID },
+                site = campsiteList.getCampsite(siteID),
                 onDelete = { campsiteList.deleteCampsite(it) }
             )
         }
@@ -359,11 +359,11 @@ fun BallinApp() {
             )
         }
 
-        composable("AdminProfileDetail/{DeviceID}") {
-            val deviceID = it.arguments?.getString("DeviceID") ?: ""
+        composable("AdminProfileDetail/{UserID}") {
+            val userID = it.arguments?.getString("UserID") ?: ""
             AdminProfileDetailScreen(
                 navController,
-                profile = profileList.getProfile(deviceID),
+                profile = profileList.getProfile(userID),
                 onDelete = { profileList.deleteProfile(it) }
             )
         }

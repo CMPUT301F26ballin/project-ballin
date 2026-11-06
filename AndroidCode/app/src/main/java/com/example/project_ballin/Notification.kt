@@ -27,6 +27,6 @@ class Notification (
      * Date() in java gives unnecessary data.
      */
     fun getFormattedDate(): String {
-        return SimpleDateFormat("dd/mm/yyyy").format(dateSent)
+        return SimpleDateFormat("dd/MM/yyyy").format(dateSent) // MM = month (mm would be minutes)
     }
 }
