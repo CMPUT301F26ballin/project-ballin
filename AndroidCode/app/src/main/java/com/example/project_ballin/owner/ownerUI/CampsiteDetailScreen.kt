@@ -77,7 +77,7 @@ fun CampsiteDetailScreen(navController: NavController, site: Campsite, userID: S
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)){
-                Text("Campsite Description: ${site.locationName}")
+                Text("Location Name: ${site.locationName}")
             }
             Row(modifier = Modifier
                 .fillMaxWidth()

@@ -130,8 +130,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
         var campRules by remember {mutableStateOf("")}
         var campDesc by remember {mutableStateOf("")}
         var campOccupancy by remember {mutableStateOf("")} //This will be changed to an int
-        var campImages = remember {mutableStateListOf<Uri>()}
-        val campByteArray = remember { mutableStateListOf<Blob>() }
+        var campByteArray = remember { mutableStateListOf<Blob>() }
         val campAvailableDates = remember { mutableStateListOf<Long>() }
         var copied by remember { mutableStateOf(0) }
 
@@ -140,13 +139,20 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
 
 
-
+        val context: Context = LocalContext.current
         val pickerLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
             uri?.let{
-                campImages.add(uri)
+                val bytes: ByteArray = context.contentResolver.openInputStream(uri).use {it!!.buffered().readBytes()}
+                val initBitmap: Bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+                val newBitmap = resizePhoto(initBitmap)
+                val baos = ByteArrayOutputStream()
+                newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val newByteArray = baos.toByteArray()
+                campByteArray.add(Blob.fromBytes(newByteArray))
             }
+
 
         }
 
@@ -165,6 +171,8 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
             campLat = oldSite.lat.toString()
             campLon = oldSite.lon.toString()
             campLocation = oldSite.locationName
+            //oldSite.images.forEach { image -> campByteArray.add(image) }
+            Log.d("Site" ,"Restored")
             copied = 1
         }
 
@@ -359,28 +367,22 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
 
             //IMAGE DISPLAY
 
-            if(campImages.isNotEmpty()){
+            if(campByteArray.isNotEmpty()){
                 Row(
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth()
                         .horizontalScroll(rememberScrollState())
                 ) {
-                    campImages.forEach { uri ->
-
-                        val context: Context = LocalContext.current
-                        val bytes: ByteArray = context.contentResolver.openInputStream(uri).use {it!!.buffered().readBytes()}
-                        val initBitmap: Bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
-                        val newBitmap = resizePhoto(initBitmap)
-                        val baos = ByteArrayOutputStream()
-                        newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-                        val newByteArray = baos.toByteArray()
-                        campByteArray.add(Blob.fromBytes(newByteArray))
+                    campByteArray.forEach {image ->
                         ImageRow(
-                            Blob.fromBytes(newByteArray),
-                            onDelete = { campByteArray.remove(it)
-                            campImages.remove(uri)})
-                    }
+                        Blob.fromBytes(image.toBytes()),
+                        onDelete = { campByteArray.remove(it)
+                        if(campByteArray.isEmpty()){
+                            campByteArray = mutableStateListOf<Blob>()
+                        }
+
+                        }) }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -424,7 +426,7 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     //Campsite needs other elements based on what is commented out in campsite object
                                     locationName = campLocation,
                                     availability = campAvailableDates,
-                                    lotteries = mutableListOf() //TODO
+                                    lotteries = mutableListOf(),
                                 )
                             )
                             Log.d("Navigation", "Adding campsite and returning to list")
@@ -461,9 +463,9 @@ fun CampsiteInputScreen (navController: NavController, oldSite: Campsite?, owner
                                     description = campDesc,
                                     occupancy = campOccupancy.toInt(),
                                     images = campByteArray,
-                                    locationName = "",
+                                    locationName = campLocation,
                                     availability = campAvailableDates,
-                                    lotteries = mutableListOf()//TODO
+                                    lotteries = mutableListOf(),
                                 )
                             )
                             Log.d("Navigation", "Updating campsite and returning to campsite details")
