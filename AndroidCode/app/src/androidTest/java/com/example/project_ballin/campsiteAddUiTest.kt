@@ -223,6 +223,62 @@ class campsiteAddUiTest {
 
     @Test
     fun viewCampsiteDetails_backToCampsites_AddNewCampsite_viewNewCampsiteDetails(){
+        composeTestRule
+            .onNodeWithTag("ownerSignin")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("toCampsiteList")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("newCampsiteButton")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("campName")
+            .performTextInput("Hello")
+
+        composeTestRule
+            .onNodeWithTag("campPrice")
+            .performTextInput("65")
+
+        composeTestRule
+            .onNodeWithTag("campRules")
+            .performTextInput("Have Fun!")
+
+        composeTestRule
+            .onNodeWithTag("campDesc")
+            .performTextInput("The best campsite ever!")
+
+        composeTestRule
+            .onNodeWithTag("tagInput")
+            .performTextInput("Tents")
+
+        composeTestRule
+            .onNodeWithTag("addTag")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("campOccupancy")
+            .performTextInput("15")
+
+        composeTestRule
+            .onNodeWithTag("campLat")
+            .performTextInput("12")
+
+        composeTestRule
+            .onNodeWithTag("campLon")
+            .performTextInput("12")
+
+        composeTestRule
+            .onNodeWithTag("campLocName")
+            .performTextInput("Waterton")
+
+        composeTestRule
+            .onNodeWithTag("addSiteButton")
+            .performClick()
+
 
     }
 

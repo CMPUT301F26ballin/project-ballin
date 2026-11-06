@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864436b4-54bb-4015-b05e-cd7029e07d1a" name="Changes" comment="" />
+    <list default="true" id="864436b4-54bb-4015-b05e-cd7029e07d1a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/AndroidCode/.idea/androidTestResultsUserPreferences.xml" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidCode/.idea/androidTestResultsUserPreferences.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AndroidCode/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidCode/.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AndroidCode/app/src/androidTest/java/com/example/project_ballin/campsiteAddUiTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidCode/app/src/androidTest/java/com/example/project_ballin/campsiteAddUiTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AndroidCode/app/src/main/java/com/example/project_ballin/owner/ownerUI/CampsiteListScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidCode/app/src/main/java/com/example/project_ballin/owner/ownerUI/CampsiteListScreen.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,22 +21,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "mietss"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;mietss&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/CMPUT301F26ballin/project-ballin.git",
-    "accountId": "618e0fb3-8e32-4204-b160-4bfd2221fc3e"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/CMPUT301F26ballin/project-ballin.git&quot;,
+    &quot;accountId&quot;: &quot;618e0fb3-8e32-4204-b160-4bfd2221fc3e&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8,
-  "fromUser": false
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3L3rH5cqk50ZYxnEG18uDpuYIQV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -47,8 +52,9 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "mies",
-    "kotlin-language-version-configured": "true"
+    "git-widget-placeholder": "Peter",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Documents/UniversityStuff/CMPUT301/project-ballin"
   }
 }]]></component>
   <component name="TaskManager">
