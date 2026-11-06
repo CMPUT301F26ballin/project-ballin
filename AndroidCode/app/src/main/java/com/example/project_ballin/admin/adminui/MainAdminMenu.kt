@@ -1,8 +1,11 @@
 package com.example.project_ballin
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -43,11 +46,11 @@ fun AdminMenuScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
-                text = "Welcome, Admin !",
+                text = "Welcome",
                 fontSize = 34.sp
             )
             Spacer(modifier = Modifier.height(34.dp))
@@ -61,6 +64,8 @@ fun AdminMenuScreen(navController: NavController) {
             FeatureTopicButton("MESSAGES", "AdminMessages", "adminMessagesButton", navController)
             Spacer(modifier = Modifier.height(16.dp))
             FeatureTopicButton("OWNERS VIOLATING POLICY", "", "", navController)
+            Spacer(modifier = Modifier.height(16.dp))
+
         }
     }
 }
@@ -93,8 +98,7 @@ fun FeatureTopicButton(name: String, destination: String, testTag: String, navCo
         ) {
             Text(name)
             Text(
-                text = "(Browse and Delete)",
-                fontSize = 10.sp
+                text = "Browse and Delete",
             )
         }
     }

@@ -27,17 +27,16 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.ConfirmDeleteDialog
 import com.example.project_ballin.Notification
+import com.example.project_ballin.entrant.entantui.ConfirmActionDialog
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 import kotlin.uuid.Uuid
 
-// NOT COMPLETED YET
-// VERIFY onDelete parameter works properly
-// VERIFY that the delete notification brings user to confirmDeleteDialog
 
 /**
  * A composable that shows the details of a specific notification
@@ -53,7 +52,7 @@ fun NotificationDetailScreen(
     notification: Notification,
     onDelete: (Notification) -> Unit
 ) {
-    var showDialog by remember { mutableStateOf(false) }
+    var notificationToDelete by remember { mutableStateOf<Notification?>(null) }
 
     TopAppBar(
         navController = navController,
@@ -71,12 +70,12 @@ fun NotificationDetailScreen(
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(fraction = 0.5f)
+                    .fillMaxHeight(fraction = 0.8f)
                     .padding(16.dp)
                     .background(
                         color = MaterialTheme.colorScheme.primary,
@@ -87,31 +86,35 @@ fun NotificationDetailScreen(
                     NotificationDetailRow("Date Sent", notification.getFormattedDate(), "dateSent${notification.getFormattedDate()}")
                     NotificationDetailRow("Notification Content", notification.content, "notificationContent${notification.content}")
                     NotificationDetailRow("Notification ID", notification.ID, "notificationID${notification.ID}")
-                    // NotificationDetailRow("Recipient IDs", notification.recipientIDs)
+                    NotificationDetailRow("Recipient ID", notification.recipientID, "recipientID${notification.recipientID}")
                 }
             }
 
             Button(
                 onClick = {
-                    showDialog = true
+                    notificationToDelete = notification
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
+                    containerColor = Color.Red
                 ),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.testTag("deleteNotification") // for UI testing
             ) {
                 Text("Delete Notification")
             }
+        }
 
-            if (showDialog) {
-                ConfirmDeleteDialog(
-                    itemDescription = "the notification ${notification.ID}",
-                    onConfirm = {
-                        showDialog = false
-                        onDelete(notification)
-                    },
-                    onCancel = { showDialog = false }
+        notificationToDelete?.let { notification ->
+            Dialog(onDismissRequest = { notificationToDelete = null }) {
+                ConfirmActionDialog().ConfirmAction(
+                    message = "Are you sure you want to delete this notification?",
+                    confirm = { confirmed ->
+                        if (confirmed) {
+                            onDelete(notification)
+                            navController.popBackStack()
+                        }
+                        notificationToDelete = null
+                    }
                 )
             }
         }
@@ -144,7 +147,7 @@ fun NotificationDetailScreenPreview() {
     val sampleNotification = Notification(
         "Hello, this is the content of the notification",
         Date(),
-        "1"
+        "1", "1"
     )
 
     NotificationDetailScreen(navcontroller, sampleNotification, onDelete = {})
