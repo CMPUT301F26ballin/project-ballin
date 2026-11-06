@@ -211,7 +211,7 @@
 - Story Points: 2
 - Risk: Low
 
-**US 03.02.02 As an admin, I want to Search profiles.**
+**US 03.02.02 As an admin, I want to Search profiles.** ✅
 - Story Points: 2
 - Risk: Low 
 
@@ -247,7 +247,7 @@
 - Story Points:  2
 - Risk: Low
 
-**US 03.04.03 As an admin, I want to search campsites.**
+**US 03.04.03 As an admin, I want to search campsites.** ✅
 - Story Points: 3
 - Risk: medium
 
@@ -263,7 +263,7 @@
 - Story Points: 3
 - Risk: medium
   
-**US 03.06.02 As an admin, I want to search the notification log.**
+**US 03.06.02 As an admin, I want to search the notification log.** ✅
 - Story Points: 2
 - Risk: Low
   
@@ -271,7 +271,7 @@
 - Story Points: 2
 - Risk: Low
   
-**US 03.06.04 As an admin, I want to delete the notification log.**
+**US 03.06.04 As an admin, I want to delete the notification log.** ✅
 - Story Points: 2
 - Risk: Low
 
