@@ -32,4 +32,4 @@ Peter: I plan to finish the date input for the campsites. I will properly test i
 
 Salix: Finish the lottery screens (view list, edit details, pick campsites). Also add lottery UML and code tests if possible 
 
-yuming:
+yuming: search bar for admin
