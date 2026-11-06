@@ -154,6 +154,13 @@ fun LotteryDetailScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             Spacer(modifier = Modifier.height(16.dp))
+            Text("Selected Campsites")
+            selectedSiteIDs.forEach{
+                val campsite = getCampsite(it)
+                Text(campsite.name)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text("Campsites")
             ownerSites.forEach{
@@ -187,7 +194,7 @@ fun CampsiteSelectable(
         Column {
             Text(campsite.name)
             Text(campsite.description)
-            //Text(campsite.tags)
+
             Text("\nCampsite available for this booking window✅")
         }
     }
