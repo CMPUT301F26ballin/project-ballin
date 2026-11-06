@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.*
 import com.example.project_ballin.Campsite
@@ -113,7 +114,8 @@ fun DisplayCampsite(
             .clickable {
                 navController.navigate("CampsiteDetailScreen/${campsite.ID},${entrantID}")
 
-            },
+            }
+            .testTag("Campsite: ${campsite.name}"),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -172,7 +174,8 @@ fun SearchBar(
         OutlinedTextField(
             value = queryText,
             onValueChange = viewModel::onSearchTextChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .testTag("Search Bar"),
             placeholder = { Text("Search Campsites") }
         )
         Spacer(modifier = Modifier.height(8.dp))
