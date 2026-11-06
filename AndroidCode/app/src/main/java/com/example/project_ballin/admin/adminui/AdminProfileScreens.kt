@@ -32,7 +32,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.reusableui.TopAppBar
-
+/**
+ * The views allowing Admin users to view profiles.
+ *
+ *
+ * */
 class AdminProfilesScreens {
     /**
      * Admin screen listing all profiles, each with a Remove button.
@@ -78,6 +82,8 @@ class AdminProfilesScreens {
         var query by rememberSaveable { mutableStateOf("") }
         val results = profiles.filter { it.matchesSearch(query) }
 
+    val adminSearch = AdminSearch()
+
         if (profiles.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -87,7 +93,7 @@ class AdminProfilesScreens {
             }
         } else {
             Column(modifier = Modifier.fillMaxSize()) {
-                AdminSearchField(
+                adminSearch.AdminSearchField(
                     query,
                     onQueryChange = { query = it },
                     placeholder = "Search profiles"

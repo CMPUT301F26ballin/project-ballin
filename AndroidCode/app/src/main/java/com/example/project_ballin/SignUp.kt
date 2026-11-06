@@ -11,77 +11,85 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import kotlin.uuid.Uuid
 
+
 /**
- *
- * the first screen a user will see, need to implement something that will
- * recognize device ID
- *
- * @param navController a [NavController] to continue to enter details screen
- *
- */
+ *The view class containing the first screen any user will see.
+ * */
+class SignUp{
 
-@Composable
-fun Signup(navController: NavController){
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Welcome To Fire-ballin",
-            fontSize = 34.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "The Lottery-based Campsite Reservation App",
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Please sign up to continue:",
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                navController.navigate("MainEntrantMenu")
-            },
-            modifier = Modifier.testTag("entrantSignin") // for testing
+    /**
+     *
+     * the first screen a user will see, need to implement something that will
+     * recognize device ID
+     *
+     * @param navController a [NavController] to continue to enter details screen
+     *
+     */
+    @Composable
+    fun Signup(navController: NavController) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Sign-up as Entrant")
-        }
+            Text(
+                text = "Welcome To Fire-ballin",
+                fontSize = 34.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "The Lottery-based Campsite Reservation App",
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Button(
-            onClick = {
-                val ownerID = "Test1" // just for testing
-                navController.navigate("OwnerMenu/${ownerID}")
-            },
-            modifier = Modifier.testTag("ownerSignin") // for testing
-        ) {
-            Text("Sign-up as Campsite Owner")
-        }
+            Text(
+                text = "Please sign up to continue:",
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = {
+                    navController.navigate("MainEntrantMenu")
+                },
+                modifier = Modifier.testTag("entrantSignin") // for testing
+            ) {
+                Text("Sign-up as Entrant")
+            }
 
-        Button(
-            onClick = {
-                navController.navigate("Admin Menu Screen")
-            },
-            modifier = Modifier.testTag("adminSignin") // for testing
-        ) {
-            Text("Sign-up as Admin")
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    val ownerID = "Test1" // just for testing
+                    navController.navigate("OwnerMenu/${ownerID}")
+                },
+                modifier = Modifier.testTag("ownerSignin") // for testing
+            ) {
+                Text("Sign-up as Campsite Owner")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("Admin Menu Screen")
+                },
+                modifier = Modifier.testTag("adminSignin") // for testing
+            ) {
+                Text("Sign-up as Admin")
+            }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun SignupPreview() {
-    val navController = rememberNavController()
-    Signup(navController)
+    @Preview(showBackground = true)
+    @Composable
+    fun SignupPreview() {
+        val navController = rememberNavController()
+        Signup(navController)
+    }
 }

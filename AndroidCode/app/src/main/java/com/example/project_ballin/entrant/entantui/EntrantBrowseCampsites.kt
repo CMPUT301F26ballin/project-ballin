@@ -1,5 +1,6 @@
 package com.example.project_ballin.entrant.entantui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
@@ -9,28 +10,41 @@ import androidx.navigation.*
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 
-
 /**
- * The entrant browse campsites page
- * Entrants can search for campsites by name, location, and number of occupants (so far)
+ *The screen allowing the entrant to browse campsites based on a variety of factors
  *
- * @param navController the navigation controller for the app
- * @param campsiteList the list of campsites
- * @param entrantID the ID of the entrant
  *
- */
-@Composable
-fun EntrantBrowseCampsites (navController: NavController, campsiteList: CampsiteList, entrantID: String) {
-    TopAppBar(
-        navController,
-        "Browse Campsites"){
-        Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(navController, campsiteList = campsiteList, entrantID = entrantID)
+ * */
+class EntrantBrowseCampsites(){
+    /**
+     * The entrant browse campsites page
+     * Entrants can search for campsites by name, location, and number of occupants (so far)
+     *
+     * @param navController the navigation controller for the app
+     * @param campsiteList the list of campsites
+     * @param entrantID the ID of the entrant
+     *
+     */
+    @SuppressLint("NotConstructor")
+    @Composable
+    fun EntrantBrowseCampsites(
+        navController: NavController,
+        campsiteList: CampsiteList,
+        entrantID: String
+    ) {
+        TopAppBar(
+            navController,
+            "Browse Campsites"
+        ) {
+            val searchBar = SearchBar()
+            Spacer(modifier = Modifier.height(16.dp))
+            searchBar.SearchBar(navController, campsiteList = campsiteList, entrantID = entrantID)
+        }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun EntrantBrowseCampsitesPreview() {
+    @Preview(showBackground = true)
+    @Composable
+    fun EntrantBrowseCampsitesPreview() {
 
+    }
 }
