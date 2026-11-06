@@ -278,6 +278,7 @@ fun BallinApp() {
             LotteryDetailScreen(
                 navController, lottery, ownerID!!,
                 ownerSites = campsiteList.campsites.filter { it.ownerID.toString() == ownerID },
+                getCampsite = { campsiteList.getCampsite(it)!! },
                 addLottery = { lotteryList.addLottery(it) },
                 updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }

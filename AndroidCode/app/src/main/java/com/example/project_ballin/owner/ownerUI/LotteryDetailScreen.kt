@@ -1,6 +1,8 @@
 package com.example.project_ballin.owner.ownerUI
 
 import android.R
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
 
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePickerDialog
@@ -27,6 +30,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -51,6 +56,7 @@ fun LotteryDetailScreen(
     lottery: Lottery?, // null if creating a new lottery
     ownerID: String,
     ownerSites: List<Campsite>,
+    getCampsite: (String) -> Campsite,
     addLottery: (Lottery) -> Unit,
     updateLottery: (oldLottery: Lottery, newLottery: Lottery) -> Unit
 ){
@@ -64,6 +70,7 @@ fun LotteryDetailScreen(
     )
     var occupancy by remember { mutableStateOf(lottery?.occupancy?.toString() ?: "") }
     var numWinners by remember { mutableStateOf(lottery?.numWinners?.toString() ?: "") }
+    var selectedSiteIDs by remember { mutableStateOf(lottery?.associatedSites ?: listOf()) }
 
     TopAppBar(navController, if (lottery == null) "New Lottery Details" else "Edit Lottery Details"){
         Column(
@@ -85,6 +92,7 @@ fun LotteryDetailScreen(
                     val bookEnd = bookingDateState.selectedEndDateMillis
                     val occ = occupancy.toIntOrNull()
                     val winners = numWinners.toIntOrNull()
+                    val sites = selectedSiteIDs
 
                     if (
                         regStart == null ||
@@ -93,6 +101,7 @@ fun LotteryDetailScreen(
                         bookEnd == null ||
                         occ == null ||  //waitlist capacity is allowed to be null
                         winners == null ||
+                        sites.isEmpty() ||
                         regEnd < regStart ||
                         bookEnd < bookStart ||
                         bookStart < regEnd // registration still active while booking started
@@ -122,6 +131,7 @@ fun LotteryDetailScreen(
                 }
 
             }
+
             Spacer(modifier = Modifier.height(16.dp))
             DateRangeSelectionButton("Registration Dates", registrationDateState)
             Spacer(modifier = Modifier.height(16.dp))
@@ -143,7 +153,42 @@ fun LotteryDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
-            //Text("${registrationDateState.selectedStartDateMillis} to ${registrationDateState.selectedEndDateMillis}")
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("Campsites")
+            ownerSites.forEach{
+                val isSelected = selectedSiteIDs.contains(it.ID)
+
+                CampsiteSelectable(campsite = it, isSelected = isSelected,
+                    onClick = {
+                    selectedSiteIDs = if (isSelected) selectedSiteIDs - it.ID
+                        else selectedSiteIDs + it.ID
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+
+@Composable
+fun CampsiteSelectable(
+    campsite: Campsite,
+    isSelected: Boolean,
+    onClick: () -> Unit) {
+    Row(
+        modifier = Modifier.
+        fillMaxWidth()
+            .border(2.dp, Color.Black)
+            .clickable{ onClick() }
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(campsite.name)
+            Text(campsite.description)
+            //Text(campsite.tags)
+            Text("\nCampsite available for this booking window✅")
         }
     }
 }
