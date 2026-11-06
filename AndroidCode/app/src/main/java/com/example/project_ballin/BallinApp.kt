@@ -33,6 +33,27 @@ import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
+import java.util.Date
+
+
+/**
+ * The main composable function that holds the mappings for the navController.
+ * Any function that calls navController to a new location passes through here
+ *
+ *
+ *
+ * Sources Used:
+ *
+ * Title: Pass Arguments to Destinations : Jetpack Compose Navigation
+ * Author: Sagar Malhotra
+ * Published: April 15, 2023
+ * https://sagar0-0.medium.com/pass-arguments-to-destinations-jetpack-compose-navigation-7c29d4c73ce5
+ *
+ *
+ *
+ * */
+
+
 
 @Composable
 fun BallinApp() {
@@ -81,11 +102,10 @@ fun BallinApp() {
     var campsite by remember { mutableStateOf<Campsite>(
         Campsite(
             "campsite1",
-            Uuid.random().toString(),
+            "2",
             //Location(""),
             lat = 0.0,
             lon = 0.0,
-            "2",
             "Jasper",
             mutableListOf<String>(),
             1.00.toFloat(),
@@ -104,6 +124,9 @@ fun BallinApp() {
         Campsite(
             "campsite2",
             "4",
+            lat = 0.0,
+            lon = 0.0,
+
             "Jasper",
             mutableListOf<String>(),
             1.00.toFloat(),
@@ -122,7 +145,9 @@ fun BallinApp() {
         Campsite(
             "campsite3",
             "5",
-             "Jasper",
+            lat = 0.0,
+            lon = 0.0,
+            "Jasper",
             mutableListOf<String>(),
             1.00.toFloat(),
             5.toFloat(),
@@ -187,6 +212,25 @@ fun BallinApp() {
         )
     ) }
 
+    var message1 by remember { mutableStateOf<Message>(
+        Message(
+            Uuid.random().toString(),
+            Uuid.random().toString(),
+            "You are booked!",
+            Date(),
+            Uuid.random().toString()
+        )
+    )}
+
+    var notification1 by remember { mutableStateOf<Notification>(
+        Notification(
+            "You won the lottery!",
+            Date(),
+            Uuid.random().toString(),
+            Uuid.random().toString()
+        )
+    )}
+
     LaunchedEffect(Unit) {
         campsite.lotteries.add(lottery.lotteryID)
         campsite2.lotteries.add(lottery2.lotteryID)
@@ -212,6 +256,8 @@ fun BallinApp() {
         lotteryList.addLottery(lottery)
         lotteryList.addLottery(lottery2)
         lotteryList.addLottery(lottery3)
+        messageList.addMessage(message1)
+        notificationList.addNotification(notification1)
     }
 
 
@@ -234,7 +280,7 @@ fun BallinApp() {
                 getOwnerSites = { campsiteList.getOwnerSites(it) })
         }
 
-        composable("CampsiteDetailScreen/{CampID},{userID}") {
+        composable("CampsiteDetailScreen/{CampID}/{userID}") {
             val siteIDString = it.arguments!!.getString("CampID")
             val campsite = campsiteList.getCampsite(siteIDString!!)
             val userID = it.arguments!!.getString("userID")
@@ -327,14 +373,26 @@ fun BallinApp() {
 
         composable("AdminMessageDetails/{MessageID}") {
             val messageID = it.arguments!!.getString("MessageID")
-            MessageDetailScreen(navController, messageList.getMessage(messageID!!), onDelete = {messageList.deleteMessage(it)})
+            val message = messageList.getMessage(messageID!!)
+            if (message != null) {
+                MessageDetailScreen(
+                    navController,
+                    message,
+                    onDelete = { messageList.deleteMessage(it) })
+            }
         }
 
         composable("AdminNotifications") { NotificationListScreen(navController, notificationList.getAllNotifications()) }
 
         composable("AdminNotificationDetails/{NotificationID}") {
             val notificationID = it.arguments!!.getString("NotificationID")
-            NotificationDetailScreen(navController, notificationList.getNotification(notificationID!!), onDelete = {notificationList.deleteNotification(it)})
+            val notification = notificationList.getNotification(notificationID!!)
+            if (notification != null) {
+                NotificationDetailScreen(
+                    navController,
+                    notification,
+                    onDelete = { notificationList.deleteNotification(it) })
+            }
         }
 
         composable("MainEntrantMenu") {

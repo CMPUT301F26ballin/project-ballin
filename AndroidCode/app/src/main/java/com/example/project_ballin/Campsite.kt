@@ -31,6 +31,14 @@ import kotlin.uuid.Uuid
  * @property ownerID the unique userID of the owner of the campsite
  * @property lotteries the lotteries this campsite is associated with
  *
+ * Sources Used:
+ * Title: UUIDs
+ * https://kotlinlang.org/docs/uuids.html
+ *
+ * Sources Used:
+ *
+ *
+ *
 *
 * */
 

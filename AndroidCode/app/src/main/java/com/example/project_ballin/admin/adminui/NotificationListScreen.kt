@@ -1,5 +1,6 @@
 package com.example.project_ballin.admin.adminui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,10 +24,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import com.example.project_ballin.Notification
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
-// Verify notifications parameter type is correct
+
 
 /**
  * A composable that shows the overview of all the notifications
@@ -52,17 +51,31 @@ fun NotificationListScreen(
 
             Spacer(modifier = Modifier.height(34.dp))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                itemsIndexed(notifications) { index, notification->
-                    NotificationButtonRow(index, notification, navController)
-                    Spacer(modifier = Modifier.height(16.dp))
+            if (notifications.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No notifications to browse through")
                 }
+            } else {
+                ListNotifications(navController, notifications)
             }
+        }
+    }
+}
+
+@Composable
+fun ListNotifications(navController: NavController, notifications: List<Notification>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        itemsIndexed(notifications) { index, notification->
+            NotificationButtonRow(index, notification, navController)
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -70,6 +83,10 @@ fun NotificationListScreen(
 /**
  * Shows the general overview of a specific notification,
  * it'll be a clickable button, showing ID and date sent only.
+ *
+ * @param index the index of the notification in the list
+ * @param notification the notification to show
+ * @param navController the navController of the app
  */
 @Composable
 fun NotificationButtonRow(index: Int, notification: Notification, navController: NavController) {
@@ -103,8 +120,8 @@ fun NotificationButtonRow(index: Int, notification: Notification, navController:
 fun NotificationListScreenPreview() {
     val navController = rememberNavController()
     val sampleNotifications = listOf(
-        Notification("Hello", Date(), "1"),
-        Notification("Hi", Date(), "2"),
+        Notification("Hello", Date(), "1", "1"),
+        Notification("Hi", Date(), "2", "2"),
     )
    NotificationListScreen(navController, sampleNotifications)
 }
