@@ -25,14 +25,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
-import com.example.project_ballin.AdminSearchField
+import com.example.project_ballin.AdminSearch
 import com.example.project_ballin.Notification
-import com.example.project_ballin.matchesSearch
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 
 
 class NotificationListScreen {
+
+    val adminSearch = AdminSearch()
+
+    /**
+     * Searches a notification by its content, recipient, and date sent.
+     *
+     * @param query the search text
+     * @return true if the notification matches the search
+     */
+    fun Notification.matchesSearch(query: String): Boolean =
+        adminSearch.matchesQuery(query, content, recipientID, getFormattedDate())
     /**
      * A composable that shows the overview of all the notifications
      *
@@ -69,7 +79,7 @@ class NotificationListScreen {
                     var query by rememberSaveable { mutableStateOf("") }
                     val results = notifications.filter { it.matchesSearch(query) }
 
-                    AdminSearchField(
+                        adminSearch.AdminSearchField(
                         query,
                         onQueryChange = { query = it },
                         placeholder = "Search notifications"

@@ -68,41 +68,6 @@ class AdminSearch(){
         return fields.any { it.contains(search, ignoreCase = true) }
     }
 
-    /**
-     * Searches a profile by name, email, phone number, role, and user ID.
-     *
-     * @param query the search text
-     * @return true if the profile matches the search
-     */
-    fun Profile.matchesSearch(query: String): Boolean =
-        matchesQuery(query, fullName, email, phoneNum, role, userID)
-
-    /**
-     * Searches a campsite by name, location, description, tags, and owner ID.
-     *
-     * @param query the search text
-     * @return true if the campsite matches the search
-     */
-    fun Campsite.matchesSearch(query: String): Boolean =
-        matchesQuery(query, name, locationName, description, tags.joinToString(" "), ownerID)
-
-    /**
-     * Searches a message by its content, sender, receiver, and date sent.
-     *
-     * @param query the search text
-     * @return true if the message matches the search
-     */
-    fun Message.matchesSearch(query: String): Boolean =
-        matchesQuery(query, content, ownerID, entrantID, getFormattedDate())
-
-    /**
-     * Searches a notification by its content, recipient, and date sent.
-     *
-     * @param query the search text
-     * @return true if the notification matches the search
-     */
-    fun Notification.matchesSearch(query: String): Boolean =
-        matchesQuery(query, content, recipientID, getFormattedDate())
 
     @Preview(showBackground = true)
     @Composable
