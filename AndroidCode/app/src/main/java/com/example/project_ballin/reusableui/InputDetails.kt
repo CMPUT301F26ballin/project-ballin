@@ -9,7 +9,9 @@ import androidx.compose.material3.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
+import android.provider.Settings
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
@@ -73,6 +75,14 @@ fun InputDetails(
     ){
 
     val uiState by viewModel.uiState.collectAsState()
+
+    val context = LocalContext.current
+
+
+    val deviceId = Settings.Secure.getString(context.contentResolver,
+        Settings.Secure.ANDROID_ID) ?: ""
+        viewModel.setDeviceId(deviceId)
+
 
     Column(
         modifier = Modifier

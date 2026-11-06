@@ -55,7 +55,7 @@ fun Signup(navController: NavController){
             },
             modifier = Modifier.testTag("entrantSignin") // for testing
         ) {
-            Text("Sign-up as Entrant")
+            Text("Continue") //this will be the only valid button soon
         }
 
         Spacer(modifier = Modifier.height(8.dp))

@@ -5,6 +5,8 @@ import androidx.compose.material3.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontVariation.Settings
 import androidx.lifecycle.ViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.*
@@ -23,13 +25,6 @@ import com.example.project_ballin.owner.Owner
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
-fun createActor(actor: UserRole): User{
-    return when (actor){
-        UserRole.ENTRANT -> Entrant()
-        UserRole.OWNER -> Owner()
-        UserRole.ADMIN -> Admin()
-    }
-}
 class UserDetailModel: ViewModel() {
 
     private var _selectedRole = MutableStateFlow(UserRole.OWNER)
@@ -37,6 +32,16 @@ class UserDetailModel: ViewModel() {
 
     private var _uiState = MutableStateFlow<User>(Owner())
     var uiState = _uiState.asStateFlow()
+
+    fun setDeviceId(deviceId: String){
+        val current = _uiState.value
+        _uiState.value = when (current) {
+            is Entrant -> current.copy(deviceId = deviceId)
+            is Owner -> current.copy(deviceId = deviceId)
+            is Admin -> current.copy(deviceId = deviceId)
+            else -> current
+        }
+    }
 
     fun onRoleChange(newRole: UserRole) {
         _selectedRole.value = newRole

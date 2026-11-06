@@ -20,7 +20,8 @@ interface User {
         lastName: String = this.lastName,
         phoneNum: String = this.phoneNum,
         email: String = this.email,
-        profilePic: String = this.profilePic
+        profilePic: String = this.profilePic,
+        deviceId: String = this.deviceId
     ): User
 
     fun deleteProfile()

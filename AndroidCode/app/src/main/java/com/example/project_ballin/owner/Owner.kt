@@ -22,13 +22,15 @@ data class Owner(
         lastName: String,
         phoneNum: String,
         email: String,
-        profilePic: String
+        profilePic: String,
+        deviceId: String
     ): Owner = copy(
         firstName = firstName,
         lastName = lastName,
         phoneNum = phoneNum,
         email = email,
-        profilePic = profilePic
+        profilePic = profilePic,
+        deviceId = deviceId
     )
     override fun deleteProfile() {
         OwnerList().deleteOwner(this)

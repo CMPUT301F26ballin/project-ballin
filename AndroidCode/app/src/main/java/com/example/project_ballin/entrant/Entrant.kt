@@ -1,6 +1,8 @@
 package com.example.project_ballin.entrant
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.text.font.FontVariation.Settings
 import com.example.project_ballin.EntrantList
 import com.example.project_ballin.User
 import com.example.project_ballin.lottery.Lottery
@@ -20,6 +22,8 @@ import kotlin.uuid.Uuid
  * @property profilePic the profile picture of the entrant
  *
  */
+
+
 data class Entrant(
     override var firstName: String = "",
     override var lastName: String = "",
@@ -39,13 +43,15 @@ data class Entrant(
         lastName: String,
         phoneNum: String,
         email: String,
-        profilePic: String
+        profilePic: String,
+        deviceId: String
     ): Entrant = copy(
         firstName = firstName,
         lastName = lastName,
         phoneNum = phoneNum,
         email = email,
-        profilePic = profilePic
+        profilePic = profilePic,
+        deviceId = deviceId
     )
     override fun deleteProfile() {
         EntrantList().deleteEntrant(this)
