@@ -116,7 +116,7 @@ fun LotteryDetailScreen(
                     } else {
                         updateLottery(lottery, newLottery)
                     }
-                    navController.navigate("LotteryListScreen/$ownerID")
+                    navController.popBackStack()
                 } ) {
                     Text("Confirm Lottery")
                 }

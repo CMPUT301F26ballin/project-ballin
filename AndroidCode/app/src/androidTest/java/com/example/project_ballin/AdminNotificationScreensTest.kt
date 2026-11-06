@@ -20,9 +20,8 @@ class AdminNotificationScreensTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val uuidRandomID: Uuid = Uuid.random()
     private val sampleNotifications = mutableListOf(
-        Notification("Hello", Date(), uuidRandomID)
+        Notification("Hello", Date(), "1", "1")
     )
 
     @Test
@@ -78,6 +77,10 @@ class AdminNotificationScreensTest {
 
         composeTestRule
             .onNodeWithTag("notificationID${sampleNotifications[0].ID}")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("recipientID${sampleNotifications[0].recipientID}")
             .assertExists()
     }
 
