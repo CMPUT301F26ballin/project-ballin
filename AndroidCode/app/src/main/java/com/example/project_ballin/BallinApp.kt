@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import com.example.project_ballin.admin.adminui.NotificationDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.entrant.QRCodeScanner
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
@@ -30,7 +31,7 @@ import com.example.project_ballin.owner.ownerUI.CampsiteInputScreen
 import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
 import com.example.project_ballin.owner.ownerUI.LotteryListScreen
-import com.example.project_ballin.owner.ownerUI.OwnerMenuScreen
+import com.example.project_ballin.owner.ownerUI.MainOwnerMenu
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
@@ -264,6 +265,12 @@ fun BallinApp() {
     }
 
 
+    val campsiteInputScreen = CampsiteInputScreen()
+    val campsiteDetailScreen = CampsiteDetailScreen()
+    val campsiteListScreen = CampsiteListScreen()
+    val mainOwnerMenu = MainOwnerMenu()
+
+
 
     NavHost(navController = navController, startDestination = "signup") {
         composable("signup") { Signup(navController) }
@@ -271,12 +278,12 @@ fun BallinApp() {
 
         composable("OwnerMenu/{OwnerID}") {
             val ownerIDString = it.arguments!!.getString("OwnerID")
-            OwnerMenuScreen(navController, ownerIDString!!)
+            mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!)
         }
 
         composable("CampsiteListScreen/{OwnerID}") {
             val ownerIDString = it.arguments!!.getString("OwnerID")
-            CampsiteListScreen(
+            campsiteListScreen.CampsiteListScreen(
                 navController,
                 ownerIDString!!,
                 getOwnerSites = { campsiteList.getOwnerSites(it) })
@@ -286,7 +293,7 @@ fun BallinApp() {
             val siteIDString = it.arguments!!.getString("CampID")
             val campsite = campsiteList.getCampsite(siteIDString!!)
             val userID = it.arguments!!.getString("userID")
-            CampsiteDetailScreen(navController, campsite!!, userID!!)
+            campsiteDetailScreen.CampsiteDetailScreen(navController, campsite!!, userID!!)
         }
 
         composable("CampsiteInputScreen/{CampID}/{OwnerID}") {
@@ -302,7 +309,7 @@ fun BallinApp() {
 
             Log.d("navigation","To input!")
 
-            CampsiteInputScreen(
+            campsiteInputScreen.CampsiteInputScreen(
                 navController, campsite, ownerID!!,
                 addSite = { Log.d("Site Addition", "Adding Site")
                     campsiteList.addCampsite(it) },
