@@ -22,5 +22,4 @@ data class Owner(
     override val deviceId: String = "",
     override var profilePic: String = "",
     override val userID: String = "",
-    val campsitesOwned: MutableList<String> = mutableListOf(),
 ) : User

@@ -51,6 +51,8 @@ import java.util.Date
  *
  *
  *
+ *
+ *
  * */
 
 
@@ -94,7 +96,7 @@ fun BallinApp() {
                 deviceId = "123",
                 profilePic = "a",
                 lastName = "",
-                userID = Uuid.random().toString()
+                userID = "Test1"
             )
         )
     }
@@ -268,8 +270,7 @@ fun BallinApp() {
 
         composable("OwnerMenu/{OwnerID}") {
             val ownerIDString = it.arguments!!.getString("OwnerID")
-            val ownerID = Uuid.parse(ownerIDString!!)
-            OwnerMenuScreen(navController, ownerID)
+            OwnerMenuScreen(navController, ownerIDString!!)
         }
 
         composable("CampsiteListScreen/{OwnerID}") {
@@ -306,6 +307,10 @@ fun BallinApp() {
                     campsiteList.addCampsite(it) },
                 updateSite = { oldSite, newSite -> campsiteList.updateCampsite(oldSite = oldSite, newSite) })
         }
+        composable("CampsiteActiveReservations/{SiteID}") {
+            val siteIDString = it.arguments!!.getString("SiteID")
+
+        }
 
         composable("LotteryListScreen/{OwnerID}") {
             val ownerID = it.arguments!!.getString("OwnerID")
@@ -327,7 +332,8 @@ fun BallinApp() {
             val lottery: Lottery? = if (lotteryID == null) null else lotteryList.getLottery(lotteryID)
             LotteryDetailScreen(
                 navController, lottery, ownerID!!,
-                ownerSites = campsiteList.campsites.filter { it.ownerID.toString() == ownerID },
+                ownerSites = campsiteList.getOwnerSites(ownerID),
+                getCampsite = { campsiteList.getCampsite(it) },
                 addLottery = { lotteryList.addLottery(it) },
                 updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
         }
@@ -346,7 +352,7 @@ fun BallinApp() {
             val siteID = it.arguments?.getString("CampID") ?: ""
             AdminCampsiteDetailScreen(
                 navController,
-                site = campsiteList.campsites.find { site -> site.ID.toString() == siteID },
+                site = campsiteList.getCampsite(siteID),
                 onDelete = { campsiteList.deleteCampsite(it) }
             )
         }
@@ -359,11 +365,11 @@ fun BallinApp() {
             )
         }
 
-        composable("AdminProfileDetail/{DeviceID}") {
-            val deviceID = it.arguments?.getString("DeviceID") ?: ""
+        composable("AdminProfileDetail/{UserID}") {
+            val userID = it.arguments?.getString("UserID") ?: ""
             AdminProfileDetailScreen(
                 navController,
-                profile = profileList.getProfile(deviceID),
+                profile = profileList.getProfile(userID),
                 onDelete = { profileList.deleteProfile(it) }
             )
         }
