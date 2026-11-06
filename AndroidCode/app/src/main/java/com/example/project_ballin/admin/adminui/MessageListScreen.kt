@@ -32,6 +32,17 @@ import kotlin.uuid.Uuid
 
 
 class MessageListScreen {
+    val adminSearch = AdminSearch()
+
+    /**
+     * Searches a message by its content, sender, receiver, and date sent.
+     *
+     * @param query the search text
+     * @return true if the message matches the search
+     */
+    fun Message.matchesSearch(query: String): Boolean =
+        adminSearch.matchesQuery(query, content, ownerID, entrantID, getFormattedDate())
+
     /**
      * A composable that shows the overview of all the messages
      * sent by an owner to an entrant.
@@ -70,7 +81,7 @@ class MessageListScreen {
                     var query by rememberSaveable { mutableStateOf("") }
                     val results = messages.filter { it.matchesSearch(query) }
 
-                    AdminSearchField(
+                        adminSearch.AdminSearchField(
                         query,
                         onQueryChange = { query = it },
                         placeholder = "Search messages"

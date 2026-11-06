@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -95,33 +96,35 @@ class LotteryDetailScreen() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Button(onClick = {
-                        // confirms the lottery details are valid
-                        // and either creates a new lottery or updates an existing one
+                    Button(
+                        modifier = Modifier.testTag("confirmLotteryButton"),
+                        onClick = {
+                            // confirms the lottery details are valid
+                            // and either creates a new lottery or updates an existing one
 
-                        val regStart = registrationDateState.selectedStartDateMillis
-                        val regEnd = registrationDateState.selectedEndDateMillis
-                        val bookStart = bookingDateState.selectedStartDateMillis
-                        val bookEnd = bookingDateState.selectedEndDateMillis
-                        val occ = occupancy.toIntOrNull()
-                        val winners = numWinners.toIntOrNull()
-                        val sites = selectedSiteIDs
+                            val regStart = registrationDateState.selectedStartDateMillis
+                            val regEnd = registrationDateState.selectedEndDateMillis
+                            val bookStart = bookingDateState.selectedStartDateMillis
+                            val bookEnd = bookingDateState.selectedEndDateMillis
+                            val occ = occupancy.toIntOrNull()
+                            val winners = numWinners.toIntOrNull()
+                            val sites = selectedSiteIDs
 
-                        if (
-                            regStart == null ||
-                            regEnd == null ||
-                            bookStart == null ||
-                            bookEnd == null ||
-                            occ == null ||  //waitlist capacity is allowed to be null
-                            winners == null ||
-                            sites.isEmpty() ||
-                            regEnd < regStart ||
-                            bookEnd < bookStart ||
-                            bookStart < regEnd // registration still active while booking started
-                        ) {
-                            return@Button
-                            // invalid lottery details
-                            // TODO alert user of the error
+                            if (
+                                regStart == null ||
+                                regEnd == null ||
+                                bookStart == null ||
+                                bookEnd == null ||
+                                occ == null ||  //waitlist capacity is allowed to be null
+                                winners == null ||
+                                sites.isEmpty() ||
+                                regEnd < regStart ||
+                                bookEnd < bookStart ||
+                                bookStart < regEnd // registration still active while booking started
+                            ) {
+                                return@Button
+                                // invalid lottery details
+                                // TODO alert user of the error
                         }
 
                         // TODO book the availability of the campsites selected
@@ -162,7 +165,9 @@ class LotteryDetailScreen() {
                     value = occupancy,
                     onValueChange = { occupancy = it },
                     label = { Text("Waitlist limit") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("WaitlistLimitEntry"),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -170,7 +175,9 @@ class LotteryDetailScreen() {
                     value = numWinners,
                     onValueChange = { numWinners = it },
                     label = { Text("Lottery winners") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("WinnerCountEntry"),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -228,10 +235,12 @@ class LotteryDetailScreen() {
         onClick: () -> Unit
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .border(2.dp, if (isSelected) Color.Blue else Color.Black)
                 .clickable { onClick() }
                 .padding(16.dp)
+                .testTag("campsiteSelectable_${campsite.ID}")
         ) {
             Column {
                 Text(campsite.name)

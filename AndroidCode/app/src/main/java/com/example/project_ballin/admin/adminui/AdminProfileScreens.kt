@@ -38,6 +38,8 @@ import com.example.project_ballin.reusableui.TopAppBar
  *
  * */
 class AdminProfilesScreens {
+    val adminSearch = AdminSearch()
+    val confirmDeleteDialog = ConfirmDeleteDialog()
     /**
      * Admin screen listing all profiles, each with a Remove button.
      *
@@ -62,6 +64,16 @@ class AdminProfilesScreens {
         }
     }
 
+
+    /**
+     * Searches a profile by name, email, phone number, role, and user ID.
+     *
+     * @param query the search text
+     * @return true if the profile matches the search
+     */
+    fun Profile.matchesSearch(query: String): Boolean =
+        adminSearch.matchesQuery(query, fullName, email, phoneNum, role, userID)
+
     /**
      * The profile list itself (no top bar), so it can be tested on its own.
      *
@@ -82,7 +94,7 @@ class AdminProfilesScreens {
         var query by rememberSaveable { mutableStateOf("") }
         val results = profiles.filter { it.matchesSearch(query) }
 
-    val adminSearch = AdminSearch()
+
 
         if (profiles.isEmpty()) {
             Box(
@@ -122,7 +134,7 @@ class AdminProfilesScreens {
         }
 
         profileToDelete?.let { profile ->
-            ConfirmDeleteDialog(
+            confirmDeleteDialog.ConfirmDeleteDialog(
                 itemDescription = "the profile of ${profile.fullName}",
                 onConfirm = {
                     onDelete(profile)
@@ -238,7 +250,7 @@ class AdminProfilesScreens {
         }
 
         if (showDialog) {
-            ConfirmDeleteDialog(
+            confirmDeleteDialog.ConfirmDeleteDialog(
                 itemDescription = "the profile of ${profile.fullName}",
                 onConfirm = {
                     showDialog = false
