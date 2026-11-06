@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -42,15 +44,16 @@ fun OwnerMenuScreen(navController: NavController, ownerID: String) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
+            Spacer(modifier = Modifier.height(128.dp))
             Text(
                 text = "Welcome Owner",
                 fontSize = 34.sp
             )
-            Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.height(128.dp))
 
             OwnerOptionsButton(
                 "My Campsites",
@@ -69,6 +72,8 @@ fun OwnerMenuScreen(navController: NavController, ownerID: String) {
             OwnerOptionsButton("Past Notifications", "", "", navController) // TODO
             Spacer(modifier = Modifier.height(16.dp))
             OwnerOptionsButton("Active Reservations", "", "", navController) // TODO
+            Spacer(modifier = Modifier.height(16.dp))
+            OwnerOptionsButton("POLICY AND GUIDELINES", "PoliciesAndGuidelines", "", navController)
         }
     }
 }

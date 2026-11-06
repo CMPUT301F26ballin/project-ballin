@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
@@ -68,6 +69,7 @@ class ActiveReservationScreen {
         //Looked up how to make a dialog in compose
         //https://developer.android.com/develop/ui/compose/components/dialog#dialog-composable
         lotteryToLeave?.let { lottery ->
+            Dialog(onDismissRequest = { lotteryToLeave = null }) {
                 ConfirmActionDialog().ConfirmAction(
                     "Are you sure you want to leave this waiting list?",
                     confirm = { confirmed ->
@@ -80,6 +82,7 @@ class ActiveReservationScreen {
                 )
             }
         }
+    }
 
 
     /**
@@ -102,7 +105,9 @@ class ActiveReservationScreen {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp))
+                        .padding(16.dp)
+                        .testTag("Active Lottery Card")
+                )
                 {
                     Text(
                         text = "You are registered in a lottery for ${
@@ -124,6 +129,7 @@ class ActiveReservationScreen {
                             onClick = onLeaveClick
                             ,
                             modifier = Modifier.padding(16.dp)
+                                .testTag("Leave Waiting List Button")
                         ) {
                             Text("Leave Waiting List")
                         }
@@ -134,6 +140,7 @@ class ActiveReservationScreen {
 
                             },
                             modifier = Modifier.padding(16.dp)
+                                .testTag("Owner Messages Button")
                         ) {
                             Text("Owner Messages")
                         }
@@ -162,6 +169,7 @@ class ActiveReservationScreen {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .testTag("Current Reservation Card")
         ) {
             Text(
                 text = "${campsite?.name}\n" +
