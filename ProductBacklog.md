@@ -5,7 +5,7 @@
 - Story Points: 1
 - Risk: Low
 
-**US 01.01.02 As an entrant, I want to filter campsites by location, date, and number of guests.** ✅
+**US 01.01.02 As an entrant, I want to filter campsites by location, date, and number of guests.** 
 - Story Points: 2
 - Risk: Low
 
@@ -21,11 +21,11 @@
 - Story Points: 3
 - Risk: Low
 
-**US 01.01.06 As an entrant, I want to join an active lottery from the campsite details screen.** ✅
+**US 01.01.06 As an entrant, I want to join an active lottery from the campsite details screen.** 
 - Story Points: 1
 - Risk: Low
 
-**US 01.02.01 As an entrant, I want to join the waiting list for a campsite lottery.** ✅
+**US 01.02.01 As an entrant, I want to join the waiting list for a campsite lottery.** 
 - Story Points: 3
 - Risk: Low
 
@@ -41,11 +41,11 @@
 - Story Points: 5
 - Risk: Medium
 
-**US 01.04.01 As an entrant, if I win the lottery, I want to see available dates that I can reserve the campsite for.** ✅
+**US 01.04.01 As an entrant, if I win the lottery, I want to see available dates that I can reserve the campsite for.** 
 - Story Points: 8
 - Risk: Low
 
-**US 01.04.02 As an entrant, if I win a multiple campsite lottery, I want to choose which campsite to reserve and which dates I want.** ✅
+**US 01.04.02 As an entrant, if I win a multiple campsite lottery, I want to choose which campsite to reserve and which dates I want.** 
 - Story Points: 8
 - Risk: Low
 
@@ -69,7 +69,7 @@
 - Story Points: 3
 - Risk: Low
 
-**US 01.07.01 As an entrant, I want to cancel my campsite reservation.** ✅
+**US 01.07.01 As an entrant, I want to cancel my campsite reservation.** 
 - Story Points: 3
 - Risk: Low
 
