@@ -12,6 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -21,7 +25,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
+import com.example.project_ballin.AdminSearchField
 import com.example.project_ballin.Notification
+import com.example.project_ballin.matchesSearch
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 
@@ -59,7 +65,20 @@ fun NotificationListScreen(
                     Text("No notifications to browse through")
                 }
             } else {
-                ListNotifications(navController, notifications)
+                // What the admin typed in the search box (kept when the screen rotates)
+                var query by rememberSaveable { mutableStateOf("") }
+                val results = notifications.filter { it.matchesSearch(query) }
+
+                AdminSearchField(query, onQueryChange = { query = it }, placeholder = "Search notifications")
+
+                if (results.isEmpty()) {
+                    Text(
+                        "No notifications match \"${query.trim()}\".",
+                        modifier = Modifier.padding(16.dp).testTag("noSearchResults")
+                    )
+                } else {
+                    ListNotifications(navController, results)
+                }
             }
         }
     }
