@@ -58,7 +58,9 @@ fun Signup(navController: NavController){
 
         Button(
             onClick = {
-                val ownerID = Uuid.random() // just for testing
+                //val ownerID = Uuid.random() // just for testing
+                val ownerID = Uuid.parse("e0eb2a9b-e66d-42f6-8e20-88ff3085889c")
+                // test Uuid so i have the same account each run
                 navController.navigate("OwnerMenu/${ownerID}")
             },
             modifier = Modifier.testTag("ownerSignin") // for testing
