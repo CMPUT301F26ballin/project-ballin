@@ -26,7 +26,10 @@ class SignUp{
      *
      */
     @Composable
-    fun Signup(navController: NavController) {
+    fun Signup(
+        navController: NavController,
+        userCurrentSession: UserCurrentSession
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,6 +80,7 @@ class SignUp{
 
             Button(
                 onClick = {
+                    userCurrentSession.isAdmin = true
                     navController.navigate("Admin Menu Screen")
                 },
                 modifier = Modifier.testTag("adminSignin") // for testing
@@ -90,6 +94,6 @@ class SignUp{
     @Composable
     fun SignupPreview() {
         val navController = rememberNavController()
-        Signup(navController)
+        Signup(navController, userCurrentSession = UserCurrentSession())
     }
 }

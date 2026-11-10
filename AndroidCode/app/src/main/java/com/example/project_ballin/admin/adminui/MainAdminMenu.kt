@@ -1,11 +1,8 @@
 package com.example.project_ballin
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -25,9 +22,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.reusableui.TopAppBar
 
-// Note: Might have to add a switch mode button at bottom to
-// switch modes (owner, entrant, admin), bc the top bar shows
-// the title of the screen, so find diff location
 /**
  *The main menu seen by admins logging into the app
  * */
@@ -40,7 +34,10 @@ class MainAdminMenu(){
      */
 
     @Composable
-    fun AdminMenuScreen(navController: NavController) {
+    fun AdminMenuScreen(
+        navController: NavController,
+        userCurrentSession: UserCurrentSession
+    ) {
         TopAppBar(
             navController = navController,
             screenTitle = "Admin Home",
@@ -100,7 +97,7 @@ class MainAdminMenu(){
                 //Put temporary destination so it doesn't crash rn
                 AdminOptionButton(
                     "SWITCH MODES",
-                    "Admin Menu Screen",
+                    "AdminSwitchModes",
                     "switchModesButton",
                     navController
                 )
@@ -156,6 +153,6 @@ class MainAdminMenu(){
     @Composable
     fun AdminMenuScreenPreview() {
         val navController = rememberNavController()
-        AdminMenuScreen(navController)
+        AdminMenuScreen(navController, UserCurrentSession())
     }
 }
