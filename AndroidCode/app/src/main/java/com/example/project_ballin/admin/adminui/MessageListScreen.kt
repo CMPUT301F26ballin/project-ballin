@@ -139,7 +139,7 @@ class MessageListScreen {
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
-                .testTag("checkMessage${index + 1}") // for UI testing
+                .testTag("checkMessage${message.ID}") // for UI testing
                 .width(250.dp)
                 .height(85.dp)
         ) {
