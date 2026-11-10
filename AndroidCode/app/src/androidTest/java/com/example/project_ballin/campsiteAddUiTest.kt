@@ -17,6 +17,12 @@ class campsiteAddUiTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    @Before
+    fun setup() {
+        composeTestRule.mainClock.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+    }
+
     @Test
     fun addCampsite_inputAllFields_ConfirmCampsiteIsSeen(){
 

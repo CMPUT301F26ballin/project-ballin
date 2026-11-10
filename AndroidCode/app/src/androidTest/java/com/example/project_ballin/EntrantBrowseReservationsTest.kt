@@ -109,6 +109,12 @@ class EntrantBrowseReservationsTest {
         entrant.lostLotteries.add(lottery3)
     }
 
+    @Before
+    fun setup() {
+        composeTestRule.mainClock.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+    }
+
     @Test
     fun NavigateToBrowseReservations_BrowseReservationsScreenIsDisplayed_WonAndLostLotteriesShow() {
         composeTestRule

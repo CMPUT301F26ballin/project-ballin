@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -12,6 +13,12 @@ import org.junit.Test
 class EntrantScreensTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
+
+    @Before
+    fun setup() {
+        composeTestRule.mainClock.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+    }
 
     @Test
     fun EntrantGoesToSearchCampsites(){
@@ -111,7 +118,7 @@ class EntrantScreensTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Policy and Guidelines")
+            .onNodeWithText("Policy Guidelines")
             .assertExists()
     }
 }

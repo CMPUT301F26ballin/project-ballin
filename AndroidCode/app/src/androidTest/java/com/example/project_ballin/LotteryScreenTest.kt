@@ -51,6 +51,12 @@ class LotteryScreenTest {
         )
     }
 
+    @Before
+    fun setup() {
+        composeTestRule.mainClock.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+    }
+
     @Test
     fun lottery_list_shows_owner_lotteries(){
         composeTestRule.setContent {

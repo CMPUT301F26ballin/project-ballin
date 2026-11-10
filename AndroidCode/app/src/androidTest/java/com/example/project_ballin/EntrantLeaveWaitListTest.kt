@@ -77,6 +77,12 @@ class EntrantLeaveWaitListTest {
         entrant.activeLotteries.add(lottery)
     }
 
+    @Before
+    fun setup() {
+        composeTestRule.mainClock.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+    }
+
     @Test
     fun NavigateToBrowseReservations_BrowseReservationsScreenIsDisplayed_WonAndLostLotteriesShow() {
         composeTestRule
