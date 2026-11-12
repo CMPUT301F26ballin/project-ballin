@@ -34,4 +34,4 @@ Salix: Finish the lottery screens (view list, edit details, pick campsites). Als
 
 yuming: search bar for admin
 
-Leighan: switch modes for admin, and add necessary tests for it. Get the foundation of viewing owners,review,ratings that violate app policy done.
+Leighan: switch modes for admin, and add necessary tests for it. Get the foundation of viewing owners,review,ratings that violate app policy done. Also have to keep in mind/maybe do: update the UI and Admin storyboard.
