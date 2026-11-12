@@ -36,6 +36,7 @@ import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.MainOwnerMenu
 import com.example.project_ballin.reusableui.InitialScreen
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
+import com.example.project_ballin.reusableui.UserReportScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
@@ -79,6 +80,7 @@ class BallinApp(){
         val ownerList = remember { OwnerList() }
         val adminList = remember { AdminList() }
         val lotteryList = remember { LotteryList() }
+        val userReportList = remember { ReportList() }
 
         //temporary for testing
         var currentEntrant by remember {
@@ -466,6 +468,17 @@ class BallinApp(){
 
             composable("AdminSwitchModes") {
                 AdminSwitchModesScreen().AdminSwitchModes(navController, userCurrentSession)
+            }
+
+            composable("UserReportScreen/{subjectReport}/{clickedID}") {
+                val subjectReport = it.arguments!!.getString("subjectReport")
+                val clickedID = it.arguments!!.getString("clickedID")
+                UserReportScreen().UserReportReason(
+                    navController,
+                    subjectReport!!,
+                    clickedID!!,
+                    onAdd = {userReportList.addReport(it)}
+                )
             }
 
             composable("MainEntrantMenu") {
