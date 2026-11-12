@@ -7,5 +7,15 @@ package com.example.project_ballin
  * as it'll have to rely on user reports for the rest
  */
 
-class ContentViolationDetector {
+class ContentViolationDetector(
+    var reportList: ReportList
+) {
+    // fun duplicateRatings() {}
+
+    // fun spamRatings() {}
+
+    // fun spamReviews() {}
+
+    // fun generateNewReport() {}
+    
 }
