@@ -14,12 +14,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.project_ballin.UserCurrentSession
 import com.example.project_ballin.reusableui.TopAppBar
 import kotlin.uuid.Uuid
 /**
@@ -40,7 +42,11 @@ class MainOwnerMenu(){
  * */
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun OwnerMenuScreen(navController: NavController, ownerID: String) {
+    fun OwnerMenuScreen(
+        navController: NavController,
+        ownerID: String,
+        userCurrentSession: UserCurrentSession
+    ) {
         TopAppBar(
             navController = navController,
             screenTitle = "Owner Homepage",
@@ -84,6 +90,16 @@ class MainOwnerMenu(){
                     "",
                     navController
                 )
+
+                if (userCurrentSession.isAdmin) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    OwnerOptionsButton(
+                        "SWITCH MODES",
+                        "AdminSwitchModes",
+                        "switchModesButton",
+                        navController
+                    )
+                }
             }
         }
     }

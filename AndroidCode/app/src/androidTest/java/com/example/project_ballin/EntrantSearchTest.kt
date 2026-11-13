@@ -51,6 +51,11 @@ class EntrantSearchTest {
         campsiteList.addCampsite(campsite)
     }
 
+    @Before
+    fun setup() {
+        composeTestRule.mainClock.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+    }
 
 
     @Test

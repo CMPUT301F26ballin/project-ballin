@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
+import com.example.project_ballin.UserCurrentSession
 import com.example.project_ballin.reusableui.TopAppBar
 
 /**
@@ -33,7 +34,10 @@ class MainEntrantMenu(){
      * @param navController the navigation controller for the app
      */
     @Composable
-    fun EntrantMenuScreen(navController: NavController) {
+    fun EntrantMenuScreen(
+        navController: NavController,
+        userCurrentSession: UserCurrentSession
+    ) {
         TopAppBar(
             navController,
             screenTitle = "Home",
@@ -74,6 +78,16 @@ class MainEntrantMenu(){
                     "POLICY AND GUIDELINES",
                     navController
                 )
+
+                if (userCurrentSession.isAdmin) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    EntrantHomeButton(
+                        "SWITCH MODES",
+                        "AdminSwitchModes",
+                        "switchModesButton",
+                        navController
+                    )
+                }
             }
 
 
@@ -117,6 +131,6 @@ class MainEntrantMenu(){
     @Composable
     fun EntrantMenuScreenPreview() {
         val navController = rememberNavController()
-        EntrantMenuScreen(navController)
+        EntrantMenuScreen(navController, userCurrentSession = UserCurrentSession())
     }
 }

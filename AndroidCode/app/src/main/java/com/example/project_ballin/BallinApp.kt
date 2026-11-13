@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.project_ballin.admin.adminui.AdminSwitchModesScreen
 import com.example.project_ballin.admin.adminui.NotificationDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.Entrant
@@ -33,7 +34,9 @@ import com.example.project_ballin.owner.ownerUI.CampsiteListScreen
 import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
 import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.MainOwnerMenu
+import com.example.project_ballin.reusableui.InitialScreen
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
+import com.example.project_ballin.reusableui.UserReportScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
@@ -77,6 +80,7 @@ class BallinApp(){
         val ownerList = remember { OwnerList() }
         val adminList = remember { AdminList() }
         val lotteryList = remember { LotteryList() }
+        val userReportList = remember { ReportList() }
 
         //temporary for testing
         var currentEntrant by remember {
@@ -298,19 +302,21 @@ class BallinApp(){
         val mainOwnerMenu = MainOwnerMenu()
         val mainAdminMenu = MainAdminMenu()
         val mainEntrantMenu = MainEntrantMenu()
+        val userCurrentSession = remember {UserCurrentSession()}
 
         val entrantBrowseCampsites = EntrantBrowseCampsites()
 
         val signUpScreen = SignUp()
 
 
-        NavHost(navController = navController, startDestination = "signup") {
-            composable("signup") { signUpScreen.Signup(navController) }
+        NavHost(navController = navController, startDestination = "initial screen") {
+            composable("initial screen") { InitialScreen().Initial(navController)}
+            composable("signup") { signUpScreen.Signup(navController, userCurrentSession) }
             composable("profile") { editProfileScreen.EditProfileScreen(navController) }
 
             composable("OwnerMenu/{OwnerID}") {
                 val ownerIDString = it.arguments!!.getString("OwnerID")
-                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!)
+                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!, userCurrentSession)
             }
 
             composable("CampsiteListScreen/{OwnerID}") {
@@ -388,7 +394,7 @@ class BallinApp(){
                     updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
             }
 
-            composable("Admin Menu Screen") { mainAdminMenu.AdminMenuScreen(navController) }
+            composable("Admin Menu Screen") { mainAdminMenu.AdminMenuScreen(navController, userCurrentSession) }
 
             composable("AdminCampsites") {
                 AdminCampsiteScreens().AdminCampsiteListScreen(
@@ -473,8 +479,23 @@ class BallinApp(){
                 }
             }
 
+            composable("AdminSwitchModes") {
+                AdminSwitchModesScreen().AdminSwitchModes(navController, userCurrentSession)
+            }
+
+            composable("UserReportScreen/{subjectReport}/{clickedID}") {
+                val subjectReport = it.arguments!!.getString("subjectReport")
+                val clickedID = it.arguments!!.getString("clickedID")
+                UserReportScreen().UserReportReason(
+                    navController,
+                    subjectReport!!,
+                    clickedID!!,
+                    onAdd = {userReportList.addReport(it)}
+                )
+            }
+
             composable("MainEntrantMenu") {
-                mainEntrantMenu.EntrantMenuScreen(navController)
+                mainEntrantMenu.EntrantMenuScreen(navController, userCurrentSession)
             }
 
             composable("EntrantBrowseReservations") {
