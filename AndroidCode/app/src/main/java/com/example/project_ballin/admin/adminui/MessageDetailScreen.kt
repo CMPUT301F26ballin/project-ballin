@@ -27,13 +27,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.project_ballin.entrant.entantui.ConfirmActionDialog
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
-import kotlin.uuid.Uuid
 
 
 class MessageDetailScreen {
@@ -85,14 +82,14 @@ class MessageDetailScreen {
                 ) {
                     Column {
                         MessageDetailRow(
-                            "Sent By Owner ID",
-                            message.ownerID,
-                            "sentBy${message.ownerID}"
+                            "Sent By User ID",
+                            message.senderID,
+                            "sentBy${message.senderID}"
                         )
                         MessageDetailRow(
-                            "Recieved By Entrant ID",
-                            message.entrantID,
-                            "recievedBy${message.entrantID}"
+                            "Recieved By User ID",
+                            message.recipientID,
+                            "recievedBy${message.recipientID}"
                         )
                         MessageDetailRow(
                             "Date Sent",
@@ -157,7 +154,7 @@ class MessageDetailScreen {
     @Preview(showBackground = true)
     @Composable
     fun MessageDetailScreenPreview() {
-        val navcontroller = rememberNavController()
+        val navController = rememberNavController()
         val sampleMessage = Message(
             "1",
             "1",
@@ -166,6 +163,6 @@ class MessageDetailScreen {
             "1"
         )
 
-        MessageDetail(navcontroller, sampleMessage, onDelete = {})
+        MessageDetail(navController, sampleMessage, onDelete = {})
     }
 }

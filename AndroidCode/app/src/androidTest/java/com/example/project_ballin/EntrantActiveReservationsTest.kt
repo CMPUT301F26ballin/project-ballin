@@ -142,6 +142,12 @@ class EntrantActiveReservationsTest {
         entrant.lostLotteries.add(lottery3)
     }
 
+    @Before
+    fun setup() {
+        composeTestRule.mainClock.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+    }
+
     @Test
     fun NavigateToActiveReservations_ActiveReservationsScreenIsDisplayed_ActiveLotteriesShow() {
         composeTestRule

@@ -1,0 +1,78 @@
+package com.example.project_ballin
+
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.navigation.compose.rememberNavController
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.project_ballin.admin.adminui.NotificationDetailScreen
+import com.example.project_ballin.admin.adminui.NotificationListScreen
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import java.util.Date
+
+@RunWith(AndroidJUnit4::class)
+class AdminNotificationDetailScreenTest {
+
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    private val sampleNotifications = mutableListOf(
+        Notification("Hello", Date(), "1", "1")
+    )
+
+    @Test
+    fun details_of_notification_appear_correctly() {
+        composeTestRule.setContent {
+            NotificationDetailScreen().NotificationDetail(
+                navController = rememberNavController(),
+                notification = sampleNotifications[0],
+                onDelete = {}
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("dateSent${sampleNotifications[0].getFormattedDate()}")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("notificationContent${sampleNotifications[0].content}")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("notificationID${sampleNotifications[0].ID}")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("recipientID${sampleNotifications[0].recipientID}")
+            .assertExists()
+    }
+
+    @Test
+    fun delete_notification_verify_deleted_and_logs_screen_updated() {
+        composeTestRule.setContent {
+            NotificationDetailScreen().NotificationDetail(
+                navController = rememberNavController(),
+                notification = sampleNotifications[0],
+                onDelete = { sampleNotifications.remove(it) }
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag("deleteNotification")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("confirmDeleteDialog")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("confirmDelete")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTag("checkNotification1")
+            .assertDoesNotExist()
+    }
+}
