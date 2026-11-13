@@ -291,6 +291,12 @@
 - Story Points: 2
 - Risk: Low
 
+**US 03.08.01 As an admin, I want to remove campsite ratings that violate app policy.**
+- Story Points: 3
+- Risk Medium
 
+**US 03.08.02 As an admin, I want to remove campsite reviews that violate app policy.**
+- Story Points: 3
+- Risk Medium
 
 

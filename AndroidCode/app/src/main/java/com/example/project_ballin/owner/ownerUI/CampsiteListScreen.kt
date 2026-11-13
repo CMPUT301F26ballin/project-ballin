@@ -124,7 +124,7 @@ class CampsiteListScreen()
                 .fillMaxWidth()
                 .clickable { onClick() }
                 .padding(16.dp)
-                .testTag("Campsite!")) {
+                .testTag(site.name)) {
 
 
             Row(

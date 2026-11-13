@@ -115,8 +115,9 @@ class LotteryDetailScreen() {
                                 regEnd == null ||
                                 bookStart == null ||
                                 bookEnd == null ||
-                                occ == null ||  //waitlist capacity is allowed to be null
+                                (occ != null && occ <= 0) ||
                                 winners == null ||
+                                winners <= 0 ||
                                 sites.isEmpty() ||
                                 regEnd < regStart ||
                                 bookEnd < bookStart ||
@@ -164,7 +165,7 @@ class LotteryDetailScreen() {
                 OutlinedTextField(
                     value = occupancy,
                     onValueChange = { occupancy = it },
-                    label = { Text("Waitlist limit") },
+                    label = { Text("Waitlist limit (optional)") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("WaitlistLimitEntry"),

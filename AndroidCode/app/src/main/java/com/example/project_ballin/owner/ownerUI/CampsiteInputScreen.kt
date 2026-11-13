@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DateRangePicker
@@ -56,6 +57,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
@@ -69,6 +71,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import androidx.core.graphics.scale
 import java.io.ByteArrayOutputStream
+import kotlin.math.roundToInt
 
 /**
  * The view class where owners can input campsite information to be turned into a campsite object
@@ -220,7 +223,8 @@ class CampsiteInputScreen(){
                         label = { Text("Price Per Night") },
                         modifier = Modifier
                             .weight(1f)
-                            .testTag("campPrice")
+                            .testTag("campPrice"),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                 }
 
@@ -302,7 +306,8 @@ class CampsiteInputScreen(){
                         modifier = Modifier
                             .weight(1f)
                             .testTag("campOccupancy")
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
                     )
                 }
 
@@ -370,7 +375,8 @@ class CampsiteInputScreen(){
                         modifier = Modifier
                             .weight(1f)
                             .testTag("campLat")
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     OutlinedTextField(
@@ -380,7 +386,8 @@ class CampsiteInputScreen(){
                         modifier = Modifier
                             .weight(1f)
                             .testTag("campLon")
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                 }
 
@@ -460,7 +467,7 @@ class CampsiteInputScreen(){
                                             tags = campTags,
                                             rules = campRules,
                                             description = campDesc,
-                                            occupancy = campOccupancy.toInt(),
+                                            occupancy = campOccupancy.toFloat().roundToInt(),
                                             images = campByteArray,
                                             //Campsite needs other elements based on what is commented out in campsite object
                                             locationName = campLocation,
