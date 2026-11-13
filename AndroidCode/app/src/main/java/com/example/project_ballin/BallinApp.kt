@@ -407,6 +407,19 @@ class BallinApp(){
                 )
             }
 
+            composable("AdminImages") {
+                val adminImageScreens = AdminImageScreens()
+                adminImageScreens.AdminImageListScreen(
+                    navController,
+                    campsites = campsiteList.campsites,
+                    onRemove = { image ->
+                        adminImageScreens.removeImage(image) { oldSite, newSite ->
+                            campsiteList.updateCampsite(oldSite, newSite)
+                        }
+                    }
+                )
+            }
+
             composable("AdminProfiles") {
                 AdminProfilesScreens().AdminProfileListScreen(
                     navController,
