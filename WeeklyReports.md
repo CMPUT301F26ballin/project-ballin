@@ -54,3 +54,7 @@ Leighan: Implemented classes relating to messages and notifications, and also ma
 Nick: search bar with filters mostly finished - filter by dates, now working on account creation 
 
 Salix: Added the basic implementation of the lottery screens and navigation
+
+# Week 5:
+
+Peter: I implement
