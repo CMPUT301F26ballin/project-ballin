@@ -58,3 +58,5 @@ Salix: Added the basic implementation of the lottery screens and navigation
 # Week 5:
 
 Peter: I implement
+
+Salix: Implement lottery notifications, add multi owner lotteries, notification history list, help with reservations
