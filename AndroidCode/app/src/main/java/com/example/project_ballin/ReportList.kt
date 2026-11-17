@@ -7,7 +7,7 @@ import com.google.firebase.firestore.firestore
 /**
  * A list that that stores all the reports of users
  */
-class ReportList {
+open class ReportList {
     private val _reports = mutableStateListOf<Report>()
 
     private val db = Firebase.firestore
@@ -49,10 +49,18 @@ class ReportList {
         reportsRef.document(report.ID).set(report)
     }
 
-
     fun getAllReports(): List<Report> {
         return reports
     }
+
+    /**
+     * Gets a report from the database with specific ID
+     *
+     * @param idBeingReported the ID of the reported ID to get
+     */
+    fun getReport(idBeingReported: String): Report? =
+        _reports.find { it.idBeingReported == idBeingReported }
+
 
     /**
      * Gets a report from the database related to the subject given
