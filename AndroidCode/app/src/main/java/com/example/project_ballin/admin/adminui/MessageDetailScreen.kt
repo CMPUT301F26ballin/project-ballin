@@ -1,16 +1,15 @@
 package com.example.project_ballin
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,50 +59,17 @@ class MessageDetailScreen {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "DETAILS",
-                    fontSize = 34.sp,
-                    color = MaterialTheme.colorScheme.primary
-                )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(fraction = 0.8f)
-                        .padding(16.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                ) {
-                    Column {
-                        MessageDetailRow(
-                            "Sent By User ID",
-                            message.senderID,
-                            "sentBy${message.senderID}"
-                        )
-                        MessageDetailRow(
-                            "Recieved By User ID",
-                            message.recipientID,
-                            "recievedBy${message.recipientID}"
-                        )
-                        MessageDetailRow(
-                            "Date Sent",
-                            message.getFormattedDate(),
-                            "dateSent${message.getFormattedDate()}"
-                        )
-                        MessageDetailRow(
-                            "Message Content",
-                            message.content,
-                            "messageContent${message.content}"
-                        )
-                    }
-                }
+                MessageDetailRows("Sent By User ID", message.senderID, "sentBy${message.senderID}")
+                MessageDetailRows("Received By User ID", message.recipientID, "recievedBy${message.recipientID}")
+                MessageDetailRows("Date Sent", message.getFormattedDate(), "dateSent${message.getFormattedDate()}")
+                MessageDetailRows("Message Content", message.content, "messageContent${message.content}")
+                MessageDetailRows("Message ID", message.ID, "messageID${message.ID}")
+                Spacer(modifier = Modifier.height(68.dp))
 
                 Button(
                     onClick = {
@@ -112,11 +79,12 @@ class MessageDetailScreen {
                         containerColor = Color.Red
                     ),
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.testTag("deleteMessage") // for UI testing
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("removeMessage") // for UI testing
                 ) {
-                    Text("Delete Message")
+                    Text("Remove Message")
                 }
-
             }
 
             messageToDelete?.let { message ->
@@ -134,20 +102,34 @@ class MessageDetailScreen {
     }
 
     /**
-     * Shows a specific part of the message and puts it in a row
+     * Shows a specific part of the message and puts it in rows
+     *
+     * @param descriptionText the description of the message
+     * @param content the content of the message
+     * @param testTag the tag to use for testing
      */
     @Composable
-    fun <T> MessageDetailRow(descriptionText: String, content: T, testTag: String) {
+    fun <T> MessageDetailRows(descriptionText: String, content: T, testTag: String) {
+        Spacer(modifier = Modifier.height(34.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
                 .testTag(testTag)
         ) {
             Text(
-                text = "${descriptionText} : ${content}",
-                color = Color(255, 255, 255)
+                text = "${descriptionText}:",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
             )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text("${content}")
         }
     }
 

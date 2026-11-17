@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,9 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -156,10 +159,15 @@ class AdminImageScreens {
      */
     @Composable
     fun AdminImageItem(image: AdminImage, onRemoveClick: () -> Unit) {
-        Card(modifier = Modifier.fillMaxWidth().testTag("adminImageItem_${image.key}")) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("adminImageItem_${image.key}"),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 AdminImageThumbnail(image.image, testTag = "adminImage_${image.key}")
                 Text(
@@ -167,12 +175,13 @@ class AdminImageScreens {
                     fontSize = 12.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 4.dp),
+                    fontWeight = FontWeight.Bold
                 )
                 Button(
                     onClick = onRemoveClick,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
+                        containerColor = Color.Red
                     ),
                     modifier = Modifier.width(150.dp).testTag("removeImage_${image.key}")
                 ) {

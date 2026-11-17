@@ -308,7 +308,6 @@ class BallinApp(){
 
         val signUpScreen = SignUp()
 
-
         NavHost(navController = navController, startDestination = "initial screen") {
             composable("initial screen") { InitialScreen().Initial(navController)}
             composable("signup") { signUpScreen.Signup(navController, userCurrentSession) }
@@ -446,7 +445,8 @@ class BallinApp(){
             composable("AdminMessages") {
                 MessageListScreen().MessageList(
                     navController,
-                    messageList.getAllMessages()
+                    messageList.getAllMessages(),
+                    onDelete = { messageList.deleteMessage(it) }
                 )
             }
 
@@ -457,14 +457,16 @@ class BallinApp(){
                     MessageDetailScreen().MessageDetail(
                         navController,
                         message,
-                        onDelete = { messageList.deleteMessage(it) })
+                        onDelete = { messageList.deleteMessage(it) }
+                    )
                 }
             }
 
             composable("AdminNotifications") {
                 NotificationListScreen().NotificationList(
                     navController,
-                    notificationList.getAllNotifications()
+                    notificationList.getAllNotifications(),
+                    onDelete = { notificationList.deleteNotification(it) }
                 )
             }
 
