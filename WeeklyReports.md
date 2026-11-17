@@ -57,4 +57,4 @@ Salix: Added the basic implementation of the lottery screens and navigation
 
 # Week 5:
 
-Peter: I implement
+Peter: I implemented a general date picker for picking availability in the campsite creation. I updated old UI mockups and diagrams to better reflect the current content and to address TA concerns. I worked on the UML class diagram, and worked on some UI issues to make things more consistent.
