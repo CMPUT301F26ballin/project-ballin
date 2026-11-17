@@ -4,8 +4,12 @@ package com.example.project_ballin
  * This should generate or look through list of owners
  * and see if they have any violations.
  * Can't completely check if they violate all policies
- * as it'll have to rely on user reports on the owner
+ * as it'll have to rely on user reports for the rest of it
  */
+
+// NOTE TO SELF: I SHOULD PROBABLY MAKE ONE SINGLE OBJECT FOR THIS
+// BUT EACH TIME A NEW CAMPSITE IS MADE BY OWNERS
+// THIS GETS TRIGGERED AND CHECKS IF DUPLICATE
 
 class OwnerViolationDetector(
     var reportList: ReportList
@@ -16,11 +20,10 @@ class OwnerViolationDetector(
      * and checks if there are any duplicates.
      *
      * @param ownerID the ID of the owner
-     * @param campsites the list of campsites
+     * @param ownerCampsites the list of campsites
      * @return boolean, true if there are duplicates, false if no duplicates found
      */
-    fun duplicateCampsiteListings(ownerID: String, campsites: CampsiteList): Boolean{
-        val ownersCampsites = campsites.getOwnerSites(ownerID)
+    fun duplicateCampsiteListings(ownerID: String, ownerCampsites: MutableList<Campsite>): Boolean{
 
         // Campsites with exact lat, lon, locationName are most likely a duplicate listing
         // because they have the same physical location, unlike a name or other property which
@@ -28,7 +31,7 @@ class OwnerViolationDetector(
         // Source Used: https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-triple/
         val nonDuplicateCampsites = mutableSetOf<Triple<Double,Double,String>>()
 
-        for (campsite in ownersCampsites) {
+        for (campsite in ownerCampsites) {
             nonDuplicateCampsites.add(Triple(
                 campsite.lat,
                 campsite.lon,
@@ -37,8 +40,7 @@ class OwnerViolationDetector(
         }
 
         // if no duplicates, the size of the lists should be the same
-        // because a set (nonDuplicateCampsites) doesn't allow copies to be added,
-        return ownersCampsites.size != nonDuplicateCampsites.size
+        return ownerCampsites.size != nonDuplicateCampsites.size
     }
 
     /**
@@ -46,19 +48,25 @@ class OwnerViolationDetector(
      * If they have one, a report is generated.
      *
      * @param ownerID the ID of the owner
-     * @param campsites the campsites repository
+     * @param ownerCampsites the campsites repository
      */
-    fun generateNewReport(ownerID: String, campsites: CampsiteList) {
-        val violationCommitted = (duplicateCampsiteListings(ownerID, campsites))
+    fun generateNewReport(ownerID: String, ownerCampsites: MutableList<Campsite>) {
+        val violationCommitted = (duplicateCampsiteListings(ownerID, ownerCampsites))
 
-        if (violationCommitted) {
+        // Checking if owner already has at least one report/violation
+        // for duplicate camp listings already
+        val existingReport = (
+                reportList.getReport(ownerID) != null)
+                &&
+                reportList.getReport(ownerID)!!.reportSubject == "Owner Has Posted Duplicate Listings"
+
+        if (violationCommitted && !existingReport) {
             val newReport = Report(
                 "Owner Has Posted Duplicate Listings",
                 "Campsite Owner",
                 ownerID,
                 "TODO"
             )
-
             reportList.addReport(newReport)
         }
     }
