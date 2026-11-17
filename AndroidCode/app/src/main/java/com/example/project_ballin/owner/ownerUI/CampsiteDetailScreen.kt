@@ -172,17 +172,39 @@ class CampsiteDetailScreen(){
                             Text("Update Campsite")
                         }
                     }
-                    /*Row(modifier = Modifier
+                    Row(modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)){
-                        Button(onClick = {navController.navigate("CampsiteInputScreen/${site.ID}/${site.ownerID}")},
+                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Active/${site.ownerID}")},
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp)
-                                .testTag("viewReservationsButton")) {
+                                .testTag("viewActiveReservationsButton")) {
                             Text("View Active Reservations")
                         }
-                    }*/
+                    }
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)){
+                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Past/${site.ownerID}")},
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .testTag("viewPastReservationsButton")) {
+                            Text("View Past Reservations")
+                        }
+                    }
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)){
+                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Cancelled/${site.ownerID}")},
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .testTag("viewPastReservationsButton")) {
+                            Text("View Past Reservations")
+                        }
+                    }
                 }
             }
         }
