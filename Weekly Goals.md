@@ -41,3 +41,5 @@ Leighan: switch modes for admin, and add necessary tests for it. Get the foundat
 Salix: Implement the new multi owner lotteries, the user waitlist screen, waitlist notifications, help with reservations
 
 yuming: add image test, put in report button 
+
+Leighan: finishing up admin side - switch modes, reporting system and seeing/removing ratings,reviews,owners that violate app policy.
