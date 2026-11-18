@@ -85,6 +85,10 @@
 - Story Points: 5
 - Risk: Low
 
+**US 01.08.02 As an entrant, I want to add, update, or remove my profile image/**
+-Story Points: 3
+-Risk: Low
+
 **US 01.09.01 As an entrant, I want to be identified by my device, so that I do not have to use a username and password.** ✅
 - Story Points: 8
 - Risk: Medium
@@ -104,6 +108,14 @@
 **US 01.13.01 As an entrant, I want to give a rating for a campsite.**
 - Story Points: 5
 - Risk: Low
+
+**US 01.13.02 As an entrant, I want to post a review for a campsite.**
+- Story Points: 5
+- Risk: Medium
+
+**US 01.14.01 As an entrant, I want to message the campsite owner for a reservation that I have.**
+- Story Points: 5
+- Risk: Medium  
 
 ## Campsite Owner:  
 **US 02.01.01 As a campsite owner, I want to register my campsite with the app.**  ✅

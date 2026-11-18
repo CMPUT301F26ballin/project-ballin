@@ -93,6 +93,12 @@ class EntrantDeclineReservationTest {
         entrant.wonLotteries.add(lottery2)
     }
 
+    @Before
+    fun setup() {
+        composeTestRule.mainClock.advanceTimeBy(2500)
+        composeTestRule.waitForIdle()
+    }
+
     @Test
     fun NavigateToBrowseReservations_WonAndLostLotteriesShow_DeclineLottery() {
         composeTestRule

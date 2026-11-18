@@ -2,11 +2,12 @@ package com.example.project_ballin
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -25,14 +26,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
-import kotlin.uuid.Uuid
-
 
 
 class MessageListScreen {
     val adminSearch = AdminSearch()
+    val confirmDeleteDialog = ConfirmDeleteDialog()
 
     /**
      * Searches a message by its content, sender, receiver, and date sent.
@@ -41,7 +45,7 @@ class MessageListScreen {
      * @return true if the message matches the search
      */
     fun Message.matchesSearch(query: String): Boolean =
-        adminSearch.matchesQuery(query, content, ownerID, entrantID, getFormattedDate())
+        adminSearch.matchesQuery(query, content, senderID, recipientID, getFormattedDate())
 
     /**
      * A composable that shows the overview of all the messages
@@ -54,8 +58,10 @@ class MessageListScreen {
     @Composable
     fun MessageList(
         navController: NavController,
-        messages: List<Message>
+        messages: List<Message>,
+        onDelete: (Message) -> Unit
     ) {
+
         TopAppBar(
             navController = navController,
             screenTitle = "Messages",
@@ -66,7 +72,6 @@ class MessageListScreen {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-
                 Spacer(modifier = Modifier.height(34.dp))
 
                 if (messages.isEmpty()) {
@@ -93,10 +98,9 @@ class MessageListScreen {
                             modifier = Modifier.padding(16.dp).testTag("noSearchResults")
                         )
                     } else {
-                        ListMessages(navController, results)
+                        ListMessages(navController, results, onDelete = {onDelete(it)})
                     }
                 }
-
             }
         }
     }
@@ -106,9 +110,12 @@ class MessageListScreen {
      *
      * @param navController the navController of the app
      * @param messages the list of messages to iterate through
+     * @param onDelete runs when the delete button is pressed
      */
     @Composable
-    fun ListMessages(navController: NavController, messages: List<Message>) {
+    fun ListMessages(navController: NavController, messages: List<Message>, onDelete: (Message) -> Unit) {
+        var messageToDelete by remember { mutableStateOf<Message?>(null) }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -116,9 +123,20 @@ class MessageListScreen {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             itemsIndexed(messages) { index, message ->
-                MessageButtonRow(index, message, navController)
+                MessageButtonRow(index, message, navController, onDelete = { messageToDelete = message })
                 Spacer(modifier = Modifier.height(16.dp))
             }
+        }
+
+        messageToDelete?.let { message ->
+            confirmDeleteDialog.ConfirmDeleteDialog(
+                itemDescription = "the message",
+                onConfirm = {
+                    onDelete(message)
+                    messageToDelete = null
+                },
+                onCancel = { messageToDelete = null }
+            )
         }
     }
 
@@ -129,28 +147,51 @@ class MessageListScreen {
      * @param index the index of the message in the list
      * @param message the message to show
      * @param navController the navController of the app
+     * @param onDelete runs when the delete button is pressed
      */
     @Composable
-    fun MessageButtonRow(index: Int, message: Message, navController: NavController) {
-
+    fun MessageButtonRow(
+        index: Int,
+        message: Message,
+        navController: NavController,
+        onDelete: (Message) -> Unit
+    ) {
         Button(
             onClick = {
                 navController.navigate("AdminMessageDetails/${message.ID}")
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
-                .testTag("checkMessage${index + 1}") // for UI testing
-                .width(250.dp)
-                .height(85.dp)
+                .testTag("checkMessage${message.ID}") // for UI testing
+                .fillMaxWidth()
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Message ${index + 1}")
-                Text(
-                    text = "Date Sent: ${message.getFormattedDate()}",
-                    fontSize = 10.sp
-                )
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = "Message ${index + 1}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text("Date Sent: ${message.getFormattedDate()}")
+                    Text("Sender: ${message.senderID}")
+                }
+
+                Button(
+                    onClick = { onDelete(message) },
+                    modifier = Modifier
+                        .testTag("removeMessage_${message.ID}"), // for UI testing
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red
+                    )
+                ) {
+                    Text("Remove")
+                }
             }
         }
     }
@@ -164,6 +205,6 @@ class MessageListScreen {
             Message("1", "1", "Hello", Date(), "1"),
             Message("2", "2", "Hi", Date(), "2")
         )
-        MessageList(navController, sampleMessages)
+        MessageList(navController, sampleMessages, onDelete = {})
     }
 }
