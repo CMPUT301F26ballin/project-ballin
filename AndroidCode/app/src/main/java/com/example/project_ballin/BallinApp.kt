@@ -25,7 +25,6 @@ import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 import com.example.project_ballin.entrant.entantui.MainEntrantMenu
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
 import com.example.project_ballin.lottery.Lottery
-
 import com.example.project_ballin.lottery.LotteryList
 import com.example.project_ballin.owner.Owner
 //import com.example.project_ballin.owner.ownerUI.CampsiteDetailScreen commented out cuz its giving me an error -Nick
@@ -36,6 +35,7 @@ import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.MainOwnerMenu
 import com.example.project_ballin.reusableui.InitialScreen
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
+import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
@@ -87,7 +87,7 @@ class BallinApp(){
             mutableStateOf<Entrant?>(
                 Entrant(
                     firstName = "Nick",
-                    phoneNum = "123",
+                    phoneNum = "123567890",
                     email = "nick@ualberta.ca",
                     deviceId = "123",
                     profilePic = "a",
@@ -296,7 +296,7 @@ class BallinApp(){
         val QRCodeScanner = QRCodeScanner()
 
         //PROFILE SCREEN OBJECTS
-        val editProfileScreen = EditProfileScreen()
+        //val editProfileScreen = EditProfileScreen()
 
         //MENU SCREEN OBJECTS
         val mainOwnerMenu = MainOwnerMenu()
@@ -307,11 +307,13 @@ class BallinApp(){
         val entrantBrowseCampsites = EntrantBrowseCampsites()
 
         val signUpScreen = SignUp()
+        val userProfile = UserProfile()
 
-        NavHost(navController = navController, startDestination = "initial screen") {
-            composable("initial screen") { InitialScreen().Initial(navController)}
-            composable("signup") { signUpScreen.Signup(navController, userCurrentSession) }
-            composable("profile") { editProfileScreen.EditProfileScreen(navController) }
+        NavHost(navController = navController, startDestination = "signup") {
+            composable("signup") { signUpScreen.Signup(navController) }
+            composable("createprofile") { userProfile.CreateProfile(navController) }
+            composable("editprofile") { userProfile.EditProfile(navController) }
+
 
             composable("OwnerMenu/{OwnerID}") {
                 val ownerIDString = it.arguments!!.getString("OwnerID")
@@ -393,7 +395,10 @@ class BallinApp(){
                     updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
             }
 
-            composable("Admin Menu Screen") { mainAdminMenu.AdminMenuScreen(navController, userCurrentSession) }
+            composable("AdminMenu/{AdminID}") {
+                val adminIDString = it.arguments!!.getString("AdminID")
+                mainAdminMenu.AdminMenuScreen(navController, adminIDString!!)
+            }
 
             composable("AdminCampsites") {
                 AdminCampsiteScreens().AdminCampsiteListScreen(
@@ -481,6 +486,9 @@ class BallinApp(){
                 }
             }
 
+            composable("EntrantMenu/{EntrantID}") {
+                val entrantIDString = it.arguments!!.getString("EntrantID")
+                mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
             composable("AdminSwitchModes") {
                 AdminSwitchModesScreen().AdminSwitchModes(navController, userCurrentSession)
             }

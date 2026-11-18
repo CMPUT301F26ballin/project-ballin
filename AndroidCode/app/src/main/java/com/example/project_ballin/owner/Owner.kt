@@ -1,19 +1,12 @@
 package com.example.project_ballin.owner
 
+import com.example.project_ballin.EntrantList
+import com.example.project_ballin.OwnerList
 import com.example.project_ballin.User
+import com.example.project_ballin.entrant.Entrant
+import kotlin.uuid.Uuid
 
-/**
- * A class that stores all the information of an owner
- * Owners have a name, phone number, email, device ID, profile picture, user ID, and a list of owned campsites.
- * @property firstName the name of the owner
- * @property lastName the last name of the owner
- * @property phoneNum the phone number of the owner
- * @property email the email of the owner
- * @property deviceId the device ID of the owner
- * @property profilePic the profile picture of the owner
- * @property userID the user ID of the owner
- * @property campsitesOwned the campsites owned by the owner
- */
+
 data class Owner(
     override var firstName: String = "",
     override var lastName: String = "",
@@ -21,5 +14,31 @@ data class Owner(
     override var email: String = "",
     override val deviceId: String = "",
     override var profilePic: String = "",
-    override val userID: String = "",
-) : User
+    override val userID: String = Uuid.random().toString(),
+    val campsitesOwned: MutableList<String> = mutableListOf(),
+) : User{
+    override fun updateDetails(
+        firstName: String,
+        lastName: String,
+        phoneNum: String,
+        email: String,
+        profilePic: String,
+        deviceId: String
+    ): Owner = copy(
+        firstName = firstName,
+        lastName = lastName,
+        phoneNum = phoneNum,
+        email = email,
+        profilePic = profilePic,
+        deviceId = deviceId
+    )
+    override fun deleteProfile() {
+        OwnerList().deleteOwner(this)
+    }
+    override fun editProfile() {
+        OwnerList().updateOwner(this)
+    }
+    override fun createProfile() {
+        OwnerList().addOwner(this)
+    }
+}
