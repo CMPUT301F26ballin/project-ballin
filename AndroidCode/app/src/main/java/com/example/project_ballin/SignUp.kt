@@ -23,62 +23,63 @@ enum class UserRole {
  * @param navController a [NavController] to continue to enter details screen
  *
  */
-
-@Composable
-fun Signup(navController: NavController){
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Welcome To Fire-ballin",
-            fontSize = 34.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "The Lottery-based Campsite Reservation App",
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Please sign up to continue:",
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                navController.navigate("createprofile")
-            },
-            modifier = Modifier.testTag("entrantSignin") // for testing
+class SignUp() {
+    @Composable
+    fun Signup(navController: NavController) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Continue") //this will be the only valid button soon
-        }
+            Text(
+                text = "Welcome To Fire-ballin",
+                fontSize = 34.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "The Lottery-based Campsite Reservation App",
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Button(
-            onClick = {
-                val ownerID = "Test1" // just for testing
-                navController.navigate("OwnerMenu/${ownerID}")
-            },
-            modifier = Modifier.testTag("ownerSignin") // for testing
-        ) {
-            Text("Sign-up as Campsite Owner")
-        }
+            Text(
+                text = "Please sign up to continue:",
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = {
+                    navController.navigate("createprofile")
+                },
+                modifier = Modifier.testTag("createProfile") // for testing
+            ) {
+                Text("Continue") //this will be the only valid button soon
+            }
 
-        Button(
-            onClick = {
-                navController.navigate("Admin Menu Screen")
-            },
-            modifier = Modifier.testTag("adminSignin") // for testing
-        ) {
-            Text("Sign-up as Admin")
+            Spacer(modifier = Modifier.height(8.dp))
+
+//            Button(
+//                onClick = {
+//                    val ownerID = "Test1" // just for testing
+//                    navController.navigate("OwnerMenu/${ownerID}")
+//                },
+//                modifier = Modifier.testTag("ownerSignin") // for testing
+//            ) {
+//                Text("Sign-up as Campsite Owner")
+//            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+//            Button(
+//                onClick = {
+//                    navController.navigate("Admin Menu Screen")
+//                },
+//                modifier = Modifier.testTag("adminSignin") // for testing
+//            ) {
+//                Text("Sign-up as Admin")
+//            }
         }
     }
 }
@@ -87,5 +88,6 @@ fun Signup(navController: NavController){
 @Composable
 fun SignupPreview() {
     val navController = rememberNavController()
-    Signup(navController)
+    val signup = SignUp()
+    signup.Signup(navController)
 }

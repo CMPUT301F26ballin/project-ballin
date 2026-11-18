@@ -13,14 +13,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import android.provider.Settings
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.ConfirmDeleteDialog
 import com.example.project_ballin.UserRole
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.entrant.entantui.ConfirmActionDialog
 import java.util.Locale
 
 /**
@@ -68,7 +72,28 @@ fun SelectProfileRole(
     }
 }
 
-//@SuppressLint("SuspiciousIndentation")
+
+
+@Composable
+fun DeleteProfile(
+    navController: NavController,
+    viewModel: UserDetailModel
+){
+
+    Button(
+        onClick = {
+            viewModel.onDelete()
+            navController.navigate("signup")
+
+        },
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Text("Delete Profile")
+
+    }
+}
+
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun InputDetails(
     navController: NavController,
@@ -79,15 +104,25 @@ fun InputDetails(
     val uiState by viewModel.uiState.collectAsState()
 
     val context = LocalContext.current
+    val deviceId = remember {
+        Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ANDROID_ID
+        ) ?: ""
+    }
 
-
-    val deviceId = Settings.Secure.getString(context.contentResolver,
-        Settings.Secure.ANDROID_ID) ?: ""
-        viewModel.setDeviceId(deviceId)
+    LaunchedEffect(deviceId, mode) {
+        if (mode == "create") {
+            viewModel.setDeviceId(deviceId)
+        } else {
+            viewModel.loadExistingUser(deviceId)
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -150,13 +185,59 @@ fun InputDetails(
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Recieve Notifications")
+
+        Switch(
+            checked = true,
+            onCheckedChange = { /*TODO*/ },
+        )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (mode == "edit"){
+            DeleteProfile(
+                navController,
+                viewModel)
+        }
+
+
+
         if (viewModel.validateDetails()) {
             Button(
                 onClick = {
                     if (mode == "create"){
                         viewModel.onCreate()
+                        when (viewModel.selectedRole.value) {
+                            UserRole.ENTRANT -> {
+                                navController.navigate("EntrantMenu/${uiState.userID}")
+                            }
+                            UserRole.OWNER -> {
+                                navController.navigate("OwnerMenu/${uiState.userID}")
+                            }
+                            UserRole.ADMIN -> {
+                                navController.navigate("AdminMenu/${uiState.userID}")
+                            }
+                        }
+
                     }else{
                         viewModel.onEdit()
+                        when (viewModel.selectedRole.value) {
+                            UserRole.ENTRANT -> {
+                                navController.navigate("EntrantMenu/${uiState.userID}")
+                            }
+                            UserRole.OWNER -> {
+                                navController.navigate("OwnerMenu/${uiState.userID}")
+                            }
+                            UserRole.ADMIN -> {
+                                navController.navigate("AdminMenu/${uiState.userID}")
+                            }
+                        }
+
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -174,8 +255,17 @@ fun InputDetails(
 
 @Preview(showBackground = true)
 @Composable
-fun InputDetailsPreview() {
+fun CreateProfileRolePreview() {
     val navController = rememberNavController()
     val mode = "create"
     InputDetails(navController, mode = mode)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EditProfileRolePreview() {
+    val navController = rememberNavController()
+    val mode = "edit"
+    InputDetails(navController, mode = mode)
+
 }

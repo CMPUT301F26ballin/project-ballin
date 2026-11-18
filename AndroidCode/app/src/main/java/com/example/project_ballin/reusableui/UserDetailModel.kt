@@ -27,10 +27,10 @@ import com.google.firebase.firestore.firestore
 
 class UserDetailModel: ViewModel() {
 
-    private var _selectedRole = MutableStateFlow(UserRole.OWNER)
+    private var _selectedRole = MutableStateFlow(UserRole.ENTRANT)
     val selectedRole = _selectedRole.asStateFlow()
 
-    private var _uiState = MutableStateFlow<User>(Owner())
+    private var _uiState = MutableStateFlow<User>(Entrant())
     var uiState = _uiState.asStateFlow()
 
     fun setDeviceId(deviceId: String){
@@ -41,6 +41,46 @@ class UserDetailModel: ViewModel() {
             is Admin -> current.copy(deviceId = deviceId)
             else -> current
         }
+    }
+
+    fun loadExistingUser(deviceId: String) {
+        if (deviceId.isBlank()) return
+        val db = Firebase.firestore
+
+        db.collection("Entrants").whereEqualTo("deviceId", deviceId).get()
+            .addOnSuccessListener { entrantDocs ->
+                if (!entrantDocs.isEmpty) {
+                    val entrant = entrantDocs.documents[0].toObject(Entrant::class.java)
+                    if (entrant != null) {
+                        _uiState.value = entrant
+                        _selectedRole.value = UserRole.ENTRANT
+                        return@addOnSuccessListener
+                    }
+                }
+
+                db.collection("Owners").whereEqualTo("deviceId", deviceId).get()
+                    .addOnSuccessListener { ownerDocs ->
+                        if (!ownerDocs.isEmpty) {
+                            val owner = ownerDocs.documents[0].toObject(Owner::class.java)
+                            if (owner != null) {
+                                _uiState.value = owner
+                                _selectedRole.value = UserRole.OWNER
+                                return@addOnSuccessListener
+                            }
+                        }
+
+                        db.collection("Admins").whereEqualTo("deviceId", deviceId).get()
+                            .addOnSuccessListener { adminDocs ->
+                                if (!adminDocs.isEmpty) {
+                                    val admin = adminDocs.documents[0].toObject(Admin::class.java)
+                                    if (admin != null) {
+                                        _uiState.value = admin
+                                        _selectedRole.value = UserRole.ADMIN
+                                    }
+                                }
+                            }
+                    }
+            }
     }
 
     fun onRoleChange(newRole: UserRole) {
@@ -97,6 +137,9 @@ class UserDetailModel: ViewModel() {
             current.updateDetails(profilePic = newProfilePic)
         }
     }
+    fun onNotificationlist(){
+
+    }
 
     fun onEdit() {
         _uiState.value.editProfile()
@@ -115,7 +158,9 @@ class UserDetailModel: ViewModel() {
          val isValidFirstName = currentUser.firstName.isNotBlank()
          val isValidLastName = currentUser.lastName.isNotBlank()
          val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(currentUser.email).matches()
-         val isPhoneValid = android.util.Patterns.PHONE.matcher(currentUser.phoneNum).matches()
+         val isPhoneValid =
+             android.util.Patterns.PHONE.matcher(currentUser.phoneNum).matches()
+                     && currentUser.phoneNum.length == 10
 
          return isValidFirstName && isValidLastName && isEmailValid && isPhoneValid
     }
