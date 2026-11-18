@@ -62,3 +62,5 @@ Peter: I implemented a general date picker for picking availability in the camps
 Salix: Finished lottery creation and editing, added tests
 
 yuming: help with uml(admin potion), image test and image browse and delete class, search bar class, search bar test
+
+Leighan: Got the basics down for admin switching modes, violation detectors for owners,reviews, and ratings, and the appropiate reporting system.
