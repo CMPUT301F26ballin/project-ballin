@@ -32,11 +32,11 @@ class AdminMessageDetailScreenTest {
         }
 
         composeTestRule
-            .onNodeWithTag("sentBy${sampleMessages[0].ownerID}")
+            .onNodeWithTag("sentBy${sampleMessages[0].senderID}")
             .assertExists()
 
         composeTestRule
-            .onNodeWithTag("recievedBy${sampleMessages[0].entrantID}")
+            .onNodeWithTag("recievedBy${sampleMessages[0].recipientID}")
             .assertExists()
 
         composeTestRule
@@ -48,7 +48,7 @@ class AdminMessageDetailScreenTest {
             .assertExists()
 
         composeTestRule
-            .onNodeWithTag("deleteMessage")
+            .onNodeWithTag("removeMessage")
             .assertExists()
     }
 
@@ -63,11 +63,11 @@ class AdminMessageDetailScreenTest {
         }
 
         composeTestRule
-            .onNodeWithTag("deleteMessage")
+            .onNodeWithTag("removeMessage")
             .assertExists()
 
         composeTestRule
-            .onNodeWithTag("deleteMessage")
+            .onNodeWithTag("removeMessage")
             .performClick()
 
         composeTestRule

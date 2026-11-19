@@ -9,31 +9,28 @@ import androidx.navigation.*
 import androidx.navigation.compose.*
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.project_ballin.entrant.Entrant
 import kotlin.uuid.Uuid
 
-
+enum class UserRole {
+    ENTRANT, OWNER, ADMIN
+}
 /**
- *The view class containing the first screen any user will see.
- * */
-class SignUp{
-
-    /**
-     *
-     * the first screen a user will see, need to implement something that will
-     * recognize device ID
-     *
-     * @param navController a [NavController] to continue to enter details screen
-     *
-     */
+ *
+ * the first screen a user will see, need to implement something that will
+ * recognize device ID
+ *
+ * @param navController a [NavController] to continue to enter details screen
+ *
+ */
+class SignUp() {
     @Composable
     fun Signup(
         navController: NavController,
         userCurrentSession: UserCurrentSession
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -57,43 +54,43 @@ class SignUp{
 
             Button(
                 onClick = {
-                    navController.navigate("MainEntrantMenu")
+                    navController.navigate("createprofile")
                 },
-                modifier = Modifier.testTag("entrantSignin") // for testing
+                modifier = Modifier.testTag("createProfile") // for testing
             ) {
-                Text("Sign-up as Entrant")
+                Text("Continue") //this will be the only valid button soon
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = {
-                    val ownerID = "Test1" // just for testing
-                    navController.navigate("OwnerMenu/${ownerID}")
-                },
-                modifier = Modifier.testTag("ownerSignin") // for testing
-            ) {
-                Text("Sign-up as Campsite Owner")
-            }
+//            Button(
+//                onClick = {
+//                    val ownerID = "Test1" // just for testing
+//                    navController.navigate("OwnerMenu/${ownerID}")
+//                },
+//                modifier = Modifier.testTag("ownerSignin") // for testing
+//            ) {
+//                Text("Sign-up as Campsite Owner")
+//            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = {
-                    userCurrentSession.isAdmin = true
-                    navController.navigate("Admin Menu Screen")
-                },
-                modifier = Modifier.testTag("adminSignin") // for testing
-            ) {
-                Text("Sign-up as Admin")
-            }
+//            Button(
+//                onClick = {
+//                    navController.navigate("Admin Menu Screen")
+//                },
+//                modifier = Modifier.testTag("adminSignin") // for testing
+//            ) {
+//                Text("Sign-up as Admin")
+//            }
         }
     }
+}
 
-    @Preview(showBackground = true)
-    @Composable
-    fun SignupPreview() {
-        val navController = rememberNavController()
-        Signup(navController, userCurrentSession = UserCurrentSession())
-    }
+@Preview(showBackground = true)
+@Composable
+fun SignupPreview() {
+    val navController = rememberNavController()
+    val signup = SignUp()
+    signup.Signup(navController)
 }

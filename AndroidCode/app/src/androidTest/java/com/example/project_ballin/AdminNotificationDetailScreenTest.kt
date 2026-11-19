@@ -60,7 +60,11 @@ class AdminNotificationDetailScreenTest {
         }
 
         composeTestRule
-            .onNodeWithTag("deleteNotification")
+            .onNodeWithTag("removeNotification")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithTag("removeNotification")
             .performClick()
 
         composeTestRule

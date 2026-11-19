@@ -1,22 +1,24 @@
-package com.example.project_ballin.admin
-import com.example.project_ballin.User
+package com.example.project_ballin
+
+import com.example.project_ballin.entrant.Entrant
+import kotlin.uuid.Uuid
 
 /**
  * Stores information of an admin, and allows
  * special functionalities related to being an admin
  *
- * Admin has a name, phone number, email, deviceId, profile picture, and user ID.
+ * Admin has a name, phone number, email, deviceId, profile picture.
  * The admin can remove and browse things like campsites, profiles,
  * notifications, messages, and the owners who violate the app policy.
  * They can also act like an entrant/owner.
  *
- * @property firstName the name of the admin
- * @property lastName the last name of the admin
+ * @property name the name of the admin
  * @property phoneNum the phone number of the admin
  * @property email the email of the admin
  * @property deviceId the device ID of the admin
- * @property profilePic the profile picture of the admin*
- * @property userID the user ID of the admin
+ * @property profilePic the profile picture of the admin
+ * @property currentMode the mode the admin user is in, by default they start off in admin mode
+ *
  */
 data class Admin(
     override var firstName: String = "",
@@ -25,5 +27,30 @@ data class Admin(
     override var email: String = "",
     override val deviceId: String = "",
     override var profilePic: String = "",
-    override val userID: String = ""
-): User
+    override val userID: String = Uuid.random().toString(),
+    ): User{
+    override fun updateDetails(
+        firstName: String,
+        lastName: String,
+        phoneNum: String,
+        email: String,
+        profilePic: String,
+        deviceId: String
+    ): Admin = copy(
+        firstName = firstName,
+        lastName = lastName,
+        phoneNum = phoneNum,
+        email = email,
+        profilePic = profilePic,
+        deviceId = deviceId
+    )
+    override fun deleteProfile() {
+        AdminList().deleteAdmin(this)
+    }
+    override fun editProfile() {
+        AdminList().updateAdmin(this)
+    }
+    override fun createProfile() {
+        AdminList().addAdmin(this)
+    }
+}
