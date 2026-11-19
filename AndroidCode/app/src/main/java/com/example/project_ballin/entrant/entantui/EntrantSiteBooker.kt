@@ -25,6 +25,7 @@ import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.reusableui.TopAppBar
+import kotlin.uuid.Uuid
 
 
 class EntrantSiteBooker {
@@ -96,7 +97,13 @@ class EntrantSiteBooker {
 
             Button(
                 onClick = {
-                    entrant.activeReservations.add(Reservation(campsiteID,chosenDates))
+                    entrant.activeReservations.add(Reservation(
+                        campsiteID,
+                        chosenDates,
+                        UserID = entrant.userID,
+                        cancelled = false,
+                        resID = Uuid.random().toString(),
+                    ))
                 },
                 enabled = chosenDates != null,
                 modifier = Modifier.padding(16.dp)

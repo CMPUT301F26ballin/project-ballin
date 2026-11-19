@@ -1,5 +1,7 @@
 package com.example.project_ballin.entrant
 
+import kotlin.uuid.Uuid
+
 /**
  * A class that stores all the information of a reservation
  * Does not store much right now
@@ -8,6 +10,9 @@ package com.example.project_ballin.entrant
  * @property dates the dates that the reservation is for
  */
 data class Reservation(
-    val campsiteID: String?,
-    val dates: List<Long>?,
+    val campsiteID: String? = "",
+    val dates: List<Long>? = listOf(),
+    val UserID: String? = "",
+    var cancelled: Boolean = false,
+    val resID: String = ""
 )
