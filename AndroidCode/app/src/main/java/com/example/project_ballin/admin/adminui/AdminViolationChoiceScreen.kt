@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -18,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,7 +59,7 @@ class AdminViolationChoiceScreen {
                 ) {
                     Text(
                         text = "Choose Violation Topic",
-                        fontSize = 24.sp
+                        fontSize = 34.sp,
                     )
                 }
 
@@ -68,18 +68,8 @@ class AdminViolationChoiceScreen {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "to",
-                        fontSize = 24.sp
-                    )
-                }
-
-                Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "View List of Related Violations",
-                        fontSize = 24.sp
+                        text = "to View List of Related Violations",
+                        fontSize = 18.sp
                     )
                 }
                 Spacer(modifier = Modifier.height(34.dp))
@@ -132,7 +122,7 @@ class AdminViolationChoiceScreen {
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .testTag(testTag) // for UI testing
-                .width(250.dp)
+                .fillMaxWidth()
                 .height(85.dp)
         ) {
             Column(

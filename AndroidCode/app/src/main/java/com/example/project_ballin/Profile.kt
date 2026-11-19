@@ -1,6 +1,5 @@
 package com.example.project_ballin
 
-import com.example.project_ballin.admin.Admin
 import com.example.project_ballin.owner.Owner
 
 /**

@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
+import com.example.project_ballin.EntrantList
+import com.example.project_ballin.OwnerList
 import com.example.project_ballin.UserCurrentSession
 import com.example.project_ballin.reusableui.TopAppBar
 
@@ -34,10 +36,12 @@ class MainEntrantMenu(){
      * @param navController the navigation controller for the app
      */
     @Composable
-    fun EntrantMenuScreen(
-        navController: NavController,
-        userCurrentSession: UserCurrentSession
-    ) {
+    fun EntrantMenuScreen(navController: NavController, entrantID: String) {
+
+        val entrantList = remember { EntrantList() }
+        val entrant = entrantList.getEntrant(entrantID)
+        val firstName = entrant?.firstName ?: ""
+
         TopAppBar(
             navController,
             screenTitle = "Home",
@@ -52,7 +56,7 @@ class MainEntrantMenu(){
             ) {
                 Spacer(modifier = Modifier.height(128.dp))
                 Text(
-                    text = "Welcome Entrant",
+                    text = "Welcome $firstName",
                     fontSize = 34.sp
                 )
                 Spacer(modifier = Modifier.height(128.dp))
@@ -131,6 +135,7 @@ class MainEntrantMenu(){
     @Composable
     fun EntrantMenuScreenPreview() {
         val navController = rememberNavController()
-        EntrantMenuScreen(navController, userCurrentSession = UserCurrentSession())
+        val entrantID = "123"
+        EntrantMenuScreen(navController, entrantID)
     }
 }
