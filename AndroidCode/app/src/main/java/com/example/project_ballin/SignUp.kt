@@ -27,7 +27,6 @@ class SignUp() {
     @Composable
     fun Signup(
         navController: NavController,
-        userCurrentSession: UserCurrentSession
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
