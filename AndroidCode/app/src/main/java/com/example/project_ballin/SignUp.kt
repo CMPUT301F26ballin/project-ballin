@@ -1,16 +1,21 @@
 package com.example.project_ballin
 
+import android.provider.Settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.reusableui.UserDetailModel
 import kotlin.uuid.Uuid
+import androidx.compose.runtime.collectAsState
 
 enum class UserRole {
     ENTRANT, OWNER, ADMIN
@@ -25,7 +30,28 @@ enum class UserRole {
  */
 class SignUp() {
     @Composable
-    fun Signup(navController: NavController) {
+    fun Signup(
+        navController: NavController,
+        viewModel: UserDetailModel = viewModel(),
+        ) {
+
+        val context = LocalContext.current
+        val deviceId = remember {
+            Settings.Secure.getString(
+                context.contentResolver,
+                Settings.Secure.ANDROID_ID
+            ) ?: ""
+        }
+
+
+        val uiState by viewModel.uiState.collectAsState()
+
+        LaunchedEffect(deviceId) {
+            viewModel.loadExistingUser(deviceId)
+        }
+
+        val isUser = deviceId.isNotBlank() && uiState.deviceId == deviceId
+
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             verticalArrangement = Arrangement.Center,
@@ -51,10 +77,27 @@ class SignUp() {
 
             Button(
                 onClick = {
-                    navController.navigate("createprofile")
+                    if (isUser){
+                        when (viewModel.selectedRole.value) {
+                            UserRole.ENTRANT -> {
+                                navController.navigate("EntrantMenu/${uiState.userID}")
+                            }
+                            UserRole.OWNER -> {
+                                navController.navigate("OwnerMenu/${uiState.userID}")
+                            }
+                            UserRole.ADMIN -> {
+                                navController.navigate("AdminMenu/${uiState.userID}")
+                            }
+                        }
+                    } else {
+                        navController.navigate("createprofile")
+                    }
                 },
                 modifier = Modifier.testTag("createProfile") // for testing
             ) {
+                if (isUser){
+                    Text("Continue as ${uiState.firstName}")
+                }else
                 Text("Continue") //this will be the only valid button soon
             }
 

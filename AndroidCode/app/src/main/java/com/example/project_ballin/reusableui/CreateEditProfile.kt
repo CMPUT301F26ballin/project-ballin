@@ -18,29 +18,12 @@ import androidx.navigation.compose.*
 class UserProfile(){
 
     @Composable
-    fun IntroText() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Before We Begin, Please Enter Your Details:",
-                fontSize = 24.sp,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-        }
-    }
-
-    @Composable
     fun CreateProfile(navController: NavController) {
         TopAppBar(
             navController,
             "Sign-In Details",
             profileButton = false
         ) {
-            IntroText()
             val mode = "create"
             InputDetails(navController, mode = mode)
         }
