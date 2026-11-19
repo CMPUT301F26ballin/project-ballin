@@ -2,6 +2,7 @@ package com.example.project_ballin
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedTextField
@@ -34,7 +35,11 @@ class MessagingScreen {
 
         TopAppBar(navController, "Messaging ${entrant!!.firstName}"){
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-                
+
+                Row(modifier = Modifier.padding(16.dp)){
+
+                }
+
             }
         }
     }
