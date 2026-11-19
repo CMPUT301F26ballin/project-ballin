@@ -497,6 +497,7 @@ class BallinApp(){
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
+            }
             composable("AdminSwitchModes") {
                 AdminSwitchModesScreen().AdminSwitchModes(navController, userCurrentSession)
             }
