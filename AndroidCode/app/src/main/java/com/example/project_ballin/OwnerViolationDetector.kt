@@ -33,8 +33,8 @@ class OwnerViolationDetector(
 
         for (campsite in ownerCampsites) {
             nonDuplicateCampsites.add(Triple(
-                campsite.lat,
-                campsite.lon,
+                campsite.location.latitude,
+                campsite.location.longitude,
                 campsite.locationName
             ))
         }

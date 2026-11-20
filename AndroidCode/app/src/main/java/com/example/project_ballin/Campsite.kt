@@ -5,6 +5,7 @@ import android.location.Location
 import android.media.Image
 import android.net.Uri
 import com.google.firebase.firestore.Blob
+import com.google.type.LatLng
 import java.util.UUID
 import kotlin.uuid.Uuid
 
@@ -45,9 +46,8 @@ import kotlin.uuid.Uuid
 
 class Campsite(
     var name: String = "",
-    var ID: String = " ",
-    var lat: Double = 0.0,
-    var lon: Double = 0.0,
+    var ID: String = "",
+    var location: com.google.android.gms.maps.model.LatLng = com.google.android.gms.maps.model.LatLng(0.0,0.0),
     var locationName: String = "",
     var tags: MutableList<String> = mutableListOf(),
     var price: Float = 0.0f,

@@ -40,6 +40,7 @@ import com.example.project_ballin.reusableui.InitialScreen
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
 import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
@@ -121,8 +122,7 @@ class BallinApp(){
                     "campsite1",
                     "2",
                     //Location(""),
-                    lat = 0.0,
-                    lon = 0.0,
+                    location = LatLng(0.0, 0.0),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -143,9 +143,7 @@ class BallinApp(){
                 Campsite(
                     "campsite2",
                     "4",
-                    lat = 0.0,
-                    lon = 0.0,
-
+                    location = LatLng(0.0, 0.0),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -166,8 +164,7 @@ class BallinApp(){
                 Campsite(
                     "campsite3",
                     "5",
-                    lat = 0.0,
-                    lon = 0.0,
+                    location = LatLng(0.0, 0.0),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -318,14 +315,14 @@ class BallinApp(){
         val reservationDetailScreen = ReservationDetailScreen()
 
         NavHost(navController = navController, startDestination = "signup") {
-            composable("signup") { signUpScreen.Signup(navController) }
+            composable("signup") { signUpScreen.Signup(navController, userCurrentSession) }
             composable("createprofile") { userProfile.CreateProfile(navController) }
             composable("editprofile") { userProfile.EditProfile(navController) }
 
 
             composable("OwnerMenu/{OwnerID}") {
                 val ownerIDString = it.arguments!!.getString("OwnerID")
-                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!, userCurrentSession)
+                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!)
             }
 
             composable("CampsiteListScreen/{OwnerID}") {
@@ -514,7 +511,7 @@ class BallinApp(){
             }
 
             composable("MainEntrantMenu") {
-                mainEntrantMenu.EntrantMenuScreen(navController, userCurrentSession)
+                mainEntrantMenu.EntrantMenuScreen(navController, "1")
             }
 
             composable("EntrantBrowseReservations") {
