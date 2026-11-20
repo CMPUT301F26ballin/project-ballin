@@ -54,3 +54,13 @@ Leighan: Implemented classes relating to messages and notifications, and also ma
 Nick: search bar with filters mostly finished - filter by dates, now working on account creation 
 
 Salix: Added the basic implementation of the lottery screens and navigation
+
+# Week 5:
+
+Peter: I implemented a general date picker for picking availability in the campsite creation. I updated old UI mockups and diagrams to better reflect the current content and to address TA concerns. I worked on the UML class diagram, and worked on some UI issues to make things more consistent.
+
+Salix: Finished lottery creation and editing, added tests
+
+yuming: help with uml(admin potion), image test and image browse and delete class, search bar class, search bar test
+
+Leighan: Got the basics down for admin switching modes, violation detectors for owners,reviews, and ratings, and the appropiate reporting system.
