@@ -1,20 +1,7 @@
 package com.example.project_ballin.reusableui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.ui.*
-import androidx.compose.ui.unit.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontVariation.Settings
 import androidx.lifecycle.ViewModel
-import androidx.navigation.*
-import androidx.navigation.compose.*
-//import androidx.room.util.copy
 import com.example.project_ballin.Admin
-import com.example.project_ballin.AdminList
-import com.example.project_ballin.EntrantList
-import com.example.project_ballin.OwnerList
 import com.example.project_ballin.User
 import com.example.project_ballin.UserRole
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -144,7 +131,6 @@ class UserDetailModel: ViewModel() {
     fun onEdit() {
         _uiState.value.editProfile()
     }
-
     fun onCreate(){
         _uiState.value.createProfile()
     }
@@ -152,6 +138,7 @@ class UserDetailModel: ViewModel() {
     fun onDelete(){
         _uiState.value.deleteProfile()
     }
+
      fun validateDetails(): Boolean {
         val currentUser = _uiState.value
 
