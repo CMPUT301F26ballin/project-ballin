@@ -14,8 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import com.example.project_ballin.EntrantList
-import com.example.project_ballin.OwnerList
-import com.example.project_ballin.UserCurrentSession
 import com.example.project_ballin.reusableui.TopAppBar
 
 /**
@@ -83,15 +81,15 @@ class MainEntrantMenu(){
                     navController
                 )
 
-                if (userCurrentSession.isAdmin) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    EntrantHomeButton(
-                        "SWITCH MODES",
-                        "AdminSwitchModes",
-                        "switchModesButton",
-                        navController
-                    )
-                }
+                //if (userCurrentSession.isAdmin) {
+                   // Spacer(modifier = Modifier.height(16.dp))
+                    // EntrantHomeButton(
+                      //  "SWITCH MODES",
+                      //  "AdminSwitchModes",
+                      //  "switchModesButton",
+                      //  navController
+                   // )
+                // }
             }
 
 

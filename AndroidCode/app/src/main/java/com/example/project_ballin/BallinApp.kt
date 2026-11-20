@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import com.example.project_ballin.owner.ownerUI.MainOwnerMenu
 import com.example.project_ballin.owner.ownerUI.OwnerReservationScreen
 import com.example.project_ballin.reusableui.InitialScreen
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
+import com.example.project_ballin.reusableui.UserDetailModel
 import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
 import com.google.firebase.firestore.Blob
@@ -306,7 +308,6 @@ class BallinApp(){
         val mainOwnerMenu = MainOwnerMenu()
         val mainAdminMenu = MainAdminMenu()
         val mainEntrantMenu = MainEntrantMenu()
-        val userCurrentSession = remember {UserCurrentSession()}
 
         val entrantBrowseCampsites = EntrantBrowseCampsites()
 
@@ -325,7 +326,7 @@ class BallinApp(){
 
             composable("OwnerMenu/{OwnerID}") {
                 val ownerIDString = it.arguments!!.getString("OwnerID")
-                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!, userCurrentSession)
+                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!)
             }
 
             composable("CampsiteListScreen/{OwnerID}") {
@@ -544,9 +545,12 @@ class BallinApp(){
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
-            composable("AdminSwitchModes") {
-                AdminSwitchModesScreen().AdminSwitchModes(navController, userCurrentSession)
             }
+
+            composable("AdminSwitchModes") {
+                AdminSwitchModesScreen().AdminSwitchModes(navController)
+            }
+
 
             composable("UserReportScreen/{subjectReport}/{clickedID}") {
                 val subjectReport = it.arguments!!.getString("subjectReport")
@@ -560,7 +564,7 @@ class BallinApp(){
             }
 
             composable("MainEntrantMenu") {
-                mainEntrantMenu.EntrantMenuScreen(navController, userCurrentSession)
+                mainEntrantMenu.EntrantMenuScreen(navController, "")
             }
 
             composable("EntrantBrowseReservations") {
