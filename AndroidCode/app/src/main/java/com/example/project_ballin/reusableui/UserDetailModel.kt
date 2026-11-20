@@ -10,7 +10,7 @@ import androidx.compose.ui.text.font.FontVariation.Settings
 import androidx.lifecycle.ViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.*
-import androidx.room.util.copy
+//import androidx.room.util.copy
 import com.example.project_ballin.Admin
 import com.example.project_ballin.AdminList
 import com.example.project_ballin.EntrantList

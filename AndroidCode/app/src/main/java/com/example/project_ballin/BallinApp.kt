@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import com.example.project_ballin.owner.ownerUI.MainOwnerMenu
 import com.example.project_ballin.owner.ownerUI.OwnerReservationScreen
 import com.example.project_ballin.reusableui.InitialScreen
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
+import com.example.project_ballin.reusableui.UserDetailModel
 import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
 import com.google.android.gms.maps.model.LatLng
@@ -303,7 +305,6 @@ class BallinApp(){
         val mainOwnerMenu = MainOwnerMenu()
         val mainAdminMenu = MainAdminMenu()
         val mainEntrantMenu = MainEntrantMenu()
-        val userCurrentSession = remember {UserCurrentSession()}
 
         val entrantBrowseCampsites = EntrantBrowseCampsites()
 
@@ -315,14 +316,14 @@ class BallinApp(){
         val reservationDetailScreen = ReservationDetailScreen()
 
         NavHost(navController = navController, startDestination = "signup") {
-            composable("signup") { signUpScreen.Signup(navController, userCurrentSession) }
+            composable("signup") { signUpScreen.Signup(navController) }
             composable("createprofile") { userProfile.CreateProfile(navController) }
             composable("editprofile") { userProfile.EditProfile(navController) }
 
 
             composable("OwnerMenu/{OwnerID}") {
                 val ownerIDString = it.arguments!!.getString("OwnerID")
-                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!)
+                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!, userCurrentSession)
             }
 
             composable("CampsiteListScreen/{OwnerID}") {
@@ -338,6 +339,53 @@ class BallinApp(){
                 val campsite = campsiteList.getCampsite(siteIDString!!)
                 val userID = it.arguments!!.getString("userID")
                 campsiteDetailScreen.CampsiteDetailScreen(navController, campsite!!, userID!!)
+            }
+
+            composable("ownerReservationScreen/{CampID}/{Type}/{OwnerID}") {
+                val siteIDString = it.arguments!!.getString("CampID")
+                val type = it.arguments!!.getString("Type")
+                var resList = listOf<Reservation>()
+                val ownerID = it.arguments!!.getString("OwnerID")
+
+                if(type == "Past"){
+                    resList = reservationList.getReservationsBefore(siteIDString!!, System.currentTimeMillis())
+                }
+                else if(type == "Active"){
+                    resList = reservationList.getReservationsAfter(siteIDString!!, System.currentTimeMillis())
+                }
+                else if(type == "Cancelled"){
+                    resList = reservationList.getCancelledReservations(siteIDString!!)
+                }
+
+                ownerReservationScreen.OwnerReservationScreen(navController, resList,ownerID!!, false)
+
+            }
+
+            composable("AllOwnerCampReservations/{OwnerID}") {
+                val ownerIDString = it.arguments!!.getString("OwnerID")
+                val resList = mutableListOf<Reservation>()
+                val campList: List<Campsite> = campsiteList.getOwnerSites(ownerIDString!!)
+                campList.forEach { campsite ->
+                    val tempResList = reservationList.getReservationsAfter(campsite.ID, System.currentTimeMillis())
+                    tempResList.forEach { res -> resList.add(res) }
+                }
+                ownerReservationScreen.OwnerReservationScreen(navController, resList, ownerIDString, true)
+
+            }
+
+            composable("reservationDetailScreen/{resID}/{OwnerID}"){
+                val resIDString = it.arguments!!.getString("resID")
+                val res = reservationList.getReservation(resIDString!!)
+                val ownerID = it.arguments!!.getString("OwnerID")
+
+                reservationDetailScreen.ReservationDetailScreen(navController, res!!,ownerID!!, onCancel = {reservationList.cancelReservation(res)})
+            }
+
+            composable("messagingScreen/{UserID}/{OwnerID}"){
+                val userIDString = it.arguments!!.getString("UserID")
+                val ownerID = it.arguments!!.getString("OwnerID")
+
+
             }
 
             composable("CampsiteInputScreen/{CampID}/{OwnerID}") {
@@ -495,9 +543,11 @@ class BallinApp(){
                 val entrantIDString = it.arguments!!.getString("EntrantID")
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
             }
+
             composable("AdminSwitchModes") {
-                AdminSwitchModesScreen().AdminSwitchModes(navController, userCurrentSession)
+                AdminSwitchModesScreen().AdminSwitchModes(navController)
             }
+
 
             composable("UserReportScreen/{subjectReport}/{clickedID}") {
                 val subjectReport = it.arguments!!.getString("subjectReport")
@@ -511,7 +561,7 @@ class BallinApp(){
             }
 
             composable("MainEntrantMenu") {
-                mainEntrantMenu.EntrantMenuScreen(navController, "1")
+                mainEntrantMenu.EntrantMenuScreen(navController, "")
             }
 
             composable("EntrantBrowseReservations") {

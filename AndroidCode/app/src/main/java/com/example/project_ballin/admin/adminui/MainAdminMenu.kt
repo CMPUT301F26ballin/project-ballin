@@ -165,6 +165,6 @@ class MainAdminMenu(){
         val navController = rememberNavController()
         val adminID = "456"
         AdminMenuScreen(navController, adminID)
-        AdminMenuScreen(navController, UserCurrentSession())
+        AdminMenuScreen(navController, "")
     }
 }
