@@ -19,6 +19,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -70,6 +72,8 @@ import kotlin.let
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import androidx.core.graphics.scale
+import com.example.project_ballin.GoogleMapScreen
+import com.google.android.gms.maps.model.LatLng
 import java.io.ByteArrayOutputStream
 import kotlin.math.roundToInt
 
@@ -135,8 +139,7 @@ class CampsiteInputScreen(){
         ) {
             //initializing input variables (there's a lot of them)
             var campName by remember { mutableStateOf("") }
-            var campLat by remember { mutableStateOf("") }
-            var campLon by remember { mutableStateOf("") }
+            var campNumLocation by remember { mutableStateOf<LatLng>(LatLng(0.0,0.0)) }
             var campLocation by remember { mutableStateOf("") }
             var campTags = remember { mutableStateListOf<String>() }
             var tagToAdd by remember { mutableStateOf("") }
@@ -151,7 +154,10 @@ class CampsiteInputScreen(){
             var showDatePicker by remember { mutableStateOf(false) }
             var addDate by remember { mutableStateOf(true) }
 
+            var showMap by remember { mutableStateOf(false) }
+
             val datePicker = GeneralDatePicker()
+            val map = GoogleMapScreen()
 
 
             val context: Context = LocalContext.current
@@ -184,8 +190,10 @@ class CampsiteInputScreen(){
                 campOccupancy = oldSite.occupancy.toString()
                 oldSite.images.forEach { byteArray -> campByteArray.add(byteArray) }
                 oldSite.availability.forEach { date -> campAvailableDates.add(date) }
-                campLat = oldSite.lat.toString()
-                campLon = oldSite.lon.toString()
+                val locStrings = oldSite.location.split(",")
+                val lat = locStrings[0].toDouble()
+                val lon = locStrings[1].toDouble()
+                campNumLocation = LatLng(lat, lon)
                 campLocation = oldSite.locationName
                 //oldSite.images.forEach { image -> campByteArray.add(image) }
                 Log.d("Site", "Restored")
@@ -368,27 +376,20 @@ class CampsiteInputScreen(){
 
                 //LOCATION
                 Row(modifier = Modifier.padding(16.dp)) {
-                    OutlinedTextField(
-                        value = campLat,
-                        onValueChange = { campLat = it },
-                        label = { Text("Latitude") },
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("campLat")
-                            .fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    OutlinedTextField(
-                        value = campLon,
-                        onValueChange = { campLon = it },
-                        label = { Text("Longitude") },
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("campLon")
-                            .fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
+                    Button(onClick = {showMap = true}){
+                        Text("Add Location")
+                    }
+                }
+
+                if(showMap){
+                    Box(modifier = Modifier.fillMaxSize().padding(16.dp)){
+                        map.GoogleMapScreen(
+                            campNumLocation, true,
+                            onNewLocation = {
+                                campNumLocation = it
+                                showMap = false
+                            })
+                    }
                 }
 
                 Row(modifier = Modifier.padding(16.dp)) {
@@ -450,15 +451,15 @@ class CampsiteInputScreen(){
                                     campDesc.isNotBlank() &&
                                     campOccupancy.isNotBlank() &&
                                     campPrice.isNotBlank() &&
-                                    campRules.isNotBlank()
+                                    campRules.isNotBlank() &&
+                                    campNumLocation != LatLng(0.0, 0.0)
 
                                 ) {
                                     //must assert numbers in price and occupancy
                                     addSite(
                                         Campsite(
                                             name = campName,
-                                            lon = campLon.toDouble(),
-                                            lat = campLat.toDouble(),
+                                            location = campNumLocation.toString(),
                                             ID = Uuid.random()
                                                 .toString(), //FIGURE OUT ID IMPLEMENTATION
                                             ownerID = ownerID,
@@ -491,18 +492,15 @@ class CampsiteInputScreen(){
                                     campDesc.isNotBlank() &&
                                     campOccupancy.isNotBlank() &&
                                     campPrice.isNotBlank() &&
-                                    campRules.isNotBlank()
+                                    campRules.isNotBlank() &&
+                                    campNumLocation != LatLng(0.0, 0.0)
                                 ) {
-                                    val location = Location(campLocation)
-                                    location.latitude = campLat.toDouble()
-                                    location.longitude = campLon.toDouble()
                                     updateSite(
                                         oldSite, Campsite(
                                             //location = location,
                                             name = campName,
                                             ID = oldSite.ID,
-                                            lon = campLon.toDouble(),
-                                            lat = campLat.toDouble(),
+                                            location = campNumLocation.toString(),
                                             ownerID = oldSite.ownerID,
                                             price = campPrice.toFloat(),
                                             rating = oldSite.rating,

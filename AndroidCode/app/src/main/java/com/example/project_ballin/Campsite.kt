@@ -47,7 +47,7 @@ import kotlin.uuid.Uuid
 class Campsite(
     var name: String = "",
     var ID: String = "",
-    var location: com.google.android.gms.maps.model.LatLng = com.google.android.gms.maps.model.LatLng(0.0,0.0),
+    var location: String = "",
     var locationName: String = "",
     var tags: MutableList<String> = mutableListOf(),
     var price: Float = 0.0f,

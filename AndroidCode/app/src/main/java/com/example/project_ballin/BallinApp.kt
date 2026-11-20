@@ -124,7 +124,7 @@ class BallinApp(){
                     "campsite1",
                     "2",
                     //Location(""),
-                    location = LatLng(0.0, 0.0),
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -145,7 +145,7 @@ class BallinApp(){
                 Campsite(
                     "campsite2",
                     "4",
-                    location = LatLng(0.0, 0.0),
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -166,7 +166,7 @@ class BallinApp(){
                 Campsite(
                     "campsite3",
                     "5",
-                    location = LatLng(0.0, 0.0),
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -323,7 +323,7 @@ class BallinApp(){
 
             composable("OwnerMenu/{OwnerID}") {
                 val ownerIDString = it.arguments!!.getString("OwnerID")
-                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!, userCurrentSession)
+                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!)
             }
 
             composable("CampsiteListScreen/{OwnerID}") {
