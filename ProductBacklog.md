@@ -81,7 +81,7 @@
 - Story Points: 3
 - Risk: Low
 
-**US 01.08.01 As an entrant, I want to delete my profile.**
+**US 01.08.01 As an entrant, I want to delete my profile.**✅
 - Story Points: 5
 - Risk: Low
 
