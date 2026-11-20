@@ -34,6 +34,12 @@ import java.util.Locale
  *
  *
  */
+@Composable
+fun ConfirmDeleteProfile(
+    viewModel: UserDetailModel
+){
+
+}
 
 @Composable
 fun SelectProfileRole(
@@ -72,24 +78,35 @@ fun SelectProfileRole(
     }
 }
 
-
-
 @Composable
 fun DeleteProfile(
     navController: NavController,
     viewModel: UserDetailModel
 ){
+    var showConfirmDelete by remember { mutableStateOf(false) }
 
     Button(
         onClick = {
-            viewModel.onDelete()
-            navController.navigate("signup")
-
+            showConfirmDelete = true
         },
         modifier = Modifier.fillMaxWidth()
     ){
         Text("Delete Profile")
-
+    }
+    if (showConfirmDelete) {
+        showConfirmDelete.let {
+            ConfirmActionDialog().ConfirmAction(
+                "Are you sure you want to delete your Profile?" +
+                        " This action cannot be undone",
+                confirm = { confirmed ->
+                    if (confirmed) {
+                        viewModel.onDelete()
+                        navController.navigate("signup")
+                    }
+                    showConfirmDelete = false
+                }
+            )
+        }
     }
 }
 
@@ -123,10 +140,18 @@ fun InputDetails(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .imePadding()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(64.dp))
+        if (mode == "create"){
+            Text(
+                text = "Before We Begin, Please Enter Your Details:",
+                fontSize = 24.sp,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Box(
             modifier = Modifier
@@ -202,7 +227,8 @@ fun InputDetails(
         if (mode == "edit"){
             DeleteProfile(
                 navController,
-                viewModel)
+                viewModel
+            )
         }
 
 
