@@ -82,7 +82,13 @@ class MainOwnerMenu(){
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                OwnerOptionsButton("Past Notifications", "", "", navController) // TODO
+                OwnerOptionsButton(
+                    "Past Notifications",
+                    "OwnerNotificationListScreen/$ownerID",
+                    "toOwnerPastNotifications",
+                    navController
+                )
+
                 Spacer(modifier = Modifier.height(16.dp))
                 OwnerOptionsButton("Active Reservations", "allOwnerCampReservations/$ownerID", "", navController) // TODO
                 Spacer(modifier = Modifier.height(16.dp))
