@@ -14,12 +14,14 @@ import kotlin.uuid.Uuid
  * @property dateSent the date the notification was sent
  * @property ID the unique ID of the notification
  * @property recipientID a list of Users Uuids, which are the recipients of the notification
+ * @property lotteryID the lotteryID of the lottery this notification was sent to
  */
 class Notification (
     var content: String = "",
     var dateSent: Date = Date(),
     var ID: String = "",
-    var recipientID: String = ""
+    var recipientID: String = "",
+    var lotteryID: String = ""
 ) {
 
     /**

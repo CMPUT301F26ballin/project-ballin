@@ -3,6 +3,7 @@ package com.example.project_ballin
 import androidx.compose.runtime.mutableStateListOf
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import java.util.Date
 import kotlin.uuid.Uuid
 
 /**
@@ -73,4 +74,16 @@ class NotificationList {
     fun getNotification(ID: String): Notification? =
         _notifications.find { it.ID == ID }
 
+    fun sendToLottery(content: String, lotteryID: String): Boolean {
+        if (content.isBlank() || lotteryID.isBlank()) return false
+        addNotification(
+            Notification(
+                content = content.trim(),
+                dateSent = Date(),
+                ID = Uuid.random().toString(),
+                lotteryID = lotteryID
+            )
+        )
+        return true
+    }
 }

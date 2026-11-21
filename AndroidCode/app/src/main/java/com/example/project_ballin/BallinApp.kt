@@ -45,6 +45,7 @@ import com.example.project_ballin.reusableui.UserReportScreen
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
+import com.example.project_ballin.owner.ownerUI.NotificationSendScreen
 
 /**
  * The main class that houses the NavHost for the nav controller. All screen changes go through this class view.
@@ -449,6 +450,20 @@ class BallinApp(){
                     getCampsite = { campsiteList.getCampsite(it) },
                     addLottery = { lotteryList.addLottery(it) },
                     updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
+            }
+
+            composable("NotificationSendScreen/{OwnerID}/{LotteryID}") {
+                val ownerID = it.arguments!!.getString("OwnerID")!!
+                val lotteryID = it.arguments!!.getString("LotteryID")!!
+                NotificationSendScreen().NotificationSendScreen(
+                    navController,
+                    ownerID,
+                    lotteryID,
+                    sendNotification = { id, content ->
+                        lotteryList.getLottery(id) != null &&
+                        notificationList.sendToLottery(content, id)
+                    }
+                )
             }
 
             composable("AdminMenu/{AdminID}") {
