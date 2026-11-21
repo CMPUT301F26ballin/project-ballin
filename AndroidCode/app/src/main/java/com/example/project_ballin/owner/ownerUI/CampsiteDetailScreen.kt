@@ -57,6 +57,7 @@ class CampsiteDetailScreen(){
 
         val datePicker = GeneralDatePicker()
         val map = GoogleMapScreen()
+        var mapMoving by remember { mutableStateOf(false) }
 
         TopAppBar(navController, "Campsite Details") {
             var showAvailability by remember { mutableStateOf(false) }
@@ -73,7 +74,7 @@ class CampsiteDetailScreen(){
                 Row(
                     modifier = Modifier
                         .padding(12.dp)
-                        .horizontalScroll(rememberScrollState())
+                        .horizontalScroll(rememberScrollState(), enabled = !mapMoving)
                 ) {
                     site.images.forEach { blob -> ImageDisplayRow(blob) }
                 }
@@ -117,7 +118,8 @@ class CampsiteDetailScreen(){
                     val locStrings = site.location.split(",")
                     map.GoogleMapScreen(LatLng(locStrings[0].toDouble(), locStrings[1].toDouble()),
                         false,
-                        onNewLocation = {showMap = false})
+                        onNewLocation = {},
+                        onMoving = {mapMoving = it})
                 }
 
                 if (showAvailability) {

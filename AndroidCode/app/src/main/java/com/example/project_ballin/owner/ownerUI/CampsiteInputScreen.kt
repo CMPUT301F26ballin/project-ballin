@@ -7,6 +7,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.biometrics.FallbackOption
 import android.location.Location
 import android.net.Uri
 import android.util.Log
@@ -154,7 +155,7 @@ class CampsiteInputScreen(){
             var showDatePicker by remember { mutableStateOf(false) }
             var addDate by remember { mutableStateOf(true) }
 
-            var showMap by remember { mutableStateOf(false) }
+            var mapMoving by remember { mutableStateOf(false) }
 
             val datePicker = GeneralDatePicker()
             val map = GoogleMapScreen()
@@ -206,7 +207,7 @@ class CampsiteInputScreen(){
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState(), enabled = !mapMoving),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
@@ -375,22 +376,17 @@ class CampsiteInputScreen(){
 
 
                 //LOCATION
-                Row(modifier = Modifier.padding(16.dp)) {
-                    Button(onClick = {showMap = true}){
-                        Text("Add Location")
-                    }
+
+                Box(modifier = Modifier.fillMaxSize().padding(12.dp).height(500.dp)){
+                    map.GoogleMapScreen(
+                        campNumLocation, true,
+                        onNewLocation = {
+                            campNumLocation = it
+                        },
+                        onMoving = {mapMoving = it}
+                    )
                 }
 
-                if(showMap){
-                    Box(modifier = Modifier.fillMaxSize().padding(16.dp)){
-                        map.GoogleMapScreen(
-                            campNumLocation, true,
-                            onNewLocation = {
-                                campNumLocation = it
-                                showMap = false
-                            })
-                    }
-                }
 
                 Row(modifier = Modifier.padding(16.dp)) {
                     OutlinedTextField(
