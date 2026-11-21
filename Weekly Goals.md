@@ -36,6 +36,8 @@ yuming: search bar for admin, test for search bar, test for admin class, impleme
 
 Leighan: switch modes for admin, and add necessary tests for it. Get the foundation of viewing owners,review,ratings that violate app policy done. Also have to keep in mind/maybe do: update the UI and Admin storyboard.
 
+Nick: account creation + editing + deletion for all roles
+
 # Week 6 (Nov 17)
 
 Salix: Implement the new multi owner lotteries, the user waitlist screen, waitlist notifications, help with reservations
