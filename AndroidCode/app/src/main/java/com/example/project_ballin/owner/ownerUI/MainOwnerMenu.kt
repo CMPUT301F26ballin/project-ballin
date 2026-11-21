@@ -12,16 +12,19 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.project_ballin.OwnerList
+import com.example.project_ballin.UserRole
 import com.example.project_ballin.reusableui.TopAppBar
-import kotlin.uuid.Uuid
+import com.example.project_ballin.reusableui.UserDetailModel
+
 /**
  * The Main menu for when an Owner account logs in. It features buttons to go to campsites,
  * lotteries, viewing past notifications, and viewing your active reservations.
@@ -41,6 +44,11 @@ class MainOwnerMenu(){
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun OwnerMenuScreen(navController: NavController, ownerID: String) {
+
+        val ownerList = remember { OwnerList() }
+        val owner = ownerList.getOwner(ownerID)
+        val firstName = owner?.firstName ?: ""
+
         TopAppBar(
             navController = navController,
             screenTitle = "Owner Homepage",
@@ -55,7 +63,7 @@ class MainOwnerMenu(){
             ) {
                 Spacer(modifier = Modifier.height(128.dp))
                 Text(
-                    text = "Welcome Owner",
+                    text = "Welcome $firstName",
                     fontSize = 34.sp
                 )
                 Spacer(modifier = Modifier.height(128.dp))
@@ -76,7 +84,7 @@ class MainOwnerMenu(){
                 Spacer(modifier = Modifier.height(16.dp))
                 OwnerOptionsButton("Past Notifications", "", "", navController) // TODO
                 Spacer(modifier = Modifier.height(16.dp))
-                OwnerOptionsButton("Active Reservations", "", "", navController) // TODO
+                OwnerOptionsButton("Active Reservations", "allOwnerCampReservations/$ownerID", "", navController) // TODO
                 Spacer(modifier = Modifier.height(16.dp))
                 OwnerOptionsButton(
                     "POLICY AND GUIDELINES",
@@ -84,6 +92,16 @@ class MainOwnerMenu(){
                     "",
                     navController
                 )
+
+               // if (userCurrentSession.isAdmin) {
+                 //   Spacer(modifier = Modifier.height(16.dp))
+                   // OwnerOptionsButton(
+                     //   "SWITCH MODES",
+                       // "AdminSwitchModes",
+                        //"switchModesButton",
+                        //navController
+                    //)
+                //}
             }
         }
     }

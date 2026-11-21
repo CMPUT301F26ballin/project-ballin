@@ -35,7 +35,7 @@ class AdminProfileScreenTest {
     @Test
     fun browseProfiles_showsEveryProfile() {
         composeRule.setContent {
-            AdminProfileListView(listOf(john, jane), onProfileClick = {}, onDelete = {})
+            AdminProfilesScreens().AdminProfileListView(listOf(john, jane), onProfileClick = {}, onDelete = {})
         }
         composeRule.onNodeWithText("John Ballin").assertIsDisplayed()
         composeRule.onNodeWithText("Jane Keller").assertIsDisplayed()
@@ -45,7 +45,7 @@ class AdminProfileScreenTest {
     @Test
     fun browseProfiles_emptyListShowsMessage() {
         composeRule.setContent {
-            AdminProfileListView(emptyList(), onProfileClick = {}, onDelete = {})
+            AdminProfilesScreens().AdminProfileListView(emptyList(), onProfileClick = {}, onDelete = {})
         }
         composeRule.onNodeWithTag("noProfiles").assertIsDisplayed()
     }
@@ -54,7 +54,7 @@ class AdminProfileScreenTest {
     fun tappingProfile_opensThatProfile() {
         var clicked: Profile? = null
         composeRule.setContent {
-            AdminProfileListView(listOf(john, jane), onProfileClick = { clicked = it }, onDelete = {})
+            AdminProfilesScreens().AdminProfileListView(listOf(john, jane), onProfileClick = { clicked = it }, onDelete = {})
         }
         composeRule.onNodeWithTag("profileItem_user2").performClick()
         assertEquals(jane, clicked)
@@ -64,7 +64,7 @@ class AdminProfileScreenTest {
     fun removeProfile_confirmRemovesIt() {
         val profiles = mutableStateListOf(john, jane)
         composeRule.setContent {
-            AdminProfileListView(profiles, onProfileClick = {}, onDelete = { profiles.remove(it) })
+            AdminProfilesScreens().AdminProfileListView(profiles, onProfileClick = {}, onDelete = { profiles.remove(it) })
         }
         composeRule.onNodeWithTag("removeProfile_user1").performClick()
         composeRule.onNodeWithTag("confirmDeleteDialog").assertIsDisplayed()
@@ -78,7 +78,7 @@ class AdminProfileScreenTest {
     fun removeProfile_cancelKeepsIt() {
         val profiles = mutableStateListOf(john, jane)
         composeRule.setContent {
-            AdminProfileListView(profiles, onProfileClick = {}, onDelete = { profiles.remove(it) })
+            AdminProfilesScreens().AdminProfileListView(profiles, onProfileClick = {}, onDelete = { profiles.remove(it) })
         }
         composeRule.onNodeWithTag("removeProfile_user1").performClick()
         composeRule.onNodeWithTag("cancelDelete").performClick()
@@ -91,7 +91,7 @@ class AdminProfileScreenTest {
     @Test
     fun profileDetails_showsAllInformation() {
         composeRule.setContent {
-            AdminProfileDetailView(john, onDelete = {})
+            AdminProfilesScreens().AdminProfileDetailView(john, onDelete = {})
         }
         composeRule.onNodeWithText("John").assertIsDisplayed()
         composeRule.onNodeWithText("Ballin").assertIsDisplayed()
@@ -104,7 +104,7 @@ class AdminProfileScreenTest {
     @Test
     fun profileDetails_missingPhoneShowsNotProvided() {
         composeRule.setContent {
-            AdminProfileDetailView(jane, onDelete = {})
+            AdminProfilesScreens().AdminProfileDetailView(jane, onDelete = {})
         }
         composeRule.onNodeWithText("Not provided").assertIsDisplayed()
     }
@@ -113,7 +113,7 @@ class AdminProfileScreenTest {
     fun profileDetails_removeAfterConfirm() {
         var deleted: Profile? = null
         composeRule.setContent {
-            AdminProfileDetailView(john, onDelete = { deleted = it })
+            AdminProfilesScreens().AdminProfileDetailView(john, onDelete = { deleted = it })
         }
         composeRule.onNodeWithTag("removeProfileDetail").performClick()
         composeRule.onNodeWithTag("confirmDelete").performClick()

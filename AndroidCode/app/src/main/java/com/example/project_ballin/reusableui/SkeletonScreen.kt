@@ -59,6 +59,7 @@ fun TopAppBar(navController: NavController,
               profileButton: Boolean = true,
               content: @Composable BoxScope.() -> Unit = {}
 ) {
+
     val scrollBehavior = TopAppBarDefaults
         .pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
@@ -93,9 +94,9 @@ fun TopAppBar(navController: NavController,
                     if (profileButton) { //make false on profile screens
                         Button(
                             onClick = {
-                                navController.navigate("profile")
+                                navController.navigate("editprofile")
                             },
-                            modifier = Modifier.testTag("profile") // for testing
+                            modifier = Modifier.testTag("editprofile") // for testing
                         ) {
                             Text("Profile")
                         }

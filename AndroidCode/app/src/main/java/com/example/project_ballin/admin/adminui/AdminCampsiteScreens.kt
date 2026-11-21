@@ -18,10 +18,12 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,9 +34,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +48,9 @@ import com.example.project_ballin.reusableui.TopAppBar
 import com.google.firebase.firestore.Blob
 
 class AdminCampsiteScreens {
+
+    val adminSearch = AdminSearch()
+    val confirmDeleteDialog = ConfirmDeleteDialog()
     /**
      * Admin screen listing every campsite in the app, each with a Remove button.
      *
@@ -67,7 +74,14 @@ class AdminCampsiteScreens {
             )
         }
     }
-
+    /**
+     * Searches a campsite by name, location, description, tags, and owner ID.
+     *
+     * @param query the search text
+     * @return true if the campsite matches the search
+     */
+    fun Campsite.matchesSearch(query: String): Boolean =
+        adminSearch.matchesQuery(query, name, locationName, description, tags.joinToString(" "), ownerID)
     /**
      * The campsite list itself (no top bar), so it can be tested on its own.
      *
@@ -96,8 +110,8 @@ class AdminCampsiteScreens {
                 Text("There are no campsites yet.", modifier = Modifier.testTag("noCampsites"))
             }
         } else {
-            Column(modifier = Modifier.fillMaxSize()) {
-                AdminSearchField(
+            Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                adminSearch.AdminSearchField(
                     query,
                     onQueryChange = { query = it },
                     placeholder = "Search campsites"
@@ -120,6 +134,7 @@ class AdminCampsiteScreens {
                                 onClick = { onCampsiteClick(site) },
                                 onRemoveClick = { siteToDelete = site }
                             )
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
@@ -127,7 +142,7 @@ class AdminCampsiteScreens {
         }
 
         siteToDelete?.let { site ->
-            ConfirmDeleteDialog(
+            confirmDeleteDialog.ConfirmDeleteDialog(
                 itemDescription = "the campsite \"${site.name}\"",
                 onConfirm = {
                     onDelete(site)
@@ -151,26 +166,27 @@ class AdminCampsiteScreens {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onClick() }
-                .testTag("adminCampsiteItem_${site.ID}")
+                .testTag("adminCampsiteItem_${site.ID}"),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(site.name, fontSize = 18.sp)
+                    Text( site.name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                     Text(
                         site.locationName,
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.primary
                     )
                     Text(formatPrice(site.price) + " / night", fontSize = 12.sp)
                 }
                 Button(
                     onClick = onRemoveClick,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
+                        containerColor = Color.Red
                     ),
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.testTag("removeCampsite_${site.ID}")
                 ) {
                     Text("Remove")
@@ -246,8 +262,9 @@ class AdminCampsiteScreens {
             Button(
                 onClick = { showDialog = true },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
+                    containerColor = Color.Red
                 ),
+                shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth().testTag("removeCampsiteDetail")
             ) {
                 Text("Remove Campsite")
@@ -255,7 +272,7 @@ class AdminCampsiteScreens {
         }
 
         if (showDialog) {
-            ConfirmDeleteDialog(
+            confirmDeleteDialog.ConfirmDeleteDialog(
                 itemDescription = "the campsite \"${site.name}\"",
                 onConfirm = {
                     showDialog = false
@@ -331,8 +348,9 @@ class AdminCampsiteScreens {
     @Composable
     fun CampsiteDetailRow(label: String, value: String) {
         Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-            Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-            Text(value, fontSize = 18.sp)
+            Text(label, fontSize = 18.sp,
+                fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            Text(value)
         }
     }
 

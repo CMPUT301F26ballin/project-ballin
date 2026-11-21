@@ -12,9 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,15 +29,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.reusableui.TopAppBar
-
+/**
+ * The views allowing Admin users to view profiles.
+ *
+ *
+ * */
 class AdminProfilesScreens {
+    val adminSearch = AdminSearch()
+    val confirmDeleteDialog = ConfirmDeleteDialog()
     /**
      * Admin screen listing all profiles, each with a Remove button.
      *
@@ -58,6 +70,16 @@ class AdminProfilesScreens {
         }
     }
 
+
+    /**
+     * Searches a profile by name, email, phone number, role, and user ID.
+     *
+     * @param query the search text
+     * @return true if the profile matches the search
+     */
+    fun Profile.matchesSearch(query: String): Boolean =
+        adminSearch.matchesQuery(query, fullName, email, phoneNum, role, userID)
+
     /**
      * The profile list itself (no top bar), so it can be tested on its own.
      *
@@ -78,6 +100,8 @@ class AdminProfilesScreens {
         var query by rememberSaveable { mutableStateOf("") }
         val results = profiles.filter { it.matchesSearch(query) }
 
+
+
         if (profiles.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -86,8 +110,8 @@ class AdminProfilesScreens {
                 Text("There are no profiles yet.", modifier = Modifier.testTag("noProfiles"))
             }
         } else {
-            Column(modifier = Modifier.fillMaxSize()) {
-                AdminSearchField(
+            Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                adminSearch.AdminSearchField(
                     query,
                     onQueryChange = { query = it },
                     placeholder = "Search profiles"
@@ -109,6 +133,7 @@ class AdminProfilesScreens {
                                 onClick = { onProfileClick(profile) },
                                 onRemoveClick = { profileToDelete = profile }
                             )
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
@@ -116,7 +141,7 @@ class AdminProfilesScreens {
         }
 
         profileToDelete?.let { profile ->
-            ConfirmDeleteDialog(
+            confirmDeleteDialog.ConfirmDeleteDialog(
                 itemDescription = "the profile of ${profile.fullName}",
                 onConfirm = {
                     onDelete(profile)
@@ -140,22 +165,24 @@ class AdminProfilesScreens {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onClick() }
-                .testTag("profileItem_${profile.userID}")
+                .testTag("profileItem_${profile.userID}"),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(profile.fullName, fontSize = 18.sp)
-                    Text(profile.role, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                    Text(profile.fullName, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(profile.role, fontSize = 12.sp)
                     Text(profile.email, fontSize = 12.sp)
                 }
                 Button(
                     onClick = onRemoveClick,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
+                        containerColor = Color.Red
                     ),
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.testTag("removeProfile_${profile.userID}")
                 ) {
                     Text("Remove")
@@ -208,7 +235,7 @@ class AdminProfilesScreens {
 
         var showDialog by remember { mutableStateOf(false) }
 
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState())) {
             // TODO: show profile picture
             ProfileDetailRow("First Name", profile.firstName)
             ProfileDetailRow("Last Name", profile.lastName)
@@ -223,8 +250,9 @@ class AdminProfilesScreens {
             Button(
                 onClick = { showDialog = true },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
+                    containerColor = Color.Red
                 ),
+                shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth().testTag("removeProfileDetail")
             ) {
                 Text("Remove Profile")
@@ -232,7 +260,7 @@ class AdminProfilesScreens {
         }
 
         if (showDialog) {
-            ConfirmDeleteDialog(
+            confirmDeleteDialog.ConfirmDeleteDialog(
                 itemDescription = "the profile of ${profile.fullName}",
                 onConfirm = {
                     showDialog = false
@@ -251,9 +279,11 @@ class AdminProfilesScreens {
      */
     @Composable
     fun ProfileDetailRow(label: String, value: String) {
+        Spacer(modifier = Modifier.height(16.dp))
         Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-            Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-            Text(value, fontSize = 18.sp)
+            Text(label, fontSize = 18.sp,
+                fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            Text(value)
         }
     }
 

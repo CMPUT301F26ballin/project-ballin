@@ -2,8 +2,10 @@ package com.example.project_ballin.admin.adminui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -25,14 +27,33 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
-import com.example.project_ballin.AdminSearchField
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import com.example.project_ballin.AdminSearch
+import com.example.project_ballin.ConfirmDeleteDialog
+import com.example.project_ballin.Message
 import com.example.project_ballin.Notification
-import com.example.project_ballin.matchesSearch
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 
 
 class NotificationListScreen {
+
+    val adminSearch = AdminSearch()
+    val confirmDeleteDialog = ConfirmDeleteDialog()
+
+    /**
+     * Searches a notification by its content, recipient, and date sent.
+     *
+     * @param query the search text
+     * @return true if the notification matches the search
+     */
+    fun Notification.matchesSearch(query: String): Boolean =
+        adminSearch.matchesQuery(query, content, recipientID, getFormattedDate())
     /**
      * A composable that shows the overview of all the notifications
      *
@@ -42,7 +63,8 @@ class NotificationListScreen {
     @Composable
     fun NotificationList(
         navController: NavController,
-        notifications: List<Notification>
+        notifications: List<Notification>,
+        onDelete: (Notification) -> Unit
     ) {
         TopAppBar(
             navController = navController,
@@ -54,7 +76,6 @@ class NotificationListScreen {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-
                 Spacer(modifier = Modifier.height(34.dp))
 
                 if (notifications.isEmpty()) {
@@ -69,7 +90,7 @@ class NotificationListScreen {
                     var query by rememberSaveable { mutableStateOf("") }
                     val results = notifications.filter { it.matchesSearch(query) }
 
-                    AdminSearchField(
+                        adminSearch.AdminSearchField(
                         query,
                         onQueryChange = { query = it },
                         placeholder = "Search notifications"
@@ -81,15 +102,24 @@ class NotificationListScreen {
                             modifier = Modifier.padding(16.dp).testTag("noSearchResults")
                         )
                     } else {
-                        ListNotifications(navController, results)
+                        ListNotifications(navController, results, onDelete = {onDelete(it)})
                     }
                 }
             }
         }
     }
 
+    /**
+     * Shows all the notifications in a list.
+     *
+     * @param navController the navController of the app
+     * @param notifications the list of notifications to iterate through
+     * @param onDelete runs when the delete button is pressed
+     */
     @Composable
-    fun ListNotifications(navController: NavController, notifications: List<Notification>) {
+    fun ListNotifications(navController: NavController, notifications: List<Notification>, onDelete: (Notification) -> Unit) {
+        var notificationToDelete by remember {mutableStateOf<Notification?>(null)}
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -97,9 +127,20 @@ class NotificationListScreen {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             itemsIndexed(notifications) { index, notification ->
-                NotificationButtonRow(index, notification, navController)
+                NotificationButtonRow(index, notification, navController, onDelete = {notificationToDelete = notification})
                 Spacer(modifier = Modifier.height(16.dp))
             }
+        }
+
+        notificationToDelete?.let { notification ->
+            confirmDeleteDialog.ConfirmDeleteDialog(
+                itemDescription = "the notification",
+                onConfirm = {
+                    onDelete(notification)
+                    notificationToDelete = null
+                },
+                onCancel = { notificationToDelete = null }
+            )
         }
     }
 
@@ -110,12 +151,14 @@ class NotificationListScreen {
      * @param index the index of the notification in the list
      * @param notification the notification to show
      * @param navController the navController of the app
+     * @param onDelete runs when the delete button is pressed
      */
     @Composable
     fun NotificationButtonRow(
         index: Int,
         notification: Notification,
-        navController: NavController
+        navController: NavController,
+        onDelete: (Notification) -> Unit
     ) {
 
         Button(
@@ -125,19 +168,36 @@ class NotificationListScreen {
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .testTag("checkNotification${index + 1}") // for UI testing
-                .width(250.dp)
-                .height(85.dp)
+                .fillMaxWidth()
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Arbitrary indexes, so no inherent order to them, just for sake of ui
-                // I didn't want to display the Uuid of Notification
-                Text("Notification ${index + 1}")
-                Text(
-                    text = "Date Sent: ${notification.getFormattedDate()}",
-                    fontSize = 10.sp
-                )
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    // Arbitrary indexes, so no inherent order to them, just for sake of ui
+                    // I didn't want to display the Uuid of Notification
+                    Text(
+                        text = "Notification ${index + 1}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text("Date Sent: ${notification.getFormattedDate()}")
+                    Text("Recipient: ${notification.recipientID}")
+                }
+
+                Button(
+                    onClick = { onDelete(notification) },
+                    modifier = Modifier
+                        .testTag("removeMessage_${notification.ID}"), // for UI testing
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red
+                    )
+                ) {
+                    Text("Remove")
+                }
             }
         }
     }
@@ -150,6 +210,6 @@ class NotificationListScreen {
             Notification("Hello", Date(), "1", "1"),
             Notification("Hi", Date(), "2", "2"),
         )
-        NotificationList(navController, sampleNotifications)
+        NotificationList(navController, sampleNotifications, onDelete = {})
     }
 }

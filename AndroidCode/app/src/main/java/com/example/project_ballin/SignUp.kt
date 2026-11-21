@@ -1,16 +1,25 @@
 package com.example.project_ballin
 
+import android.provider.Settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.ui.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.*
 import androidx.navigation.compose.*
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.reusableui.UserDetailModel
 import kotlin.uuid.Uuid
+import androidx.compose.runtime.collectAsState
 
+enum class UserRole {
+    ENTRANT, OWNER, ADMIN
+}
 /**
  *
  * the first screen a user will see, need to implement something that will
@@ -19,62 +28,101 @@ import kotlin.uuid.Uuid
  * @param navController a [NavController] to continue to enter details screen
  *
  */
-
-@Composable
-fun Signup(navController: NavController){
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Welcome To Fire-ballin",
-            fontSize = 34.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "The Lottery-based Campsite Reservation App",
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Please sign up to continue:",
-            fontSize = 16.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                navController.navigate("MainEntrantMenu")
-            },
-            modifier = Modifier.testTag("entrantSignin") // for testing
+class SignUp() {
+    @Composable
+    fun Signup(
+        navController: NavController,
+        viewModel: UserDetailModel = viewModel(),
         ) {
-            Text("Sign-up as Entrant")
+
+        val context = LocalContext.current
+        val deviceId = remember {
+            Settings.Secure.getString(
+                context.contentResolver,
+                Settings.Secure.ANDROID_ID
+            ) ?: ""
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
-        Button(
-            onClick = {
-                val ownerID = "Test1" // just for testing
-                navController.navigate("OwnerMenu/${ownerID}")
-            },
-            modifier = Modifier.testTag("ownerSignin") // for testing
-        ) {
-            Text("Sign-up as Campsite Owner")
+        val uiState by viewModel.uiState.collectAsState()
+
+        LaunchedEffect(deviceId) {
+            viewModel.loadExistingUser(deviceId)
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        val isUser = deviceId.isNotBlank() && uiState.deviceId == deviceId
 
-        Button(
-            onClick = {
-                navController.navigate("Admin Menu Screen")
-            },
-            modifier = Modifier.testTag("adminSignin") // for testing
+        Column(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Sign-up as Admin")
+            Text(
+                text = "Welcome To Fire-ballin",
+                fontSize = 34.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "The Lottery-based Campsite Reservation App",
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Please sign up to continue:",
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    if (isUser){
+                        when (viewModel.selectedRole.value) {
+                            UserRole.ENTRANT -> {
+                                navController.navigate("EntrantMenu/${uiState.userID}")
+                            }
+                            UserRole.OWNER -> {
+                                navController.navigate("OwnerMenu/${uiState.userID}")
+                            }
+                            UserRole.ADMIN -> {
+                                navController.navigate("AdminMenu/${uiState.userID}")
+                            }
+                        }
+                    } else {
+                        navController.navigate("createprofile")
+                    }
+                },
+                modifier = Modifier.testTag("createProfile") // for testing
+            ) {
+                if (isUser){
+                    Text("Continue as ${uiState.firstName}")
+                }else
+                Text("Continue") //this will be the only valid button soon
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+//            Button(
+//                onClick = {
+//                    val ownerID = "Test1" // just for testing
+//                    navController.navigate("OwnerMenu/${ownerID}")
+//                },
+//                modifier = Modifier.testTag("ownerSignin") // for testing
+//            ) {
+//                Text("Sign-up as Campsite Owner")
+//            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+//            Button(
+//                onClick = {
+//                    navController.navigate("Admin Menu Screen")
+//                },
+//                modifier = Modifier.testTag("adminSignin") // for testing
+//            ) {
+//                Text("Sign-up as Admin")
+//            }
         }
     }
 }
@@ -83,5 +131,6 @@ fun Signup(navController: NavController){
 @Composable
 fun SignupPreview() {
     val navController = rememberNavController()
-    Signup(navController)
+    val signup = SignUp()
+    signup.Signup(navController)
 }

@@ -10,15 +10,15 @@ import kotlin.uuid.Uuid
  *
  * Messages have an ownerID, entrantID, content, and dateSent.
  *
- * @property ownerID the ID of the owner of the message.
- * @property entrantID the ID of the entrant which owner sent message to.
+ * @property senderID the ID of the user who sent the message.
+ * @property recipientID the ID of the user which sender sent message to.
  * @property content the body/content of the message
  * @property dateSent the date the message was sent
  * @property ID the unique ID of the message
  */
 class Message (
-    var ownerID: String = "",
-    var entrantID: String = "",
+    var senderID: String = "",
+    var recipientID: String = "",
     var content: String = "",
     var dateSent: Date = Date(),
     var ID: String = Uuid.random().toString()

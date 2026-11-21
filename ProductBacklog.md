@@ -81,9 +81,13 @@
 - Story Points: 3
 - Risk: Low
 
-**US 01.08.01 As an entrant, I want to delete my profile.**
+**US 01.08.01 As an entrant, I want to delete my profile.**✅
 - Story Points: 5
 - Risk: Low
+
+**US 01.08.02 As an entrant, I want to add, update, or remove my profile image/**
+-Story Points: 3
+-Risk: Low
 
 **US 01.09.01 As an entrant, I want to be identified by my device, so that I do not have to use a username and password.** ✅
 - Story Points: 8
@@ -104,6 +108,14 @@
 **US 01.13.01 As an entrant, I want to give a rating for a campsite.**
 - Story Points: 5
 - Risk: Low
+
+**US 01.13.02 As an entrant, I want to post a review for a campsite.**
+- Story Points: 5
+- Risk: Medium
+
+**US 01.14.01 As an entrant, I want to message the campsite owner for a reservation that I have.**
+- Story Points: 5
+- Risk: Medium  
 
 ## Campsite Owner:  
 **US 02.01.01 As a campsite owner, I want to register my campsite with the app.**  ✅
@@ -162,11 +174,11 @@
 - Story Points: 5 
 - Risk: High
 
-**US 02.06.01 As a campsite owner, I want to view the currently booked dates for my campsite**  ✅
+**US 02.06.01 As a campsite owner, I want to view the currently booked dates for my campsite**  
 - Story Points: 2
 - Risk: High
 
-**US 02.07.01 As a campsite owner, I want to view a list of active reservations.**  ✅
+**US 02.07.01 As a campsite owner, I want to view a list of active reservations.**  
 - Story Points: 2 
 - Risk: Medium
 
@@ -291,6 +303,12 @@
 - Story Points: 2
 - Risk: Low
 
+**US 03.08.01 As an admin, I want to remove campsite ratings that violate app policy.**
+- Story Points: 3
+- Risk Medium
 
+**US 03.08.02 As an admin, I want to remove campsite reviews that violate app policy.**
+- Story Points: 3
+- Risk Medium
 
 
