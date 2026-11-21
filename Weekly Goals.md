@@ -47,3 +47,5 @@ Leighan: finishing up admin side - switch modes, reporting system and seeing/rem
 Peter: I will finish off the message sending and reservation-viewing functions, I will figure out map views for the location of a campsite (and hopefully refine campsite location input), I will figure out QR Code generation, and I will figure out how to fix the image rotation bug (where images taken on a vertical phone get rotated.)
 
 Mies: Working on creating, modifying, and viewing reservations for campsites
+
+Nick: working on filter by dates, then account profile pic editing 
