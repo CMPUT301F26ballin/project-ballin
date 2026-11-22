@@ -42,6 +42,7 @@ import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
 import com.example.project_ballin.reusableui.UserDetailModel
 import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
@@ -123,8 +124,7 @@ class BallinApp(){
                     "campsite1",
                     "2",
                     //Location(""),
-                    lat = 0.0,
-                    lon = 0.0,
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -145,9 +145,7 @@ class BallinApp(){
                 Campsite(
                     "campsite2",
                     "4",
-                    lat = 0.0,
-                    lon = 0.0,
-
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -168,8 +166,7 @@ class BallinApp(){
                 Campsite(
                     "campsite3",
                     "5",
-                    lat = 0.0,
-                    lon = 0.0,
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -248,7 +245,7 @@ class BallinApp(){
                     Uuid.random().toString(),
                     Uuid.random().toString(),
                     "You are booked!",
-                    Date(),
+                    System.currentTimeMillis(),
                     Uuid.random().toString()
                 )
             )
@@ -317,6 +314,9 @@ class BallinApp(){
         //RESERVATION SCREEN OBJECTS
         val ownerReservationScreen = OwnerReservationScreen()
         val reservationDetailScreen = ReservationDetailScreen()
+
+        //MessagingScreen
+        val messagingScreen = MessagingScreen()
 
         NavHost(navController = navController, startDestination = "signup") {
             composable("signup") { signUpScreen.Signup(navController) }
@@ -387,6 +387,19 @@ class BallinApp(){
             composable("messagingScreen/{UserID}/{OwnerID}"){
                 val userIDString = it.arguments!!.getString("UserID")
                 val ownerID = it.arguments!!.getString("OwnerID")
+
+                val entrant = entrantList.getEntrant(userIDString!!)
+
+
+                messagingScreen.MessagingScreen(navController, ownerID!!, userIDString!!, entrant!!.firstName,
+                    onAddMessage = {userID, ownerID, messageContent -> messageList.addMessage(
+                        Message(
+                            senderID = ownerID,
+                            recipientID = userID,
+                            content = messageContent,
+                            dateSent = System.currentTimeMillis()
+                        ))}
+                    )
 
 
             }

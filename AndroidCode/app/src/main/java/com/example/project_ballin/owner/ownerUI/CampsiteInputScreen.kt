@@ -7,6 +7,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.hardware.biometrics.FallbackOption
 import android.location.Location
 import android.net.Uri
 import android.util.Log
@@ -19,6 +20,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,6 +56,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -70,6 +73,9 @@ import kotlin.let
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import androidx.core.graphics.scale
+import com.example.project_ballin.GoogleMapScreen
+import com.example.project_ballin.QRCodeGenerator
+import com.google.android.gms.maps.model.LatLng
 import java.io.ByteArrayOutputStream
 import kotlin.math.roundToInt
 
@@ -135,8 +141,7 @@ class CampsiteInputScreen(){
         ) {
             //initializing input variables (there's a lot of them)
             var campName by remember { mutableStateOf("") }
-            var campLat by remember { mutableStateOf("") }
-            var campLon by remember { mutableStateOf("") }
+            var campNumLocation by remember { mutableStateOf<LatLng>(LatLng(0.0,0.0)) }
             var campLocation by remember { mutableStateOf("") }
             var campTags = remember { mutableStateListOf<String>() }
             var tagToAdd by remember { mutableStateOf("") }
@@ -151,7 +156,11 @@ class CampsiteInputScreen(){
             var showDatePicker by remember { mutableStateOf(false) }
             var addDate by remember { mutableStateOf(true) }
 
+            var mapMoving by remember { mutableStateOf(false) }
+
             val datePicker = GeneralDatePicker()
+            val map = GoogleMapScreen()
+            val qrGenerator = QRCodeGenerator()
 
 
             val context: Context = LocalContext.current
@@ -184,8 +193,10 @@ class CampsiteInputScreen(){
                 campOccupancy = oldSite.occupancy.toString()
                 oldSite.images.forEach { byteArray -> campByteArray.add(byteArray) }
                 oldSite.availability.forEach { date -> campAvailableDates.add(date) }
-                campLat = oldSite.lat.toString()
-                campLon = oldSite.lon.toString()
+                val locStrings = oldSite.location.split(",")
+                val lat = locStrings[0].toDouble()
+                val lon = locStrings[1].toDouble()
+                campNumLocation = LatLng(lat, lon)
                 campLocation = oldSite.locationName
                 //oldSite.images.forEach { image -> campByteArray.add(image) }
                 Log.d("Site", "Restored")
@@ -198,7 +209,7 @@ class CampsiteInputScreen(){
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState(), enabled = !mapMoving),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
@@ -367,29 +378,17 @@ class CampsiteInputScreen(){
 
 
                 //LOCATION
-                Row(modifier = Modifier.padding(16.dp)) {
-                    OutlinedTextField(
-                        value = campLat,
-                        onValueChange = { campLat = it },
-                        label = { Text("Latitude") },
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("campLat")
-                            .fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    OutlinedTextField(
-                        value = campLon,
-                        onValueChange = { campLon = it },
-                        label = { Text("Longitude") },
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("campLon")
-                            .fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+                Box(modifier = Modifier.fillMaxSize().padding(12.dp).height(500.dp)){
+                    map.GoogleMapScreen(
+                        campNumLocation, true,
+                        onNewLocation = {
+                            campNumLocation = it
+                        },
+                        onMoving = {mapMoving = it}
                     )
                 }
+
 
                 Row(modifier = Modifier.padding(16.dp)) {
                     OutlinedTextField(
@@ -450,17 +449,17 @@ class CampsiteInputScreen(){
                                     campDesc.isNotBlank() &&
                                     campOccupancy.isNotBlank() &&
                                     campPrice.isNotBlank() &&
-                                    campRules.isNotBlank()
+                                    campRules.isNotBlank() &&
+                                    campNumLocation != LatLng(0.0, 0.0)
 
                                 ) {
                                     //must assert numbers in price and occupancy
+                                    val campID = Uuid.random().toString()
                                     addSite(
                                         Campsite(
                                             name = campName,
-                                            lon = campLon.toDouble(),
-                                            lat = campLat.toDouble(),
-                                            ID = Uuid.random()
-                                                .toString(), //FIGURE OUT ID IMPLEMENTATION
+                                            location = campNumLocation.toString(),
+                                            ID = campID,
                                             ownerID = ownerID,
                                             price = campPrice.toFloat(),
                                             rating = null,
@@ -473,6 +472,7 @@ class CampsiteInputScreen(){
                                             locationName = campLocation,
                                             availability = campAvailableDates,
                                             lotteries = mutableListOf(),
+                                            QRCode = qrGenerator.encodeQRBlobFromString(campID)
                                         )
                                     )
                                     Log.d("Navigation", "Adding campsite and returning to list")
@@ -491,18 +491,15 @@ class CampsiteInputScreen(){
                                     campDesc.isNotBlank() &&
                                     campOccupancy.isNotBlank() &&
                                     campPrice.isNotBlank() &&
-                                    campRules.isNotBlank()
+                                    campRules.isNotBlank() &&
+                                    campNumLocation != LatLng(0.0, 0.0)
                                 ) {
-                                    val location = Location(campLocation)
-                                    location.latitude = campLat.toDouble()
-                                    location.longitude = campLon.toDouble()
                                     updateSite(
                                         oldSite, Campsite(
                                             //location = location,
                                             name = campName,
                                             ID = oldSite.ID,
-                                            lon = campLon.toDouble(),
-                                            lat = campLat.toDouble(),
+                                            location = campNumLocation.toString(),
                                             ownerID = oldSite.ownerID,
                                             price = campPrice.toFloat(),
                                             rating = oldSite.rating,
@@ -514,6 +511,7 @@ class CampsiteInputScreen(){
                                             locationName = campLocation,
                                             availability = campAvailableDates,
                                             lotteries = mutableListOf(),
+                                            QRCode = oldSite.QRCode
                                         )
                                     )
                                     Log.d(
