@@ -18,12 +18,16 @@ class GeneralReportButton {
      * @param subjectReport the subject of the report
      * @param clickedID the ID of the clicked item that is being reported
      * @param navController the navController Object
+     * @param label the text on the button, e.g. "Report Owner"
+     * @param testTag the button's tag for UI testing
      */
     @Composable
     fun ReportButton(
         subjectReport: String,
         clickedID: String,
-        navController: NavController
+        navController: NavController,
+        label: String = "Report",
+        testTag: String = "reportButton"
     ) {
         Button(
             onClick = {
@@ -32,10 +36,10 @@ class GeneralReportButton {
                 )
             },
             modifier = Modifier
-                .testTag("reportButton")
+                .testTag(testTag)
                 .background(Color.Red)
         ){
-            Text("Report")
+            Text(label)
         }
     }
 }

@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.project_ballin.reusableui.GeneralReportButton
 import com.example.project_ballin.reusableui.TopAppBar
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
@@ -216,6 +217,30 @@ class CampsiteDetailScreen(){
                                 .testTag("viewPastReservationsButton")) {
                             Text("View Past Reservations")
                         }
+                    }
+                } else {
+                    // Anyone who doesn't own this campsite can report it, or report its owner
+                    val reportButton = GeneralReportButton()
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        reportButton.ReportButton(
+                            subjectReport = "Campsite",
+                            clickedID = site.ID,
+                            navController = navController,
+                            label = "Report Campsite",
+                            testTag = "reportCampsiteButton"
+                        )
+                        reportButton.ReportButton(
+                            subjectReport = "Owner",
+                            clickedID = site.ownerID,
+                            navController = navController,
+                            label = "Report Owner",
+                            testTag = "reportOwnerButton"
+                        )
                     }
                 }
             }
