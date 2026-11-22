@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.owner.ownerUI.OwnerReservationScreen
+import com.example.project_ballin.reusableui.GeneralReportButton
 import com.example.project_ballin.reusableui.TopAppBar
 
 /**
@@ -34,7 +35,14 @@ class MessagingScreen {
 
         TopAppBar(navController, "Messaging ${entrant!!.firstName}"){
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-                
+                // Lets the owner report the entrant they are messaging
+                GeneralReportButton().ReportButton(
+                    subjectReport = "Entrant",
+                    clickedID = userID,
+                    navController = navController,
+                    label = "Report Entrant",
+                    testTag = "reportEntrantButton"
+                )
             }
         }
     }
