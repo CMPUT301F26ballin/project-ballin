@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.reusableui.GeneralReportButton
 import com.example.project_ballin.reusableui.TopAppBar
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 
 /**
@@ -56,9 +57,12 @@ class CampsiteDetailScreen(){
     fun CampsiteDetailScreen(navController: NavController, site: Campsite, userID: String) {
 
         val datePicker = GeneralDatePicker()
+        val map = GoogleMapScreen()
+        var mapMoving by remember { mutableStateOf(false) }
 
         TopAppBar(navController, "Campsite Details") {
             var showAvailability by remember { mutableStateOf(false) }
+            var showMap by remember { mutableStateOf(false) }
 
             Column(
                 modifier = Modifier
@@ -71,7 +75,7 @@ class CampsiteDetailScreen(){
                 Row(
                     modifier = Modifier
                         .padding(12.dp)
-                        .horizontalScroll(rememberScrollState())
+                        .horizontalScroll(rememberScrollState(), enabled = !mapMoving)
                 ) {
                     site.images.forEach { blob -> ImageDisplayRow(blob) }
                 }
@@ -108,7 +112,15 @@ class CampsiteDetailScreen(){
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    Text("Lat: ${site.lat} Lon ${site.lon}")
+                    Button(onClick = {showMap = true}) { }
+                }
+
+                if(showMap){
+                    val locStrings = site.location.split(",")
+                    map.GoogleMapScreen(LatLng(locStrings[0].toDouble(), locStrings[1].toDouble()),
+                        false,
+                        onNewLocation = {},
+                        onMoving = {mapMoving = it})
                 }
 
                 if (showAvailability) {

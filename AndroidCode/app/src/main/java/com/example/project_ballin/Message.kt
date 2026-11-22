@@ -20,7 +20,7 @@ class Message (
     var senderID: String = "",
     var recipientID: String = "",
     var content: String = "",
-    var dateSent: Date = Date(),
+    var dateSent: Long = System.currentTimeMillis(),
     var ID: String = Uuid.random().toString()
 ) {
 
