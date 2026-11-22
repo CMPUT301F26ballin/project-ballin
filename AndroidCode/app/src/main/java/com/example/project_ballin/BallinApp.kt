@@ -24,6 +24,7 @@ import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
+import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 import com.example.project_ballin.entrant.entantui.MainEntrantMenu
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
@@ -350,17 +351,26 @@ class BallinApp(){
                 var resList = listOf<Reservation>()
                 val ownerID = it.arguments!!.getString("OwnerID")
 
-                if(type == "Past"){
-                    resList = reservationList.getReservationsBefore(siteIDString!!, System.currentTimeMillis())
-                }
-                else if(type == "Active"){
-                    resList = reservationList.getReservationsAfter(siteIDString!!, System.currentTimeMillis())
-                }
-                else if(type == "Cancelled"){
+                if (type == "Past") {
+                    resList = reservationList.getReservationsBefore(
+                        siteIDString!!,
+                        System.currentTimeMillis()
+                    )
+                } else if (type == "Active") {
+                    resList = reservationList.getReservationsAfter(
+                        siteIDString!!,
+                        System.currentTimeMillis()
+                    )
+                } else if (type == "Cancelled") {
                     resList = reservationList.getCancelledReservations(siteIDString!!)
                 }
 
-                ownerReservationScreen.OwnerReservationScreen(navController, resList,ownerID!!, false)
+                ownerReservationScreen.OwnerReservationScreen(
+                    navController,
+                    resList,
+                    ownerID!!,
+                    false
+                )
 
             }
 
@@ -369,22 +379,34 @@ class BallinApp(){
                 val resList = mutableListOf<Reservation>()
                 val campList: List<Campsite> = campsiteList.getOwnerSites(ownerIDString!!)
                 campList.forEach { campsite ->
-                    val tempResList = reservationList.getReservationsAfter(campsite.ID, System.currentTimeMillis())
+                    val tempResList = reservationList.getReservationsAfter(
+                        campsite.ID,
+                        System.currentTimeMillis()
+                    )
                     tempResList.forEach { res -> resList.add(res) }
                 }
-                ownerReservationScreen.OwnerReservationScreen(navController, resList, ownerIDString, true)
+                ownerReservationScreen.OwnerReservationScreen(
+                    navController,
+                    resList,
+                    ownerIDString,
+                    true
+                )
 
             }
 
-            composable("reservationDetailScreen/{resID}/{OwnerID}"){
+            composable("reservationDetailScreen/{resID}/{OwnerID}") {
                 val resIDString = it.arguments!!.getString("resID")
                 val res = reservationList.getReservation(resIDString!!)
                 val ownerID = it.arguments!!.getString("OwnerID")
 
-                reservationDetailScreen.ReservationDetailScreen(navController, res!!,ownerID!!, onCancel = {reservationList.cancelReservation(res)})
+                reservationDetailScreen.ReservationDetailScreen(
+                    navController,
+                    res!!,
+                    ownerID!!,
+                    onCancel = { reservationList.cancelReservation(res) })
             }
 
-            composable("messagingScreen/{UserID}/{OwnerID}"){
+            composable("messagingScreen/{UserID}/{OwnerID}") {
                 val userIDString = it.arguments!!.getString("UserID")
                 val ownerID = it.arguments!!.getString("OwnerID")
 
@@ -559,7 +581,7 @@ class BallinApp(){
                     navController,
                     subjectReport!!,
                     clickedID!!,
-                    onAdd = {userReportList.addReport(it)}
+                    onAdd = { userReportList.addReport(it) }
                 )
             }
 
@@ -605,7 +627,11 @@ class BallinApp(){
             }
 
             composable("Browse Campsites") {
-                entrantBrowseCampsites.EntrantBrowseCampsites(navController, campsiteList, currentEntrant!!.userID)
+                entrantBrowseCampsites.EntrantBrowseCampsites(
+                    navController,
+                    campsiteList,
+                    currentEntrant!!.userID
+                )
             }
 
             composable("PoliciesAndGuidelines") {
@@ -614,6 +640,29 @@ class BallinApp(){
 
             composable("Scan QR Code") {
                 QRCodeScanner.QRCodeScanner(navController)
+            }
+
+            composable("confirmBooking/{campID}/{entrantID}/{chosenDates}") {
+                val campID = it.arguments?.getString("campID")
+                val entrantID = it.arguments?.getString("entrantID")
+                val chosenDates = it.arguments?.getString("chosenDates")
+                if (campID != null) {
+                    if (entrantID != null) {
+                        if (chosenDates != null) {
+                            val campsite = campsiteList.getCampsite(campID)
+                            val entrant = entrantList.getEntrant(entrantID)
+                            val chosenDatesList = chosenDates.split(",").map { it.toLong() }
+
+                            EntrantConfirmBooking().ConfirmBooking(
+                                navController,
+                                campsite!!,
+                                entrant!!,
+                                chosenDatesList,
+                                reservationList
+                            )
+                        }
+                    }
+                }
             }
         }
     }

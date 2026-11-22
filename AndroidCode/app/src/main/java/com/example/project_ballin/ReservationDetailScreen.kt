@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.reusableui.TopAppBar
+import java.text.DateFormat
+import java.util.Locale
 
 /**
  * A view class that shows the details of a reservation to an owner and gives them the option to reject
@@ -26,6 +28,15 @@ import com.example.project_ballin.reusableui.TopAppBar
  * */
 
 class ReservationDetailScreen {
+
+    // Source - https://stackoverflow.com/q/49551461
+    // Posted by HelloCW
+    // Retrieved 2026-11-21, License - CC BY-SA 3.0
+
+    fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
+        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+        return df.format(this)
+    }
 
     /**
      * The composable function that allows the user to view the active reservation's details
@@ -46,6 +57,9 @@ class ReservationDetailScreen {
         val entrant = entrantList.getEntrant(res.UserID!!)
         val confirmDeleteDialog = ConfirmDeleteDialog()
         var confirming = remember { false }
+
+        val startDate = res.dates?.get(0)?.toDateString()
+        val endDate = res.dates?.get(1)?.toDateString()
 
         TopAppBar(
             navController = navController,
@@ -70,12 +84,12 @@ class ReservationDetailScreen {
                 Row(modifier = Modifier.padding(16.dp)) {
                     Text("Site Name: ${site!!.name}")
                     Spacer(modifier = Modifier.padding(12.dp))
-                    Text("Start Date: TODO")
+                    Text("Start Date: $startDate")
                 }
                 Row(){
                     Text("Name: ${entrant!!.firstName} ${entrant.lastName}")
                     Spacer(modifier = Modifier.padding(12.dp))
-                    Text("End Date: TODO")
+                    Text("End Date: $endDate")
                 }
                 Row(modifier = Modifier.padding(16.dp)){
                     Button(onClick = {navController.navigate("messagingScreen/${res.UserID}/${ownerID}")},
@@ -91,11 +105,5 @@ class ReservationDetailScreen {
             }
 
         }
-
-
-
-
     }
-
-
 }

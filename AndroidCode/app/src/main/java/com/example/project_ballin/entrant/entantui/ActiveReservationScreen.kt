@@ -32,6 +32,8 @@ import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
+import java.text.DateFormat
+import java.util.Locale
 
 
 class ActiveReservationScreen {
@@ -153,6 +155,16 @@ class ActiveReservationScreen {
         }
     }
 
+    // Source - https://stackoverflow.com/q/49551461
+    // Posted by HelloCW
+    // Retrieved 2026-11-21, License - CC BY-SA 3.0
+
+    fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
+        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+        return df.format(this)
+    }
+
+
 
     /**
      * The entrant current reservation card
@@ -168,6 +180,9 @@ class ActiveReservationScreen {
     fun CurrentReservationCard(entrant: Entrant, reservation: Reservation, campsiteList: CampsiteList, navController: NavController){
         val campsite = campsiteList.getCampsite(reservation.campsiteID)
 
+        val startDate = reservation.dates?.get(0)?.toDateString()
+        val endDate = reservation.dates?.get(1)?.toDateString()
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -176,7 +191,7 @@ class ActiveReservationScreen {
         ) {
             Text(
                 text = "${campsite?.name}\n" +
-                        "From: ${reservation.dates?.get(0)} To: ${reservation.dates?.get(1)}\n" +
+                        "From: $startDate\n + To: $endDate\n" +
                         "Details:\n" +
                         " - ${campsite?.locationName}\n" +
                         " - ${campsite?.occupancy}",

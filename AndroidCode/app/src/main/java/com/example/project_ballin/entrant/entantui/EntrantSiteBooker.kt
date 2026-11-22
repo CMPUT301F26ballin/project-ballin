@@ -97,13 +97,7 @@ class EntrantSiteBooker {
 
             Button(
                 onClick = {
-                    entrant.activeReservations.add(Reservation(
-                        campsiteID,
-                        chosenDates,
-                        UserID = entrant.userID,
-                        cancelled = false,
-                        resID = Uuid.random().toString(),
-                    ))
+                    navController.navigate("confirmBooking/${campsiteID}/${entrant.userID}/${chosenDates?.joinToString(",")}")
                 },
                 enabled = chosenDates != null,
                 modifier = Modifier.padding(16.dp)
