@@ -245,7 +245,7 @@ class BallinApp(){
                     Uuid.random().toString(),
                     Uuid.random().toString(),
                     "You are booked!",
-                    Date(),
+                    System.currentTimeMillis(),
                     Uuid.random().toString()
                 )
             )
@@ -314,6 +314,9 @@ class BallinApp(){
         //RESERVATION SCREEN OBJECTS
         val ownerReservationScreen = OwnerReservationScreen()
         val reservationDetailScreen = ReservationDetailScreen()
+
+        //MessagingScreen
+        val messagingScreen = MessagingScreen()
 
         NavHost(navController = navController, startDestination = "signup") {
             composable("signup") { signUpScreen.Signup(navController) }
@@ -384,6 +387,19 @@ class BallinApp(){
             composable("messagingScreen/{UserID}/{OwnerID}"){
                 val userIDString = it.arguments!!.getString("UserID")
                 val ownerID = it.arguments!!.getString("OwnerID")
+
+                val entrant = entrantList.getEntrant(userIDString!!)
+
+
+                messagingScreen.MessagingScreen(navController, ownerID!!, userIDString!!, entrant!!.firstName,
+                    onAddMessage = {userID, ownerID, messageContent -> messageList.addMessage(
+                        Message(
+                            senderID = ownerID,
+                            recipientID = userID,
+                            content = messageContent,
+                            dateSent = System.currentTimeMillis()
+                        ))}
+                    )
 
 
             }

@@ -74,6 +74,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import androidx.core.graphics.scale
 import com.example.project_ballin.GoogleMapScreen
+import com.example.project_ballin.QRCodeGenerator
 import com.google.android.gms.maps.model.LatLng
 import java.io.ByteArrayOutputStream
 import kotlin.math.roundToInt
@@ -159,6 +160,7 @@ class CampsiteInputScreen(){
 
             val datePicker = GeneralDatePicker()
             val map = GoogleMapScreen()
+            val qrGenerator = QRCodeGenerator()
 
 
             val context: Context = LocalContext.current
@@ -452,12 +454,12 @@ class CampsiteInputScreen(){
 
                                 ) {
                                     //must assert numbers in price and occupancy
+                                    val campID = Uuid.random().toString()
                                     addSite(
                                         Campsite(
                                             name = campName,
                                             location = campNumLocation.toString(),
-                                            ID = Uuid.random()
-                                                .toString(), //FIGURE OUT ID IMPLEMENTATION
+                                            ID = campID,
                                             ownerID = ownerID,
                                             price = campPrice.toFloat(),
                                             rating = null,
@@ -470,6 +472,7 @@ class CampsiteInputScreen(){
                                             locationName = campLocation,
                                             availability = campAvailableDates,
                                             lotteries = mutableListOf(),
+                                            QRCode = qrGenerator.encodeQRBlobFromString(campID)
                                         )
                                     )
                                     Log.d("Navigation", "Adding campsite and returning to list")
@@ -508,6 +511,7 @@ class CampsiteInputScreen(){
                                             locationName = campLocation,
                                             availability = campAvailableDates,
                                             lotteries = mutableListOf(),
+                                            QRCode = oldSite.QRCode
                                         )
                                     )
                                     Log.d(

@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -202,8 +203,8 @@ class MessageListScreen {
         val navController = rememberNavController()
 
         val sampleMessages = listOf(
-            Message("1", "1", "Hello", Date(), "1"),
-            Message("2", "2", "Hi", Date(), "2")
+            Message("1", "1", "Hello", System.currentTimeMillis(), "1"),
+            Message("2", "2", "Hi", System.currentTimeMillis(), "2")
         )
         MessageList(navController, sampleMessages, onDelete = {})
     }

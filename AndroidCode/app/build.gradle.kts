@@ -90,6 +90,5 @@ dependencies {
     // Google Maps Compose widgets library
     implementation("com.google.maps.android:maps-compose-widgets:$mapsComposeVersion")
 
-    implementation("androidmads.library.qrgenerator:QRGenerator:1.0.3")
     implementation("com.google.zxing:core:3.5.4")
 }
