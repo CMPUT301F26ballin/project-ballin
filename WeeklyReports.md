@@ -66,3 +66,5 @@ yuming: help with uml(admin potion), image test and image browse and delete clas
 Leighan: Got the basics down for admin switching modes, violation detectors for owners,reviews, and ratings, and the appropiate reporting system.
 
 Nick: account creation + edit + deletion mostly complete (just gotta add profile pics). pivoting back to filter by dates.  
+
+# Week 6:

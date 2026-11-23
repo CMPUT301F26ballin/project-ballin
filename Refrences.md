@@ -17,11 +17,11 @@ https://www.baeldung.com/kotlin/dates
 https://developer.android.com/develop/ui/compose/components/datepickers  
 https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.js/-date/  
 https://towardsdev.com/date-picker-in-material-3-jetpack-compose-with-examples-ed0a939c8b80
-**Location Object:**
-https://developer.android.com/reference/kotlin/android/location/Location  
-**Navcontroller use and data passing:**  
-https://www.youtube.com/watch?v=AoU9EoHWpno  
+ 
 **Debugging:**  
+Title: How to Print to the Console in Android Studio?
+Last Updated: Jul 23, 2025
+Poster: Shivam Jha https://www.geeksforgeeks.org/profile/encrypter09
 https://www.geeksforgeeks.org/android/how-to-print-to-the-console-in-android-studio/  
 
 **Image Uploads:**  
