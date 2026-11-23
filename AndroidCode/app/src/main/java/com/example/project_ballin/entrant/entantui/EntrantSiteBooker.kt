@@ -55,7 +55,7 @@ class EntrantSiteBooker {
 
 
                     DateRangePicker().BookingDateRangePicker(
-                        availableDates = campsiteList.getCampsite(campsiteID)!!.availability,
+                        availableDates = listOf(1795392000000L, 1795478400000L),
                         modifier = Modifier.weight(1f),
                         chosenDates = { chosenDates = it }
                     )
@@ -93,7 +93,7 @@ class EntrantSiteBooker {
 
             Button(
                 onClick = {
-                    navController.navigate("confirmBooking/${campsiteID}/${entrant.userID}/${chosenDates?.joinToString(",")}")
+                    navController.navigate("confirmBooking/${campsiteID}/${chosenDates?.joinToString(",")}")
                 },
                 enabled = chosenDates != null,
                 modifier = Modifier.padding(16.dp)

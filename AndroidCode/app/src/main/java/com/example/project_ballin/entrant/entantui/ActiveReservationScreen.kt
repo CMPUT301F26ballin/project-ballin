@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.project_ballin.CampsiteList
+import com.example.project_ballin.ReservationList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.lottery.Lottery
@@ -47,7 +48,7 @@ class ActiveReservationScreen {
      * @param campsiteList the list of campsites
      */
     @Composable
-    fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList){
+    fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList, reservationList: ReservationList){
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
 
         Column(
@@ -59,7 +60,7 @@ class ActiveReservationScreen {
                 "Active Reservations"
             ) {
                 LazyColumn {
-                    items(entrant.activeReservations) { reservation ->
+                    items(reservationList.getReservationsForEntrant(entrant.userID)) { reservation ->
                         CurrentReservationCard(entrant, reservation, campsiteList, navController)
                     }
 

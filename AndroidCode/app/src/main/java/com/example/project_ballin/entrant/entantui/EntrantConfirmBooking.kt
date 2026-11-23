@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,14 +25,26 @@ import com.example.project_ballin.Campsite
 import com.example.project_ballin.ReservationList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
+import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
+import java.text.DateFormat
+import java.util.Locale
 import kotlin.uuid.Uuid
 
 class EntrantConfirmBooking {
+
+    // Source - https://stackoverflow.com/q/49551461
+    // Posted by HelloCW
+    // Retrieved 2026-11-21, License - CC BY-SA 3.0
+
+    fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
+        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+        return df.format(this)
+    }
     @Composable
     fun ConfirmBooking(navController: NavController, campsite: Campsite, entrant: Entrant, chosenDates: List<Long>, reservationList: ReservationList) {
 
-        var rulesChecked by remember { mutableStateOf(true) }
+        var rulesChecked by remember { mutableStateOf(false) }
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -43,105 +56,160 @@ class EntrantConfirmBooking {
             ) {
                 Card(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .padding(16.dp),
                 ) {
-                    Row(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),
                     ) {
-                        Text(
-                            text = "Before you book, confirm you have read the rules for this campsite:",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        for (rule in campsite.rules) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(0.dp, 16.dp)
+                        ){
                             Text(
-                                text = "- $rule",
-                                style = MaterialTheme.typography.bodyMedium
+                                text = "Booking Details:",
+                                style = MaterialTheme.typography.titleLarge
                             )
                         }
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                    ) {
-                        Text(
-                            text = "I confirm I have read and agree to the rules.",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Checkbox(
-                            checked = rulesChecked,
-                            onCheckedChange = { rulesChecked = it },
-                            modifier = Modifier.testTag("rulesCheckbox")
-                        )
-                    }
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                    ){
-                        Text(
-                            text = "Campsite Name: ${campsite.name}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = "Campsite Location: ${campsite.locationName}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = "Campsite Occupancy: ${campsite.occupancy}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = "Campsite Price: ${campsite.price} per night",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = "Booking from: ${chosenDates[0]} to: ${chosenDates[1]}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                    ) {
-                        Button(
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error
-                            ),
-                            onClick = {
-                                navController.popBackStack()
-                            },
-                            modifier = Modifier.padding(16.dp)
-                                .testTag("abortBookingButton")
-                        ) {
-                            Text("Cancel")
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ){
+                            Text(
+                                text = "Campsite Name: ${campsite.name}",
+                                style = MaterialTheme.typography.titleMedium
+                            )
                         }
 
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ){
+                            Text(
+                                text = "Campsite Location: ${campsite.locationName}",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
 
-                        Button(
-                            onClick = {
-                                reservationList.addReservation(
-                                    Reservation(
-                                    campsite.ID,
-                                    chosenDates,
-                                    UserID = entrant.userID,
-                                    cancelled = false,
-                                    resID = Uuid.random().toString(),
-                                    )
-                                )
-                                navController.navigate("EntrantBrowseReservations/${entrant.userID}")
-                            },
-                            enabled = rulesChecked,
-                            modifier = Modifier.padding(16.dp)
-                                .testTag("confirmBookingButton")
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ){
+                            Text(
+                                text = "Campsite Occupancy: ${campsite.occupancy}",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ){
+                            Text(
+                                text = "Campsite Price: $${"%.2f".format(campsite.price)}/night",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ){
+                            Text(
+                                text = "Booking from: ${chosenDates[0].toDateString()} to: ${chosenDates[1].toDateString()}",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+
+                        HorizontalDivider(
+                            modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp)
+                        )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(0.dp, 16.dp),
                         ) {
-                            Text("Confirm Booking")
+                            Text(
+                                text = "Before you book, confirm you have read the rules for this campsite:",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                        }
+
+                        for (rule in campsite.rules) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp, 0.dp),
+                            ) {
+                                Text(
+                                    text = "- $rule",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(0.dp, 16.dp),
+                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+
+                        ) {
+                            Text(
+                                text = "I confirm I have read and agree to the rules.",
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                            Checkbox(
+                                checked = rulesChecked,
+                                onCheckedChange = { rulesChecked = it },
+                                modifier = Modifier.testTag("rulesCheckbox")
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                        ) {
+                            Button(
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.error
+                                ),
+                                onClick = {
+                                    navController.popBackStack()
+                                },
+                                modifier = Modifier.padding(16.dp)
+                                    .testTag("abortBookingButton")
+                            ) {
+                                Text("Cancel")
+                            }
+
+
+                            Button(
+                                onClick = {
+                                    reservationList.addReservation(
+                                        Reservation(
+                                            campsite.ID,
+                                            chosenDates,
+                                            UserID = entrant.userID,
+                                            cancelled = false,
+                                            resID = Uuid.random().toString(),
+                                        )
+                                    )
+                                    navController.navigate("EntrantBrowseReservations")
+                                },
+                                enabled = rulesChecked,
+                                modifier = Modifier.padding(16.dp)
+                                    .testTag("confirmBookingButton")
+                            ) {
+                                Text("Confirm Booking")
+                            }
                         }
                     }
                 }

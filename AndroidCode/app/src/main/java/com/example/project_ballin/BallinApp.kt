@@ -606,7 +606,8 @@ class BallinApp(){
                     ActiveReservationScreen().ActiveReservations(
                         navController,
                         entrant,
-                        campsiteList
+                        campsiteList,
+                        reservationList
                     )
                 }
             }
@@ -642,25 +643,22 @@ class BallinApp(){
                 QRCodeScanner.QRCodeScanner(navController)
             }
 
-            composable("confirmBooking/{campID}/{entrantID}/{chosenDates}") {
+            composable("confirmBooking/{campID}/{chosenDates}") {
                 val campID = it.arguments?.getString("campID")
-                val entrantID = it.arguments?.getString("entrantID")
                 val chosenDates = it.arguments?.getString("chosenDates")
                 if (campID != null) {
-                    if (entrantID != null) {
-                        if (chosenDates != null) {
-                            val campsite = campsiteList.getCampsite(campID)
-                            val entrant = entrantList.getEntrant(entrantID)
-                            val chosenDatesList = chosenDates.split(",").map { it.toLong() }
+                    if (chosenDates != null) {
+                        val campsite = campsiteList.getCampsite(campID)
+                        val entrant = currentEntrant
+                        val chosenDatesList = chosenDates.split(",").map { it.toLong() }
 
-                            EntrantConfirmBooking().ConfirmBooking(
-                                navController,
-                                campsite!!,
-                                entrant!!,
-                                chosenDatesList,
-                                reservationList
-                            )
-                        }
+                        EntrantConfirmBooking().ConfirmBooking(
+                            navController,
+                            campsite!!,
+                            entrant!!,
+                            chosenDatesList,
+                            reservationList
+                        )
                     }
                 }
             }
