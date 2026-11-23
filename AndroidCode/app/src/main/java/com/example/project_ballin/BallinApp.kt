@@ -47,6 +47,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
+import com.example.project_ballin.owner.ownerUI.NotificationSendScreen
+import com.example.project_ballin.owner.ownerUI.OwnerNotificationListScreen
 
 /**
  * The main class that houses the NavHost for the nav controller. All screen changes go through this class view.
@@ -484,6 +486,33 @@ class BallinApp(){
                     getCampsite = { campsiteList.getCampsite(it) },
                     addLottery = { lotteryList.addLottery(it) },
                     updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
+            }
+
+            composable("NotificationSendScreen/{OwnerID}/{LotteryID}") {
+                val ownerID = it.arguments!!.getString("OwnerID")!!
+                val lotteryID = it.arguments!!.getString("LotteryID")!!
+                NotificationSendScreen().NotificationSendScreen(
+                    navController,
+                    ownerID,
+                    lotteryID,
+                    sendNotification = { content ->
+                        notificationList.sendToLottery(content, lotteryID)
+                    }
+                )
+            }
+
+            composable("OwnerNotificationListScreen/{OwnerID}"){
+                val ownerID = it.arguments!!.getString("OwnerID")!!
+                val ownerLotteryIDs = lotteryList.getOwnerLotteries(ownerID).map{
+                    l -> l.lotteryID
+                }
+                OwnerNotificationListScreen().OwnerNotificationListScreen(
+                    navController,
+                    ownerID,
+                    notificationList.getAllNotifications().filter { n ->
+                        n.lotteryID in ownerLotteryIDs
+                    }
+                )
             }
 
             composable("AdminMenu/{AdminID}") {
