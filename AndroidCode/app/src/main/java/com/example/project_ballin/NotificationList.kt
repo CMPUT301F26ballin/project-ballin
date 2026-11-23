@@ -86,4 +86,8 @@ class NotificationList {
         )
         return true
     }
+
+    fun getNotificationsByLottery(lotteryID: String) : List<Notification> {
+        return _notifications.filter { it.lotteryID == lotteryID }
+    }
 }

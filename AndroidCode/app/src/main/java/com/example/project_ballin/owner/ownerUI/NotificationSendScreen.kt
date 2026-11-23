@@ -32,7 +32,7 @@ class NotificationSendScreen() {
      * @param navController the navcontroller of the app
      * @param userID the userID of the owner sending the message
      * @param lotteryID the lotteryID of the lottery we're sending notifcations to
-     * @param sendNotification the function to send a notification
+     * @param sendNotification the function to send a notification (message : String) -> (sentSuccessfully : Boolean)
      */
 
     @SuppressLint("NotConstructor")
@@ -41,7 +41,7 @@ class NotificationSendScreen() {
         navController: NavController,
         userID: String,
         lotteryID: String,
-        sendNotification: (String, String) -> Boolean
+        sendNotification: (String) -> Boolean
     ) {
         val longestMessage = 500
         var message by remember { mutableStateOf("") }
@@ -52,9 +52,6 @@ class NotificationSendScreen() {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                Text("lottery notifications")
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = message,
@@ -76,7 +73,7 @@ class NotificationSendScreen() {
                         .testTag("SendNotificationButton"),
                     onClick = {
                         if (!message.isBlank()) {
-                            sendNotification(lotteryID, message)
+                            sendNotification(message)
                             navController.popBackStack()
                         }
                     }

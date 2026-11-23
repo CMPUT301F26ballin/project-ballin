@@ -495,9 +495,8 @@ class BallinApp(){
                     navController,
                     ownerID,
                     lotteryID,
-                    sendNotification = { id, content ->
-                        lotteryList.getLottery(id) != null &&
-                        notificationList.sendToLottery(content, id)
+                    sendNotification = { content ->
+                        notificationList.sendToLottery(content, lotteryID)
                     }
                 )
             }
