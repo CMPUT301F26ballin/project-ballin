@@ -24,6 +24,7 @@ import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
+import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 import com.example.project_ballin.entrant.entantui.MainEntrantMenu
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
@@ -42,6 +43,7 @@ import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
 import com.example.project_ballin.reusableui.UserDetailModel
 import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
@@ -123,8 +125,7 @@ class BallinApp(){
                     "campsite1",
                     "2",
                     //Location(""),
-                    lat = 0.0,
-                    lon = 0.0,
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -145,9 +146,7 @@ class BallinApp(){
                 Campsite(
                     "campsite2",
                     "4",
-                    lat = 0.0,
-                    lon = 0.0,
-
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -168,8 +167,7 @@ class BallinApp(){
                 Campsite(
                     "campsite3",
                     "5",
-                    lat = 0.0,
-                    lon = 0.0,
+                    location = LatLng(0.0, 0.0).toString(),
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -248,7 +246,7 @@ class BallinApp(){
                     Uuid.random().toString(),
                     Uuid.random().toString(),
                     "You are booked!",
-                    Date(),
+                    System.currentTimeMillis(),
                     Uuid.random().toString()
                 )
             )
@@ -318,6 +316,9 @@ class BallinApp(){
         val ownerReservationScreen = OwnerReservationScreen()
         val reservationDetailScreen = ReservationDetailScreen()
 
+        //MessagingScreen
+        val messagingScreen = MessagingScreen()
+
         NavHost(navController = navController, startDestination = "signup") {
             composable("signup") { signUpScreen.Signup(navController) }
             composable("createprofile") { userProfile.CreateProfile(navController) }
@@ -350,17 +351,26 @@ class BallinApp(){
                 var resList = listOf<Reservation>()
                 val ownerID = it.arguments!!.getString("OwnerID")
 
-                if(type == "Past"){
-                    resList = reservationList.getReservationsBefore(siteIDString!!, System.currentTimeMillis())
-                }
-                else if(type == "Active"){
-                    resList = reservationList.getReservationsAfter(siteIDString!!, System.currentTimeMillis())
-                }
-                else if(type == "Cancelled"){
+                if (type == "Past") {
+                    resList = reservationList.getReservationsBefore(
+                        siteIDString!!,
+                        System.currentTimeMillis()
+                    )
+                } else if (type == "Active") {
+                    resList = reservationList.getReservationsAfter(
+                        siteIDString!!,
+                        System.currentTimeMillis()
+                    )
+                } else if (type == "Cancelled") {
                     resList = reservationList.getCancelledReservations(siteIDString!!)
                 }
 
-                ownerReservationScreen.OwnerReservationScreen(navController, resList,ownerID!!, false)
+                ownerReservationScreen.OwnerReservationScreen(
+                    navController,
+                    resList,
+                    ownerID!!,
+                    false
+                )
 
             }
 
@@ -369,24 +379,49 @@ class BallinApp(){
                 val resList = mutableListOf<Reservation>()
                 val campList: List<Campsite> = campsiteList.getOwnerSites(ownerIDString!!)
                 campList.forEach { campsite ->
-                    val tempResList = reservationList.getReservationsAfter(campsite.ID, System.currentTimeMillis())
+                    val tempResList = reservationList.getReservationsAfter(
+                        campsite.ID,
+                        System.currentTimeMillis()
+                    )
                     tempResList.forEach { res -> resList.add(res) }
                 }
-                ownerReservationScreen.OwnerReservationScreen(navController, resList, ownerIDString, true)
+                ownerReservationScreen.OwnerReservationScreen(
+                    navController,
+                    resList,
+                    ownerIDString,
+                    true
+                )
 
             }
 
-            composable("reservationDetailScreen/{resID}/{OwnerID}"){
+            composable("reservationDetailScreen/{resID}/{OwnerID}") {
                 val resIDString = it.arguments!!.getString("resID")
                 val res = reservationList.getReservation(resIDString!!)
                 val ownerID = it.arguments!!.getString("OwnerID")
 
-                reservationDetailScreen.ReservationDetailScreen(navController, res!!,ownerID!!, onCancel = {reservationList.cancelReservation(res)})
+                reservationDetailScreen.ReservationDetailScreen(
+                    navController,
+                    res!!,
+                    ownerID!!,
+                    onCancel = { reservationList.cancelReservation(res) })
             }
 
-            composable("messagingScreen/{UserID}/{OwnerID}"){
+            composable("messagingScreen/{UserID}/{OwnerID}") {
                 val userIDString = it.arguments!!.getString("UserID")
                 val ownerID = it.arguments!!.getString("OwnerID")
+
+                val entrant = entrantList.getEntrant(userIDString!!)
+
+
+                messagingScreen.MessagingScreen(navController, ownerID!!, userIDString!!, entrant!!.firstName,
+                    onAddMessage = {userID, ownerID, messageContent -> messageList.addMessage(
+                        Message(
+                            senderID = ownerID,
+                            recipientID = userID,
+                            content = messageContent,
+                            dateSent = System.currentTimeMillis()
+                        ))}
+                    )
 
 
             }
@@ -559,7 +594,7 @@ class BallinApp(){
                     navController,
                     subjectReport!!,
                     clickedID!!,
-                    onAdd = {userReportList.addReport(it)}
+                    onAdd = { userReportList.addReport(it) }
                 )
             }
 
@@ -584,7 +619,8 @@ class BallinApp(){
                     ActiveReservationScreen().ActiveReservations(
                         navController,
                         entrant,
-                        campsiteList
+                        campsiteList,
+                        reservationList
                     )
                 }
             }
@@ -605,7 +641,11 @@ class BallinApp(){
             }
 
             composable("Browse Campsites") {
-                entrantBrowseCampsites.EntrantBrowseCampsites(navController, campsiteList, currentEntrant!!.userID)
+                entrantBrowseCampsites.EntrantBrowseCampsites(
+                    navController,
+                    campsiteList,
+                    currentEntrant!!.userID
+                )
             }
 
             composable("PoliciesAndGuidelines") {
@@ -614,6 +654,26 @@ class BallinApp(){
 
             composable("Scan QR Code") {
                 QRCodeScanner.QRCodeScanner(navController)
+            }
+
+            composable("confirmBooking/{campID}/{chosenDates}") {
+                val campID = it.arguments?.getString("campID")
+                val chosenDates = it.arguments?.getString("chosenDates")
+                if (campID != null) {
+                    if (chosenDates != null) {
+                        val campsite = campsiteList.getCampsite(campID)
+                        val entrant = currentEntrant
+                        val chosenDatesList = chosenDates.split(",").map { it.toLong() }
+
+                        EntrantConfirmBooking().ConfirmBooking(
+                            navController,
+                            campsite!!,
+                            entrant!!,
+                            chosenDatesList,
+                            reservationList
+                        )
+                    }
+                }
             }
         }
     }

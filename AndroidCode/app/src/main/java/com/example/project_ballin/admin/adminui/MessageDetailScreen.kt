@@ -141,7 +141,7 @@ class MessageDetailScreen {
             "1",
             "1",
             "Hello, this is the content of the message",
-            Date(),
+            System.currentTimeMillis(),
             "1"
         )
 

@@ -133,5 +133,5 @@ class SignUp() {
 fun SignupPreview() {
     val navController = rememberNavController()
     val signup = SignUp()
-    signup.Signup(navController)
+    signup.Signup(navController,)
 }
