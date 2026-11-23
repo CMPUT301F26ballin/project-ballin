@@ -17,15 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.entrant.Entrant
-import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.reusableui.TopAppBar
-import kotlin.uuid.Uuid
 
 
 class EntrantSiteBooker {
@@ -59,7 +55,7 @@ class EntrantSiteBooker {
 
 
                     DateRangePicker().BookingDateRangePicker(
-                        availableDates = campsiteList.getCampsite(campsiteID)!!.availability,
+                        availableDates = listOf(1795392000000L, 1795478400000L),
                         modifier = Modifier.weight(1f),
                         chosenDates = { chosenDates = it }
                     )
@@ -97,13 +93,7 @@ class EntrantSiteBooker {
 
             Button(
                 onClick = {
-                    entrant.activeReservations.add(Reservation(
-                        campsiteID,
-                        chosenDates,
-                        UserID = entrant.userID,
-                        cancelled = false,
-                        resID = Uuid.random().toString(),
-                    ))
+                    navController.navigate("confirmBooking/${campsiteID}/${chosenDates?.joinToString(",")}")
                 },
                 enabled = chosenDates != null,
                 modifier = Modifier.padding(16.dp)
@@ -111,11 +101,5 @@ class EntrantSiteBooker {
                 Text("Book")
             }
         }
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun EntrantBookSitePreview() {
-
     }
 }
