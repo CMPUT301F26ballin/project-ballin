@@ -34,13 +34,10 @@ import java.util.Locale
  *
  *
  */
-@Composable
-fun ConfirmDeleteProfile(
-    viewModel: UserDetailModel
-){
 
-}
-
+/**
+ * lets the user choose on account creation whether they want ot be admin, entrant, owner
+ */
 @Composable
 fun SelectProfileRole(
     viewModel: UserDetailModel
@@ -78,6 +75,16 @@ fun SelectProfileRole(
     }
 }
 
+/**
+ * The delete profile button, will prompt action dialog confirming whether
+ * the user wants to delete their profile
+ * boots user back to sign up screen if acct is deleted
+ *
+ * @param navController the navigation controller for the app
+ * @param viewModel the view model for the app
+ *
+ */
+
 @Composable
 fun DeleteProfile(
     navController: NavController,
@@ -110,6 +117,16 @@ fun DeleteProfile(
     }
 }
 
+/**
+ * ihe input detail screen, allows the user to input their details
+ *
+ * @param navController the navigation controller for the app
+ * @param viewModel the view model for the app
+ * @param mode the mode of the screen, create or edit
+ *
+ * still requires ability to choose profile pic and recieve notifications
+ *
+ */
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun InputDetails(

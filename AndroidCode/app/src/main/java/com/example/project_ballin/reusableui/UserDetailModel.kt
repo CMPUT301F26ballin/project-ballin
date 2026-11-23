@@ -12,6 +12,12 @@ import com.example.project_ballin.owner.Owner
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
+/**
+ *
+ * view model to handle account creation, editing and deletion
+ *
+ */
+
 class UserDetailModel: ViewModel() {
 
     private var _selectedRole = MutableStateFlow(UserRole.ENTRANT)
@@ -20,6 +26,9 @@ class UserDetailModel: ViewModel() {
     private var _uiState = MutableStateFlow<User>(Entrant())
     var uiState = _uiState.asStateFlow()
 
+    /**
+     * sets the device ID of the user on account creation
+     */
     fun setDeviceId(deviceId: String){
         val current = _uiState.value
         _uiState.value = when (current) {
@@ -30,6 +39,9 @@ class UserDetailModel: ViewModel() {
         }
     }
 
+    /**
+     * loads an existing user from firebase based on their device ID
+     */
     fun loadExistingUser(deviceId: String) {
         if (deviceId.isBlank()) return
         val db = Firebase.firestore
@@ -70,6 +82,10 @@ class UserDetailModel: ViewModel() {
             }
     }
 
+    /**
+     * when creating an account, the user chooses which role they are
+     *
+     */
     fun onRoleChange(newRole: UserRole) {
         _selectedRole.value = newRole
         val current = _uiState.value
@@ -99,6 +115,9 @@ class UserDetailModel: ViewModel() {
         }
     }
 
+    /**
+     * change the details of the user
+     */
     fun onFirstNameChange(newFirstName: String) {
         _uiState.update { current ->
             current.updateDetails(firstName = newFirstName)
@@ -128,17 +147,31 @@ class UserDetailModel: ViewModel() {
 
     }
 
+    /**
+     * edit the details of the user
+     */
     fun onEdit() {
         _uiState.value.editProfile()
     }
+
+    /**
+     * create the profile of the user
+     */
     fun onCreate(){
         _uiState.value.createProfile()
     }
 
+    /**
+     * delete the profile of the user
+     */
     fun onDelete(){
         _uiState.value.deleteProfile()
     }
 
+    /**
+     * used to validate the details of the user, ie. phone number is 10 digits long
+     * and email has @something.com
+     */
      fun validateDetails(): Boolean {
         val currentUser = _uiState.value
 

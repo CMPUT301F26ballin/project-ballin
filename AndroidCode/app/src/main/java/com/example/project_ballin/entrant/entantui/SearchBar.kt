@@ -10,20 +10,24 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
 import com.example.project_ballin.Campsite
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.project_ballin.CampsiteList
+import kotlin.String
+import kotlin.collections.sorted
+
 /**
  * The important functions allowing the user to search for campsites based on a variety of factors
  * */
 class SearchBar(){
     /**
      * function to filter campsites by number of guests
-     *
      *
      * @param modifier the modifier to apply to the filter
      * @param viewModel the view model to use for filtering
@@ -94,8 +98,45 @@ class SearchBar(){
     }
 
     @Composable
-    fun DateFilter() {
-        TODO() //when date range and stuff have been implemented
+    fun DateFilter(
+        modifier: Modifier = Modifier,
+        viewModel: SearchViewModel = viewModel(),
+        campsiteList: CampsiteList
+    ) {
+
+        var showDatePicker by remember { mutableStateOf(false) }
+
+        val dateOptions = remember(campsiteList.campsites) {
+            campsiteList.campsites.flatMap { it.availability }.distinct().sorted()
+        }
+        //val dateRange by viewModel.dateFilter.collectAsStateWithLifecycle()
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(
+                onClick = {
+                    showDatePicker = true
+
+                }
+            ){
+                Text("Filter by Dates")
+            }
+
+            if (showDatePicker) {
+                DateRangePicker().BookingDateRangePicker(
+                    availableDates = dateOptions,
+                    modifier = Modifier.weight(1f),
+                    chosenDates = { selectedDates ->
+                        viewModel.onSelectedDateFilterChange(selectedDates)
+                    }
+                )
+            }
+
+        }
     }
 
     /**
@@ -197,6 +238,9 @@ class SearchBar(){
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            //DateFilter(campsiteList = campsiteList)
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn(
                 modifier = Modifier

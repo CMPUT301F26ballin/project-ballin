@@ -26,6 +26,7 @@ enum class UserRole {
  * recognize device ID
  *
  * @param navController a [NavController] to continue to enter details screen
+ * @param viewModel a [UserDetailModel] to handle user details and update firebase
  *
  */
 class SignUp() {
