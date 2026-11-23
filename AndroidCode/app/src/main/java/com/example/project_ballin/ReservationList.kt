@@ -190,5 +190,15 @@ class ReservationList {
         return returnList
     }
 
+    fun getReservationsForEntrant(userID: String): List<Reservation> {
+        val returnList = mutableStateListOf<Reservation>()
+        reservations.forEach { reservation ->
+            if(reservation.UserID == userID){
+                returnList.add(reservation)
+            }
+        }
+        return returnList
+    }
+
 
 }
