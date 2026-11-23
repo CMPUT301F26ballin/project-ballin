@@ -8,6 +8,7 @@
 yuming7: part of story mockup(admin), most of UML(admin), half of crc card(admin), half of backlog/risk management(admin).
 
 # Week 2 :
+Yuming: refined admin crc cards
 
 # Week 3 :
 
