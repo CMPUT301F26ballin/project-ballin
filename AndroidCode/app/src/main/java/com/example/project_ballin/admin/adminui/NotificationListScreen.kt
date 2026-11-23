@@ -207,8 +207,8 @@ class NotificationListScreen {
     fun NotificationListScreenPreview() {
         val navController = rememberNavController()
         val sampleNotifications = listOf(
-            Notification("Hello", Date(), "1", "1"),
-            Notification("Hi", Date(), "2", "2"),
+            Notification("Hello", System.currentTimeMillis(), "1", "1"),
+            Notification("Hi", System.currentTimeMillis(), "2", "2"),
         )
         NotificationList(navController, sampleNotifications, onDelete = {})
     }

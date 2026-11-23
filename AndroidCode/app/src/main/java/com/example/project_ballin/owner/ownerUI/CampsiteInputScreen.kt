@@ -122,8 +122,28 @@ class CampsiteInputScreen(){
      * Responder: Haythem BEN AICHA (Nov 30, 2016)
      * https://stackoverflow.com/questions/40885860/how-to-save-bitmap-to-firebase
      *
+     * Maps:
      *
+     * Title: Getting started with Google Maps Platform
+     * From: Google Maps Platform
+     * https://developers.google.com/maps/get-started#console_1
      *
+     * Title: Add a map to your Android app (Kotlin with Compose)
+     * From: Google Maps Platform
+     * https://developers.google.com/codelabs/maps-platform/maps-platform-101-compose#1
+     *
+     * Title: LatLng
+     * From: Google Maps Platform
+     * https://developers.google.com/maps/documentation/android-sdk/reference/com/google/android/libraries/maps/model/LatLng
+     *
+     * Title: Maps Compose Library
+     * From: Google Maps Platform
+     * https://developers.google.com/maps/documentation/android-sdk/maps-compose
+     *
+     * Title: Convert String To LatLng
+     * Inquirer: Makoto (Dec 3, 2014)
+     * Responder: Display Name (Dec 3, 2014)
+     * https://stackoverflow.com/questions/27261670/convert-string-to-latlng
      *
      *
      * */
