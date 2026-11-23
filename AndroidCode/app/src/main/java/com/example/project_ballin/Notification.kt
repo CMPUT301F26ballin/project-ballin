@@ -17,7 +17,7 @@ import kotlin.uuid.Uuid
  */
 class Notification (
     var content: String = "",
-    var dateSent: Date = Date(),
+    var dateSent: Long = System.currentTimeMillis(),
     var ID: String = "",
     var recipientID: String = ""
 ) {

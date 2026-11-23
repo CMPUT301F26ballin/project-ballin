@@ -64,7 +64,10 @@ class BallinApp(){
      * Published: April 15, 2023
      * https://sagar0-0.medium.com/pass-arguments-to-destinations-jetpack-compose-navigation-7c29d4c73ce5
      *
-     *
+     * Title: Passing data between screens | Navigation : Jetpack Compose - 34
+     * Posted By: CodeTutor
+     * Date: Feb 28, 2024
+     * https://www.youtube.com/watch?v=AoU9EoHWpno
      *
      *
      *
@@ -255,7 +258,7 @@ class BallinApp(){
             mutableStateOf<Notification>(
                 Notification(
                     "You won the lottery!",
-                    Date(),
+                    System.currentTimeMillis(),
                     Uuid.random().toString(),
                     Uuid.random().toString()
                 )
@@ -625,8 +628,9 @@ class BallinApp(){
                 PolicyGuidelinesScreen().PolicyGuidelines(navController)
             }
 
-            composable("Scan QR Code") {
-                QRCodeScanner.QRCodeScanner(navController)
+            composable("Scan QR Code/{userID}") {
+                val userID = it.arguments?.getString("userID")
+                QRCodeScanner.QRCodeScanner(navController, userID!!)
             }
         }
     }
