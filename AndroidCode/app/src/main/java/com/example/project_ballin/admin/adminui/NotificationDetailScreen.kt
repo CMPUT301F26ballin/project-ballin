@@ -67,7 +67,7 @@ class NotificationDetailScreen {
             ) {
 
                 NotificationDetailRows("Recipient ID", notification.recipientID, "recipientID${notification.recipientID}")
-                NotificationDetailRows("Date Sent", notification.getFormattedDate(), "dateSent${notification.getFormattedDate()}")
+                NotificationDetailRows("Date Sent", notification.dateSent.toString(), "dateSent${notification.dateSent}")
                 NotificationDetailRows("Notification Content", notification.content, "notificationContent${notification.content}")
                 NotificationDetailRows("Notification ID", notification.ID, "notificationID${notification.ID}")
                 Spacer(modifier = Modifier.height(68.dp))

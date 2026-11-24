@@ -48,18 +48,18 @@ class AdminSearchTest {
 
     private val fireMessage = Message(
         senderID = "owner1", recipientID = "entrant1",
-        content = "Fire ban this weekend", dateSent = Date(), ID = "m1"
+        content = "Fire ban this weekend", dateSent = System.currentTimeMillis(), ID = "m1"
     )
     private val welcomeMessage = Message(
         senderID = "owner2", recipientID = "entrant2",
-        content = "Welcome to the campsite", dateSent = Date(), ID = "m2"
+        content = "Welcome to the campsite", dateSent = System.currentTimeMillis(), ID = "m2"
     )
 
     private val wonNotification = Notification(
-        content = "You won the lottery!", dateSent = Date(), ID = "n1", recipientID = "entrant1"
+        content = "You won the lottery!", dateSent = System.currentTimeMillis(), ID = "n1", recipientID = "entrant1"
     )
     private val cancelledNotification = Notification(
-        content = "Your reservation was cancelled", dateSent = Date(), ID = "n2", recipientID = "entrant2"
+        content = "Your reservation was cancelled", dateSent = System.currentTimeMillis(), ID = "n2", recipientID = "entrant2"
     )
 
     // ---------- matchesQuery (the shared matching rule) ----------
