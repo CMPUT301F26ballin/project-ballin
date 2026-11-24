@@ -23,6 +23,7 @@ import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
+import com.example.project_ballin.entrant.entantui.EntrantSiteSelector
 import com.example.project_ballin.entrant.entantui.MainEntrantMenu
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
 import com.example.project_ballin.lottery.Lottery
@@ -712,6 +713,12 @@ class BallinApp(){
                         )
                     }
                 }
+            }
+
+            composable("siteSelector/{lotteryID}"){
+                val lotteryID = it.arguments?.getString("lotteryID")
+                val lottery = lotteryList.getLottery(lotteryID!!)
+                EntrantSiteSelector().SiteSelector(navController, campsiteList, currentEntrant!!, lottery)
             }
         }
     }

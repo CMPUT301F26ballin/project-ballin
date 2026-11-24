@@ -26,6 +26,7 @@ import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
+import com.google.apps.card.v1.Columns
 
 class EntrantBrowseReservations{
 
@@ -178,10 +179,21 @@ class EntrantBrowseReservations{
 
                     HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
-                    Row(
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+
                     ) {
+                        Button(
+                            onClick = {
+                                navController.navigate("siteSelector/${lottery.lotteryID}")
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("Choose Site Button")
+                        ) {
+                            Text("Choose Site")
+                        }
+
                         Button(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.error
@@ -189,23 +201,10 @@ class EntrantBrowseReservations{
                             onClick = onDeclineClick
                             ,
                             modifier = Modifier
-                                .weight(1f)
+                                .fillMaxWidth()
                                 .testTag("Decline Button")
                         ) {
                             Text("Decline")
-                        }
-
-
-                        Button(
-                            onClick = {
-                                val site = lottery.associatedSites[0]
-                                navController.navigate("EntrantSiteBooker/${site}/${lottery.lotteryID}")
-                            },
-                            modifier = Modifier
-                                .weight(1f)
-                                .testTag("Select Dates Button")
-                        ) {
-                            Text("Select Dates")
                         }
                     }
                 }
