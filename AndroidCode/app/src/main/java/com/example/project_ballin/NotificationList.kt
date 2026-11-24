@@ -79,7 +79,7 @@ class NotificationList {
         addNotification(
             Notification(
                 content = content.trim(),
-                dateSent = Date(),
+                dateSent = System.currentTimeMillis(),
                 ID = Uuid.random().toString(),
                 lotteryID = lotteryID
             )

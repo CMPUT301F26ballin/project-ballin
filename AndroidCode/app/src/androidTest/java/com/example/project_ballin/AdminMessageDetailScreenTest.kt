@@ -16,7 +16,7 @@ class AdminMessageDetailScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-    
+
     private val sampleMessages = mutableListOf(
         Message("1","1","Hello", Date(), "1"),
     )
