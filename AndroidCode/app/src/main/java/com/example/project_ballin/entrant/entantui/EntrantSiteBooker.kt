@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,17 +50,21 @@ class EntrantSiteBooker {
                 "Book Site"
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+                    modifier = Modifier.fillMaxSize(),
+                ){
+                    Card(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(16.dp, 16.dp, 16.dp, 0.dp)
+                    ) {
+                        DateRangePicker().BookingDateRangePicker(
+                            availableDates = listOf(1795392000000L, 1795478400000L),
+                            modifier = Modifier.weight(1f),
+                            chosenDates = { chosenDates = it }
+                        )
 
-
-                    DateRangePicker().BookingDateRangePicker(
-                        availableDates = listOf(1795392000000L, 1795478400000L),
-                        modifier = Modifier.weight(1f),
-                        chosenDates = { chosenDates = it }
-                    )
+                    }
 
                     CancelBookButtons(navController, chosenDates, campsiteID, lottery)
                 }
@@ -76,8 +81,9 @@ class EntrantSiteBooker {
     @Composable
     fun CancelBookButtons(navController: NavController, chosenDates: List<Long>?, campsiteID: String?, lottery: Lottery?) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier.fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(
@@ -86,7 +92,7 @@ class EntrantSiteBooker {
                 onClick = {
                     navController.popBackStack()
                 },
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.weight(1f)
             ) {
                 Text("Cancel")
             }
@@ -97,7 +103,7 @@ class EntrantSiteBooker {
                     navController.navigate("confirmBooking/${campsiteID}/${chosenDates?.joinToString(",")}/${lottery?.lotteryID}")
                 },
                 enabled = chosenDates != null,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.weight(1f)
             ) {
                 Text("Book")
             }

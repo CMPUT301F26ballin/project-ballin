@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.*
@@ -56,10 +57,15 @@ class EntrantBrowseReservations{
                 ) {
                     ActivePastReservationButtons(navController)
 
-                    val activeLotteries = entrant.activeLotteries
+                    val lotteriesToShow = entrant.activeLotteries.filter {
+                        entrant.userID in it.winners || entrant.userID in it.losers
+                    }
 
-                    LazyColumn {
-                        items(activeLotteries) { lottery ->
+                    LazyColumn{
+                        items(lotteriesToShow) { lottery ->
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
                             LotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
                         }
                     }
@@ -104,7 +110,8 @@ class EntrantBrowseReservations{
                     navController.navigate("ActiveReservationScreen")
                 },
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
                     .testTag("Active Reservation Button"),
 
             ) {
@@ -119,7 +126,8 @@ class EntrantBrowseReservations{
                     navController.navigate("PastReservationScreen")
                 },
                 shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
                     .testTag("Past Reservation Button"),
 
             ) {
@@ -148,7 +156,6 @@ class EntrantBrowseReservations{
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
         ) {
             if (entrant.userID in lottery.winners) {
                 Column(
@@ -158,15 +165,22 @@ class EntrantBrowseReservations{
                         .testTag("Won Lottery Card")
                 ) {
                     Text(
-                        text = "You have won a lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}. Book it?",
-                        style = MaterialTheme.typography.titleMedium
+                        text = "You won the lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}!",
+                        style = MaterialTheme.typography.titleLarge
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Book it?",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+
+                    HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Button(
                             colors = ButtonDefaults.buttonColors(
@@ -174,7 +188,8 @@ class EntrantBrowseReservations{
                             ),
                             onClick = onDeclineClick
                             ,
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
+                                .weight(1f)
                                 .testTag("Decline Button")
                         ) {
                             Text("Decline")
@@ -186,7 +201,8 @@ class EntrantBrowseReservations{
                                 val site = lottery.associatedSites[0]
                                 navController.navigate("EntrantSiteBooker/${site}/${lottery.lotteryID}")
                             },
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
+                                .weight(1f)
                                 .testTag("Select Dates Button")
                         ) {
                             Text("Select Dates")
@@ -208,11 +224,11 @@ class EntrantBrowseReservations{
                     ) {
                         Text(
                             text = "Unfortunately you lost the lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}.",
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleLarge
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -222,7 +238,8 @@ class EntrantBrowseReservations{
                             onClick = {
                                 entrant.activeLotteries.remove(lottery)
                             },
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
+                                .weight(1f)
                                 .testTag("Dismiss Button")
                         ) {
                             Text("Dismiss")

@@ -57,7 +57,7 @@ class ReservationList {
      * A method that takes a campsite reservation and cancels it.
      * */
     fun cancelReservation(reservation: Reservation){
-        reservation.cancelled = false
+        reservation.cancelled = true
 
         reservationsRef.document(reservation.resID).set(reservation)
     }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,6 +51,7 @@ class ActiveReservationScreen {
     @Composable
     fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList, reservationList: ReservationList){
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
+        var reservationToLeave by remember { mutableStateOf<Reservation?>(null) }
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -61,7 +63,7 @@ class ActiveReservationScreen {
             ) {
                 LazyColumn {
                     items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
-                        CurrentReservationCard(entrant, reservation, campsiteList, navController)
+                        CurrentReservationCard(entrant, reservation, campsiteList, navController, { reservationToLeave = reservation })
                     }
 
                     items(entrant.activeLotteries) { lottery ->
@@ -83,6 +85,18 @@ class ActiveReservationScreen {
                         entrant.activeLotteries.remove(lottery)
                     }
                     lotteryToLeave = null
+                }
+            )
+        }
+
+        reservationToLeave?.let { reservation ->
+            ConfirmActionDialog().ConfirmAction(
+                "Are you sure you want to cancel this reservation?",
+                confirm = { confirmed ->
+                    if (confirmed) {
+                        reservationList.cancelReservation(reservation)
+                    }
+                    reservationToLeave = null
                 }
             )
         }
@@ -114,19 +128,19 @@ class ActiveReservationScreen {
                 )
                 {
                     Text(
-                        text = "You are registered in a lottery for ${
+                        text = "You are registered in a lottery for: ${
                             campsiteList.getCampsite(
                                 lottery.associatedSites[0]
                             )?.name
-                        }",
-                        style = MaterialTheme.typography.titleMedium
+                        }.",
+                        style = MaterialTheme.typography.titleLarge
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Button(
                             colors = ButtonDefaults.buttonColors(
@@ -135,17 +149,20 @@ class ActiveReservationScreen {
                             onClick = onLeaveClick
                             ,
                             modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
                                 .testTag("Leave Waiting List Button")
                         ) {
                             Text("Leave Waiting List")
                         }
-
 
                         Button(
                             onClick = {
 
                             },
                             modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
                                 .testTag("Owner Messages Button")
                         ) {
                             Text("Owner Messages")
@@ -178,9 +195,8 @@ class ActiveReservationScreen {
      *
      */
     @Composable
-    fun CurrentReservationCard(entrant: Entrant, reservation: Reservation, campsiteList: CampsiteList, navController: NavController){
+    fun CurrentReservationCard(entrant: Entrant, reservation: Reservation, campsiteList: CampsiteList, navController: NavController, onCancelClick: () -> Unit){
         val campsite = campsiteList.getCampsite(reservation.campsiteID)
-
         val startDate = reservation.dates?.get(0)?.toDateString()
         val endDate = reservation.dates?.get(1)?.toDateString()
 
@@ -190,41 +206,100 @@ class ActiveReservationScreen {
                 .padding(16.dp)
                 .testTag("Current Reservation Card")
         ) {
-            Text(
-                text = "${campsite?.name}\n" +
-                        "From: $startDate\n + To: $endDate\n" +
-                        "Details:\n" +
-                        " - ${campsite?.locationName}\n" +
-                        " - ${campsite?.occupancy}",
-                style = MaterialTheme.typography.titleMedium
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            ){
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    ),
-                    onClick = {
-
-                    },
-
-                ) {
-                    Text("Cancel Registration")
+                Row {
+                    Text(
+                        text = "Upcoming Reservation: ${campsite?.name}",
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 }
 
+                Row{
+                    Text(
+                        text = "Check-in: $startDate\nCheck-out: $endDate",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
 
-                Button(
-                    onClick = {
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
-                    },
+                Row{
 
-                ) {
-                    Text("Owner Messages")
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Column{
+                        Row{
+                            Text(
+                                text = "Details:",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.padding(16.dp, 0.dp)
+                        ){
+                            Text(
+                                text =  " - Location: ${campsite?.locationName}\n" +
+                                        " - Occupancy: ${campsite?.occupancy}",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+
+                    }
+
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = androidx.compose.ui.Alignment.End
+                    ){
+                        Button(
+                            onClick = {
+                                navController.navigate("CampsiteDetailScreen/${campsite?.ID}/${entrant.userID}")
+
+                            },
+                            modifier = Modifier
+                                .testTag("More Details Button")
+                                .fillMaxWidth()
+
+                            ) {
+                            Text("More Details")
+                        }
+
+                        Button(
+                            onClick = {
+
+                            },
+                            modifier = Modifier
+                                .testTag("Messages Button")
+                                .fillMaxWidth()
+
+                            ) {
+                            Text("Messages")
+                        }
+
+                        Button(
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error
+                            ),
+                            onClick = onCancelClick,
+                            modifier = Modifier
+                                .testTag("Cancel Reservation Button")
+                                .fillMaxWidth()
+
+
+                            ) {
+                            Text("Cancel Reservation")
+                        }
+                    }
                 }
             }
         }
