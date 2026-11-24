@@ -166,15 +166,24 @@ class EntrantBrowseReservations{
                         .testTag("Won Lottery Card")
                 ) {
                     Text(
-                        text = "You won the lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}!",
+                        text = "You won the lottery for:",
                         style = MaterialTheme.typography.titleLarge
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
+                    for(campsite in lottery.associatedSites){
+                        Text(
+                            text = "- ${campsiteList.getCampsite(campsite)?.name}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Text(
                         text = "Book it?",
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.titleMedium
                     )
 
                     HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
@@ -222,8 +231,17 @@ class EntrantBrowseReservations{
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Text(
-                            text = "Unfortunately you lost the lottery for ${campsiteList.getCampsite(lottery.associatedSites[0])?.name}.",
+                            text = "Unfortunately, you lost the lottery for:",
                             style = MaterialTheme.typography.titleLarge
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    for(campsite in lottery.associatedSites){
+                        Text(
+                            text = "- ${campsiteList.getCampsite(campsite)?.name}",
+                            style = MaterialTheme.typography.bodyLarge
                         )
                     }
 
