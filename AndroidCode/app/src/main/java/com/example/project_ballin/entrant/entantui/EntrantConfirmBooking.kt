@@ -26,6 +26,7 @@ import com.example.project_ballin.ReservationList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.lottery.LotteryList
 import com.example.project_ballin.reusableui.TopAppBar
 import java.text.DateFormat
 import java.util.Locale
@@ -42,7 +43,7 @@ class EntrantConfirmBooking {
         return df.format(this)
     }
     @Composable
-    fun ConfirmBooking(navController: NavController, campsite: Campsite, entrant: Entrant, chosenDates: List<Long>, reservationList: ReservationList) {
+    fun ConfirmBooking(navController: NavController, campsite: Campsite, entrant: Entrant, chosenDates: List<Long>, reservationList: ReservationList, lottery: Lottery) {
 
         var rulesChecked by remember { mutableStateOf(false) }
 
@@ -197,12 +198,15 @@ class EntrantConfirmBooking {
                                         Reservation(
                                             campsite.ID,
                                             chosenDates,
-                                            UserID = entrant.userID,
+                                            userID = entrant.userID,
                                             cancelled = false,
                                             resID = Uuid.random().toString(),
                                         )
                                     )
                                     navController.navigate("EntrantBrowseReservations")
+
+                                    entrant.activeLotteries.remove(lottery)
+                                    entrant.wonLotteries.remove(lottery)
                                 },
                                 enabled = rulesChecked,
                                 modifier = Modifier.padding(16.dp)

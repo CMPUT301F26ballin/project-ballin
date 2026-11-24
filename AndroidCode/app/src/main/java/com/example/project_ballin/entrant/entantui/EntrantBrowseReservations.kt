@@ -184,7 +184,7 @@ class EntrantBrowseReservations{
                         Button(
                             onClick = {
                                 val site = lottery.associatedSites[0]
-                                navController.navigate("EntrantSiteBooker/${site}")
+                                navController.navigate("EntrantSiteBooker/${site}/${lottery.lotteryID}")
                             },
                             modifier = Modifier.padding(16.dp)
                                 .testTag("Select Dates Button")

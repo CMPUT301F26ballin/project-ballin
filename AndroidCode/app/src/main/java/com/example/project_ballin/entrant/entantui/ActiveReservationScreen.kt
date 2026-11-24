@@ -60,7 +60,7 @@ class ActiveReservationScreen {
                 "Active Reservations"
             ) {
                 LazyColumn {
-                    items(reservationList.getReservationsForEntrant(entrant.userID)) { reservation ->
+                    items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
                         CurrentReservationCard(entrant, reservation, campsiteList, navController)
                     }
 

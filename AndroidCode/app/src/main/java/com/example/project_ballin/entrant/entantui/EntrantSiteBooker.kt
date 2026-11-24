@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
 
 
@@ -34,7 +35,7 @@ class EntrantSiteBooker {
      * @param entrant the entrant
      */
     @Composable
-    fun SiteBooker (navController: NavController, campsiteID: String?, campsiteList: CampsiteList, entrant: Entrant) {
+    fun SiteBooker (navController: NavController, campsiteID: String?, campsiteList: CampsiteList, entrant: Entrant, lottery: Lottery?) {
 
 
         var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
@@ -60,7 +61,7 @@ class EntrantSiteBooker {
                         chosenDates = { chosenDates = it }
                     )
 
-                    CancelBookButtons(navController, chosenDates, entrant, campsiteID)
+                    CancelBookButtons(navController, chosenDates, campsiteID, lottery)
                 }
             }
         }
@@ -73,7 +74,7 @@ class EntrantSiteBooker {
      *
      */
     @Composable
-    fun CancelBookButtons(navController: NavController, chosenDates: List<Long>?, entrant: Entrant, campsiteID: String?) {
+    fun CancelBookButtons(navController: NavController, chosenDates: List<Long>?, campsiteID: String?, lottery: Lottery?) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -93,7 +94,7 @@ class EntrantSiteBooker {
 
             Button(
                 onClick = {
-                    navController.navigate("confirmBooking/${campsiteID}/${chosenDates?.joinToString(",")}")
+                    navController.navigate("confirmBooking/${campsiteID}/${chosenDates?.joinToString(",")}/${lottery?.lotteryID}")
                 },
                 enabled = chosenDates != null,
                 modifier = Modifier.padding(16.dp)
