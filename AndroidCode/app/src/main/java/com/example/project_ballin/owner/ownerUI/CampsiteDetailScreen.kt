@@ -3,10 +3,12 @@ package com.example.project_ballin
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +36,7 @@ import com.example.project_ballin.reusableui.GeneralReportButton
 import com.example.project_ballin.reusableui.TopAppBar
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
+import com.google.zxing.qrcode.encoder.QRCode
 
 /**
  * The view class where entrants and owners can view the details of a given campsite
@@ -113,7 +116,10 @@ class CampsiteDetailScreen(){
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Button(onClick = {showMap = true}) {
+                    Box(modifier = Modifier
+                        .padding(16.dp)
+                        .height(500.dp)
+                        .fillMaxWidth()) {
                         map.GoogleMapScreen(LatLng(site.lat, site.lon),
                             false,
                             onNewLocation = {},
@@ -162,7 +168,7 @@ class CampsiteDetailScreen(){
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    Text(site.rules)
+                    Text("Rules & Cancellation: ${site.rules}")
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -172,7 +178,19 @@ class CampsiteDetailScreen(){
                     .padding(16.dp),
                     horizontalArrangement = Arrangement.Center
                 ){
-                    ImageDisplayRow(site.QRCode!!)
+                    Log.d("Qr", "Getting Bytes")
+                    if(site.qrCode == null){
+                        Log.d("Qr", "Null QR")
+                    }
+                    else{
+                        val byteArray = site.qrCode.toBytes()
+                        Log.d("Qr", "Bytes!")
+                        Image(
+                            bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                                .asImageBitmap(),
+                            contentDescription = "CampQRCode"
+                        )
+                    }
                 }
 
                 if (site.ownerID == userID) {
