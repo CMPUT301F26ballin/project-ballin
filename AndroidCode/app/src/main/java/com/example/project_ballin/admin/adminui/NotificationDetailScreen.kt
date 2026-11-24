@@ -137,7 +137,7 @@ class NotificationDetailScreen {
 
         val sampleNotification = Notification(
             "Hello, this is the content of the notification",
-            Date(),
+            System.currentTimeMillis(),
             "1", "1"
         )
 
