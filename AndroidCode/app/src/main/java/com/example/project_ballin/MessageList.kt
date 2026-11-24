@@ -32,9 +32,13 @@ class MessageList {
             _messages.clear()
 
             snapshots?.documents?.forEach { document->
-                val message = document.toObject(Message::class.java)
-                if(message != null){
-                    _messages.add(message)
+                try {
+                    val message = document.toObject(Message::class.java)
+                    if(message != null){
+                        _messages.add(message)
+                    }
+                } catch (e: Exception) {
+                    // just skip messages that can't be parsed
                 }
             }
         }

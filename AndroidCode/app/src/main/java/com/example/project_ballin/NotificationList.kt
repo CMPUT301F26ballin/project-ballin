@@ -1,8 +1,10 @@
 package com.example.project_ballin
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import java.util.Date
 import kotlin.uuid.Uuid
 
 /**
@@ -22,6 +24,7 @@ class NotificationList {
      */
 
     private val notificationsRef = db.collection("Notifications")
+
     init{
         notificationsRef.addSnapshotListener { snapshots, error ->
             if(error != null){
@@ -30,10 +33,14 @@ class NotificationList {
 
             _notifications.clear()
 
-            snapshots?.documents?.forEach { document->
-                val notification = document.toObject(Notification::class.java)
-                if(notification != null){
-                    _notifications.add(notification)
+            snapshots?.documents?.forEach { document ->
+                try {
+                    val notification = document.toObject(Notification::class.java)
+                    if(notification != null){
+                        _notifications.add(notification)
+                    }
+                } catch (e: Exception) {
+                    // just skip notifications that can't be parsed
                 }
             }
         }
@@ -41,6 +48,7 @@ class NotificationList {
 
     val notifications: List<Notification>
         get() = _notifications
+
 
     /**
      * Adds a notification to the database
@@ -73,4 +81,20 @@ class NotificationList {
     fun getNotification(ID: String): Notification? =
         _notifications.find { it.ID == ID }
 
+    fun sendToLottery(content: String, lotteryID: String): Boolean {
+        if (content.isBlank() || lotteryID.isBlank()) return false
+        addNotification(
+            Notification(
+                content = content.trim(),
+                dateSent = System.currentTimeMillis(),
+                ID = Uuid.random().toString(),
+                lotteryID = lotteryID
+            )
+        )
+        return true
+    }
+
+    fun getNotificationsByLottery(lotteryID: String) : List<Notification> {
+        return _notifications.filter { it.lotteryID == lotteryID }
+    }
 }

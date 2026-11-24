@@ -66,7 +66,7 @@ class MessageDetailScreen {
 
                 MessageDetailRows("Sent By User ID", message.senderID, "sentBy${message.senderID}")
                 MessageDetailRows("Received By User ID", message.recipientID, "recievedBy${message.recipientID}")
-                MessageDetailRows("Date Sent", message.getFormattedDate(), "dateSent${message.getFormattedDate()}")
+                MessageDetailRows("Date Sent", message.dateSent.toString(), "dateSent${message.dateSent}")
                 MessageDetailRows("Message Content", message.content, "messageContent${message.content}")
                 MessageDetailRows("Message ID", message.ID, "messageID${message.ID}")
                 Spacer(modifier = Modifier.height(68.dp))
@@ -141,7 +141,7 @@ class MessageDetailScreen {
             "1",
             "1",
             "Hello, this is the content of the message",
-            Date(),
+            System.currentTimeMillis(),
             "1"
         )
 

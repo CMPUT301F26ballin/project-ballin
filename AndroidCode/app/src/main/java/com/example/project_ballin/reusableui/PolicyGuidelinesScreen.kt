@@ -19,6 +19,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 class PolicyGuidelinesScreen {
+
+    /**
+     * This screen displays the policies and guidelines for the app.
+     * The users of the app must obey these policies, and any violations
+     * may result in either account deletion for owners, or removal of content posted
+     *
+     * @param navController the navigation controller for the app
+     */
     @Composable
     fun PolicyGuidelines(
         navController: NavController

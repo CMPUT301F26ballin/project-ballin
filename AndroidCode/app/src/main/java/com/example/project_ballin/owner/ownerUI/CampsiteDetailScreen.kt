@@ -30,7 +30,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.project_ballin.reusableui.GeneralReportButton
 import com.example.project_ballin.reusableui.TopAppBar
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 
 /**
@@ -55,9 +57,12 @@ class CampsiteDetailScreen(){
     fun CampsiteDetailScreen(navController: NavController, site: Campsite, userID: String) {
 
         val datePicker = GeneralDatePicker()
+        val map = GoogleMapScreen()
+        var mapMoving by remember { mutableStateOf(false) }
 
         TopAppBar(navController, "Campsite Details") {
             var showAvailability by remember { mutableStateOf(false) }
+            var showMap by remember { mutableStateOf(false) }
 
             Column(
                 modifier = Modifier
@@ -70,7 +75,7 @@ class CampsiteDetailScreen(){
                 Row(
                     modifier = Modifier
                         .padding(12.dp)
-                        .horizontalScroll(rememberScrollState())
+                        .horizontalScroll(rememberScrollState(), enabled = !mapMoving)
                 ) {
                     site.images.forEach { blob -> ImageDisplayRow(blob) }
                 }
@@ -105,9 +110,15 @@ class CampsiteDetailScreen(){
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Text("Lat: ${site.lat} Lon ${site.lon}")
+                    Button(onClick = {showMap = true}) {
+                        map.GoogleMapScreen(LatLng(site.lat, site.lon),
+                            false,
+                            onNewLocation = {},
+                            onMoving = {mapMoving = it})
+                    }
                 }
 
                 if (showAvailability) {
@@ -156,6 +167,14 @@ class CampsiteDetailScreen(){
 
                 Spacer(Modifier.height(16.dp))
 
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    ImageDisplayRow(site.QRCode!!)
+                }
+
                 if (site.ownerID == userID) {
                     Row(
                         modifier = Modifier
@@ -178,7 +197,6 @@ class CampsiteDetailScreen(){
                         Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Active/${site.ownerID}")},
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
                                 .testTag("viewActiveReservationsButton")) {
                             Text("View Active Reservations")
                         }
@@ -189,7 +207,6 @@ class CampsiteDetailScreen(){
                         Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Past/${site.ownerID}")},
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
                                 .testTag("viewPastReservationsButton")) {
                             Text("View Past Reservations")
                         }
@@ -200,10 +217,33 @@ class CampsiteDetailScreen(){
                         Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Cancelled/${site.ownerID}")},
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
                                 .testTag("viewPastReservationsButton")) {
                             Text("View Past Reservations")
                         }
+                    }
+                } else {
+                    // Anyone who doesn't own this campsite can report it, or report its owner
+                    val reportButton = GeneralReportButton()
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        reportButton.ReportButton(
+                            subjectReport = "Campsite",
+                            clickedID = site.ID,
+                            navController = navController,
+                            label = "Report Campsite",
+                            testTag = "reportCampsiteButton"
+                        )
+                        reportButton.ReportButton(
+                            subjectReport = "Owner",
+                            clickedID = site.ownerID,
+                            navController = navController,
+                            label = "Report Owner",
+                            testTag = "reportOwnerButton"
+                        )
                     }
                 }
             }

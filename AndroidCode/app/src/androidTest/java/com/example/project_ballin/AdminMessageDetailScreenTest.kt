@@ -16,9 +16,9 @@ class AdminMessageDetailScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-    
+
     private val sampleMessages = mutableListOf(
-        Message("1","1","Hello", Date(), "1"),
+        Message("1","1","Hello", System.currentTimeMillis(), "1"),
     )
 
     @Test
@@ -40,7 +40,7 @@ class AdminMessageDetailScreenTest {
             .assertExists()
 
         composeTestRule
-            .onNodeWithTag("dateSent${sampleMessages[0].getFormattedDate()}")
+            .onNodeWithTag("dateSent${sampleMessages[0].dateSent}")
             .assertExists()
 
         composeTestRule

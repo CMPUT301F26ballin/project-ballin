@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.entrant.Reservation
+import com.example.project_ballin.reusableui.GeneralReportButton
 import com.example.project_ballin.reusableui.TopAppBar
 import java.text.DateFormat
 import java.util.Locale
@@ -101,6 +102,16 @@ class ReservationDetailScreen {
                     Button(onClick = {confirming = true}){
                         Text("Cancel Reservation")
                     }
+                }
+                // Lets the owner report the entrant who made this reservation
+                Row(modifier = Modifier.padding(16.dp)){
+                    GeneralReportButton().ReportButton(
+                        subjectReport = "Entrant",
+                        clickedID = res.UserID ?: "",
+                        navController = navController,
+                        label = "Report Entrant",
+                        testTag = "reportEntrantButton"
+                    )
                 }
             }
 

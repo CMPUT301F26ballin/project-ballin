@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.PropertyName
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.uuid.Uuid
@@ -14,19 +16,14 @@ import kotlin.uuid.Uuid
  * @property dateSent the date the notification was sent
  * @property ID the unique ID of the notification
  * @property recipientID a list of Users Uuids, which are the recipients of the notification
+ * @property lotteryID the lotteryID of the lottery this notification was sent to
  */
 class Notification (
     var content: String = "",
-    var dateSent: Date = Date(),
+    var dateSent: Long = System.currentTimeMillis(),
     var ID: String = "",
-    var recipientID: String = ""
+    var recipientID: String = "",
+    var lotteryID: String = ""
 ) {
-
-    /**
-     * Returns the date sent in a readable format.
-     * Date() in java gives unnecessary data.
-     */
-    fun getFormattedDate(): String {
-        return SimpleDateFormat("dd/MM/yyyy").format(dateSent) // MM = month (mm would be minutes)
-    }
+    // getFormattedDate() {}
 }

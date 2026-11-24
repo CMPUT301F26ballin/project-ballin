@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,7 +46,7 @@ class MessageListScreen {
      * @return true if the message matches the search
      */
     fun Message.matchesSearch(query: String): Boolean =
-        adminSearch.matchesQuery(query, content, senderID, recipientID, getFormattedDate())
+        adminSearch.matchesQuery(query, content, senderID, recipientID, dateSent.toString())
 
     /**
      * A composable that shows the overview of all the messages
@@ -178,7 +179,7 @@ class MessageListScreen {
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Text("Date Sent: ${message.getFormattedDate()}")
+                    Text("Date Sent: ${message.dateSent.toString()}")
                     Text("Sender: ${message.senderID}")
                 }
 
@@ -202,8 +203,8 @@ class MessageListScreen {
         val navController = rememberNavController()
 
         val sampleMessages = listOf(
-            Message("1", "1", "Hello", Date(), "1"),
-            Message("2", "2", "Hi", Date(), "2")
+            Message("1", "1", "Hello", System.currentTimeMillis(), "1"),
+            Message("2", "2", "Hi", System.currentTimeMillis(), "2")
         )
         MessageList(navController, sampleMessages, onDelete = {})
     }

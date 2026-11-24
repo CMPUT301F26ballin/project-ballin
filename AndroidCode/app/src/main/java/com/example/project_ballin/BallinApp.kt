@@ -43,9 +43,12 @@ import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
 import com.example.project_ballin.reusableui.UserDetailModel
 import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import java.util.Date
+import com.example.project_ballin.owner.ownerUI.NotificationSendScreen
+import com.example.project_ballin.owner.ownerUI.OwnerNotificationListScreen
 
 /**
  * The main class that houses the NavHost for the nav controller. All screen changes go through this class view.
@@ -64,7 +67,10 @@ class BallinApp(){
      * Published: April 15, 2023
      * https://sagar0-0.medium.com/pass-arguments-to-destinations-jetpack-compose-navigation-7c29d4c73ce5
      *
-     *
+     * Title: Passing data between screens | Navigation : Jetpack Compose - 34
+     * Posted By: CodeTutor
+     * Date: Feb 28, 2024
+     * https://www.youtube.com/watch?v=AoU9EoHWpno
      *
      *
      *
@@ -124,8 +130,8 @@ class BallinApp(){
                     "campsite1",
                     "2",
                     //Location(""),
-                    lat = 0.0,
-                    lon = 0.0,
+                    0.0,
+                    0.0,
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -146,9 +152,8 @@ class BallinApp(){
                 Campsite(
                     "campsite2",
                     "4",
-                    lat = 0.0,
-                    lon = 0.0,
-
+                    0.0,
+                    0.0,
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -169,8 +174,8 @@ class BallinApp(){
                 Campsite(
                     "campsite3",
                     "5",
-                    lat = 0.0,
-                    lon = 0.0,
+                    0.0,
+                    0.0,
                     "Jasper",
                     mutableListOf<String>(),
                     1.00.toFloat(),
@@ -243,13 +248,14 @@ class BallinApp(){
             )
         }
 
+
         var message1 by remember {
             mutableStateOf<Message>(
                 Message(
                     Uuid.random().toString(),
                     Uuid.random().toString(),
                     "You are booked!",
-                    Date(),
+                    System.currentTimeMillis(),
                     Uuid.random().toString()
                 )
             )
@@ -259,12 +265,13 @@ class BallinApp(){
             mutableStateOf<Notification>(
                 Notification(
                     "You won the lottery!",
-                    Date(),
+                    System.currentTimeMillis(),
                     Uuid.random().toString(),
                     Uuid.random().toString()
                 )
             )
         }
+
 
         LaunchedEffect(Unit) {
             campsite.lotteries.add(lottery.lotteryID)
@@ -295,7 +302,6 @@ class BallinApp(){
             notificationList.addNotification(notification1)
         }
 
-
         val campsiteInputScreen = CampsiteInputScreen()
         val campsiteDetailScreen = CampsiteDetailScreen()
         val campsiteListScreen = CampsiteListScreen()
@@ -318,6 +324,10 @@ class BallinApp(){
         //RESERVATION SCREEN OBJECTS
         val ownerReservationScreen = OwnerReservationScreen()
         val reservationDetailScreen = ReservationDetailScreen()
+
+        //MessagingScreen
+        val messagingScreen = MessagingScreen()
+
 
         NavHost(navController = navController, startDestination = "signup") {
             composable("signup") { signUpScreen.Signup(navController) }
@@ -410,6 +420,19 @@ class BallinApp(){
                 val userIDString = it.arguments!!.getString("UserID")
                 val ownerID = it.arguments!!.getString("OwnerID")
 
+                val entrant = entrantList.getEntrant(userIDString!!)
+
+
+                messagingScreen.MessagingScreen(navController, ownerID!!, userIDString!!, entrant!!.firstName,
+                    onAddMessage = {userID, ownerID, messageContent -> messageList.addMessage(
+                        Message(
+                            senderID = ownerID,
+                            recipientID = userID,
+                            content = messageContent,
+                            dateSent = System.currentTimeMillis()
+                        ))}
+                    )
+
 
             }
 
@@ -471,6 +494,33 @@ class BallinApp(){
                     getCampsite = { campsiteList.getCampsite(it) },
                     addLottery = { lotteryList.addLottery(it) },
                     updateLottery = { old, new -> lotteryList.updateLottery(old, new) })
+            }
+
+            composable("NotificationSendScreen/{OwnerID}/{LotteryID}") {
+                val ownerID = it.arguments!!.getString("OwnerID")!!
+                val lotteryID = it.arguments!!.getString("LotteryID")!!
+                NotificationSendScreen().NotificationSendScreen(
+                    navController,
+                    ownerID,
+                    lotteryID,
+                    sendNotification = { content ->
+                        notificationList.sendToLottery(content, lotteryID)
+                    }
+                )
+            }
+
+            composable("OwnerNotificationListScreen/{OwnerID}"){
+                val ownerID = it.arguments!!.getString("OwnerID")!!
+                val ownerLotteryIDs = lotteryList.getOwnerLotteries(ownerID).map{
+                    l -> l.lotteryID
+                }
+                OwnerNotificationListScreen().OwnerNotificationListScreen(
+                    navController,
+                    ownerID,
+                    notificationList.getAllNotifications().filter { n ->
+                        n.lotteryID in ownerLotteryIDs
+                    }
+                )
             }
 
             composable("AdminMenu/{AdminID}") {
@@ -564,6 +614,7 @@ class BallinApp(){
                 }
             }
 
+
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
@@ -639,8 +690,9 @@ class BallinApp(){
                 PolicyGuidelinesScreen().PolicyGuidelines(navController)
             }
 
-            composable("Scan QR Code") {
-                QRCodeScanner.QRCodeScanner(navController)
+            composable("Scan QR Code/{userID}") {
+                val userID = it.arguments?.getString("userID")
+                QRCodeScanner.QRCodeScanner(navController, userID!!)
             }
 
             composable("confirmBooking/{campID}/{chosenDates}") {

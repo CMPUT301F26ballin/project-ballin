@@ -5,8 +5,10 @@
 #---------------------------------------
 
 # Week 1 :
+yuming7: part of story mockup(admin), most of UML(admin), half of crc card(admin), half of backlog/risk management(admin).
 
 # Week 2 :
+Yuming: refined admin crc cards
 
 # Week 3 :
 
@@ -36,6 +38,8 @@ yuming: search bar for admin, test for search bar, test for admin class, impleme
 
 Leighan: switch modes for admin, and add necessary tests for it. Get the foundation of viewing owners,review,ratings that violate app policy done. Also have to keep in mind/maybe do: update the UI and Admin storyboard.
 
+Nick: account creation + editing + deletion for all roles
+
 # Week 6 (Nov 17)
 
 Salix: Implement the new multi owner lotteries, the user waitlist screen, waitlist notifications, help with reservations
@@ -45,3 +49,7 @@ yuming: add image test, put in report button
 Leighan: finishing up admin side - switch modes, reporting system and seeing/removing ratings,reviews,owners that violate app policy.
 
 Peter: I will finish off the message sending and reservation-viewing functions, I will figure out map views for the location of a campsite (and hopefully refine campsite location input), I will figure out QR Code generation, and I will figure out how to fix the image rotation bug (where images taken on a vertical phone get rotated.)
+
+Mies: Working on creating, modifying, and viewing reservations for campsites
+
+Nick: working on filter by dates, then account profile pic editing 

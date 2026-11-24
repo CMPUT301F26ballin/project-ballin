@@ -53,7 +53,7 @@ class NotificationListScreen {
      * @return true if the notification matches the search
      */
     fun Notification.matchesSearch(query: String): Boolean =
-        adminSearch.matchesQuery(query, content, recipientID, getFormattedDate())
+        adminSearch.matchesQuery(query, content, recipientID, dateSent.toString())
     /**
      * A composable that shows the overview of all the notifications
      *
@@ -184,7 +184,7 @@ class NotificationListScreen {
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Text("Date Sent: ${notification.getFormattedDate()}")
+                    Text("Date Sent: ${notification.dateSent}")
                     Text("Recipient: ${notification.recipientID}")
                 }
 
@@ -207,8 +207,8 @@ class NotificationListScreen {
     fun NotificationListScreenPreview() {
         val navController = rememberNavController()
         val sampleNotifications = listOf(
-            Notification("Hello", Date(), "1", "1"),
-            Notification("Hi", Date(), "2", "2"),
+            Notification("Hello", System.currentTimeMillis(), "1", "1"),
+            Notification("Hi", System.currentTimeMillis(), "2", "2"),
         )
         NotificationList(navController, sampleNotifications, onDelete = {})
     }
