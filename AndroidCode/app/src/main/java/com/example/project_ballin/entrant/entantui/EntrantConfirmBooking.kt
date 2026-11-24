@@ -38,14 +38,26 @@ import kotlin.uuid.Uuid
 
 class EntrantConfirmBooking {
 
+    // Converts long to date string
     // Source - https://stackoverflow.com/q/49551461
     // Posted by HelloCW
     // Retrieved 2026-11-21, License - CC BY-SA 3.0
-
     fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
         val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
         return df.format(this)
     }
+
+    /**
+     * The entrant confirm booking page
+     * Entrants can confirm a booking after confirming they have read the rules for the campsite
+     *
+     * @param navController the navigation controller for the app
+     * @param campsite the campsite to book
+     * @param entrant the entrant
+     * @param chosenDates the chosen dates for the reservation
+     * @param reservationList the list of reservations
+     * @param lottery the lottery associated with the site
+     */
     @Composable
     fun ConfirmBooking(navController: NavController, campsite: Campsite, entrant: Entrant, chosenDates: List<Long>, reservationList: ReservationList, lottery: Lottery) {
 

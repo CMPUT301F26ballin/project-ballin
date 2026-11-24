@@ -41,6 +41,17 @@ import java.util.Locale
 
 class ActiveReservationScreen {
 
+    // Converts long to date string
+    // Source - https://stackoverflow.com/q/49551461
+    // Posted by HelloCW
+    // Retrieved 2026-11-21, License - CC BY-SA 3.0
+
+    fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
+        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+        return df.format(this)
+    }
+
+
     /**
      * The entrant active reservations page
      * Entrants can look at their active reservations
@@ -145,9 +156,12 @@ class ActiveReservationScreen {
 
 
                         for (site in campsites) {
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
                             Text(
                                 text = "${campsiteList.getCampsite(site)?.name}",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.titleLarge
                             )
 
                             Column{
@@ -160,15 +174,16 @@ class ActiveReservationScreen {
 
                                         Text(
                                             text = "Details:",
-                                            style = MaterialTheme.typography.bodyLarge
+                                            style = MaterialTheme.typography.titleMedium
                                         )
 
                                         Row(
                                             modifier = Modifier.padding(16.dp, 0.dp)
                                         ){
                                             Text(
-                                                text =  " - Location: ${campsiteList.getCampsite(site)?.locationName}\n" +
-                                                        " - Occupancy: ${campsiteList.getCampsite(site)?.occupancy}",
+                                                text =  "- Location: ${campsiteList.getCampsite(site)?.locationName}\n" +
+                                                        "- Occupancy: ${campsiteList.getCampsite(site)?.occupancy}\n" +
+                                                        "- Price: $${"%.2f".format(campsiteList.getCampsite(site)?.price)}/night",
                                                 style = MaterialTheme.typography.bodyLarge
                                             )
                                         }
@@ -253,17 +268,6 @@ class ActiveReservationScreen {
         }
     }
 
-    // Source - https://stackoverflow.com/q/49551461
-    // Posted by HelloCW
-    // Retrieved 2026-11-21, License - CC BY-SA 3.0
-
-    fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
-        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
-        return df.format(this)
-    }
-
-
-
     /**
      * The entrant current reservation card
      * Entrants can look at their current reservations
@@ -324,9 +328,10 @@ class ActiveReservationScreen {
                             modifier = Modifier.padding(16.dp, 0.dp)
                         ){
                             Text(
-                                text =  " - Location: ${campsite?.locationName}\n" +
-                                        " - Occupancy: ${campsite?.occupancy}",
-                                style = MaterialTheme.typography.titleMedium
+                                text =  "- Location: ${campsite?.locationName}\n" +
+                                        "- Occupancy: ${campsite?.occupancy}\n" +
+                                        "- Price: $${"%.2f".format(campsite?.price)}/night",
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
 
@@ -373,7 +378,6 @@ class ActiveReservationScreen {
                 ) {
                     Text("Cancel Reservation")
                 }
-
             }
         }
     }

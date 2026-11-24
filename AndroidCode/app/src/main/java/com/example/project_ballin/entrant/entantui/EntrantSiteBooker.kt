@@ -34,9 +34,10 @@ class EntrantSiteBooker {
      * @param navController the navigation controller for the app
      * @param campsiteID the campsite to book
      * @param entrant the entrant
+     * @param lottery the lottery
      */
     @Composable
-    fun SiteBooker (navController: NavController, campsiteID: String?, campsiteList: CampsiteList, entrant: Entrant, lottery: Lottery?) {
+    fun SiteBooker (navController: NavController, campsiteID: String?, entrant: Entrant, lottery: Lottery?) {
 
 
         var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
@@ -75,7 +76,10 @@ class EntrantSiteBooker {
     /**
      * Shows the decline and book buttons
      *
+     * @param navController the navigation controller for the app
      * @param chosenDates the chosen dates for the reservation
+     * @param campsiteID the campsite to book
+     * @param lottery the lottery associated with the site
      *
      */
     @Composable

@@ -27,6 +27,16 @@ import com.example.project_ballin.reusableui.TopAppBar
 
 class EntrantSiteSelector {
 
+
+    /**
+     * The entrant site selector page
+     * Entrants can select a campsite from a list of available campsites in the lottery
+     *
+     * @param navController the navigation controller for the app
+     * @param campsiteList the list of campsites
+     * @param entrant the entrant
+     * @param lottery the lottery that sites are in
+     */
     @Composable
     fun SiteSelector(
         navController: NavController,
@@ -63,6 +73,15 @@ class EntrantSiteSelector {
     }
 
 
+    /**
+     * The site card
+     * Entrants can select a site displayed
+     *
+     * @param navController the navigation controller for the app
+     * @param entrant the entrant
+     * @param campsite the campsite
+     * @param lottery the lottery that sites are in
+     */
     @Composable
     fun SiteCard(
         navController: NavController,
@@ -108,9 +127,10 @@ class EntrantSiteSelector {
                             modifier = Modifier.padding(16.dp, 0.dp)
                         ) {
                             Text(
-                                text = " - Location: ${campsite.locationName}\n" +
-                                        " - Occupancy: ${campsite.occupancy}",
-                                style = MaterialTheme.typography.titleMedium
+                                text = "- Location: ${campsite.locationName}\n" +
+                                        "- Occupancy: ${campsite.occupancy}\n" +
+                                        "- Price: $${"%.2f".format(campsite.price)}/night",
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
                     }
