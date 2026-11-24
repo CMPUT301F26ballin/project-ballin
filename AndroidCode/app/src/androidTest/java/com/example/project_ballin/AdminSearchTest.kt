@@ -19,6 +19,8 @@ import java.util.Date
 /**
  * Tests for searching the admin's lists (US 03.02.02, US 03.04.03, US 03.06.02, US 03.07.02).
  * Uses local lists, so no database needed.
+ *
+ * dateSent gotta be change to currenttimemillis, just FYI -Nick
  */
 @RunWith(AndroidJUnit4::class)
 class AdminSearchTest {

@@ -26,6 +26,7 @@ enum class UserRole {
  * recognize device ID
  *
  * @param navController a [NavController] to continue to enter details screen
+ * @param viewModel a [UserDetailModel] to handle user details and update firebase
  *
  */
 class SignUp() {
@@ -45,6 +46,7 @@ class SignUp() {
 
 
         val uiState by viewModel.uiState.collectAsState()
+        val isLoading by viewModel.isLoading.collectAsState()
 
         LaunchedEffect(deviceId) {
             viewModel.loadExistingUser(deviceId)
@@ -75,33 +77,39 @@ class SignUp() {
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = {
-                    if (isUser){
-                        when (viewModel.selectedRole.value) {
-                            UserRole.ENTRANT -> {
-                                navController.navigate("EntrantMenu/${uiState.userID}")
+            if (isLoading){
+                CircularProgressIndicator()
+            }
+            else {
+                Button(
+                    onClick = {
+                        if (isUser) {
+                            when (viewModel.selectedRole.value) {
+                                UserRole.ENTRANT -> {
+                                    navController.navigate("EntrantMenu/${uiState.userID}")
+                                }
+
+                                UserRole.OWNER -> {
+                                    navController.navigate("OwnerMenu/${uiState.userID}")
+                                }
+
+                                UserRole.ADMIN -> {
+                                    navController.navigate("AdminMenu/${uiState.userID}")
+                                }
                             }
-                            UserRole.OWNER -> {
-                                navController.navigate("OwnerMenu/${uiState.userID}")
-                            }
-                            UserRole.ADMIN -> {
-                                navController.navigate("AdminMenu/${uiState.userID}")
-                            }
+                        } else {
+                            navController.navigate("createprofile")
                         }
-                    } else {
-                        navController.navigate("createprofile")
-                    }
-                },
-                modifier = Modifier.testTag("createProfile") // for testing
-            ) {
-                if (isUser){
-                    Text("Continue as ${uiState.firstName}")
-                }else
-                Text("Continue") //this will be the only valid button soon
+                    },
+                    modifier = Modifier.testTag("createProfile") // for testing
+                ) {
+                    if (isUser) {
+                        Text("Continue as ${uiState.firstName}")
+                    } else
+                        Text("Continue") //this will be the only valid button soon
+                }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
 
 //            Button(
 //                onClick = {
@@ -112,8 +120,6 @@ class SignUp() {
 //            ) {
 //                Text("Sign-up as Campsite Owner")
 //            }
-
-            Spacer(modifier = Modifier.height(8.dp))
 
 //            Button(
 //                onClick = {

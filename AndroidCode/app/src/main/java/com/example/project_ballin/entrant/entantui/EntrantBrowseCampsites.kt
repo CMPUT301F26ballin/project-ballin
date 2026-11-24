@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.*
+import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 
@@ -45,6 +46,8 @@ class EntrantBrowseCampsites(){
     @Preview(showBackground = true)
     @Composable
     fun EntrantBrowseCampsitesPreview() {
-
+        val navController = rememberNavController()
+        val campsiteList = CampsiteList()
+        EntrantBrowseCampsites(navController, campsiteList, "123")
     }
 }

@@ -12,6 +12,12 @@ import com.example.project_ballin.owner.Owner
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
+/**
+ *
+ * view model to handle account creation, editing and deletion
+ *
+ */
+
 class UserDetailModel: ViewModel() {
 
     private var _selectedRole = MutableStateFlow(UserRole.ENTRANT)
@@ -20,6 +26,13 @@ class UserDetailModel: ViewModel() {
     private var _uiState = MutableStateFlow<User>(Entrant())
     var uiState = _uiState.asStateFlow()
 
+    private var _isloading = MutableStateFlow(true)
+    var isLoading = _isloading.asStateFlow()
+
+
+    /**
+     * sets the device ID of the user on account creation
+     */
     fun setDeviceId(deviceId: String){
         val current = _uiState.value
         _uiState.value = when (current) {
@@ -30,9 +43,16 @@ class UserDetailModel: ViewModel() {
         }
     }
 
+    /**
+     * loads an existing user from firebase based on their device ID
+     */
     fun loadExistingUser(deviceId: String) {
-        if (deviceId.isBlank()) return
+        if (deviceId.isBlank()){
+            _isloading.value = false
+            return
+        }
         val db = Firebase.firestore
+        _isloading.value = true
 
         db.collection("Entrants").whereEqualTo("deviceId", deviceId).get()
             .addOnSuccessListener { entrantDocs ->
@@ -40,6 +60,7 @@ class UserDetailModel: ViewModel() {
                     val entrant = entrantDocs.documents[0].toObject(Entrant::class.java)
                     if (entrant != null) {
                         _uiState.value = entrant
+                        _isloading.value = false
                         _selectedRole.value = UserRole.ENTRANT
                         return@addOnSuccessListener
                     }
@@ -51,7 +72,9 @@ class UserDetailModel: ViewModel() {
                             val owner = ownerDocs.documents[0].toObject(Owner::class.java)
                             if (owner != null) {
                                 _uiState.value = owner
+                                _isloading.value = false
                                 _selectedRole.value = UserRole.OWNER
+
                                 return@addOnSuccessListener
                             }
                         }
@@ -62,14 +85,22 @@ class UserDetailModel: ViewModel() {
                                     val admin = adminDocs.documents[0].toObject(Admin::class.java)
                                     if (admin != null) {
                                         _uiState.value = admin
+                                        _isloading.value = false
                                         _selectedRole.value = UserRole.ADMIN
+                                        return@addOnSuccessListener
                                     }
                                 }
+                                _isloading.value = false
                             }
+
                     }
             }
     }
 
+    /**
+     * when creating an account, the user chooses which role they are
+     *
+     */
     fun onRoleChange(newRole: UserRole) {
         _selectedRole.value = newRole
         val current = _uiState.value
@@ -80,25 +111,34 @@ class UserDetailModel: ViewModel() {
                 lastName = current.lastName,
                 phoneNum = current.phoneNum,
                 email = current.email,
-                profilePic = current.profilePic
+                profilePic = current.profilePic,
+                deviceId = current.deviceId,
+                userID = current.userID
             )
             UserRole.OWNER -> Owner(
                 firstName = current.firstName,
                 lastName = current.lastName,
                 phoneNum = current.phoneNum,
                 email = current.email,
-                profilePic = current.profilePic
+                profilePic = current.profilePic,
+                deviceId = current.deviceId,
+                userID = current.userID
             )
             UserRole.ADMIN -> Admin(
                 firstName = current.firstName,
                 lastName = current.lastName,
                 phoneNum = current.phoneNum,
                 email = current.email,
-                profilePic = current.profilePic
+                profilePic = current.profilePic,
+                deviceId = current.deviceId,
+                userID = current.userID
             )
         }
     }
 
+    /**
+     * change the details of the user
+     */
     fun onFirstNameChange(newFirstName: String) {
         _uiState.update { current ->
             current.updateDetails(firstName = newFirstName)
@@ -128,28 +168,43 @@ class UserDetailModel: ViewModel() {
 
     }
 
+    /**
+     * edit the details of the user
+     */
     fun onEdit() {
         _uiState.value.editProfile()
     }
+
+    /**
+     * create the profile of the user
+     */
     fun onCreate(){
         _uiState.value.createProfile()
     }
 
+    /**
+     * delete the profile of the user
+     */
     fun onDelete(){
         _uiState.value.deleteProfile()
     }
 
+    /**
+     * used to validate the details of the user, ie. phone number is 10 digits long
+     * and email has som@something.com
+     */
      fun validateDetails(): Boolean {
         val currentUser = _uiState.value
 
-         val isValidFirstName = currentUser.firstName.isNotBlank()
-         val isValidLastName = currentUser.lastName.isNotBlank()
-         val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(currentUser.email).matches()
-         val isPhoneValid =
-             android.util.Patterns.PHONE.matcher(currentUser.phoneNum).matches()
-                     && currentUser.phoneNum.length == 10
+        val isValidFirstName = currentUser.firstName.isNotBlank()
+        val isValidLastName = currentUser.lastName.isNotBlank()
+        val isValidDeviceId = currentUser.deviceId.isNotBlank()
+        val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(currentUser.email).matches()
+        val isPhoneValid =
+            android.util.Patterns.PHONE.matcher(currentUser.phoneNum).matches()
+                    && currentUser.phoneNum.length == 10
 
-         return isValidFirstName && isValidLastName && isEmailValid && isPhoneValid
+         return isValidFirstName && isValidLastName && isEmailValid && isPhoneValid && isValidDeviceId
     }
 }
 
