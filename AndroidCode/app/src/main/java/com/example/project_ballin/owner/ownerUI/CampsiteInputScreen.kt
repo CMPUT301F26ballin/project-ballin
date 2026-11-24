@@ -213,10 +213,7 @@ class CampsiteInputScreen(){
                 campOccupancy = oldSite.occupancy.toString()
                 oldSite.images.forEach { byteArray -> campByteArray.add(byteArray) }
                 oldSite.availability.forEach { date -> campAvailableDates.add(date) }
-                val locStrings = oldSite.location.split(",")
-                val lat = locStrings[0].toDouble()
-                val lon = locStrings[1].toDouble()
-                campNumLocation = LatLng(lat, lon)
+                campNumLocation = LatLng(oldSite.lat, oldSite.lon)
                 campLocation = oldSite.locationName
                 //oldSite.images.forEach { image -> campByteArray.add(image) }
                 Log.d("Site", "Restored")
@@ -478,7 +475,8 @@ class CampsiteInputScreen(){
                                     addSite(
                                         Campsite(
                                             name = campName,
-                                            location = campNumLocation.toString(),
+                                            lat = campNumLocation.latitude,
+                                            lon = campNumLocation.longitude,
                                             ID = campID,
                                             ownerID = ownerID,
                                             price = campPrice.toFloat(),
@@ -519,7 +517,8 @@ class CampsiteInputScreen(){
                                             //location = location,
                                             name = campName,
                                             ID = oldSite.ID,
-                                            location = campNumLocation.toString(),
+                                            lat = campNumLocation.latitude,
+                                            lon = campNumLocation.longitude,
                                             ownerID = oldSite.ownerID,
                                             price = campPrice.toFloat(),
                                             rating = oldSite.rating,

@@ -32,10 +32,9 @@ class OwnerViolationDetector(
         val nonDuplicateCampsites = mutableSetOf<Triple<Double,Double,String>>()
 
         for (campsite in ownerCampsites) {
-            val locStrings = campsite.location.split(",")
             nonDuplicateCampsites.add(Triple(
-                locStrings[0].toDouble(),
-                locStrings[1].toDouble(),
+                campsite.lat,
+                campsite.lon,
                 campsite.locationName
             ))
         }
