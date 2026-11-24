@@ -245,6 +245,7 @@ class BallinApp(){
             )
         }
 
+
         var message1 by remember {
             mutableStateOf<Message>(
                 Message(
@@ -267,6 +268,7 @@ class BallinApp(){
                 )
             )
         }
+
 
         LaunchedEffect(Unit) {
             campsite.lotteries.add(lottery.lotteryID)
@@ -297,7 +299,6 @@ class BallinApp(){
             notificationList.addNotification(notification1)
         }
 
-
         val campsiteInputScreen = CampsiteInputScreen()
         val campsiteDetailScreen = CampsiteDetailScreen()
         val campsiteListScreen = CampsiteListScreen()
@@ -323,6 +324,7 @@ class BallinApp(){
 
         //MessagingScreen
         val messagingScreen = MessagingScreen()
+
 
         NavHost(navController = navController, startDestination = "signup") {
             composable("signup") { signUpScreen.Signup(navController) }
@@ -608,6 +610,7 @@ class BallinApp(){
                         onDelete = { notificationList.deleteNotification(it) })
                 }
             }
+
 
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
