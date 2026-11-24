@@ -24,6 +24,9 @@ class QRCodeGenerator {
      *
      * Ref:
      * Title: Android QR Code Generator and Scanner with Kotlin and Jetpack Compose — Step-by-Step Guide
+     * Date: 18/08/2026
+     * Author: Andres Cruz
+     * https://www.desarrollolibre.net/blog/android/how-to-create-a-qr-code-reader-on-android-with-android-studio
      *
      *
      *
@@ -31,12 +34,11 @@ class QRCodeGenerator {
 
     fun encodeQRBlobFromString(input: String): Blob {
         val writer = QRCodeWriter()
-        val bitMatrix = writer.encode(input, BarcodeFormat.QR_CODE, 256, 256)
-        val bitmap = createBitmap(256, 256, Bitmap.Config.RGB_565)
-        for (x in 0 until 256) {
-            for (y in 0 until 256) {
+        val bitMatrix = writer.encode(input, BarcodeFormat.QR_CODE, 512, 512)
+        val bitmap = createBitmap(512, 512, Bitmap.Config.RGB_565)
+        for (x in 0 until 512) {
+            for (y in 0 until 512) {
                 bitmap[x, y] = if (bitMatrix.get(x, y)) Color.BLACK else Color.WHITE
-                // bitmap.setPixel(x, y, if (bitMatrix.get(x, y)) Color.BLACK else Color.WHITE)
             }
         }
         val baos = ByteArrayOutputStream()
