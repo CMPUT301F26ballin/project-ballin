@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -114,6 +115,11 @@ class ActiveReservationScreen {
      */
     @Composable
     fun ActiveLotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onLeaveClick: () -> Unit){
+        val campsites = lottery.associatedSites
+        val startDate = lottery.registrationStart?.toDateString()
+        val endDate = lottery.registrationEnd?.toDateString()
+
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -127,45 +133,119 @@ class ActiveReservationScreen {
                         .testTag("Active Lottery Card")
                 )
                 {
-                    Text(
-                        text = "You are registered in a lottery for: ${
-                            campsiteList.getCampsite(
-                                lottery.associatedSites[0]
-                            )?.name
-                        }.",
-                        style = MaterialTheme.typography.titleLarge
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ){
 
-                    HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+                        Text(
+                            text = "You are registered in a lottery for:",
+                            style = MaterialTheme.typography.titleLarge
+                        )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Button(
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error
-                            ),
-                            onClick = onLeaveClick
-                            ,
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .testTag("Leave Waiting List Button")
-                        ) {
-                            Text("Leave Waiting List")
+
+                        for (site in campsites) {
+                            Text(
+                                text = "${campsiteList.getCampsite(site)?.name}",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            Column{
+
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ){
+                                    Column {
+
+
+                                        Text(
+                                            text = "Details:",
+                                            style = MaterialTheme.typography.bodyLarge
+                                        )
+
+                                        Row(
+                                            modifier = Modifier.padding(16.dp, 0.dp)
+                                        ){
+                                            Text(
+                                                text =  " - Location: ${campsiteList.getCampsite(site)?.locationName}\n" +
+                                                        " - Occupancy: ${campsiteList.getCampsite(site)?.occupancy}",
+                                                style = MaterialTheme.typography.bodyLarge
+                                            )
+                                        }
+                                    }
+
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalAlignment = Alignment.End,
+                                        verticalArrangement = Arrangement.SpaceEvenly
+                                    ){
+                                        Button(
+                                            onClick = {
+                                                navController.navigate("CampsiteDetailScreen/${campsiteList.getCampsite(site)?.ID}/${entrant.userID}")
+
+                                            },
+                                            modifier = Modifier
+                                                .testTag("More Details Button"),
+
+
+
+                                        ) {
+                                            Text("More Details")
+                                        }
+                                    }
+                                }
+                            }
                         }
 
-                        Button(
-                            onClick = {
+                        HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
-                            },
+                        Row{
+                            Text(
+                                text = "Start: $startDate\nEnd: $endDate",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+
+                        HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+
+                        Row(
                             modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .testTag("Owner Messages Button")
-                        ) {
-                            Text("Owner Messages")
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ){
+
+
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = androidx.compose.ui.Alignment.End
+                            )
+                            {
+
+                                Button(
+                                    onClick = {
+
+                                    },
+                                    modifier = Modifier
+                                        .testTag("Messages Button")
+                                        .fillMaxWidth()
+
+                                ) {
+                                    Text("Messages")
+                                }
+
+                                Button(
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.error
+                                    ),
+                                    onClick = onLeaveClick
+                                    ,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .testTag("Leave Waiting List Button")
+                                ) {
+                                    Text("Leave Waiting List")
+                                }
+                            }
                         }
                     }
                 }
@@ -228,10 +308,6 @@ class ActiveReservationScreen {
 
                 HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
-                Row{
-
-                }
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -255,52 +331,49 @@ class ActiveReservationScreen {
                         }
 
                     }
-
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = androidx.compose.ui.Alignment.End
-                    ){
-                        Button(
-                            onClick = {
-                                navController.navigate("CampsiteDetailScreen/${campsite?.ID}/${entrant.userID}")
-
-                            },
-                            modifier = Modifier
-                                .testTag("More Details Button")
-                                .fillMaxWidth()
-
-                            ) {
-                            Text("More Details")
-                        }
-
-                        Button(
-                            onClick = {
-
-                            },
-                            modifier = Modifier
-                                .testTag("Messages Button")
-                                .fillMaxWidth()
-
-                            ) {
-                            Text("Messages")
-                        }
-
-                        Button(
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error
-                            ),
-                            onClick = onCancelClick,
-                            modifier = Modifier
-                                .testTag("Cancel Reservation Button")
-                                .fillMaxWidth()
-
-
-                            ) {
-                            Text("Cancel Reservation")
-                        }
-                    }
                 }
+
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+
+                Button(
+                    onClick = {
+                        navController.navigate("CampsiteDetailScreen/${campsite?.ID}/${entrant.userID}")
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("More Details Button")
+
+                ) {
+                    Text("More Details")
+                }
+
+                Button(
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("Messages Button")
+
+                ) {
+                    Text("Messages")
+                }
+
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    ),
+                    onClick = onCancelClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("Cancel Reservation Button")
+
+
+                ) {
+                    Text("Cancel Reservation")
+                }
+
             }
         }
     }
