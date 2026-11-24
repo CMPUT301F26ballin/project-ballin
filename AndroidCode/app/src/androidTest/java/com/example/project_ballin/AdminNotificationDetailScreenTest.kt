@@ -19,7 +19,7 @@ class AdminNotificationDetailScreenTest {
     val composeTestRule = createComposeRule()
 
     private val sampleNotifications = mutableListOf(
-        Notification("Hello", Date(), "1", "1")
+        Notification("Hello", System.currentTimeMillis(), "1", "1")
     )
 
     @Test
@@ -33,7 +33,7 @@ class AdminNotificationDetailScreenTest {
         }
 
         composeTestRule
-            .onNodeWithTag("dateSent${sampleNotifications[0].getFormattedDate()}")
+            .onNodeWithTag("dateSent${sampleNotifications[0].dateSent}")
             .assertExists()
 
         composeTestRule

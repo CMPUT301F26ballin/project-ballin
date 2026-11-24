@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.PropertyName
 import java.util.Date
 import java.text.SimpleDateFormat
 import kotlin.uuid.Uuid
@@ -23,12 +25,5 @@ class Message (
     var dateSent: Long = System.currentTimeMillis(),
     var ID: String = Uuid.random().toString()
 ) {
-
-    /**
-     * Returns the date sent in a readable format.
-     * Date() in java gives unnecessary data.
-     */
-    fun getFormattedDate(): String {
-        return SimpleDateFormat("dd/MM/yyyy").format(dateSent) // MM = month (mm would be minutes)
-    }
+   // fun getFormattedDate() {}
 }
