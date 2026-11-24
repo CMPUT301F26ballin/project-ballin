@@ -46,7 +46,7 @@ class MessageListScreen {
      * @return true if the message matches the search
      */
     fun Message.matchesSearch(query: String): Boolean =
-        adminSearch.matchesQuery(query, content, senderID, recipientID, getFormattedDate())
+        adminSearch.matchesQuery(query, content, senderID, recipientID, dateSent.toString())
 
     /**
      * A composable that shows the overview of all the messages
@@ -179,7 +179,7 @@ class MessageListScreen {
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Text("Date Sent: ${message.getFormattedDate()}")
+                    Text("Date Sent: ${message.dateSent.toString()}")
                     Text("Sender: ${message.senderID}")
                 }
 
