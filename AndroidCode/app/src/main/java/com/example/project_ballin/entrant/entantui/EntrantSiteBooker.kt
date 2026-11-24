@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.lottery.Lottery
 import com.example.project_ballin.reusableui.TopAppBar
 
 
@@ -32,9 +34,10 @@ class EntrantSiteBooker {
      * @param navController the navigation controller for the app
      * @param campsiteID the campsite to book
      * @param entrant the entrant
+     * @param lottery the lottery
      */
     @Composable
-    fun SiteBooker (navController: NavController, campsiteID: String?, campsiteList: CampsiteList, entrant: Entrant) {
+    fun SiteBooker (navController: NavController, campsiteID: String?, entrant: Entrant, lottery: Lottery?) {
 
 
         var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
@@ -48,19 +51,23 @@ class EntrantSiteBooker {
                 "Book Site"
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+                    modifier = Modifier.fillMaxSize(),
+                ){
+                    Card(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(16.dp, 16.dp, 16.dp, 0.dp)
+                    ) {
+                        DateRangePicker().BookingDateRangePicker(
+                            availableDates = listOf(1795392000000L, 1795478400000L),
+                            modifier = Modifier.weight(1f),
+                            chosenDates = { chosenDates = it }
+                        )
 
+                    }
 
-                    DateRangePicker().BookingDateRangePicker(
-                        availableDates = listOf(1795392000000L, 1795478400000L),
-                        modifier = Modifier.weight(1f),
-                        chosenDates = { chosenDates = it }
-                    )
-
-                    CancelBookButtons(navController, chosenDates, entrant, campsiteID)
+                    CancelBookButtons(navController, chosenDates, campsiteID, lottery)
                 }
             }
         }
@@ -69,14 +76,18 @@ class EntrantSiteBooker {
     /**
      * Shows the decline and book buttons
      *
+     * @param navController the navigation controller for the app
      * @param chosenDates the chosen dates for the reservation
+     * @param campsiteID the campsite to book
+     * @param lottery the lottery associated with the site
      *
      */
     @Composable
-    fun CancelBookButtons(navController: NavController, chosenDates: List<Long>?, entrant: Entrant, campsiteID: String?) {
+    fun CancelBookButtons(navController: NavController, chosenDates: List<Long>?, campsiteID: String?, lottery: Lottery?) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier.fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(
@@ -85,7 +96,7 @@ class EntrantSiteBooker {
                 onClick = {
                     navController.popBackStack()
                 },
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.weight(1f)
             ) {
                 Text("Cancel")
             }
@@ -93,10 +104,10 @@ class EntrantSiteBooker {
 
             Button(
                 onClick = {
-                    navController.navigate("confirmBooking/${campsiteID}/${chosenDates?.joinToString(",")}")
+                    navController.navigate("confirmBooking/${campsiteID}/${chosenDates?.joinToString(",")}/${lottery?.lotteryID}")
                 },
                 enabled = chosenDates != null,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.weight(1f)
             ) {
                 Text("Book")
             }

@@ -35,7 +35,6 @@ data class Entrant(
     val activeLotteries: MutableList<Lottery> = mutableStateListOf(),
     val wonLotteries: MutableList<Lottery> = mutableStateListOf(),
     val lostLotteries: MutableList<Lottery> = mutableStateListOf(),
-    val activeReservations: MutableList<Reservation> = mutableStateListOf(),
     val pastReservations: MutableList<Reservation> = mutableStateListOf(),
 ) : User{
     override fun updateDetails(
