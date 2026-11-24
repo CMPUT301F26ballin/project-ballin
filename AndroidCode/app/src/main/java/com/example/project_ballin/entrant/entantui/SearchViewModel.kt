@@ -1,5 +1,6 @@
 package com.example.project_ballin.entrant.entantui
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.project_ballin.Campsite
@@ -18,67 +19,37 @@ import kotlin.uuid.Uuid
  */
 
 class SearchViewModel: ViewModel() {
+    //----------------------------------------------------------------
     private val _query = MutableStateFlow("")
     val query = _query.asStateFlow()
 
     fun onSearchTextChange(text: String) {
         _query.value = text
     }
-
+    //----------------------------------------------------------------
     private var _selectedNumOfGuests = MutableStateFlow<Int?>(null)
     var numOfGuests = _selectedNumOfGuests.asStateFlow()
 
-    fun onNumOfGuestsChange(dateFilter: String) {
-        _selectedNumOfGuests.value = dateFilter.toIntOrNull()
+    fun onNumOfGuestsChange(numFilter: String) {
+        _selectedNumOfGuests.value = numFilter.toIntOrNull()
     }
+    //----------------------------------------------------------------
     private var _selectedLocationFilter = MutableStateFlow<String?>(null)
     var locationFilter = _selectedLocationFilter.asStateFlow()
 
     fun onSelectedLocationFilterChange(locationFilter: String?){
         _selectedLocationFilter.value = locationFilter
     }
+    //----------------------------------------------------------------
+    private var _selectedDateFilter = MutableStateFlow<List<Long>?>(null)
+    var dateFilter = _selectedDateFilter.asStateFlow()
 
-     val testSites: List<Campsite> = listOf( // replace with actual sites
-         Campsite(
-             name = "Pine Valley Campsite",
-             ID = Uuid.random().toString(),
-             locationName = "Banff National Park",
-             tags = mutableListOf("Tent", "Scenic"),
-             price = 35.0f,
-             rating = 4.5f,
-             rules = "No campfire after 10 PM",
-             description = "Beautiful valley surrounded by pine trees.",
-             occupancy = 4,
-             ownerID = Uuid.random().toString(),
-             images = mutableListOf()
-         ),
-         Campsite(
-             name = "Lakeside Retreat",
-             ID = Uuid.random().toString(),
-             locationName = "Jasper",
-             tags = mutableListOf("Lake", "Fishing"),
-             price = 50.0f,
-             rating = 4.8f,
-             rules = "Catch and release only",
-             description = "Right by the lake with amazing sunrise views.",
-             occupancy = 6,
-             ownerID = Uuid.random().toString(),
-             images = mutableListOf()
-         ),
-         Campsite(
-             name = "Mountain Peak Camp",
-             ID = Uuid.random().toString(),
-             locationName = "Rocky Mountains",
-             tags = mutableListOf("Hiking", "Elevation"),
-             price = 40.0f,
-             rating = 4.2f,
-             rules = "Pack it in, pack it out",
-             description = "High altitude camping for experienced hikers.",
-             occupancy = 2,
-             ownerID = Uuid.random().toString(),
-             images = mutableListOf()
-         )
-    ) //replace with actual sites
+    fun onSelectedDateFilterChange(dateFilter: List<Long>?){
+        _selectedDateFilter.value = dateFilter
+    }
+
+    //----------------------------------------------------------------
+
     private val _campsites = MutableStateFlow<List<Campsite>>(emptyList())
 
     fun updateCampsites(newList: List<Campsite>) {
@@ -86,8 +57,8 @@ class SearchViewModel: ViewModel() {
     }
 
     val campsites = combine(
-        query, numOfGuests, locationFilter, _campsites
-    ) { text, guestLimit, locationLimit, campsites ->
+        query, numOfGuests, locationFilter, dateFilter, _campsites
+    ) { text, guestLimit, locationLimit, dateLimit, campsites ->
         campsites.filter { campsite ->
             val matchesText = text.isBlank() ||
                     campsite.name.contains(text, ignoreCase = true)
@@ -98,7 +69,11 @@ class SearchViewModel: ViewModel() {
             val matchesLocation = locationLimit == null ||
                     campsite.locationName == locationLimit
 
-            matchesText && matchesGuests && matchesLocation
+            val dateLimit = dateLimit == null ||
+                    campsite.availability.containsAll(dateLimit)
+
+
+            matchesText && matchesGuests && matchesLocation && dateLimit
         }
     }
         .stateIn(

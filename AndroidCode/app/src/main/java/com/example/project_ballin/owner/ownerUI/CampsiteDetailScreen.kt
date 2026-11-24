@@ -110,17 +110,15 @@ class CampsiteDetailScreen(){
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Button(onClick = {showMap = true}) { }
-                }
-
-                if(showMap){
-                    val locStrings = site.location.split(",")
-                    map.GoogleMapScreen(LatLng(locStrings[0].toDouble(), locStrings[1].toDouble()),
-                        false,
-                        onNewLocation = {},
-                        onMoving = {mapMoving = it})
+                    Button(onClick = {showMap = true}) {
+                        map.GoogleMapScreen(LatLng(site.lat, site.lon),
+                            false,
+                            onNewLocation = {},
+                            onMoving = {mapMoving = it})
+                    }
                 }
 
                 if (showAvailability) {
@@ -169,6 +167,14 @@ class CampsiteDetailScreen(){
 
                 Spacer(Modifier.height(16.dp))
 
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    ImageDisplayRow(site.QRCode!!)
+                }
+
                 if (site.ownerID == userID) {
                     Row(
                         modifier = Modifier
@@ -191,7 +197,6 @@ class CampsiteDetailScreen(){
                         Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Active/${site.ownerID}")},
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
                                 .testTag("viewActiveReservationsButton")) {
                             Text("View Active Reservations")
                         }
@@ -202,7 +207,6 @@ class CampsiteDetailScreen(){
                         Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Past/${site.ownerID}")},
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
                                 .testTag("viewPastReservationsButton")) {
                             Text("View Past Reservations")
                         }
@@ -213,7 +217,6 @@ class CampsiteDetailScreen(){
                         Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Cancelled/${site.ownerID}")},
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
                                 .testTag("viewPastReservationsButton")) {
                             Text("View Past Reservations")
                         }
