@@ -49,6 +49,7 @@ import kotlin.uuid.Uuid
 import java.util.Date
 import com.example.project_ballin.owner.ownerUI.NotificationSendScreen
 import com.example.project_ballin.owner.ownerUI.OwnerNotificationListScreen
+import com.example.project_ballin.owner.ownerUI.WaitlistListScreen
 
 /**
  * The main class that houses the NavHost for the nav controller. All screen changes go through this class view.
@@ -198,8 +199,10 @@ class BallinApp(){
                     mutableListOf<String>(),
                     "6",
                     "3",
+                    false,
                     mutableListOf<String>(),
-                    mutableListOf<String>()
+                    mutableListOf<String>(),
+                     mutableListOf<String>()
                 )
             )
         }
@@ -217,6 +220,8 @@ class BallinApp(){
                     mutableListOf<String>(),
                     "7",
                     "3",
+                    false,
+                    mutableListOf<String>(),
                     mutableListOf<String>(),
                     mutableListOf<String>()
                 )
@@ -236,6 +241,8 @@ class BallinApp(){
                     mutableListOf<String>(),
                     "8",
                     "3",
+                    false,
+                    mutableListOf<String>(),
                     mutableListOf<String>(),
                     mutableListOf<String>()
                 )
@@ -464,7 +471,9 @@ class BallinApp(){
                 LotteryListScreen().LotteryListScreen(
                     navController,
                     ownerID!!,
-                    getOwnerLotteries = { lotteryList.getOwnerLotteries(it) },
+                    ownerLotteries = lotteryList.getOwnerLotteries(ownerID),
+                    groupLotteries = lotteryList.getAllGroupLotteries(ownerID),
+                    enrolledGroupLotteries = lotteryList.getEnrolledGroupLotteries(ownerID),
                     getCampsite = { campsiteList.getCampsite(it) }
                 )
             }
@@ -512,6 +521,18 @@ class BallinApp(){
                     notificationList.getAllNotifications().filter { n ->
                         n.lotteryID in ownerLotteryIDs
                     }
+                )
+            }
+
+            composable("WaitlistListScreen/{LotteryID}"){
+                val lotteryID = it.arguments!!.getString("LotteryID")!!
+                val entrantIDs = lotteryList.getLottery(lotteryID)?.waitList ?: emptyList()
+                val entrants = entrantIDs.mapNotNull { id ->
+                    entrantList.getEntrant(id)
+                }
+                WaitlistListScreen().WaitlistListScreen(
+                    navController,
+                    entrants
                 )
             }
 

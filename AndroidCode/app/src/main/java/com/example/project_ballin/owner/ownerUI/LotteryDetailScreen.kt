@@ -27,6 +27,7 @@ import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDateRangePickerState
@@ -35,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -83,6 +85,7 @@ class LotteryDetailScreen() {
         var occupancy by remember { mutableStateOf(lottery?.occupancy?.toString() ?: "") }
         var numWinners by remember { mutableStateOf(lottery?.numWinners?.toString() ?: "") }
         var selectedSiteIDs by remember { mutableStateOf(lottery?.associatedSites ?: listOf()) }
+        var groupLottery by remember { mutableStateOf(lottery?.multipleOwnerLottery ?: false) }
 
         TopAppBar(
             navController,
@@ -144,6 +147,7 @@ class LotteryDetailScreen() {
                             bookingEnd = bookEnd,
                             occupancy = occ,
                             numWinners = winners,
+                            multipleOwnerLottery = groupLottery,
                             associatedSites = sites.toMutableList()
                         )
                         if (lottery == null) {
@@ -164,39 +168,86 @@ class LotteryDetailScreen() {
                 DateRangeSelectionButton("Booking Dates", bookingDateState)
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedTextField(
-                    value = occupancy,
-                    onValueChange = { occupancy = it },
-                    label = { Text("Waitlist limit (optional)") },
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("WaitlistLimitEntry"),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Column(modifier = Modifier.weight(1f)){
+                        OutlinedTextField(
+                            value = numWinners,
+                            onValueChange = { numWinners = it },
+                            label = { Text("Lottery winners") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("WinnerCountEntry"),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)){
+                        OutlinedTextField(
+                            value = occupancy,
+                            onValueChange = { occupancy = it },
+                            label = { Text("Waitlist limit (optional)") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("WaitlistLimitEntry"),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        )
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
-                OutlinedTextField(
-                    value = numWinners,
-                    onValueChange = { numWinners = it },
-                    label = { Text("Lottery winners") },
+
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("WinnerCountEntry"),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)){
+                        Text("Group lottery? Other owners can add their campsites, only you can edit the lottery details")
+
+                    }
+                    Column(){
+                        Switch(
+                            checked = groupLottery,
+                            onCheckedChange = { groupLottery = it }
+                        )
+                    }
+
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (lottery != null) {
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(
-                        modifier =
-                            Modifier.testTag("sendNotificationButton"),
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Button(
+                            modifier =
+                                Modifier.testTag("viewEntrantsButton"),
+                            onClick = {
+                                navController.navigate(
+                                    "WaitlistListScreen/${lottery.lotteryID}"
+                                ) }
+                        ) {
+                            Text("View waitlist")
+                        }
+
+                        Button(
+                            modifier =
+                                Modifier.testTag("sendNotificationButton"),
                             onClick = {
                                 navController.navigate(
                                     "NotificationSendScreen/$ownerID/${lottery.lotteryID}"
-                                ) },
+                                ) }
                         ) {
                             Text("Notify Entrants")
+                        }
                     }
                 }
 

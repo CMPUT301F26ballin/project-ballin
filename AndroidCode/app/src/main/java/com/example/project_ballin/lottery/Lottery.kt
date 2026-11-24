@@ -23,7 +23,9 @@ import kotlin.uuid.Uuid
  * @property bookingEnd the end time of booking period
  * @property associatedSites the associated campsites of the lottery
  * @property lotteryID the ID of the lottery
- * @property lotteryOwnerID the ID of the owner of the lottery
+ * @property lotteryOwnerID the ID of the primary owner of the lottery
+ * @property multipleOwnerLottery boolean, if this is a group lottery where other owners can add their sites
+ * @property additionalLotteryOwners the String IDs of additional owners
  * @property winners the list of winners of the lottery
  * @property losers the list of losers of the lottery
  *
@@ -39,6 +41,8 @@ data class Lottery(
     var associatedSites: MutableList<String> = mutableListOf(),
     var lotteryID: String = "",
     var lotteryOwnerID: String = "",
+    var multipleOwnerLottery: Boolean = false,
+    var additionalLotteryOwners: MutableList<String> = mutableListOf(),
     var winners: MutableList<String> = mutableListOf(),
     var losers: MutableList<String> = mutableListOf()
 ){

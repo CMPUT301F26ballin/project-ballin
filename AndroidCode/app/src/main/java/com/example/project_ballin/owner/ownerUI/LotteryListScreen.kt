@@ -39,6 +39,7 @@ class LotteryListScreen() {
      * @param navController the navController of the app
      * @param ownerID the ID of the owner user accessing the list
      * @param getOwnerLotteries the function to get the lotteries of the owner
+     * @param getGroupLotteries the function to get openly acessable group lotteries
      * @param getCampsite the function to get a campsite by ID
      * */
     @SuppressLint("NotConstructor")
@@ -46,11 +47,12 @@ class LotteryListScreen() {
     fun LotteryListScreen(
         navController: NavController,
         ownerID: String,
-        getOwnerLotteries: (String) -> List<Lottery>,
+        ownerLotteries: List<Lottery>,
+        groupLotteries: List<Lottery>,
+        enrolledGroupLotteries: List<Lottery>,
         getCampsite: (String) -> Campsite?,
     ) {
-        val lotteries = getOwnerLotteries(ownerID)
-
+        val lotteries = ownerLotteries
         TopAppBar(navController, "My Lotteries") {
             LotteryListView(navController, ownerID, lotteries, getCampsite)
         }
