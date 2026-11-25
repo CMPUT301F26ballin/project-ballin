@@ -87,6 +87,12 @@ class LotteryDetailScreen() {
         var selectedSiteIDs by remember { mutableStateOf(lottery?.associatedSites ?: listOf()) }
         var groupLottery by remember { mutableStateOf(lottery?.multipleOwnerLottery ?: false) }
 
+        // need to know if we are the primary owner of this lottery so we have full edit permission
+        val isPrimaryOwner = lottery == null || lottery.lotteryOwnerID == ownerID
+        // can add sites if we are the primary owner, or if it's a group lottery
+        val canAddSites = isPrimaryOwner || (lottery?.multipleOwnerLottery == true)
+
+
         TopAppBar(
             navController,
             if (lottery == null) "New Lottery Details" else "Edit Lottery Details"
@@ -163,9 +169,9 @@ class LotteryDetailScreen() {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                DateRangeSelectionButton("Registration Dates", registrationDateState)
+                DateRangeSelectionButton("Registration Dates", registrationDateState, enabled = isPrimaryOwner)
                 Spacer(modifier = Modifier.height(16.dp))
-                DateRangeSelectionButton("Booking Dates", bookingDateState)
+                DateRangeSelectionButton("Booking Dates", bookingDateState, enabled = isPrimaryOwner)
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
@@ -181,6 +187,7 @@ class LotteryDetailScreen() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .testTag("WinnerCountEntry"),
+                            enabled = isPrimaryOwner,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
                     }
@@ -192,6 +199,7 @@ class LotteryDetailScreen() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .testTag("WaitlistLimitEntry"),
+                            enabled = isPrimaryOwner,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                         )
                     }
@@ -211,7 +219,8 @@ class LotteryDetailScreen() {
                     Column(){
                         Switch(
                             checked = groupLottery,
-                            onCheckedChange = { groupLottery = it }
+                            onCheckedChange = { groupLottery = it },
+                            enabled = isPrimaryOwner
                         )
                     }
 
@@ -334,7 +343,10 @@ class LotteryDetailScreen() {
      * https://developer.android.com/reference/kotlin/androidx/compose/material3/DatePickerDialog.composable
      */
     @Composable
-    fun DateRangeSelectionButton(label: String, state: DateRangePickerState) {
+    fun DateRangeSelectionButton(
+        label: String,
+        state: DateRangePickerState,
+        enabled: Boolean = true) {
         var showPicker by remember { mutableStateOf(false) }
 
         val start = state.selectedStartDateMillis
@@ -346,7 +358,10 @@ class LotteryDetailScreen() {
 
         Text(label)
 
-        Button(onClick = { showPicker = true }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { showPicker = true },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled) {
             Text(text)
         }
 

@@ -25,7 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.project_ballin.Campsite
@@ -54,13 +58,68 @@ class LotteryListScreen() {
     ) {
         val lotteries = ownerLotteries
         TopAppBar(navController, "My Lotteries") {
-            LotteryListView(navController, ownerID, lotteries, getCampsite)
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    item() {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            NewLotteryButton(navController, ownerID)
+                        }
+                    }
+                    if (lotteries.isEmpty()) {
+                        item() {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text("No active lotteries",
+                                    fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+
+                    item() {
+                            Text("My Lotteries",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold)
+                        // owners own primary owner lotteries
+                        LotteryListView(navController, ownerID, lotteries, getCampsite)
+                        Spacer(Modifier.height(16.dp))
+                    }
+
+                    item(){
+                        Text("Enrolled Group Lotteries",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Bold
+                        )
+                        // group lotteries not owned by owner that they have contributed campsites to
+                        LotteryListView(navController, ownerID, enrolledGroupLotteries, getCampsite)
+                        Spacer(Modifier.height(16.dp))
+                    }
+
+                    item(){
+                            Text("Public Group Lotteries",
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Bold
+                            )
+                        // group lotteries not enrolled in, open to contribute to
+                        LotteryListView(navController, ownerID, groupLotteries, getCampsite)
+                        Spacer(Modifier.height(16.dp))
+                    }
+            }
         }
     }
 
     /**
-     * Holds the list of all of the lotteries
-     * and the new lottery button
+     * Holds the list of lotteries
      * @param navController the navController of the app
      * @param ownerID the ID of the owner user accessing the list
      * @param lotteries the list of lotteries to display for this owner
@@ -73,34 +132,14 @@ class LotteryListScreen() {
         lotteries: List<Lottery>,
         getCampsite: (String) -> Campsite?
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            item {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    NewLotteryButton(navController, ownerID)
-                }
-            }
-            if (lotteries.isEmpty()) {
-                item {
-                    Box(
-                        modifier = Modifier.fillParentMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("No active lotteries")
-                    }
-                }
-            }
-
-            itemsIndexed(lotteries) { index, lottery ->
-                val ID = lottery.lotteryID
-                Spacer(modifier = Modifier.height(16.dp))
+        if (lotteries.isEmpty()) {
+            Text("No active lotteries")
+        } else {
+            lotteries.forEach { lottery ->
+                Spacer(Modifier.height(16.dp))
                 LotteryItem(
                     lottery,
-                    onClick = {
-                        navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=$ID") },
+                    onClick = { navController.navigate("LotteryDetailScreen/$ownerID?LotteryID=${lottery.lotteryID}") },
                     getCampsite = getCampsite
                 )
             }
@@ -159,13 +198,16 @@ class LotteryListScreen() {
                             "to ${formatDateMillisToDMY(lottery.bookingEnd!!)}"
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-
+                if (lottery.multipleOwnerLottery){
+                    Text("Group Lottery")
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
                 // list of the sites
                 if (lottery.associatedSites.isEmpty()) Text("No sites associated")
                 lottery.associatedSites.forEach { id ->
                     val campsite = getCampsite(id)
                     if (campsite != null) Text("${campsite.name} - ${campsite.description}")
-                    else Text("Deleted campsite")
+                    //else Text("Deleted campsite")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }

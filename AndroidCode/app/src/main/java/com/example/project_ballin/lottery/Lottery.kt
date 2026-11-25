@@ -14,7 +14,7 @@ import kotlin.uuid.Uuid
  * Lotteries have a list of waitlist users, an occupancy limit,
  * a number of winners, an owner, an active date Range, and associated campsites
  *
- * @property waitList the list of waitlist users
+ * @property waitList the list of waitlist user IDs
  * @property occupancy the occupancy limit of the lottery
  * @property numWinners the number of winners of the lottery
  * @property registrationStart the start time of sign up period

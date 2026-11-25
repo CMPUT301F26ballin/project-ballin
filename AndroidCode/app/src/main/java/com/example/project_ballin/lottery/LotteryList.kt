@@ -74,5 +74,5 @@ class LotteryList {
 
     // get all group lotteries that you're NOT the primary owner of
     fun getAllGroupLotteries(ownerID: String): List<Lottery> =
-        _lotteries.filter { it.multipleOwnerLottery && ownerID !in it.lotteryOwnerID }
+        _lotteries.filter { it.multipleOwnerLottery && ownerID != it.lotteryOwnerID  && ownerID !in it.additionalLotteryOwners}
 }
