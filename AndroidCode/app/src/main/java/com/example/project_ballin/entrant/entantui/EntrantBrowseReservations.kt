@@ -116,7 +116,7 @@ class EntrantBrowseReservations{
                     .testTag("Active Reservation Button"),
 
             ) {
-                Text("Active\nReservations",
+                Text("Active\nreservations",
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium)
             }
@@ -132,7 +132,7 @@ class EntrantBrowseReservations{
                     .testTag("Past Reservation Button"),
 
             ) {
-                Text("Past\nReservations",
+                Text("Past\nreservations",
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium)
 
@@ -200,7 +200,7 @@ class EntrantBrowseReservations{
                                 .fillMaxWidth()
                                 .testTag("Choose Site Button")
                         ) {
-                            Text("Choose Site")
+                            Text("Choose site")
                         }
 
                         Button(

@@ -22,6 +22,7 @@ import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
+import com.example.project_ballin.entrant.entantui.EntrantLeaveCampsiteReview
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 import com.example.project_ballin.entrant.entantui.EntrantSiteSelector
 import com.example.project_ballin.entrant.entantui.MainEntrantMenu
@@ -47,7 +48,7 @@ import com.example.project_ballin.owner.ownerUI.OwnerNotificationListScreen
 /**
  * The main class that houses the NavHost for the nav controller. All screen changes go through this class view.
  * */
-class BallinApp(){
+class BallinApp() {
     /**
      * The main composable function that holds the mappings for the navController.
      * Any function that calls navController to a new location passes through here
@@ -88,6 +89,7 @@ class BallinApp(){
         val lotteryList = remember { LotteryList() }
         val userReportList = remember { ReportList() }
         val reservationList = remember { ReservationList() }
+        val reviewList = remember { ReviewList() }
 
         //temporary for testing
         var currentEntrant by remember {
@@ -417,15 +419,19 @@ class BallinApp(){
                 val entrant = entrantList.getEntrant(userIDString!!)
 
 
-                messagingScreen.MessagingScreen(navController, ownerID!!, userIDString!!, entrant!!.firstName,
-                    onAddMessage = {userID, ownerID, messageContent -> messageList.addMessage(
-                        Message(
-                            senderID = ownerID,
-                            recipientID = userID,
-                            content = messageContent,
-                            dateSent = System.currentTimeMillis()
-                        ))}
-                    )
+                messagingScreen.MessagingScreen(
+                    navController, ownerID!!, userIDString!!, entrant!!.firstName,
+                    onAddMessage = { userID, ownerID, messageContent ->
+                        messageList.addMessage(
+                            Message(
+                                senderID = ownerID,
+                                recipientID = userID,
+                                content = messageContent,
+                                dateSent = System.currentTimeMillis()
+                            )
+                        )
+                    }
+                )
 
 
             }
@@ -503,10 +509,10 @@ class BallinApp(){
                 )
             }
 
-            composable("OwnerNotificationListScreen/{OwnerID}"){
+            composable("OwnerNotificationListScreen/{OwnerID}") {
                 val ownerID = it.arguments!!.getString("OwnerID")!!
-                val ownerLotteryIDs = lotteryList.getOwnerLotteries(ownerID).map{
-                    l -> l.lotteryID
+                val ownerLotteryIDs = lotteryList.getOwnerLotteries(ownerID).map { l ->
+                    l.lotteryID
                 }
                 OwnerNotificationListScreen().OwnerNotificationListScreen(
                     navController,
@@ -660,7 +666,12 @@ class BallinApp(){
             composable("PastReservationScreen") {
                 val entrant = currentEntrant
                 if (entrant != null) {
-                    PastReservationScreen().PastReservations(navController, entrant, campsiteList, reservationList)
+                    PastReservationScreen().PastReservations(
+                        navController,
+                        entrant,
+                        campsiteList,
+                        reservationList
+                    )
                 }
             }
 
@@ -715,10 +726,28 @@ class BallinApp(){
                 }
             }
 
-            composable("siteSelector/{lotteryID}"){
+            composable("siteSelector/{lotteryID}") {
                 val lotteryID = it.arguments?.getString("lotteryID")
                 val lottery = lotteryList.getLottery(lotteryID!!)
-                EntrantSiteSelector().SiteSelector(navController, campsiteList, currentEntrant!!, lottery)
+                EntrantSiteSelector().SiteSelector(
+                    navController,
+                    campsiteList,
+                    currentEntrant!!,
+                    lottery
+                )
+            }
+
+            composable("entrantReviewScreen/{campsiteID}") {
+                val campsiteID = it.arguments?.getString("campsiteID")
+                val entrant = currentEntrant
+                if (campsiteID != null && entrant != null) {
+                    EntrantLeaveCampsiteReview().EntrantGiveCampsiteReviewScreen(
+                        navController,
+                        entrant,
+                        campsiteID,
+                        reviewList
+                    )
+                }
             }
         }
     }

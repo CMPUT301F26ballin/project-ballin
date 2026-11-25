@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.Review
+import com.example.project_ballin.ReviewList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.reusableui.TopAppBar
 
@@ -43,11 +44,15 @@ class EntrantLeaveCampsiteReview {
         navController: NavController,
         entrant: Entrant,
         campsiteID: String,
-        onAdd: (Review) -> Unit,
-        noPreviousReviewGiven: Boolean
+        reviewList: ReviewList,
     ){
         var reviewContents by remember { mutableStateOf("") }
         var confirmReview  by remember { mutableStateOf(false) }
+        var noPreviousReviewGiven by remember { mutableStateOf(true) }
+
+        if(entrant.userID in reviewList.getReviewsFromCampsite(campsiteID).map { it.reviewer }){
+            noPreviousReviewGiven = false
+        }
 
         TopAppBar(
             navController,
@@ -60,7 +65,7 @@ class EntrantLeaveCampsiteReview {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(128.dp))
-                if (!noPreviousReviewGiven ) {
+                if (noPreviousReviewGiven) {
                     Text(
                         text = "Permission Denied",
                         fontSize = 24.sp
@@ -105,7 +110,7 @@ class EntrantLeaveCampsiteReview {
                         confirm = { confirmed ->
                             if (confirmed) {
                                 val newReview = Review(entrant.userID, reviewContents, campsiteID)
-                                onAdd(newReview)
+                                reviewList.addReview(newReview)
                                 navController.popBackStack()
                             }
                             confirmReview = false
@@ -115,31 +120,5 @@ class EntrantLeaveCampsiteReview {
                 }
             }
         }
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun EntrantGiveCampsiteReviewnoPreviousReviewGivenPreview() {
-        val navController = rememberNavController()
-        EntrantLeaveCampsiteReview().EntrantGiveCampsiteReviewScreen(
-            navController,
-            Entrant("1", "John", "Doe"),
-            "123456789",
-            onAdd = {},
-            noPreviousReviewGiven = true
-        )
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun EntrantGiveCampsiteReviewPermissionDeniedPreview() {
-        val navController = rememberNavController()
-        EntrantLeaveCampsiteReview().EntrantGiveCampsiteReviewScreen(
-            navController,
-            Entrant("1", "John", "Doe"),
-            "123456789",
-            onAdd = {},
-            noPreviousReviewGiven = false
-        )
     }
 }

@@ -74,7 +74,7 @@ class PastReservationScreen {
 
                                 )
 
-                            HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+                            HorizontalDivider(modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp))
                         }
                         items(reservationList.getPastReservationsForEntrant(entrant.userID)){ reservation ->
                             PastReservationCard(entrant, reservation, campsiteList, navController)
@@ -95,7 +95,7 @@ class PastReservationScreen {
                                 style = MaterialTheme.typography.titleLarge
                             )
 
-                            HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+                            HorizontalDivider(modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp))
                         }
 
                         items(reservationList.getCancelledReservationsForEntrant(entrant.userID)){ reservation ->
@@ -200,8 +200,7 @@ class PastReservationScreen {
                 if(!reservation.cancelled){
                     Button(
                         onClick = {
-
-
+                            navController.navigate("entrantReviewScreen/${campsite?.ID}")
                         },
                         modifier = Modifier
                             .fillMaxWidth()

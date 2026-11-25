@@ -73,11 +73,10 @@ class ActiveReservationScreen {
                 navController,
                 "Active Reservations"
             ) {
-
-                if(reservationList.getCurrentReservationsForEntrant(entrant.userID).isNotEmpty()){
-                    LazyColumn(
-                        modifier = Modifier.padding(16.dp)
-                    ){
+                LazyColumn(
+                    modifier = Modifier.padding(16.dp)
+                ){
+                    if(reservationList.getCurrentReservationsForEntrant(entrant.userID).isNotEmpty()){
                         item{
 
 
@@ -87,19 +86,20 @@ class ActiveReservationScreen {
 
                                 )
 
-                            HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+                            HorizontalDivider(modifier = Modifier.padding(0.dp,0.dp, 0.dp, 16.dp))
                         }
 
                         items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
                             CurrentReservationCard(entrant, reservation, campsiteList, navController, { reservationToLeave = reservation })
-                        }
-                    }
-                }
 
-                if(entrant.activeLotteries.isNotEmpty()){
-                    LazyColumn(
-                        modifier = Modifier.padding(16.dp)
-                    ){
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+
+
+                    }
+
+                    if(entrant.activeLotteries.isNotEmpty()){
+
                         item{
 
 
@@ -109,11 +109,13 @@ class ActiveReservationScreen {
 
                                 )
 
-                            HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+                            HorizontalDivider(modifier = Modifier.padding(0.dp,0.dp, 0.dp, 16.dp))
                         }
 
                         items(entrant.activeLotteries) { lottery ->
                             ActiveLotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
+
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
@@ -239,7 +241,7 @@ class ActiveReservationScreen {
 
 
                                         ) {
-                                            Text("More Details")
+                                            Text("More details")
                                         }
                                     }
                                 }
@@ -266,7 +268,7 @@ class ActiveReservationScreen {
 
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = androidx.compose.ui.Alignment.End
+                                horizontalAlignment = Alignment.End
                             )
                             {
 
@@ -292,7 +294,7 @@ class ActiveReservationScreen {
                                         .fillMaxWidth()
                                         .testTag("Leave Waiting List Button")
                                 ) {
-                                    Text("Leave Waiting List")
+                                    Text("Leave waiting list")
                                 }
                             }
                         }
@@ -331,7 +333,7 @@ class ActiveReservationScreen {
 
                 Row {
                     Text(
-                        text = "Upcoming Reservation: ${campsite?.name}",
+                        text = "Upcoming reservation: ${campsite?.name}",
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
@@ -383,7 +385,7 @@ class ActiveReservationScreen {
                         .testTag("More Details Button")
 
                 ) {
-                    Text("More Details")
+                    Text("More details")
                 }
 
                 Button(
@@ -409,7 +411,7 @@ class ActiveReservationScreen {
 
 
                 ) {
-                    Text("Cancel Reservation")
+                    Text("Cancel reservation")
                 }
             }
         }
