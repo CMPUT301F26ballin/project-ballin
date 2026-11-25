@@ -70,3 +70,5 @@ Nick: account creation + edit + deletion mostly complete (just gotta add profile
 # Week 6:
 
 Salix: Implemented the owner lottery notifications (send and previous sent list) and multi owner lotteries
+
+Leighan: Finished the violation detectors for owners, reviews and ratings. 
