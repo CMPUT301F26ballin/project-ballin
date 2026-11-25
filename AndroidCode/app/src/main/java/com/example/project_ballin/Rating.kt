@@ -13,7 +13,7 @@ import kotlin.uuid.Uuid
  */
 class Rating (
     var reviewer: String = "",
-    var ratingNumber: Double = 0.0,
+    var ratingNumber: Int = 0,
     var campsiteID: String = "",
     var ID: String = Uuid.random().toString()
 )
