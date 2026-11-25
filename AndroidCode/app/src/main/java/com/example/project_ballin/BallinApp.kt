@@ -690,7 +690,7 @@ class BallinApp(){
                 PolicyGuidelinesScreen().PolicyGuidelines(navController)
             }
 
-            composable("Scan QR Code/{userID}") {
+            composable("ScanQRCode/{userID}") {
                 val userID = it.arguments?.getString("userID")
                 QRCodeScanner.QRCodeScanner(navController, userID!!)
             }
