@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -39,6 +41,17 @@ import java.util.Locale
 
 class ActiveReservationScreen {
 
+    // Converts long to date string
+    // Source - https://stackoverflow.com/q/49551461
+    // Posted by HelloCW
+    // Retrieved 2026-11-21, License - CC BY-SA 3.0
+
+    fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
+        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+        return df.format(this)
+    }
+
+
     /**
      * The entrant active reservations page
      * Entrants can look at their active reservations
@@ -50,6 +63,7 @@ class ActiveReservationScreen {
     @Composable
     fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList, reservationList: ReservationList){
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
+        var reservationToLeave by remember { mutableStateOf<Reservation?>(null) }
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -60,8 +74,8 @@ class ActiveReservationScreen {
                 "Active Reservations"
             ) {
                 LazyColumn {
-                    items(reservationList.getReservationsForEntrant(entrant.userID)) { reservation ->
-                        CurrentReservationCard(entrant, reservation, campsiteList, navController)
+                    items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
+                        CurrentReservationCard(entrant, reservation, campsiteList, navController, { reservationToLeave = reservation })
                     }
 
                     items(entrant.activeLotteries) { lottery ->
@@ -86,6 +100,18 @@ class ActiveReservationScreen {
                 }
             )
         }
+
+        reservationToLeave?.let { reservation ->
+            ConfirmActionDialog().ConfirmAction(
+                "Are you sure you want to cancel this reservation?",
+                confirm = { confirmed ->
+                    if (confirmed) {
+                        reservationList.cancelReservation(reservation)
+                    }
+                    reservationToLeave = null
+                }
+            )
+        }
     }
 
 
@@ -100,6 +126,11 @@ class ActiveReservationScreen {
      */
     @Composable
     fun ActiveLotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onLeaveClick: () -> Unit){
+        val campsites = lottery.associatedSites
+        val startDate = lottery.registrationStart?.toDateString()
+        val endDate = lottery.registrationEnd?.toDateString()
+
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -113,59 +144,129 @@ class ActiveReservationScreen {
                         .testTag("Active Lottery Card")
                 )
                 {
-                    Text(
-                        text = "You are registered in a lottery for ${
-                            campsiteList.getCampsite(
-                                lottery.associatedSites[0]
-                            )?.name
-                        }",
-                        style = MaterialTheme.typography.titleMedium
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ){
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "You are registered in a lottery for:",
+                            style = MaterialTheme.typography.titleLarge
+                        )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Button(
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error
-                            ),
-                            onClick = onLeaveClick
-                            ,
-                            modifier = Modifier
-                                .testTag("Leave Waiting List Button")
-                        ) {
-                            Text("Leave Waiting List")
+
+                        for (site in campsites) {
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Text(
+                                text = "${campsiteList.getCampsite(site)?.name}",
+                                style = MaterialTheme.typography.titleLarge
+                            )
+
+                            Column{
+
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ){
+                                    Column {
+
+
+                                        Text(
+                                            text = "Details:",
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+
+                                        Row(
+                                            modifier = Modifier.padding(16.dp, 0.dp)
+                                        ){
+                                            Text(
+                                                text =  "- Location: ${campsiteList.getCampsite(site)?.locationName}\n" +
+                                                        "- Occupancy: ${campsiteList.getCampsite(site)?.occupancy}\n" +
+                                                        "- Price: $${"%.2f".format(campsiteList.getCampsite(site)?.price)}/night",
+                                                style = MaterialTheme.typography.bodyLarge
+                                            )
+                                        }
+                                    }
+
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalAlignment = Alignment.End,
+                                        verticalArrangement = Arrangement.SpaceEvenly
+                                    ){
+                                        Button(
+                                            onClick = {
+                                                navController.navigate("CampsiteDetailScreen/${campsiteList.getCampsite(site)?.ID}/${entrant.userID}")
+
+                                            },
+                                            modifier = Modifier
+                                                .testTag("More Details Button"),
+
+
+
+                                        ) {
+                                            Text("More Details")
+                                        }
+                                    }
+                                }
+                            }
                         }
 
+                        HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
-                        Button(
-                            onClick = {
+                        Row{
+                            Text(
+                                text = "Start: $startDate\nEnd: $endDate",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
 
-                            },
+                        HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+
+                        Row(
                             modifier = Modifier
-                                .testTag("Owner Messages Button")
-                        ) {
-                            Text("Owner Messages")
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ){
+
+
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = androidx.compose.ui.Alignment.End
+                            )
+                            {
+
+                                Button(
+                                    onClick = {
+
+                                    },
+                                    modifier = Modifier
+                                        .testTag("Messages Button")
+                                        .fillMaxWidth()
+
+                                ) {
+                                    Text("Messages")
+                                }
+
+                                Button(
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.error
+                                    ),
+                                    onClick = onLeaveClick
+                                    ,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .testTag("Leave Waiting List Button")
+                                ) {
+                                    Text("Leave Waiting List")
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
-
-    // Source - https://stackoverflow.com/q/49551461
-    // Posted by HelloCW
-    // Retrieved 2026-11-21, License - CC BY-SA 3.0
-
-    fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
-        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
-        return df.format(this)
-    }
-
-
 
     /**
      * The entrant current reservation card
@@ -178,9 +279,8 @@ class ActiveReservationScreen {
      *
      */
     @Composable
-    fun CurrentReservationCard(entrant: Entrant, reservation: Reservation, campsiteList: CampsiteList, navController: NavController){
+    fun CurrentReservationCard(entrant: Entrant, reservation: Reservation, campsiteList: CampsiteList, navController: NavController, onCancelClick: () -> Unit){
         val campsite = campsiteList.getCampsite(reservation.campsiteID)
-
         val startDate = reservation.dates?.get(0)?.toDateString()
         val endDate = reservation.dates?.get(1)?.toDateString()
 
@@ -190,41 +290,93 @@ class ActiveReservationScreen {
                 .padding(16.dp)
                 .testTag("Current Reservation Card")
         ) {
-            Text(
-                text = "${campsite?.name}\n" +
-                        "From: $startDate\n + To: $endDate\n" +
-                        "Details:\n" +
-                        " - ${campsite?.locationName}\n" +
-                        " - ${campsite?.occupancy}",
-                style = MaterialTheme.typography.titleMedium
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            ){
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Row {
+                    Text(
+                        text = "Upcoming Reservation: ${campsite?.name}",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
+                Row{
+                    Text(
+                        text = "Check-in: $startDate\nCheck-out: $endDate",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Column{
+                        Row{
+                            Text(
+                                text = "Details:",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.padding(16.dp, 0.dp)
+                        ){
+                            Text(
+                                text =  "- Location: ${campsite?.locationName}\n" +
+                                        "- Occupancy: ${campsite?.occupancy}\n" +
+                                        "- Price: $${"%.2f".format(campsite?.price)}/night",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+
+                    }
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+
+                Button(
+                    onClick = {
+                        navController.navigate("CampsiteDetailScreen/${campsite?.ID}/${entrant.userID}")
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("More Details Button")
+
+                ) {
+                    Text("More Details")
+                }
+
+                Button(
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("Messages Button")
+
+                ) {
+                    Text("Messages")
+                }
+
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
                     ),
-                    onClick = {
+                    onClick = onCancelClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("Cancel Reservation Button")
 
-                    },
 
                 ) {
-                    Text("Cancel Registration")
-                }
-
-
-                Button(
-                    onClick = {
-
-                    },
-
-                ) {
-                    Text("Owner Messages")
+                    Text("Cancel Reservation")
                 }
             }
         }

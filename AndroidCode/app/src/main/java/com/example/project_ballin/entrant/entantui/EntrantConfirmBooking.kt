@@ -1,10 +1,13 @@
 package com.example.project_ballin.entrant.entantui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -17,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -26,6 +30,7 @@ import com.example.project_ballin.ReservationList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.lottery.LotteryList
 import com.example.project_ballin.reusableui.TopAppBar
 import java.text.DateFormat
 import java.util.Locale
@@ -33,16 +38,28 @@ import kotlin.uuid.Uuid
 
 class EntrantConfirmBooking {
 
+    // Converts long to date string
     // Source - https://stackoverflow.com/q/49551461
     // Posted by HelloCW
     // Retrieved 2026-11-21, License - CC BY-SA 3.0
-
     fun Long.toDateString(dateFormat: Int =  DateFormat.MEDIUM): String {
         val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
         return df.format(this)
     }
+
+    /**
+     * The entrant confirm booking page
+     * Entrants can confirm a booking after confirming they have read the rules for the campsite
+     *
+     * @param navController the navigation controller for the app
+     * @param campsite the campsite to book
+     * @param entrant the entrant
+     * @param chosenDates the chosen dates for the reservation
+     * @param reservationList the list of reservations
+     * @param lottery the lottery associated with the site
+     */
     @Composable
-    fun ConfirmBooking(navController: NavController, campsite: Campsite, entrant: Entrant, chosenDates: List<Long>, reservationList: ReservationList) {
+    fun ConfirmBooking(navController: NavController, campsite: Campsite, entrant: Entrant, chosenDates: List<Long>, reservationList: ReservationList, lottery: Lottery) {
 
         var rulesChecked by remember { mutableStateOf(false) }
 
@@ -67,7 +84,6 @@ class EntrantConfirmBooking {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(0.dp, 16.dp)
                         ){
                             Text(
                                 text = "Booking Details:",
@@ -75,13 +91,15 @@ class EntrantConfirmBooking {
                             )
                         }
 
+                        Spacer(modifier = Modifier.padding(8.dp))
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ){
                             Text(
                                 text = "Campsite Name: ${campsite.name}",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
 
@@ -91,7 +109,7 @@ class EntrantConfirmBooking {
                         ){
                             Text(
                                 text = "Campsite Location: ${campsite.locationName}",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
 
@@ -101,7 +119,7 @@ class EntrantConfirmBooking {
                         ){
                             Text(
                                 text = "Campsite Occupancy: ${campsite.occupancy}",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
 
@@ -111,7 +129,7 @@ class EntrantConfirmBooking {
                         ){
                             Text(
                                 text = "Campsite Price: $${"%.2f".format(campsite.price)}/night",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
 
@@ -121,18 +139,17 @@ class EntrantConfirmBooking {
                         ){
                             Text(
                                 text = "Booking from: ${chosenDates[0].toDateString()} to: ${chosenDates[1].toDateString()}",
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
 
                         HorizontalDivider(
-                            modifier = Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp)
+                            modifier = Modifier.padding(0.dp, 16.dp)
                         )
 
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(0.dp, 16.dp),
                         ) {
                             Text(
                                 text = "Before you book, confirm you have read the rules for this campsite:",
@@ -140,6 +157,8 @@ class EntrantConfirmBooking {
                             )
 
                         }
+
+                        Spacer(modifier = Modifier.padding(8.dp))
 
                         for (rule in campsite.rules) {
                             Row(
@@ -154,28 +173,36 @@ class EntrantConfirmBooking {
                             }
                         }
 
+                        Spacer(modifier = Modifier.padding(8.dp))
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(0.dp, 16.dp),
-                                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-
+                                .toggleable(
+                                    value = rulesChecked,
+                                    onValueChange = { rulesChecked = it }
+                                )
+                                .testTag("rulesCheckbox"),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = "I confirm I have read and agree to the rules.",
                                 style = MaterialTheme.typography.titleSmall,
+                                modifier = Modifier.weight(1f)
                             )
                             Checkbox(
                                 checked = rulesChecked,
-                                onCheckedChange = { rulesChecked = it },
-                                modifier = Modifier.testTag("rulesCheckbox")
+                                onCheckedChange = null
                             )
                         }
 
+                        HorizontalDivider(
+                            modifier = Modifier.padding(0.dp, 16.dp)
+                        )
+
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             Button(
                                 colors = ButtonDefaults.buttonColors(
@@ -184,7 +211,8 @@ class EntrantConfirmBooking {
                                 onClick = {
                                     navController.popBackStack()
                                 },
-                                modifier = Modifier.padding(16.dp)
+                                modifier = Modifier
+                                    .weight(1f)
                                     .testTag("abortBookingButton")
                             ) {
                                 Text("Cancel")
@@ -197,15 +225,19 @@ class EntrantConfirmBooking {
                                         Reservation(
                                             campsite.ID,
                                             chosenDates,
-                                            UserID = entrant.userID,
+                                            userID = entrant.userID,
                                             cancelled = false,
                                             resID = Uuid.random().toString(),
                                         )
                                     )
                                     navController.navigate("EntrantBrowseReservations")
+
+                                    entrant.activeLotteries.remove(lottery)
+                                    entrant.wonLotteries.remove(lottery)
                                 },
                                 enabled = rulesChecked,
-                                modifier = Modifier.padding(16.dp)
+                                modifier = Modifier
+                                    .weight(1f)
                                     .testTag("confirmBookingButton")
                             ) {
                                 Text("Confirm Booking")

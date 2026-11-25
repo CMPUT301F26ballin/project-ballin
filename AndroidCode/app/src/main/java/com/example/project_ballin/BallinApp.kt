@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,11 +19,11 @@ import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.QRCodeScanner
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
-import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
+import com.example.project_ballin.entrant.entantui.EntrantSiteSelector
 import com.example.project_ballin.entrant.entantui.MainEntrantMenu
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
 import com.example.project_ballin.lottery.Lottery
@@ -38,15 +36,11 @@ import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
 import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.MainOwnerMenu
 import com.example.project_ballin.owner.ownerUI.OwnerReservationScreen
-import com.example.project_ballin.reusableui.InitialScreen
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
-import com.example.project_ballin.reusableui.UserDetailModel
 import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
-import java.util.Date
 import com.example.project_ballin.owner.ownerUI.NotificationSendScreen
 import com.example.project_ballin.owner.ownerUI.OwnerNotificationListScreen
 import com.example.project_ballin.owner.ownerUI.WaitlistListScreen
@@ -691,11 +685,14 @@ class BallinApp(){
                 }
             }
 
-            composable("EntrantSiteBooker/{campID}") { siteToBook ->
+            composable("EntrantSiteBooker/{campID}/{lotteryID}") { siteToBook ->
                 val entrant = currentEntrant
                 val campID = siteToBook.arguments?.getString("campID")
+                val lotteryID = siteToBook.arguments?.getString("lotteryID")
+                val lottery = lotteryList.getLottery(lotteryID!!)
+
                 if (entrant != null) {
-                    EntrantSiteBooker().SiteBooker(navController, campID, campsiteList, entrant)
+                    EntrantSiteBooker().SiteBooker(navController, campID, entrant, lottery)
                 }
             }
 
@@ -716,24 +713,33 @@ class BallinApp(){
                 QRCodeScanner.QRCodeScanner(navController, userID!!)
             }
 
-            composable("confirmBooking/{campID}/{chosenDates}") {
+            composable("confirmBooking/{campID}/{chosenDates}/{lotteryID}") {
                 val campID = it.arguments?.getString("campID")
                 val chosenDates = it.arguments?.getString("chosenDates")
+                val lotteryID = it.arguments?.getString("lotteryID")
                 if (campID != null) {
                     if (chosenDates != null) {
                         val campsite = campsiteList.getCampsite(campID)
                         val entrant = currentEntrant
                         val chosenDatesList = chosenDates.split(",").map { it.toLong() }
+                        val lottery = lotteryList.getLottery(lotteryID!!)
 
                         EntrantConfirmBooking().ConfirmBooking(
                             navController,
                             campsite!!,
                             entrant!!,
                             chosenDatesList,
-                            reservationList
+                            reservationList,
+                            lottery!!
                         )
                     }
                 }
+            }
+
+            composable("siteSelector/{lotteryID}"){
+                val lotteryID = it.arguments?.getString("lotteryID")
+                val lottery = lotteryList.getLottery(lotteryID!!)
+                EntrantSiteSelector().SiteSelector(navController, campsiteList, currentEntrant!!, lottery)
             }
         }
     }

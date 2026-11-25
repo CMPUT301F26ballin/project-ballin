@@ -84,7 +84,9 @@ fun TopAppBar(navController: NavController,
                             onClick = {
                                 navController.popBackStack()
                             },
-                            modifier = Modifier.testTag("back") // for testing
+                            modifier = Modifier
+
+                                .testTag("back") // for testing
                         ) {
                             Text("Back")
                         }
@@ -96,7 +98,8 @@ fun TopAppBar(navController: NavController,
                             onClick = {
                                 navController.navigate("editprofile")
                             },
-                            modifier = Modifier.testTag("editprofile") // for testing
+                            modifier = Modifier
+                                .testTag("editprofile") // for testing
                         ) {
                             Text("Profile")
                         }
