@@ -56,4 +56,4 @@ Nick: working on filter by dates, then account profile pic editing
 
 # Week 7 (Final Week!)
 
-Peter: I will fix the scroll hijacking bug with the map location input, I will add to the campsite detail screen to allow users to view the active lotteries of a campsite. I will refine old tests and create new ones for the screens, and I will update and add to the UML, UI mockup, and other documents.
+Peter: I will fix the scroll hijacking bug with the map location input, I will add to the campsite detail screen to allow users to view the active lotteries of a campsite. I will refine old tests and create new ones for the screens. I will properly test the different owner reservation views, and I will update and add to the UML, UI mockup, and other documents.
