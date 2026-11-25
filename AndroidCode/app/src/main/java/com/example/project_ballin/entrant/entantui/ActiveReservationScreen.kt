@@ -73,13 +73,48 @@ class ActiveReservationScreen {
                 navController,
                 "Active Reservations"
             ) {
-                LazyColumn {
-                    items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
-                        CurrentReservationCard(entrant, reservation, campsiteList, navController, { reservationToLeave = reservation })
-                    }
 
-                    items(entrant.activeLotteries) { lottery ->
-                        ActiveLotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
+                if(reservationList.getCurrentReservationsForEntrant(entrant.userID).isNotEmpty()){
+                    LazyColumn(
+                        modifier = Modifier.padding(16.dp)
+                    ){
+                        item{
+
+
+                            Text(
+                                text = "Your current reservations:",
+                                style = MaterialTheme.typography.titleLarge,
+
+                                )
+
+                            HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+                        }
+
+                        items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
+                            CurrentReservationCard(entrant, reservation, campsiteList, navController, { reservationToLeave = reservation })
+                        }
+                    }
+                }
+
+                if(entrant.activeLotteries.isNotEmpty()){
+                    LazyColumn(
+                        modifier = Modifier.padding(16.dp)
+                    ){
+                        item{
+
+
+                            Text(
+                                text = "Your active lotteries:",
+                                style = MaterialTheme.typography.titleLarge,
+
+                                )
+
+                            HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+                        }
+
+                        items(entrant.activeLotteries) { lottery ->
+                            ActiveLotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
+                        }
                     }
                 }
             }
@@ -134,7 +169,6 @@ class ActiveReservationScreen {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
         ) {
             if (entrant.userID in lottery.waitList) {
                 Column(
@@ -287,7 +321,6 @@ class ActiveReservationScreen {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
                 .testTag("Current Reservation Card")
         ) {
             Column(

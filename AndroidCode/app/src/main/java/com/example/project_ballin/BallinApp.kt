@@ -660,7 +660,7 @@ class BallinApp(){
             composable("PastReservationScreen") {
                 val entrant = currentEntrant
                 if (entrant != null) {
-                    PastReservationScreen().PastReservations(navController, entrant)
+                    PastReservationScreen().PastReservations(navController, entrant, campsiteList, reservationList)
                 }
             }
 
