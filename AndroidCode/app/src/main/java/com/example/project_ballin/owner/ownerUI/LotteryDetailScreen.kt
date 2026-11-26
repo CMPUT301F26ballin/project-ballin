@@ -27,6 +27,7 @@ import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDateRangePickerState
@@ -35,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
@@ -83,10 +85,18 @@ class LotteryDetailScreen() {
         var occupancy by remember { mutableStateOf(lottery?.occupancy?.toString() ?: "") }
         var numWinners by remember { mutableStateOf(lottery?.numWinners?.toString() ?: "") }
         var selectedSiteIDs by remember { mutableStateOf(lottery?.associatedSites ?: listOf()) }
+        var groupLottery by remember { mutableStateOf(lottery?.multipleOwnerLottery ?: false) }
+
+        val isNew = lottery == null
+        // need to know if we are the primary owner of this lottery so we have full edit permission
+        val isPrimaryOwner = isNew || lottery.lotteryOwnerID == ownerID
+        // can add sites if we are the primary owner, or if it's a group lottery
+        val canAddSites = isPrimaryOwner || (lottery?.multipleOwnerLottery == true)
+        val contributedToLottery = lottery?.additionalLotteryOwners?.contains(ownerID)
 
         TopAppBar(
             navController,
-            if (lottery == null) "New Lottery Details" else "Edit Lottery Details"
+            if (isNew) "New Lottery Details" else "Edit Lottery Details"
         ) {
             Column(
                 modifier = Modifier
@@ -103,6 +113,25 @@ class LotteryDetailScreen() {
                         onClick = {
                             // confirms the lottery details are valid
                             // and either creates a new lottery or updates an existing one
+                            val mySiteIDs = ownerSites.map { it.ID }.toList()
+                            if(lottery != null && !isPrimaryOwner && canAddSites) {
+                                // only edit this secondary users sites
+                                val mySites = selectedSiteIDs.filter { it in mySiteIDs }
+                                val otherSites = lottery.associatedSites.filter {it !in mySiteIDs}
+                                val owners = lottery.additionalLotteryOwners.toMutableList()
+                                if (mySites.isNotEmpty() && ownerID !in owners) owners.add(ownerID)
+                                if (mySites.isEmpty()) owners.remove(ownerID)
+
+                                updateLottery(
+                                    lottery,
+                                    lottery.copy(
+                                        associatedSites = (otherSites + mySites).toMutableList(),
+                                        additionalLotteryOwners = owners
+                                    )
+                                )
+                                navController.popBackStack()
+                                return@Button
+                            }
 
                             val regStart = registrationDateState.selectedStartDateMillis
                             val regEnd = registrationDateState.selectedEndDateMillis
@@ -127,7 +156,6 @@ class LotteryDetailScreen() {
                             ) {
                                 return@Button
                                 // invalid lottery details
-                                // TODO alert user of the error
                         }
 
                         // TODO book the availability of the campsites selected
@@ -137,6 +165,7 @@ class LotteryDetailScreen() {
                             lotteryID = Uuid.random().toString(),
                             lotteryOwnerID = ownerID
                         )
+                            val keptOthers = if (groupLottery) baseLottery.associatedSites.filter { it !in mySiteIDs } else emptyList()
                         val newLottery = baseLottery.copy(
                             registrationStart = regStart,
                             registrationEnd = regEnd,
@@ -144,7 +173,9 @@ class LotteryDetailScreen() {
                             bookingEnd = bookEnd,
                             occupancy = occ,
                             numWinners = winners,
-                            associatedSites = sites.toMutableList()
+                            multipleOwnerLottery = groupLottery,
+                            associatedSites = (keptOthers + sites.filter {it in mySiteIDs}).toMutableList(),
+                            additionalLotteryOwners = if (groupLottery) baseLottery.additionalLotteryOwners else mutableListOf()
                         )
                         if (lottery == null) {
                             addLottery(newLottery)
@@ -152,6 +183,7 @@ class LotteryDetailScreen() {
                             updateLottery(lottery, newLottery)
                         }
                         navController.popBackStack()
+                            return@Button
                     }) {
                         Text("Confirm Lottery")
                     }
@@ -159,44 +191,96 @@ class LotteryDetailScreen() {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                DateRangeSelectionButton("Registration Dates", registrationDateState)
+                DateRangeSelectionButton("Registration Dates", registrationDateState, enabled = isPrimaryOwner)
                 Spacer(modifier = Modifier.height(16.dp))
-                DateRangeSelectionButton("Booking Dates", bookingDateState)
+                DateRangeSelectionButton("Booking Dates", bookingDateState, enabled = isPrimaryOwner)
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedTextField(
-                    value = occupancy,
-                    onValueChange = { occupancy = it },
-                    label = { Text("Waitlist limit (optional)") },
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("WaitlistLimitEntry"),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Column(modifier = Modifier.weight(1f)){
+                        OutlinedTextField(
+                            value = numWinners,
+                            onValueChange = { numWinners = it },
+                            label = { Text("Lottery winners") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("WinnerCountEntry"),
+                            enabled = isPrimaryOwner,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)){
+                        OutlinedTextField(
+                            value = occupancy,
+                            onValueChange = { occupancy = it },
+                            label = { Text("Waitlist limit (optional)") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("WaitlistLimitEntry"),
+                            enabled = isPrimaryOwner,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        )
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
-                OutlinedTextField(
-                    value = numWinners,
-                    onValueChange = { numWinners = it },
-                    label = { Text("Lottery winners") },
+
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("WinnerCountEntry"),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)){
+                        Text("Group lottery? Other owners can add their campsites, only you can edit the lottery details")
+
+                    }
+                    Column(){
+                        Switch(
+                            checked = groupLottery,
+                            onCheckedChange = { groupLottery = it },
+                            enabled = isPrimaryOwner
+                        )
+                    }
+
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (lottery != null) {
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(
-                        modifier =
-                            Modifier.testTag("sendNotificationButton"),
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Button(
+                            modifier =
+                                Modifier.testTag("viewEntrantsButton"),
+                            onClick = {
+                                navController.navigate(
+                                    "WaitlistListScreen/${lottery.lotteryID}"
+                                ) },
+                            enabled = (contributedToLottery == true) || isPrimaryOwner
+                        ) {
+                            Text("View waitlist")
+                        }
+
+                        Button(
+                            modifier =
+                                Modifier.testTag("sendNotificationButton"),
                             onClick = {
                                 navController.navigate(
                                     "NotificationSendScreen/$ownerID/${lottery.lotteryID}"
                                 ) },
+                            enabled = (contributedToLottery == true) || isPrimaryOwner
                         ) {
                             Text("Notify Entrants")
+                        }
                     }
                 }
 
@@ -283,7 +367,10 @@ class LotteryDetailScreen() {
      * https://developer.android.com/reference/kotlin/androidx/compose/material3/DatePickerDialog.composable
      */
     @Composable
-    fun DateRangeSelectionButton(label: String, state: DateRangePickerState) {
+    fun DateRangeSelectionButton(
+        label: String,
+        state: DateRangePickerState,
+        enabled: Boolean = true) {
         var showPicker by remember { mutableStateOf(false) }
 
         val start = state.selectedStartDateMillis
@@ -295,7 +382,10 @@ class LotteryDetailScreen() {
 
         Text(label)
 
-        Button(onClick = { showPicker = true }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { showPicker = true },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled) {
             Text(text)
         }
 

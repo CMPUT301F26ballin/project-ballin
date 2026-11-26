@@ -1,6 +1,7 @@
 package com.example.project_ballin.reusableui
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
@@ -13,14 +14,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil3.compose.AsyncImage
 import com.example.project_ballin.ConfirmDeleteDialog
 import com.example.project_ballin.UserRole
 import com.example.project_ballin.entrant.Entrant
@@ -31,6 +42,14 @@ import java.util.Locale
  *
  * screen for the user (anyone) to enter their details in order to sign in and
  * use this to for the signing in process and edit profile
+ *
+ * Sources:
+ *
+ * Radio Buttons:
+ * https://developer.android.com/develop/ui/compose/components/radio-button
+ *
+ * Profile Pics:
+ * https://developer.android.com/develop/ui/compose/graphics/images/customize
  *
  *
  */
@@ -93,6 +112,9 @@ fun DeleteProfile(
     var showConfirmDelete by remember { mutableStateOf(false) }
 
     Button(
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.error
+        ),
         onClick = {
             showConfirmDelete = true
         },
@@ -107,6 +129,7 @@ fun DeleteProfile(
                         " This action cannot be undone",
                 confirm = { confirmed ->
                     if (confirmed) {
+                        viewModel.removeProfilePic()
                         viewModel.onDelete()
                         navController.navigate("signup")
                     }
@@ -124,7 +147,7 @@ fun DeleteProfile(
  * @param viewModel the view model for the app
  * @param mode the mode of the screen, create or edit
  *
- * still requires ability to choose profile pic and recieve notifications
+ * still requires ability to recieve notifications
  *
  */
 @SuppressLint("SuspiciousIndentation")
@@ -136,6 +159,7 @@ fun InputDetails(
     ){
 
     val uiState by viewModel.uiState.collectAsState()
+    val isUploadingImage by viewModel.isUploadingImage.collectAsState()
 
     val context = LocalContext.current
     val deviceId = remember {
@@ -170,16 +194,72 @@ fun InputDetails(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Box(
-            modifier = Modifier
-                .size(200.dp)
-                .background(MaterialTheme.colorScheme.primary),
-            contentAlignment = Alignment.Center,
-        ){
-            Text(
-                text = "profile pic place holder",
-                fontSize = 34.sp
+        val imagePicker = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia()
+        ) { uri: Uri? ->
+            if (uri != null) {
+                viewModel.uploadProfilePic(uri)
+            }
+        }
+
+        if (isUploadingImage) {
+            Box(
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+
+        } else if (uiState.profilePic.isBlank()) {
+            Box(
+                modifier = Modifier
+                    .size(200.dp)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .clip(CircleShape)
+                    .clickable {
+                        imagePicker.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    },
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "Tap To Select Profile Picture",
+                    textAlign = TextAlign.Center,
+                    fontSize = 34.sp,
+                    lineHeight = 34.sp,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        } else{
+            AsyncImage(
+                model = uiState.profilePic,
+                contentDescription = "Profile Picture",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(CircleShape)
+                    .clickable {
+                        imagePicker.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }
             )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    viewModel.removeProfilePic()
+                }
+            ){
+                Text("Delete Profile Picture")
+            }
+
         }
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -247,8 +327,6 @@ fun InputDetails(
                 viewModel
             )
         }
-
-
 
         if (viewModel.validateDetails()) {
             Button(
