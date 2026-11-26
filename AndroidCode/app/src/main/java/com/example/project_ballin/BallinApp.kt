@@ -552,6 +552,13 @@ class BallinApp(){
                 )
             }
 
+            composable("AdminQRCodes") {
+                AdminQRCodeScreens().AdminQRCodeListScreen(
+                    navController,
+                    campsites = campsiteList.campsites
+                )
+            }
+
             composable("AdminProfiles") {
                 AdminProfilesScreens().AdminProfileListScreen(
                     navController,
