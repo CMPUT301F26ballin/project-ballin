@@ -81,16 +81,42 @@ class NotificationList {
     fun getNotification(ID: String): Notification? =
         _notifications.find { it.ID == ID }
 
-    fun sendToLottery(content: String, lotteryID: String): Boolean {
-        if (content.isBlank() || lotteryID.isBlank()) return false
-        addNotification(
-            Notification(
-                content = content.trim(),
-                dateSent = System.currentTimeMillis(),
-                ID = Uuid.random().toString(),
-                lotteryID = lotteryID
+    /**
+     * Sends a notification to a list of entrants
+     *
+     * @param content the message to send
+     * @param lotteryID
+     * @param entrantIDs the list of entrant IDs to send to
+     * @return successfully sent or not
+     */
+    fun sendToEntrants(content: String, lotteryID: String, entrantIDs: List<String>): Boolean {
+        if (content.isBlank()) return false
+        val now = System.currentTimeMillis()
+        if (entrantIDs.isEmpty()) {
+            // if theres no entrants, still send a message to no one
+            // so the sent message still in the owners records
+            addNotification(
+                Notification(
+                    content = content.trim(),
+                    dateSent = now,
+                    ID = Uuid.random().toString(),
+                    lotteryID = lotteryID,
+                    recipientID = ""
+                )
             )
-        )
+        } else {
+            entrantIDs.forEach { entrantID ->
+                addNotification(
+                    Notification(
+                        content = content.trim(),
+                        dateSent = now,
+                        ID = Uuid.random().toString(),
+                        lotteryID = lotteryID,
+                        recipientID = entrantID
+                    )
+                )
+            }
+        }
         return true
     }
 

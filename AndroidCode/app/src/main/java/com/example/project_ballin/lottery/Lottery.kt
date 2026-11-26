@@ -14,7 +14,7 @@ import kotlin.uuid.Uuid
  * Lotteries have a list of waitlist users, an occupancy limit,
  * a number of winners, an owner, an active date Range, and associated campsites
  *
- * @property waitList the list of waitlist users
+ * @property waitList the list of waitlist user IDs
  * @property occupancy the occupancy limit of the lottery
  * @property numWinners the number of winners of the lottery
  * @property registrationStart the start time of sign up period
@@ -23,10 +23,12 @@ import kotlin.uuid.Uuid
  * @property bookingEnd the end time of booking period
  * @property associatedSites the associated campsites of the lottery
  * @property lotteryID the ID of the lottery
- * @property lotteryOwnerID the ID of the owner of the lottery
+ * @property lotteryOwnerID the ID of the primary owner of the lottery
+ * @property multipleOwnerLottery boolean, if this is a group lottery where other owners can add their sites
+ * @property additionalLotteryOwners the String IDs of additional owners
  * @property winners the list of winners of the lottery
  * @property losers the list of losers of the lottery
- *
+ * @property bWinnersDrawn if the lottery drawn has been done with winners picked
  */
 data class Lottery(
     var waitList: MutableList<String> = mutableListOf(),
@@ -39,8 +41,11 @@ data class Lottery(
     var associatedSites: MutableList<String> = mutableListOf(),
     var lotteryID: String = "",
     var lotteryOwnerID: String = "",
+    var multipleOwnerLottery: Boolean = false,
+    var additionalLotteryOwners: MutableList<String> = mutableListOf(),
     var winners: MutableList<String> = mutableListOf(),
-    var losers: MutableList<String> = mutableListOf()
+    var losers: MutableList<String> = mutableListOf(),
+    var bWinnersDrawn: Boolean = false
 ){
     fun addWinner(id: String) { winners.add(id) }
     fun addLoser(id: String) { losers.add(id) }
