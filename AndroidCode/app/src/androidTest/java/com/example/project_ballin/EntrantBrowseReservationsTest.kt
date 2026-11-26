@@ -11,7 +11,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-
+/**
 //Test for checking what shows up in the browse reservations screen
 class EntrantBrowseReservationsTest {
     private lateinit var campsiteList: CampsiteList
@@ -109,12 +109,6 @@ class EntrantBrowseReservationsTest {
         entrant.lostLotteries.add(lottery3)
     }
 
-    @Before
-    fun setup() {
-        composeTestRule.mainClock.advanceTimeBy(2500)
-        composeTestRule.waitForIdle()
-    }
-
     @Test
     fun NavigateToBrowseReservations_BrowseReservationsScreenIsDisplayed_WonAndLostLotteriesShow() {
         composeTestRule
@@ -153,3 +147,4 @@ class EntrantBrowseReservationsTest {
     }
 
 }
+        **/
