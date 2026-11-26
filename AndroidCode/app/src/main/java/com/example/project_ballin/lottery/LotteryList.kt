@@ -64,7 +64,15 @@ class LotteryList {
     fun getLottery(ID: String): Lottery? =
         _lotteries.find { it.lotteryID == ID }
 
-    fun getOwnerLotteries(ID: String): List<Lottery> =
-        _lotteries.filter { it.lotteryOwnerID == ID }
+    // since lotteries can have multiple owners associated, return true for primary owner only
+    fun getOwnerLotteries(ownerID: String): List<Lottery> =
+        _lotteries.filter { it.lotteryOwnerID == ownerID }
 
+    // get an owners secondary lotteries only
+    fun getEnrolledGroupLotteries(ownerID: String): List<Lottery> =
+        _lotteries.filter { ownerID in it.additionalLotteryOwners }
+
+    // get all group lotteries that you're NOT the primary owner of
+    fun getAllGroupLotteries(ownerID: String): List<Lottery> =
+        _lotteries.filter { it.multipleOwnerLottery && ownerID != it.lotteryOwnerID  && ownerID !in it.additionalLotteryOwners}
 }
