@@ -1,4 +1,4 @@
-✅ Indicates what will be complete at halfway checkpoint
+✅ Indicates complete 
 ## Entrant:
 
 **US 01.01.01 As an entrant, I want to search for campsites.** ✅
@@ -85,7 +85,7 @@
 - Story Points: 5
 - Risk: Low
 
-**US 01.08.02 As an entrant, I want to add, update, or remove my profile image/**
+**US 01.08.02 As an entrant, I want to add, update, or remove my profile image/**✅
 -Story Points: 3
 -Risk: Low
 
