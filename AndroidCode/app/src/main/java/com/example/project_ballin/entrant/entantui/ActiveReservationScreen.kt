@@ -73,13 +73,50 @@ class ActiveReservationScreen {
                 navController,
                 "Active Reservations"
             ) {
-                LazyColumn {
-                    items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
-                        CurrentReservationCard(entrant, reservation, campsiteList, navController, { reservationToLeave = reservation })
+                LazyColumn(
+                    modifier = Modifier.padding(16.dp)
+                ){
+                    if(reservationList.getCurrentReservationsForEntrant(entrant.userID).isNotEmpty()){
+                        item{
+
+
+                            Text(
+                                text = "Your current reservations:",
+                                style = MaterialTheme.typography.titleLarge,
+
+                                )
+
+                            HorizontalDivider(modifier = Modifier.padding(0.dp,0.dp, 0.dp, 16.dp))
+                        }
+
+                        items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
+                            CurrentReservationCard(entrant, reservation, campsiteList, navController, { reservationToLeave = reservation })
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+
+
                     }
 
-                    items(entrant.activeLotteries) { lottery ->
-                        ActiveLotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
+                    if(entrant.activeLotteries.isNotEmpty()){
+
+                        item{
+
+
+                            Text(
+                                text = "Your active lotteries:",
+                                style = MaterialTheme.typography.titleLarge,
+
+                                )
+
+                            HorizontalDivider(modifier = Modifier.padding(0.dp,0.dp, 0.dp, 16.dp))
+                        }
+
+                        items(entrant.activeLotteries) { lottery ->
+                            ActiveLotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
                 }
             }
@@ -134,7 +171,6 @@ class ActiveReservationScreen {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
         ) {
             if (entrant.userID in lottery.waitList) {
                 Column(
@@ -205,7 +241,7 @@ class ActiveReservationScreen {
 
 
                                         ) {
-                                            Text("More Details")
+                                            Text("More details")
                                         }
                                     }
                                 }
@@ -232,7 +268,7 @@ class ActiveReservationScreen {
 
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = androidx.compose.ui.Alignment.End
+                                horizontalAlignment = Alignment.End
                             )
                             {
 
@@ -258,7 +294,7 @@ class ActiveReservationScreen {
                                         .fillMaxWidth()
                                         .testTag("Leave Waiting List Button")
                                 ) {
-                                    Text("Leave Waiting List")
+                                    Text("Leave waiting list")
                                 }
                             }
                         }
@@ -287,7 +323,6 @@ class ActiveReservationScreen {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
                 .testTag("Current Reservation Card")
         ) {
             Column(
@@ -298,7 +333,7 @@ class ActiveReservationScreen {
 
                 Row {
                     Text(
-                        text = "Upcoming Reservation: ${campsite?.name}",
+                        text = "Upcoming reservation: ${campsite?.name}",
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
@@ -350,7 +385,7 @@ class ActiveReservationScreen {
                         .testTag("More Details Button")
 
                 ) {
-                    Text("More Details")
+                    Text("More details")
                 }
 
                 Button(
@@ -376,7 +411,7 @@ class ActiveReservationScreen {
 
 
                 ) {
-                    Text("Cancel Reservation")
+                    Text("Cancel reservation")
                 }
             }
         }

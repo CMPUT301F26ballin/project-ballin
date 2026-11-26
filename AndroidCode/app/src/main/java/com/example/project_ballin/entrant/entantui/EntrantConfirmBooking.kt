@@ -230,7 +230,7 @@ class EntrantConfirmBooking {
                                             resID = Uuid.random().toString(),
                                         )
                                     )
-                                    navController.navigate("EntrantBrowseReservations")
+                                    navController.popBackStack("EntrantBrowseReservations", false)
 
                                     entrant.activeLotteries.remove(lottery)
                                     entrant.wonLotteries.remove(lottery)

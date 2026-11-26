@@ -2,11 +2,17 @@ package com.example.project_ballin.entrant.entantui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,9 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.Rating
+import com.example.project_ballin.RatingList
 import com.example.project_ballin.Review
+import com.example.project_ballin.ReviewList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.reusableui.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 
 class EntrantLeaveCampsiteReview {
 
@@ -43,11 +54,20 @@ class EntrantLeaveCampsiteReview {
         navController: NavController,
         entrant: Entrant,
         campsiteID: String,
-        onAdd: (Review) -> Unit,
-        noPreviousReviewGiven: Boolean
+        reviewList: ReviewList,
+        ratingList: RatingList
     ){
         var reviewContents by remember { mutableStateOf("") }
         var confirmReview  by remember { mutableStateOf(false) }
+        var noPreviousReviewGiven by remember { mutableStateOf(true) }
+
+        var rating by remember { mutableStateOf(0) }
+        var confirmRating by remember { mutableStateOf(false) }
+
+
+        if(entrant.userID in reviewList.getReviewsFromCampsite(campsiteID).map { it.reviewer }){
+            noPreviousReviewGiven = false
+        }
 
         TopAppBar(
             navController,
@@ -60,32 +80,47 @@ class EntrantLeaveCampsiteReview {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(128.dp))
-                if (!noPreviousReviewGiven ) {
+                if (!noPreviousReviewGiven) {
                     Text(
-                        text = "Permission Denied",
+                        text = "Permission denied.",
                         fontSize = 24.sp
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "You Have Already Given Review",
+                        text = "You have already left a review",
                         fontSize = 24.sp
                     )
                 } else {
                     Text(
-                        text = "Review Campsite",
+                        text = "Review campsite:",
                         fontSize = 24.sp
                     )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        for (i in 1..5) {
+                            RatingButton(
+                                i,
+                                onSelectedRating = {rating = it},
+                                modifier = Modifier.weight(1f),
+                                change = (i <= rating)
+                            )
+                        }
+                    }
+
                     Spacer(modifier = Modifier.height(34.dp))
 
                     OutlinedTextField(
                         value = reviewContents,
                         onValueChange = { reviewContents = it },
-                        label = { Text("Text Review Here") }
+                        label = { Text("Input your review here...") }
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { confirmReview = true }
+                        onClick = { confirmReview = true },
+                        enabled = reviewContents.isNotBlank() && rating > 0
                     ) {
                         Text("Confirm")
                     }
@@ -99,15 +134,22 @@ class EntrantLeaveCampsiteReview {
                     )
                 }
 
-                if (reviewContents.isNotBlank() && confirmReview && noPreviousReviewGiven) {
+                if (reviewContents.isNotBlank() && confirmReview && rating > 0 && confirmRating && noPreviousReviewGiven) {
                     ConfirmActionDialog().ConfirmAction(
                         message = "Are you sure you want to leave this review?",
                         confirm = { confirmed ->
                             if (confirmed) {
+                                val newRating = Rating(entrant.userID, rating, campsiteID)
+                                ratingList.addRating(newRating)
+                                navController.popBackStack()
+
                                 val newReview = Review(entrant.userID, reviewContents, campsiteID)
-                                onAdd(newReview)
+                                reviewList.addReview(newReview)
                                 navController.popBackStack()
                             }
+                            rating = 0
+                            confirmRating = false
+
                             confirmReview = false
                             reviewContents = ""
                         }
@@ -117,29 +159,43 @@ class EntrantLeaveCampsiteReview {
         }
     }
 
-    @Preview(showBackground = true)
+    /**
+     * A button that allows the entrant to give a rating to a campsite
+     * Numbers range from 1-5, with 1 being the worst, to 5 being the best
+     *
+     * @param number the number of the rating
+     * @param onSelectedRating the function that is called when the button is clicked
+     * @param modifier the modifier for the button
+     * @param change the boolean that determines if the icon button should be big or small, and diff color,
+     * it depends on whatever rating the entrant has given
+     */
     @Composable
-    fun EntrantGiveCampsiteReviewnoPreviousReviewGivenPreview() {
-        val navController = rememberNavController()
-        EntrantLeaveCampsiteReview().EntrantGiveCampsiteReviewScreen(
-            navController,
-            Entrant("1", "John", "Doe"),
-            "123456789",
-            onAdd = {},
-            noPreviousReviewGiven = true
-        )
-    }
+    fun RatingButton(
+        number: Int,
+        onSelectedRating: (Int) -> Unit,
+        modifier: Modifier = Modifier,
+        change: Boolean
+    ) {
+        val iconSize = if (change) 68.dp else 24.dp
 
-    @Preview(showBackground = true)
-    @Composable
-    fun EntrantGiveCampsiteReviewPermissionDeniedPreview() {
-        val navController = rememberNavController()
-        EntrantLeaveCampsiteReview().EntrantGiveCampsiteReviewScreen(
-            navController,
-            Entrant("1", "John", "Doe"),
-            "123456789",
-            onAdd = {},
-            noPreviousReviewGiven = false
-        )
+        /**
+         * Source Used: https://brahimoubbad.com/posts/how-to-use-material-icons-in-jetpack-compose/
+         * Title: How to use Material Icons in Jetpack Compose - (A Developer's Complete Guide 2026)
+         * Author: Brahim Oubbad
+         * Published: May 22, 2025
+         */
+        IconButton(
+            onClick = {
+                onSelectedRating(number)
+            },
+            modifier = modifier
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = "Star Icon",
+                modifier = Modifier.size(iconSize),
+                tint = if (change) MaterialTheme.colorScheme.primary else Color.Gray
+            )
+        }
     }
 }
