@@ -80,18 +80,7 @@ class EntrantRateCampsite {
                     Text(text = "Rate Campsite",fontSize = 24.sp)
                     Spacer(modifier = Modifier.height(34.dp))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        for (i in 1..5) {
-                            RatingButton(
-                                i,
-                                onSelectedRating = {rating = it},
-                                modifier = Modifier.weight(1f),
-                                change = (i <= rating)
-                            )
-                        }
-                    }
+
                     Spacer(modifier = Modifier.height(34.dp))
 
                     Button(
@@ -101,62 +90,7 @@ class EntrantRateCampsite {
                     }
                 }
 
-                if (rating > 0 && confirmRating && noPreviousRatingGiven) {
-                    ConfirmActionDialog().ConfirmAction(
-                        message = "Are you sure you want to rate campsite ${rating}?",
-                        confirm = { confirmed ->
-                            if (confirmed) {
-                                val newRating = Rating(entrant.userID, rating, campsiteID)
-                                onAdd(newRating)
-                                navController.popBackStack()
-                            }
-                            rating = 0
-                            confirmRating = false
-                        }
-                    )
-                }
-
             }
-        }
-    }
-
-    /**
-     * A button that allows the entrant to give a rating to a campsite
-     * Numbers range from 1-5, with 1 being the worst, to 5 being the best
-     *
-     * @param number the number of the rating
-     * @param onSelectedRating the function that is called when the button is clicked
-     * @param modifier the modifier for the button
-     * @param change the boolean that determines if the icon button should be big or small, and diff color,
-     * it depends on whatever rating the entrant has given
-     */
-    @Composable
-    fun RatingButton(
-        number: Int,
-        onSelectedRating: (Int) -> Unit,
-        modifier: Modifier = Modifier,
-        change: Boolean
-    ) {
-        val iconSize = if (change) 68.dp else 24.dp
-
-        /**
-         * Source Used: https://brahimoubbad.com/posts/how-to-use-material-icons-in-jetpack-compose/
-         * Title: How to use Material Icons in Jetpack Compose - (A Developer's Complete Guide 2026)
-         * Author: Brahim Oubbad
-         * Published: May 22, 2025
-         */
-        IconButton(
-            onClick = {
-                onSelectedRating(number)
-            },
-            modifier = modifier
-        ) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = "Star Icon",
-                modifier = Modifier.size(iconSize),
-                tint = if (change) MaterialTheme.colorScheme.primary else Color.Gray
-            )
         }
     }
 
@@ -188,17 +122,5 @@ class EntrantRateCampsite {
         )
     }
 
-    @Preview(showBackground = true)
-    @Composable
-    fun Entrant3StarRatingPreview() {
-        Row{
-            for (i in 1..5) {
-                RatingButton(
-                    i,
-                    onSelectedRating = {},
-                    change = (i <= 3)
-                )
-            }
-        }
-    }
+
 }

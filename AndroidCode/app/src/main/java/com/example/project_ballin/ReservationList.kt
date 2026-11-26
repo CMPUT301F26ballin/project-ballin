@@ -193,7 +193,7 @@ class ReservationList {
     fun getCurrentReservationsForEntrant(userID: String): List<Reservation> {
         val returnList = mutableStateListOf<Reservation>()
         reservations.forEach { reservation ->
-            if(reservation.userID == userID && reservation.dates?.get(1)!! <= System.currentTimeMillis() && !reservation.cancelled){
+            if(reservation.userID == userID && reservation.dates?.last()!! >= System.currentTimeMillis() && !reservation.cancelled){
                 returnList.add(reservation)
             }
         }
@@ -204,7 +204,7 @@ class ReservationList {
         val returnList = mutableStateListOf<Reservation>()
 
         reservations.forEach { reservation ->
-            if(reservation.userID == userID && reservation.dates?.get(1)!! >= System.currentTimeMillis() && !reservation.cancelled){
+            if(reservation.userID == userID && reservation.dates?.get(1)!! < System.currentTimeMillis() && !reservation.cancelled){
                 returnList.add(reservation)
             }
         }

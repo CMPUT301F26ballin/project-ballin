@@ -90,6 +90,7 @@ class BallinApp() {
         val userReportList = remember { ReportList() }
         val reservationList = remember { ReservationList() }
         val reviewList = remember { ReviewList() }
+        val ratingList = remember{ RatingList() }
 
         //temporary for testing
         var currentEntrant by remember {
@@ -268,6 +269,18 @@ class BallinApp() {
             )
         }
 
+        var pastReservation by remember {
+            mutableStateOf<Reservation>(
+                Reservation(
+                    "5",
+                    listOf(123L, 234L),
+                    "1",
+                    false,
+                    "1"
+                )
+            )
+        }
+
 
         LaunchedEffect(Unit) {
             campsite.lotteries.add(lottery.lotteryID)
@@ -276,6 +289,7 @@ class BallinApp() {
             lottery.associatedSites.add(campsite.ID)
             lottery2.associatedSites.add(campsite2.ID)
             lottery3.associatedSites.add(campsite3.ID)
+
             currentEntrant?.let {
                 lottery.waitList.add(it.userID)
                 it.activeLotteries.add(lottery)
@@ -287,6 +301,8 @@ class BallinApp() {
                 lottery3.losers.add(it.userID)
                 it.lostLotteries.add(lottery3)
                 it.activeLotteries.add(lottery3)
+
+                it.pastReservations.add(pastReservation)
             }
             campsiteList.addCampsite(campsite)
             campsiteList.addCampsite(campsite2)
@@ -296,6 +312,7 @@ class BallinApp() {
             lotteryList.addLottery(lottery3)
             messageList.addMessage(message1)
             notificationList.addNotification(notification1)
+            reservationList.addReservation(pastReservation)
         }
 
         val campsiteInputScreen = CampsiteInputScreen()
@@ -745,7 +762,8 @@ class BallinApp() {
                         navController,
                         entrant,
                         campsiteID,
-                        reviewList
+                        reviewList,
+                        ratingList
                     )
                 }
             }

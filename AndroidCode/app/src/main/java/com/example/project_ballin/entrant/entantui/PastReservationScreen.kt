@@ -61,10 +61,10 @@ class PastReservationScreen {
                 navController,
                 "Past Reservations"
             ) {
-                if(reservationList.getPastReservationsForEntrant(entrant.userID).isNotEmpty()){
-                    LazyColumn(
-                        modifier = Modifier.padding(16.dp)
-                    ){
+                LazyColumn(
+                    modifier = Modifier.padding(16.dp)
+                ){
+                    if(reservationList.getPastReservationsForEntrant(entrant.userID).isNotEmpty()){
                         item{
 
 
@@ -82,13 +82,9 @@ class PastReservationScreen {
                             Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
-                }
 
+                    if(reservationList.getCancelledReservationsForEntrant(entrant.userID).isNotEmpty()){
 
-                if(reservationList.getCancelledReservationsForEntrant(entrant.userID).isNotEmpty()){
-                    LazyColumn(
-                        modifier = Modifier.padding(16.dp)
-                    ){
                         item{
                             Text(
                                 text = "Your cancelled reservations:",
@@ -104,6 +100,9 @@ class PastReservationScreen {
                             Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
+
+
+
                 }
             }
         }
