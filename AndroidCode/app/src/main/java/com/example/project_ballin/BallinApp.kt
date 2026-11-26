@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -15,16 +13,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.project_ballin.admin.adminui.AdminSwitchModesScreen
+import com.example.project_ballin.admin.adminui.AdminViolationChoiceScreen
+import com.example.project_ballin.admin.adminui.AdminViolationListScreen
+//import com.example.project_ballin.admin.adminui.MessageDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.QRCodeScanner
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
-import com.example.project_ballin.entrant.entantui.EditProfileScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
+import com.example.project_ballin.entrant.entantui.EntrantLeaveCampsiteReview
+import com.example.project_ballin.entrant.entantui.EntrantRateCampsite
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 import com.example.project_ballin.entrant.entantui.MainEntrantMenu
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
@@ -38,15 +40,11 @@ import com.example.project_ballin.owner.ownerUI.LotteryDetailScreen
 import com.example.project_ballin.owner.ownerUI.LotteryListScreen
 import com.example.project_ballin.owner.ownerUI.MainOwnerMenu
 import com.example.project_ballin.owner.ownerUI.OwnerReservationScreen
-import com.example.project_ballin.reusableui.InitialScreen
 import com.example.project_ballin.reusableui.PolicyGuidelinesScreen
-import com.example.project_ballin.reusableui.UserDetailModel
 import com.example.project_ballin.reusableui.UserProfile
 import com.example.project_ballin.reusableui.UserReportScreen
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
-import java.util.Date
 import com.example.project_ballin.owner.ownerUI.NotificationSendScreen
 import com.example.project_ballin.owner.ownerUI.OwnerNotificationListScreen
 
@@ -94,6 +92,8 @@ class BallinApp(){
         val lotteryList = remember { LotteryList() }
         val userReportList = remember { ReportList() }
         val reservationList = remember { ReservationList() }
+        val ratingList = remember { RatingList() }
+        val reviewList = remember { ReviewList() }
 
         //temporary for testing
         var currentEntrant by remember {
@@ -272,7 +272,6 @@ class BallinApp(){
             )
         }
 
-
         LaunchedEffect(Unit) {
             campsite.lotteries.add(lottery.lotteryID)
             campsite2.lotteries.add(lottery2.lotteryID)
@@ -328,8 +327,14 @@ class BallinApp(){
         //MessagingScreen
         val messagingScreen = MessagingScreen()
 
+        //Reporting/Violation Screens
+        val adminViolationChoiceScreen = AdminViolationChoiceScreen()
+        val adminViolationListScreen = AdminViolationListScreen()
+        val adminViolationDetailScreen = AdminViolationDetailScreen()
 
-        NavHost(navController = navController, startDestination = "signup") {
+
+
+        NavHost(navController = navController, startDestination = "AdminMenu/${100100100}") {
             composable("signup") { signUpScreen.Signup(navController) }
             composable("createprofile") { userProfile.CreateProfile(navController) }
             composable("editprofile") { userProfile.EditProfile(navController) }
@@ -337,7 +342,8 @@ class BallinApp(){
 
             composable("OwnerMenu/{OwnerID}") {
                 val ownerIDString = it.arguments!!.getString("OwnerID")
-                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!)
+                val hasAdminPrivileges = (adminList.getAdmin(ownerIDString!!) != null)
+                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!, hasAdminPrivileges)
             }
 
             composable("CampsiteListScreen/{OwnerID}") {
@@ -614,14 +620,70 @@ class BallinApp(){
                 }
             }
 
+            composable("AdminViolationChoice") {
+                adminViolationChoiceScreen.AdminViolationChoice(navController)
+            }
+
+            composable("AdminViolationList/{subject}") {
+                val subject = it.arguments!!.getString("subject")
+                val reportsFromSubject = userReportList.getReportsInSubject(subject!!)
+                adminViolationListScreen.AdminViolationList(
+                    navController,
+                    reportsFromSubject,
+                    onDelete = {
+                        when (subject) {
+                            "Campsite Owner" -> {
+                                userReportList.deleteReportInSubjectOwner(it)
+                            }
+                            "Review" -> {
+                                userReportList.deleteReportInSubjectReview(it)
+                            }
+                            "Rating" -> {
+                                userReportList.deleteReportInSubjectRating(it)
+                            }
+                        }
+                    }
+                )
+            }
+
+            composable("AdminViolationDetail/{reportID}") {
+                val reportID = it.arguments!!.getString("reportID")
+                val report = userReportList.getReport(reportID!!)
+                adminViolationDetailScreen.AdminViolationDetail(
+                    navController,
+                    report!!,
+                    onDelete = {
+                        when (report.reportSubject) {
+                            "Campsite Owner" -> {
+                                userReportList.deleteReportInSubjectOwner(it)
+                            }
+                            "Review" -> {
+                                userReportList.deleteReportInSubjectReview(it)
+                            }
+                            "Rating" -> {
+                                userReportList.deleteReportInSubjectRating(it)
+                            }
+                        }
+                    }
+                )
+            }
+
+
 
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
-                mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
+                val hasAdminPrivileges = (adminList.getAdmin(entrantIDString!!) != null)
+                Log.d("AdminCheck", entrantIDString)
+                Log.d(
+                    "AdminCheck",
+                    adminList.getAdmin(entrantIDString).toString()
+                )
+                Log.d("AdminCheck", adminList.admins.size.toString())
+                mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!, hasAdminPrivileges)
             }
 
             composable("AdminSwitchModes") {
-                AdminSwitchModesScreen().AdminSwitchModes(navController)
+                AdminSwitchModesScreen().AdminSwitchModes(navController, entrantList, ownerList, adminList)
             }
 
 
@@ -667,6 +729,43 @@ class BallinApp(){
                 val entrant = currentEntrant
                 if (entrant != null) {
                     PastReservationScreen().PastReservations(navController, entrant)
+                }
+            }
+
+            /**
+             * Source Used: https://www.baeldung.com/kotlin/finding-element-in-list
+             * Title: Finding an Element in a List Using Kotlin
+             * Author: Baeldung
+             */
+            composable("EntrantRateCampsite/{campID}") {
+                val entrant = currentEntrant
+                val campID = it.arguments?.getString("campID")
+                if (entrant != null) {
+                    EntrantRateCampsite().EntrantGiveCampsiteRatingScreen(
+                        navController,
+                        entrant,
+                        campID!!,
+                        onAdd = {ratingList.addRating(it)},
+                        noPreviousRatingGiven =
+                            ratingList.getRatingsFromCampsite(campID)
+                                .find { it.reviewer == entrant.userID } == null
+                    )
+                }
+            }
+
+            composable("EntrantLeaveCampsiteReview/{campID}") {
+                val entrant = currentEntrant
+                val campID = it.arguments?.getString("campID")
+                if (entrant != null) {
+                    EntrantLeaveCampsiteReview().EntrantGiveCampsiteReviewScreen(
+                        navController,
+                        entrant,
+                        campID!!,
+                        onAdd = {reviewList.addReview(it)},
+                        noPreviousReviewGiven =
+                            reviewList.getReviewsFromCampsite(campID)
+                                .find { it.reviewer == entrant.userID } == null
+                    )
                 }
             }
 

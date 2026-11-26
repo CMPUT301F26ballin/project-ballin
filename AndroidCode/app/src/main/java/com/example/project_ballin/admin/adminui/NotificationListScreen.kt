@@ -89,7 +89,6 @@ class NotificationListScreen {
                     // What the admin typed in the search box (kept when the screen rotates)
                     var query by rememberSaveable { mutableStateOf("") }
                     val results = notifications.filter { it.matchesSearch(query) }
-
                         adminSearch.AdminSearchField(
                         query,
                         onQueryChange = { query = it },
@@ -184,7 +183,7 @@ class NotificationListScreen {
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Text("Date Sent: ${notification.dateSent}")
+                    Text("Date Sent: ${notification.getFormattedDate()}")
                     Text("Recipient: ${notification.recipientID}")
                 }
 

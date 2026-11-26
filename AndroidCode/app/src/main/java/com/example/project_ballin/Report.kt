@@ -15,3 +15,5 @@ class Report (
     var idBeingReported: String = "",
     var ID: String = ""
 )
+
+//NEED TO FLUSH OUT REPORT LIST

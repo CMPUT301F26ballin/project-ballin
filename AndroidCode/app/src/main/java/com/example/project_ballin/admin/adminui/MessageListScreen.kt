@@ -32,7 +32,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import com.example.project_ballin.reusableui.TopAppBar
+import java.text.DateFormat
 import java.util.Date
+import java.util.Locale
 
 
 class MessageListScreen {
@@ -179,7 +181,7 @@ class MessageListScreen {
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Text("Date Sent: ${message.dateSent.toString()}")
+                    Text("Date Sent: ${message.getFormattedDate()}")
                     Text("Sender: ${message.senderID}")
                 }
 

@@ -87,13 +87,14 @@ open class ReportList {
         reportsRef.document(report.ID).delete()
     }
 
+    // DELETIONS FOR EACH SUBJECT MUST CASCADE DELETE
     /**
      * Specific deletion for the report in the database
      * that is in subject rating
      */
     fun deleteReportInSubjectRating(report: Report) {
         deleteReport(report)
-        // CASCADE THE DELETION IN RATING LIST
+        RatingList().deleteRating(report.ID)
     }
 
     /**
@@ -102,7 +103,7 @@ open class ReportList {
      */
     fun deleteReportInSubjectReview(report: Report) {
         deleteReport(report)
-        // CASCADE THE DELETION IN REVIEW LIST
+        ReviewList().deleteReview(report.ID)
     }
 
     /**

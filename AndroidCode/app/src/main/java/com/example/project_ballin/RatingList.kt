@@ -71,5 +71,14 @@ open class RatingList {
         return _ratings.filter { it.campsiteID == campsiteID }
     }
 
+    /**
+     * Deletes a rating from the database
+     *
+     * @param ID the ID of the rating being deleted
+     */
+    fun deleteRating(ID: String) {
+        ratingsRef.document(ID).delete()
+    }
+
 }
 

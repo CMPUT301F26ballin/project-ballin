@@ -71,4 +71,13 @@ open class ReviewList {
         return _reviews.filter { it.campsiteID == campsiteID }
     }
 
+    /**
+     * Deletes a review from the database
+     *
+     * @param ID the ID of the review being deleted
+     */
+    fun deleteReview(ID: String) {
+        reviewsRef.document(ID).delete()
+    }
+
 }

@@ -67,7 +67,7 @@ class NotificationDetailScreen {
             ) {
 
                 NotificationDetailRows("Recipient ID", notification.recipientID, "recipientID${notification.recipientID}")
-                NotificationDetailRows("Date Sent", notification.dateSent.toString(), "dateSent${notification.dateSent}")
+                NotificationDetailRows("Date Sent", notification.getFormattedDate(), "dateSent${notification.dateSent}")
                 NotificationDetailRows("Notification Content", notification.content, "notificationContent${notification.content}")
                 NotificationDetailRows("Notification ID", notification.ID, "notificationID${notification.ID}")
                 Spacer(modifier = Modifier.height(68.dp))
@@ -106,7 +106,7 @@ class NotificationDetailScreen {
      * Shows a specific part of the notification and puts it in a row
      */
     @Composable
-    fun <T> NotificationDetailRows(descriptionText: String, content: T, testTag: String) {
+    fun NotificationDetailRows(descriptionText: String, content: String, testTag: String) {
         Spacer(modifier = Modifier.height(34.dp))
         Row(
             modifier = Modifier
@@ -126,7 +126,7 @@ class NotificationDetailScreen {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text("${content}")
+            Text(content)
         }
     }
 
