@@ -96,6 +96,13 @@ class MainAdminMenu(){
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+                AdminOptionButton(
+                    "QR CODES\nBROWSE",
+                    "AdminQRCodes",
+                    "adminQRCodesButton",
+                    navController
+                )
+                Spacer(modifier = Modifier.height(16.dp))
                 //Put temporary destination so it doesn't crash rn
                 AdminOptionButton(
                     "OWNERS VIOLATING POLICY\nBROWSE AND DELETE",

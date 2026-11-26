@@ -72,7 +72,7 @@ class MainEntrantMenu(){
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                EntrantHomeButton("SCAN QR CODE", "Scan QR Code", "SCAN QR CODE", navController)
+                EntrantHomeButton("SCAN QR CODE", "ScanQRCode/${entrantID}", "SCAN QR CODE", navController)
                 Spacer(modifier = Modifier.height(16.dp))
                 EntrantHomeButton(
                     "POLICY AND GUIDELINES",

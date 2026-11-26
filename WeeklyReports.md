@@ -74,3 +74,5 @@ Mies: Reservation stuff fleshed out on entrant side, entrants can now see their 
 Salix: Implemented the owner lottery notifications (send and previous sent list) and multi owner lotteries
 
 Leighan: Finished the violation detectors for owners, reviews and ratings. 
+
+Nick: Finished implementing profile pictures, should finish filter by dates soon. 
