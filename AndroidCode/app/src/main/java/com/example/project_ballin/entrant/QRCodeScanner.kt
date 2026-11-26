@@ -2,6 +2,7 @@ package com.example.project_ballin.entrant
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -59,6 +60,7 @@ class QRCodeScanner(){
             var hasCameraPermission by remember { mutableStateOf(false) }
             var qrCodeResult by remember { mutableStateOf("Scanning...") }
             var foundQR by remember { mutableStateOf(false) }
+            var openCam by remember {mutableStateOf(false)}
 
             val permissionLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.RequestPermission(),
@@ -83,21 +85,39 @@ class QRCodeScanner(){
 
             Column(modifier = Modifier.fillMaxSize()) {
                 if(hasCameraPermission){
-                    cameraPreview(onQRDetected = { result ->
-                        qrCodeResult = result
-                        foundQR = true
-                    })
-                    Spacer(modifier = Modifier.height(16.dp))
-                    if(foundQR){
-                        Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = {
-                                navController.navigate("CampsiteDetailScreen/$qrCodeResult/$userID")
-                            }) {
-                            Text("Go to Campsite")
+                    if(openCam){
+                        Row(modifier = Modifier.fillMaxSize()) {
+                            cameraPreview(onQRDetected = { result ->
+                                qrCodeResult = result
+                                foundQR = true
+                                openCam = false
+                                Log.d("QR", "Found QR!")
+                            })
                         }
                     }
 
+                    Row(modifier = Modifier.fillMaxWidth()){
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                openCam = true
+                            }) {
+                            Text("Open Camera")
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(modifier = Modifier.fillMaxWidth()){
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                if(foundQR){ navController.navigate("CampsiteDetailScreen/$qrCodeResult/$userID") }
+                            }) {
+                            if(foundQR){ Text("Go to Campsite") }
+                            else{Text("No Campsite Found")}
+                        }
+                    }
                 }
                 else{
                     Text("Camera permission is needed to scan QR.", modifier = Modifier.padding(16.dp))
