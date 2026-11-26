@@ -122,7 +122,7 @@ class EntrantRateCampsite {
 
     /**
      * A button that allows the entrant to give a rating to a campsite
-     * Numbers range from 1-5, with 1 being the worst, to 5 being the best
+     * Number of stars indicate the rating, 1-star being the worst and 5-star being the best
      *
      * @param number the number of the rating
      * @param onSelectedRating the function that is called when the button is clicked
