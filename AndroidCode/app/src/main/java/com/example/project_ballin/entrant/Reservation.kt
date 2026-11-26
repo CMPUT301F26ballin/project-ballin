@@ -10,9 +10,9 @@ import kotlin.uuid.Uuid
  * @property dates the dates that the reservation is for
  */
 data class Reservation(
-    val campsiteID: String? = "",
+    var campsiteID: String? = "",
     val dates: List<Long>? = listOf(),
-    val UserID: String? = "",
+    var userID: String? = "",
     var cancelled: Boolean = false,
-    val resID: String = ""
+    var resID: String = ""
 )

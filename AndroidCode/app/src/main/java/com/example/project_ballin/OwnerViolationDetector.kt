@@ -1,74 +1,81 @@
 package com.example.project_ballin
 
-/**
- * This should generate or look through list of owners
- * and see if they have any violations.
- * Can't completely check if they violate all policies
- * as it'll have to rely on user reports for the rest of it
- */
+import kotlin.uuid.Uuid
 
-// NOTE TO SELF: I SHOULD PROBABLY MAKE ONE SINGLE OBJECT FOR THIS
-// BUT EACH TIME A NEW CAMPSITE IS MADE BY OWNERS
-// THIS GETS TRIGGERED AND CHECKS IF DUPLICATE
+/**
+ * Generates and look through list of owners
+ * and see if they have any violations. This class
+ * Can't completely check if owners violate all policies
+ * as it'll have to rely on user Reporting System for rest of it.
+ *
+ * @property reportList the list of reports
+ */
 
 class OwnerViolationDetector(
     var reportList: ReportList
 ) {
 
     /**
-     * This function gets a list of all the campsites owned by the owner
-     * and checks if there are any duplicates.
+     * Checks if the campsite listing is a duplicate
      *
-     * @param ownerID the ID of the owner
-     * @param ownerCampsites the list of campsites
-     * @return boolean, true if there are duplicates, false if no duplicates found
+     * @param site the campsite to check
+     * @param ownerCampsites the campsites list
+     * @return boolean, true if duplicate, false if not
      */
-    fun duplicateCampsiteListings(ownerID: String, ownerCampsites: MutableList<Campsite>): Boolean{
-
-        // Campsites with exact lat, lon, locationName are most likely a duplicate listing
-        // because they have the same physical location, unlike a name or other property which
-        // one can end up putting false information in.
-        // Source Used: https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-triple/
-        val nonDuplicateCampsites = mutableSetOf<Triple<Double,Double,String>>()
-
-        for (campsite in ownerCampsites) {
-            val locStrings = campsite.location.split(",")
-            nonDuplicateCampsites.add(Triple(
-                locStrings[0].toDouble(),
-                locStrings[1].toDouble(),
-                campsite.locationName
-            ))
+    fun isDuplicateListing(site: Campsite, ownerCampsites: List<Campsite>): Boolean {
+        // I chose lat,lon and locationName, and availability
+        // because they are the most likely to be a duplicate listing
+        // if same time and place
+        val duplicateListing = ownerCampsites.find {
+            it.lat == site.lat &&
+            it.lon == site.lon &&
+            it.locationName == site.locationName &&
+            it.availability == site.availability &&
+            it.ID != site.ID // If the ID is the same, it's the same listing
         }
-
-        // if no duplicates, the size of the lists should be the same
-        return ownerCampsites.size != nonDuplicateCampsites.size
+        return (duplicateListing != null)
     }
 
     /**
-     * Checks if the owner has committed any violations.
+     * Checks if existing report is already in the list of report,.
      * If they have one, a report is generated.
      *
      * @param ownerID the ID of the owner
-     * @param ownerCampsites the campsites repository
      */
-    fun generateNewReport(ownerID: String, ownerCampsites: MutableList<Campsite>) {
-        val violationCommitted = (duplicateCampsiteListings(ownerID, ownerCampsites))
+    fun generateNewReport(ownerID: String) {
 
         // Checking if owner already has at least one report/violation
         // for duplicate camp listings already
-        val existingReport = (
-                reportList.getReport(ownerID) != null)
-                &&
-                reportList.getReport(ownerID)!!.reportSubject == "Owner Has Posted Duplicate Listings"
+        val existingReport =
+            (reportList.getReport(ownerID) != null) &&
+                    (reportList.getReport(ownerID)!!.reason == "Has Posted Duplicate Listings")
 
-        if (violationCommitted && !existingReport) {
+        if (!existingReport) {
             val newReport = Report(
-                "Owner Has Posted Duplicate Listings",
+                "Has Posted Duplicate Listings",
                 "Campsite Owner",
                 ownerID,
-                "TODO"
+                Uuid.random().toString()
             )
             reportList.addReport(newReport)
+        }
+    }
+
+    /**
+     * A quick check to see if the campsite listing is a duplicate,
+     * and if it is, a report is generated if it doesn't already have one.
+     *
+     * This function is called upon or triggered each time
+     * there is a new campsite listing made by an owner
+     *
+     * @param site the campsite to check
+     * @param ownerCampsites the campsites list
+     */
+    fun quickSiteCheck(site: Campsite, ownerCampsites: List<Campsite>) {
+        val violationCommitted = (isDuplicateListing(site, ownerCampsites))
+
+        if (violationCommitted) {
+            generateNewReport(site.ownerID)
         }
     }
 

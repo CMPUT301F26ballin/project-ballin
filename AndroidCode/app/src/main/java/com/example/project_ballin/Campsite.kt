@@ -32,7 +32,7 @@ import kotlin.uuid.Uuid
  * @property images A list of promotional images for the campsite
  * @property ownerID the unique userID of the owner of the campsite
  * @property lotteries the lotteries this campsite is associated with
- * @property QRCode the blob object containing the QR code.
+ * @property qrCode the blob object containing the QR code.
  *
  * Sources Used:
  * Title: UUIDs
@@ -48,7 +48,8 @@ import kotlin.uuid.Uuid
 class Campsite(
     var name: String = "",
     var ID: String = "",
-    var location: String = "",
+    var lat: Double = 0.0,
+    var lon: Double = 0.0,
     var locationName: String = "",
     var tags: MutableList<String> = mutableListOf(),
     var price: Float = 0.0f,
@@ -60,5 +61,5 @@ class Campsite(
     var ownerID: String = "",
     val availability : MutableList<Long> = mutableListOf(),
     val lotteries: MutableList<String> = mutableListOf(),
-    val QRCode: Blob? = null
+    val qrCode: Blob? = null,
     )

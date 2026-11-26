@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+import kotlin.uuid.Uuid
+
 /**
  * A class that stores information on a review of a campsite
  *
@@ -14,5 +16,5 @@ class Review (
     var reviewer: String = "",
     var content: String = "",
     var campsiteID: String = "",
-    var ID: String = ""
+    var ID: String = Uuid.random().toString()
 )

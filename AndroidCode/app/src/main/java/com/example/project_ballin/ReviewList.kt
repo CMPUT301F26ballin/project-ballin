@@ -18,7 +18,7 @@ open class ReviewList {
      * a new review is added.
      *
      */
-    private val reviewsRef = db.collection("Messages")
+    private val reviewsRef = db.collection("Reviews")
 
     init {
         reviewsRef.addSnapshotListener { snapshots, error ->
@@ -67,6 +67,8 @@ open class ReviewList {
      *
      * @param campsiteID the ID of the campsite the review is for
      */
-   // fun getReviewsForCampsite(campsiteID: String): List<Review> {}
+    fun getReviewsFromCampsite(campsiteID: String): List<Review> {
+        return _reviews.filter { it.campsiteID == campsiteID }
+    }
 
 }

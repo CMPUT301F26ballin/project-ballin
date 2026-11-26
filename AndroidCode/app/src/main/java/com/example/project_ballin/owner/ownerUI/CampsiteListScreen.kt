@@ -84,6 +84,15 @@ class CampsiteListScreen()
                     }
                 }
 
+                Row(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    Text("Click on a campsite to view its details")
+                }
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
