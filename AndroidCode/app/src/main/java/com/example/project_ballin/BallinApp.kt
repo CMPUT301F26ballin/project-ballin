@@ -507,22 +507,25 @@ class BallinApp(){
                     ownerID,
                     lotteryID,
                     sendNotification = { content ->
-                        notificationList.sendToLottery(content, lotteryID)
+                        val entrantIDs = lotteryList.getLottery(lotteryID)?.waitList?.toList() ?: emptyList()
+                        notificationList.sendToEntrants(content, lotteryID, entrantIDs)
                     }
                 )
             }
 
             composable("OwnerNotificationListScreen/{OwnerID}"){
                 val ownerID = it.arguments!!.getString("OwnerID")!!
-                val ownerLotteryIDs = lotteryList.getOwnerLotteries(ownerID).map{
+                val ownerEnrolledLotteries = lotteryList.getOwnerLotteries(ownerID) + lotteryList.getEnrolledGroupLotteries(ownerID)
+                val ownerLotteryIDs = ownerEnrolledLotteries.map{
                     l -> l.lotteryID
                 }
+                val notifs = notificationList.getAllNotifications()
+                    .filter { it.lotteryID in ownerLotteryIDs }
+                    .distinctBy { it.lotteryID to it.dateSent to it.content }
                 OwnerNotificationListScreen().OwnerNotificationListScreen(
                     navController,
                     ownerID,
-                    notificationList.getAllNotifications().filter { n ->
-                        n.lotteryID in ownerLotteryIDs
-                    }
+                    notifs
                 )
             }
 

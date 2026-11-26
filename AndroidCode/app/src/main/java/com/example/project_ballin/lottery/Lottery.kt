@@ -28,7 +28,7 @@ import kotlin.uuid.Uuid
  * @property additionalLotteryOwners the String IDs of additional owners
  * @property winners the list of winners of the lottery
  * @property losers the list of losers of the lottery
- *
+ * @property bWinnersDrawn if the lottery drawn has been done with winners picked
  */
 data class Lottery(
     var waitList: MutableList<String> = mutableListOf(),
@@ -44,7 +44,8 @@ data class Lottery(
     var multipleOwnerLottery: Boolean = false,
     var additionalLotteryOwners: MutableList<String> = mutableListOf(),
     var winners: MutableList<String> = mutableListOf(),
-    var losers: MutableList<String> = mutableListOf()
+    var losers: MutableList<String> = mutableListOf(),
+    var bWinnersDrawn: Boolean = false
 ){
     fun addWinner(id: String) { winners.add(id) }
     fun addLoser(id: String) { losers.add(id) }

@@ -87,15 +87,16 @@ class LotteryDetailScreen() {
         var selectedSiteIDs by remember { mutableStateOf(lottery?.associatedSites ?: listOf()) }
         var groupLottery by remember { mutableStateOf(lottery?.multipleOwnerLottery ?: false) }
 
+        val isNew = lottery == null
         // need to know if we are the primary owner of this lottery so we have full edit permission
-        val isPrimaryOwner = lottery == null || lottery.lotteryOwnerID == ownerID
+        val isPrimaryOwner = isNew || lottery.lotteryOwnerID == ownerID
         // can add sites if we are the primary owner, or if it's a group lottery
         val canAddSites = isPrimaryOwner || (lottery?.multipleOwnerLottery == true)
-
+        val contributedToLottery = lottery?.additionalLotteryOwners?.contains(ownerID)
 
         TopAppBar(
             navController,
-            if (lottery == null) "New Lottery Details" else "Edit Lottery Details"
+            if (isNew) "New Lottery Details" else "Edit Lottery Details"
         ) {
             Column(
                 modifier = Modifier
@@ -112,6 +113,25 @@ class LotteryDetailScreen() {
                         onClick = {
                             // confirms the lottery details are valid
                             // and either creates a new lottery or updates an existing one
+                            val mySiteIDs = ownerSites.map { it.ID }.toList()
+                            if(lottery != null && !isPrimaryOwner && canAddSites) {
+                                // only edit this secondary users sites
+                                val mySites = selectedSiteIDs.filter { it in mySiteIDs }
+                                val otherSites = lottery.associatedSites.filter {it !in mySiteIDs}
+                                val owners = lottery.additionalLotteryOwners.toMutableList()
+                                if (mySites.isNotEmpty() && ownerID !in owners) owners.add(ownerID)
+                                if (mySites.isEmpty()) owners.remove(ownerID)
+
+                                updateLottery(
+                                    lottery,
+                                    lottery.copy(
+                                        associatedSites = (otherSites + mySites).toMutableList(),
+                                        additionalLotteryOwners = owners
+                                    )
+                                )
+                                navController.popBackStack()
+                                return@Button
+                            }
 
                             val regStart = registrationDateState.selectedStartDateMillis
                             val regEnd = registrationDateState.selectedEndDateMillis
@@ -136,7 +156,6 @@ class LotteryDetailScreen() {
                             ) {
                                 return@Button
                                 // invalid lottery details
-                                // TODO alert user of the error
                         }
 
                         // TODO book the availability of the campsites selected
@@ -146,6 +165,7 @@ class LotteryDetailScreen() {
                             lotteryID = Uuid.random().toString(),
                             lotteryOwnerID = ownerID
                         )
+                            val keptOthers = if (groupLottery) baseLottery.associatedSites.filter { it !in mySiteIDs } else emptyList()
                         val newLottery = baseLottery.copy(
                             registrationStart = regStart,
                             registrationEnd = regEnd,
@@ -154,7 +174,8 @@ class LotteryDetailScreen() {
                             occupancy = occ,
                             numWinners = winners,
                             multipleOwnerLottery = groupLottery,
-                            associatedSites = sites.toMutableList()
+                            associatedSites = (keptOthers + sites.filter {it in mySiteIDs}).toMutableList(),
+                            additionalLotteryOwners = if (groupLottery) baseLottery.additionalLotteryOwners else mutableListOf()
                         )
                         if (lottery == null) {
                             addLottery(newLottery)
@@ -162,6 +183,7 @@ class LotteryDetailScreen() {
                             updateLottery(lottery, newLottery)
                         }
                         navController.popBackStack()
+                            return@Button
                     }) {
                         Text("Confirm Lottery")
                     }
@@ -242,7 +264,8 @@ class LotteryDetailScreen() {
                             onClick = {
                                 navController.navigate(
                                     "WaitlistListScreen/${lottery.lotteryID}"
-                                ) }
+                                ) },
+                            enabled = (contributedToLottery == true) || isPrimaryOwner
                         ) {
                             Text("View waitlist")
                         }
@@ -253,7 +276,8 @@ class LotteryDetailScreen() {
                             onClick = {
                                 navController.navigate(
                                     "NotificationSendScreen/$ownerID/${lottery.lotteryID}"
-                                ) }
+                                ) },
+                            enabled = (contributedToLottery == true) || isPrimaryOwner
                         ) {
                             Text("Notify Entrants")
                         }
