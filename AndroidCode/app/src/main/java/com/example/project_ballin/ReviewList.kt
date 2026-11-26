@@ -71,4 +71,8 @@ open class ReviewList {
         return _reviews.filter { it.campsiteID == campsiteID }
     }
 
+    fun getCampsiteReviewFromEntrant(entrantID: String, campsiteID: String): Review? {
+        return _reviews.find { it.reviewer == entrantID && it.campsiteID == campsiteID }
+    }
+
 }
