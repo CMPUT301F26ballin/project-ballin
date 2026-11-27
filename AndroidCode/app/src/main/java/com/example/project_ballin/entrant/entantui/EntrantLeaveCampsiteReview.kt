@@ -220,7 +220,7 @@ class EntrantLeaveCampsiteReview {
         val size = 32.dp
 
         Text(
-            text = "You have already reviewed this campsite:",
+            text = "You have already reviewed this campsite.",
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(3.dp, 0.dp)
         )

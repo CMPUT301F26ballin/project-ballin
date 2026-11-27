@@ -19,6 +19,7 @@ import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.QRCodeScanner
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
+import com.example.project_ballin.entrant.entantui.EntrantBookingConfirmation
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
@@ -797,6 +798,16 @@ class BallinApp() {
                         ratingList
                     )
                 }
+            }
+
+            composable("bookingConfirmationScreen/{reservationID}"){
+                val reservationID = it.arguments?.getString("reservationID")
+                val reservation = reservationList.getReservation(reservationID!!)
+                val campsite = campsiteList.getCampsite(reservation?.campsiteID)
+                val entrant = currentEntrant
+
+
+                EntrantBookingConfirmation().BookingConfirmation(navController, reservation, campsite, entrant)
             }
         }
     }
