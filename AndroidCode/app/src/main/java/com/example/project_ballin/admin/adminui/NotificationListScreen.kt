@@ -36,8 +36,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import com.example.project_ballin.AdminSearch
 import com.example.project_ballin.ConfirmDeleteDialog
+import com.example.project_ballin.EntrantList
 import com.example.project_ballin.Message
 import com.example.project_ballin.Notification
+import com.example.project_ballin.OwnerList
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 
@@ -185,8 +187,23 @@ class NotificationListScreen {
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.primary
                     )
+                    val entrant = EntrantList().getEntrant(notification.recipientID)
+                    val owner = OwnerList().getOwner(notification.recipientID)
+
+                    // Trying to get name because its more useful information
+                    // at a glance for admin, rather than UUID unique ID- harder to decipher
+                    val userName =
+                        when {
+                            entrant != null ->
+                                "${entrant.firstName} ${entrant.lastName}"
+                            owner != null ->
+                                "${owner.firstName} ${owner.lastName}"
+                            else ->
+                                "Anonymous User"
+                        }
+
                     Text("Date Sent: ${notification.getFormattedDate()}")
-                    Text("Recipient: ${notification.recipientID}")
+                    Text("Recipient: $userName")
                 }
 
                 Button(

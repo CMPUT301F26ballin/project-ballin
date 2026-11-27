@@ -30,7 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.ConfirmDeleteDialog
+import com.example.project_ballin.EntrantList
 import com.example.project_ballin.Notification
+import com.example.project_ballin.OwnerList
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 
@@ -66,6 +68,22 @@ class NotificationDetailScreen {
             horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
+                val entrant = EntrantList().getEntrant(notification.recipientID)
+                val owner = OwnerList().getOwner(notification.recipientID)
+
+                // Trying to get name because its more useful information
+                // at a glance for admin, rather than UUID unique ID- harder to decipher
+                val userName =
+                    when {
+                        entrant != null ->
+                            "${entrant.firstName} ${entrant.lastName}"
+                        owner != null ->
+                            "${owner.firstName} ${owner.lastName}"
+                        else ->
+                            "Anonymous User"
+                    }
+                
+                NotificationDetailRows("Recipient Name", userName, "userName${userName}")
                 NotificationDetailRows("Recipient ID", notification.recipientID, "recipientID${notification.recipientID}")
                 NotificationDetailRows("Date Sent", notification.getFormattedDate(), "dateSent${notification.dateSent}")
                 NotificationDetailRows("Notification Content", notification.content, "notificationContent${notification.content}")

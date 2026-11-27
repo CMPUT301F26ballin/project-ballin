@@ -64,8 +64,12 @@ class MessageDetailScreen {
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                val senderName = getUserName(message.senderID)
+                val recieverName = getUserName(message.recipientID)
 
+                MessageDetailRows("Sent By User", senderName,"sentBy$senderName")
                 MessageDetailRows("Sent By User ID", message.senderID, "sentBy${message.senderID}")
+                MessageDetailRows("Received By User", recieverName, "recievedBy$recieverName")
                 MessageDetailRows("Received By User ID", message.recipientID, "recievedBy${message.recipientID}")
                 MessageDetailRows("Date Sent", message.getFormattedDate(), "dateSent${message.dateSent}")
                 MessageDetailRows("Message Content", message.content, "messageContent${message.content}")
@@ -132,6 +136,27 @@ class MessageDetailScreen {
         ) {
             Text(content)
         }
+    }
+
+    /**
+     * Gets the names of targeted user - either sender or reciever
+     */
+    fun getUserName(userID: String): String {
+        val entrant = EntrantList().getEntrant(userID)
+        val owner = OwnerList().getOwner(userID)
+
+        // Trying to get name because its more useful information
+        // at a glance for admin, rather than UUID unique ID- harder to decipher
+        val userName =
+            when {
+                entrant != null ->
+                    "${entrant.firstName} ${entrant.lastName}"
+                owner != null ->
+                    "${owner.firstName} ${owner.lastName}"
+                else ->
+                    "Anonymous User"
+            }
+        return userName
     }
 
     @Preview(showBackground = true)

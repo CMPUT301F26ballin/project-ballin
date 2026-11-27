@@ -185,8 +185,23 @@ class MessageListScreen {
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.primary
                     )
+
+                    val entrant = EntrantList().getEntrant(message.senderID)
+                    val owner = OwnerList().getOwner(message.senderID)
+
+                    // Trying to get name because its more useful information
+                    // at a glance for admin, rather than UUID unique ID- harder to decipher
+                    val senderUserName =
+                        when {
+                            entrant != null ->
+                                "${entrant.firstName} ${entrant.lastName}"
+                            owner != null ->
+                                "${owner.firstName} ${owner.lastName}"
+                            else ->
+                                "Anonymous User"
+                        }
                     Text("Date Sent: ${message.getFormattedDate()}")
-                    Text("Sender: ${message.senderID}")
+                    Text("Sender: $senderUserName")
                 }
 
                 Button(
