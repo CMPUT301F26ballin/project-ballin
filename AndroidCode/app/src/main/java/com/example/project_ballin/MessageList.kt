@@ -78,4 +78,8 @@ class MessageList {
     fun getMessage(ID: String): Message? =
          _messages.find { it.ID == ID }
 
+
+    fun getMessagesForEntrant(entrantID: String): List<Message> {
+        return _messages.filter { it.recipientID == entrantID }
+    }
 }

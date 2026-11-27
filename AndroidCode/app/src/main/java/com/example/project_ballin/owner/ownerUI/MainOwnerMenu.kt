@@ -89,15 +89,6 @@ class MainOwnerMenu(){
                     navController
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-                OwnerOptionsButton("Active Reservations", "allOwnerCampReservations/$ownerID", "", navController) // TODO
-                Spacer(modifier = Modifier.height(16.dp))
-                OwnerOptionsButton(
-                    "POLICY AND GUIDELINES",
-                    "PoliciesAndGuidelines",
-                    "",
-                    navController
-                )
 
                // if (userCurrentSession.isAdmin) {
                  //   Spacer(modifier = Modifier.height(16.dp))

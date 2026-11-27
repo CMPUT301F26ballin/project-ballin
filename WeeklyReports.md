@@ -67,4 +67,14 @@ Leighan: Got the basics down for admin switching modes, violation detectors for 
 
 Nick: account creation + edit + deletion mostly complete (just gotta add profile pics). pivoting back to filter by dates.  
 
+Mies: Reservation stuff fleshed out on entrant side, entrants can now see their reservations and take action on them. Some visual changes as well
+
 # Week 6:
+
+Salix: Implemented the owner lottery notifications (send and previous sent list) and multi owner lotteries
+
+Leighan: Finished the violation detectors for owners, reviews and ratings. 
+
+Nick: Finished implementing profile pictures, should finish filter by dates soon. 
+
+yuming: add image test, put in report button 

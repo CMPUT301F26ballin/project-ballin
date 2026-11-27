@@ -80,5 +80,9 @@ open class RatingList {
         ratingsRef.document(ID).delete()
     }
 
+    fun getCampsiteRatingFromEntrant(entrantID: String, campsiteID: String): Rating? {
+        return _ratings.find { it.reviewer == entrantID && it.campsiteID == campsiteID }
+    }
+
 }
 

@@ -1,5 +1,6 @@
 package com.example.project_ballin.reusableui
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.example.project_ballin.Admin
 import com.example.project_ballin.User
@@ -9,27 +10,39 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.owner.Owner
+import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.storage
+import java.util.UUID
 
 /**
  *
  * view model to handle account creation, editing and deletion
  *
+ * Sources:
+ *
+ * Profile Pictures:
+ * https://firebase.google.com/docs/storage/android/upload-files?hl=en&authuser=0
+ * https://www.youtube.com/watch?v=YgjYVbg1oiA&t=475s
+ * https://medium.com/@enkosolutionsdeveloper/building-an-image-upload-app-using-kotlin-jetpack-compose-and-firebase-storage-bfa262c195ac
+ *https://developer.android.com/develop/ui/compose/graphics/images/loading
+ *
  */
 
 class UserDetailModel: ViewModel() {
-
     private var _selectedRole = MutableStateFlow(UserRole.ENTRANT)
     val selectedRole = _selectedRole.asStateFlow()
-
+    //----------------------------------------------------------------
     private var _uiState = MutableStateFlow<User>(Entrant())
     var uiState = _uiState.asStateFlow()
-
+    //----------------------------------------------------------------
     private var _isloading = MutableStateFlow(true)
     var isLoading = _isloading.asStateFlow()
-
-
+    //----------------------------------------------------------------
+    private var _isUploadingImage = MutableStateFlow(false)
+    val isUploadingImage = _isUploadingImage.asStateFlow()
+    //----------------------------------------------------------------
     /**
      * sets the device ID of the user on account creation
      */
@@ -42,7 +55,6 @@ class UserDetailModel: ViewModel() {
             else -> current
         }
     }
-
     /**
      * loads an existing user from firebase based on their device ID
      */
@@ -87,7 +99,6 @@ class UserDetailModel: ViewModel() {
                                         _uiState.value = admin
                                         _isloading.value = false
                                         _selectedRole.value = UserRole.ADMIN
-                                        return@addOnSuccessListener
                                     }
                                 }
                                 _isloading.value = false
@@ -96,6 +107,48 @@ class UserDetailModel: ViewModel() {
                     }
             }
     }
+    fun uploadProfilePic(uri: Uri) {
+        val current = _uiState.value
+        val userId = current.userID.ifBlank { UUID.randomUUID().toString() }
+
+        _isUploadingImage.value = true
+
+        val fileRef = Firebase.storage.reference.child("profile_pics/$userId.jpg")
+        fileRef.putFile(uri)
+        .continueWithTask { task ->
+                _isUploadingImage.value = false
+                if (!task.isSuccessful) {
+                    task.exception?.let { throw it }
+                }
+                fileRef.downloadUrl
+            }
+                .addOnSuccessListener { downloadUrl ->
+                    _isUploadingImage.value = false
+                    onProfilePicChange(downloadUrl.toString())
+                }
+                .addOnFailureListener { exception ->
+                    _isUploadingImage.value = false
+                    android.util.Log.e("UserDetailModel", "Upload failed: ${exception.message}", exception)
+        }
+    }
+
+    fun removeProfilePic(){
+        val current = _uiState.value
+        val userId = current.userID.ifBlank { UUID.randomUUID().toString() }
+
+        val fileRef = Firebase.storage.reference.child("profile_pics/$userId.jpg")
+
+        fileRef.delete()
+            .addOnSuccessListener {
+                onProfilePicChange("")
+            }
+            .addOnFailureListener { exception ->
+                android.util.Log.e("UserDetailModel", "Upload failed: ${exception.message}", exception)
+            }
+        onProfilePicChange("")
+    }
+
+
 
     /**
      * when creating an account, the user chooses which role they are
@@ -159,11 +212,21 @@ class UserDetailModel: ViewModel() {
             current.updateDetails(email = newEmail)
         }
     }
-    fun onProfilePicChange(newProfilePic: String) { //change once peter finds out how images work
+    fun onProfilePicChange(newProfilePic: String) {
         _uiState.update { current ->
             current.updateDetails(profilePic = newProfilePic)
         }
     }
+
+    //----------------------------------------------------------------
+
+    fun onDeleteProfilePic(){
+        _uiState.update { current ->
+            current.updateDetails(profilePic = "")
+        }
+
+    }
+
     fun onNotificationlist(){
 
     }

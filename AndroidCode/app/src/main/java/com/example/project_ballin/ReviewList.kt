@@ -80,4 +80,8 @@ open class ReviewList {
         reviewsRef.document(ID).delete()
     }
 
+    fun getCampsiteReviewFromEntrant(entrantID: String, campsiteID: String): Review? {
+        return _reviews.find { it.reviewer == entrantID && it.campsiteID == campsiteID }
+    }
+
 }

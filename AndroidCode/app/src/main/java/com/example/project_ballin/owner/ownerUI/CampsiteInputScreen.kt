@@ -7,6 +7,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.hardware.biometrics.FallbackOption
 import android.location.Location
 import android.net.Uri
@@ -14,6 +15,7 @@ import android.util.Log
 import android.widget.Button
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +29,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -73,10 +76,12 @@ import kotlin.let
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import androidx.core.graphics.scale
+import androidx.exifinterface.media.ExifInterface
 import com.example.project_ballin.GoogleMapScreen
 import com.example.project_ballin.QRCodeGenerator
 import com.google.android.gms.maps.model.LatLng
 import java.io.ByteArrayOutputStream
+import kotlin.ByteArray
 import kotlin.math.roundToInt
 
 /**
@@ -184,22 +189,58 @@ class CampsiteInputScreen(){
 
 
             val context: Context = LocalContext.current
+
+
+
+
             val pickerLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.GetContent()
             ) { uri: Uri? ->
                 uri?.let {
-                    val bytes: ByteArray = context.contentResolver.openInputStream(uri)
-                        .use { it!!.buffered().readBytes() }
-                    val initBitmap: Bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    val newBitmap = resizePhoto(initBitmap)
+                    fun rotateImage(bitmap: Bitmap, degrees: Float): Bitmap{
+                        val matrix = Matrix()
+                        Log.d("Images", "PostRotate")
+                        matrix.postRotate(degrees)
+                        Log.d("Images", "Creating rotated bitmap")
+                        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix,true)
+                    }
+                    fun openURIAndRotatePhoto(uri: Uri): Bitmap {
+                        val inputStream = context.contentResolver.openInputStream(uri)
+                        val useInput = inputStream.use { it!!.buffered().readBytes() }
+                        val initbitmap = BitmapFactory.decodeByteArray(useInput, 0, useInput.size)
+                        val bitmap = resizePhoto(initbitmap)
+                        val eiInput = context.contentResolver.openInputStream(uri)
+                        val ei = ExifInterface(eiInput!!)
+                        val rotation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+
+
+                        if(rotation == ExifInterface.ORIENTATION_ROTATE_90){
+                            Log.d("Images", "Rotate 90")
+                            return rotateImage(bitmap, 90f)
+                        }
+                        else if(rotation == ExifInterface.ORIENTATION_ROTATE_180){
+                            Log.d("Images", "Rotate 90")
+                            return rotateImage(bitmap, 180f)
+                        }
+                        else if(rotation == ExifInterface.ORIENTATION_ROTATE_270){
+                            Log.d("Images", "Rotate 90")
+                            return rotateImage(bitmap, 270f)
+                        }
+                        Log.d("Images", "NoRotation")
+                        return bitmap
+                    }
+
+                    val bitmap = openURIAndRotatePhoto(uri)
+                    Log.d("Images", "Have Image")
+                    //resize photo
                     val baos = ByteArrayOutputStream()
-                    newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                     val newByteArray = baos.toByteArray()
                     campByteArray.add(Blob.fromBytes(newByteArray))
                 }
-
-
             }
+
+
 
 
             //the old campsite (if we are updating) null if this is a new site.
@@ -396,7 +437,10 @@ class CampsiteInputScreen(){
 
                 //LOCATION
 
-                Box(modifier = Modifier.fillMaxSize().padding(12.dp).height(500.dp)){
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp)
+                    .height(500.dp)){
                     map.GoogleMapScreen(
                         campNumLocation, true,
                         onNewLocation = {
@@ -416,6 +460,7 @@ class CampsiteInputScreen(){
                             .weight(1f)
                             .testTag("campLocName")
                             .fillMaxWidth()
+                            .imePadding()
                     )
                 }
 
@@ -490,7 +535,7 @@ class CampsiteInputScreen(){
                                             locationName = campLocation,
                                             availability = campAvailableDates,
                                             lotteries = mutableListOf(),
-                                            QRCode = qrGenerator.encodeQRBlobFromString(campID)
+                                            qrCode = qrGenerator.encodeQRBlobFromString(campID)
                                         )
                                     )
                                     Log.d("Navigation", "Adding campsite and returning to list")
@@ -530,7 +575,7 @@ class CampsiteInputScreen(){
                                             locationName = campLocation,
                                             availability = campAvailableDates,
                                             lotteries = mutableListOf(),
-                                            QRCode = oldSite.QRCode
+                                            qrCode = oldSite.qrCode
                                         )
                                     )
                                     Log.d(
@@ -627,4 +672,7 @@ class CampsiteInputScreen(){
         val H = W * ratio
         return bitmap.scale(W, H, false)
     }
+
+
+
 }

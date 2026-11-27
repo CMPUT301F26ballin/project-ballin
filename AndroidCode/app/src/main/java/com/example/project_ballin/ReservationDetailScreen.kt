@@ -55,7 +55,7 @@ class ReservationDetailScreen {
         val entrantList = EntrantList()
         val campsiteList = CampsiteList()
         val site = campsiteList.getCampsite(res.campsiteID)
-        val entrant = entrantList.getEntrant(res.UserID!!)
+        val entrant = entrantList.getEntrant(res.userID!!)
         val confirmDeleteDialog = ConfirmDeleteDialog()
         var confirming = remember { false }
 
@@ -93,7 +93,7 @@ class ReservationDetailScreen {
                     Text("End Date: $endDate")
                 }
                 Row(modifier = Modifier.padding(16.dp)){
-                    Button(onClick = {navController.navigate("messagingScreen/${res.UserID}/${ownerID}")},
+                    Button(onClick = {navController.navigate("messagingScreen/${res.userID}/${ownerID}")},
                         modifier = Modifier.fillMaxWidth()) {
                         Text("Message User")
                     }
@@ -107,7 +107,7 @@ class ReservationDetailScreen {
                 Row(modifier = Modifier.padding(16.dp)){
                     GeneralReportButton().ReportButton(
                         subjectReport = "Entrant",
-                        clickedID = res.UserID ?: "",
+                        clickedID = res.userID ?: "",
                         navController = navController,
                         label = "Report Entrant",
                         testTag = "reportEntrantButton"

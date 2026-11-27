@@ -27,7 +27,9 @@ import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
 import com.example.project_ballin.entrant.entantui.EntrantLeaveCampsiteReview
 import com.example.project_ballin.entrant.entantui.EntrantRateCampsite
+import com.example.project_ballin.entrant.entantui.EntrantLeaveCampsiteReview
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
+import com.example.project_ballin.entrant.entantui.EntrantSiteSelector
 import com.example.project_ballin.entrant.entantui.MainEntrantMenu
 import com.example.project_ballin.entrant.entantui.PastReservationScreen
 import com.example.project_ballin.lottery.Lottery
@@ -47,11 +49,12 @@ import com.google.firebase.firestore.Blob
 import kotlin.uuid.Uuid
 import com.example.project_ballin.owner.ownerUI.NotificationSendScreen
 import com.example.project_ballin.owner.ownerUI.OwnerNotificationListScreen
+import com.example.project_ballin.owner.ownerUI.WaitlistListScreen
 
 /**
  * The main class that houses the NavHost for the nav controller. All screen changes go through this class view.
  * */
-class BallinApp(){
+class BallinApp() {
     /**
      * The main composable function that holds the mappings for the navController.
      * Any function that calls navController to a new location passes through here
@@ -92,6 +95,8 @@ class BallinApp(){
         val lotteryList = remember { LotteryList() }
         val userReportList = remember { ReportList() }
         val reservationList = remember { ReservationList() }
+        val reviewList = remember { ReviewList() }
+        val ratingList = remember{ RatingList() }
         val ratingList = remember { RatingList() }
         val reviewList = remember { ReviewList() }
 
@@ -204,8 +209,10 @@ class BallinApp(){
                     mutableListOf<String>(),
                     "6",
                     "3",
+                    false,
                     mutableListOf<String>(),
-                    mutableListOf<String>()
+                    mutableListOf<String>(),
+                     mutableListOf<String>()
                 )
             )
         }
@@ -223,6 +230,8 @@ class BallinApp(){
                     mutableListOf<String>(),
                     "7",
                     "3",
+                    false,
+                    mutableListOf<String>(),
                     mutableListOf<String>(),
                     mutableListOf<String>()
                 )
@@ -242,6 +251,8 @@ class BallinApp(){
                     mutableListOf<String>(),
                     "8",
                     "3",
+                    false,
+                    mutableListOf<String>(),
                     mutableListOf<String>(),
                     mutableListOf<String>()
                 )
@@ -272,6 +283,19 @@ class BallinApp(){
             )
         }
 
+        var pastReservation by remember {
+            mutableStateOf<Reservation>(
+                Reservation(
+                    "5",
+                    listOf(123L, 234L),
+                    "1",
+                    false,
+                    "1"
+                )
+            )
+        }
+
+
         LaunchedEffect(Unit) {
             campsite.lotteries.add(lottery.lotteryID)
             campsite2.lotteries.add(lottery2.lotteryID)
@@ -279,6 +303,7 @@ class BallinApp(){
             lottery.associatedSites.add(campsite.ID)
             lottery2.associatedSites.add(campsite2.ID)
             lottery3.associatedSites.add(campsite3.ID)
+
             currentEntrant?.let {
                 lottery.waitList.add(it.userID)
                 it.activeLotteries.add(lottery)
@@ -290,6 +315,8 @@ class BallinApp(){
                 lottery3.losers.add(it.userID)
                 it.lostLotteries.add(lottery3)
                 it.activeLotteries.add(lottery3)
+
+                it.pastReservations.add(pastReservation)
             }
             campsiteList.addCampsite(campsite)
             campsiteList.addCampsite(campsite2)
@@ -299,6 +326,7 @@ class BallinApp(){
             lotteryList.addLottery(lottery3)
             messageList.addMessage(message1)
             notificationList.addNotification(notification1)
+            reservationList.addReservation(pastReservation)
         }
 
         val campsiteInputScreen = CampsiteInputScreen()
@@ -429,15 +457,19 @@ class BallinApp(){
                 val entrant = entrantList.getEntrant(userIDString!!)
 
 
-                messagingScreen.MessagingScreen(navController, ownerID!!, userIDString!!, entrant!!.firstName,
-                    onAddMessage = {userID, ownerID, messageContent -> messageList.addMessage(
-                        Message(
-                            senderID = ownerID,
-                            recipientID = userID,
-                            content = messageContent,
-                            dateSent = System.currentTimeMillis()
-                        ))}
-                    )
+                messagingScreen.MessagingScreen(
+                    navController, ownerID!!, userIDString!!, entrant!!.firstName,
+                    onAddMessage = { userID, ownerID, messageContent ->
+                        messageList.addMessage(
+                            Message(
+                                senderID = ownerID,
+                                recipientID = userID,
+                                content = messageContent,
+                                dateSent = System.currentTimeMillis()
+                            )
+                        )
+                    }
+                )
 
 
             }
@@ -478,7 +510,9 @@ class BallinApp(){
                 LotteryListScreen().LotteryListScreen(
                     navController,
                     ownerID!!,
-                    getOwnerLotteries = { lotteryList.getOwnerLotteries(it) },
+                    ownerLotteries = lotteryList.getOwnerLotteries(ownerID),
+                    groupLotteries = lotteryList.getAllGroupLotteries(ownerID),
+                    enrolledGroupLotteries = lotteryList.getEnrolledGroupLotteries(ownerID),
                     getCampsite = { campsiteList.getCampsite(it) }
                 )
             }
@@ -510,22 +544,37 @@ class BallinApp(){
                     ownerID,
                     lotteryID,
                     sendNotification = { content ->
-                        notificationList.sendToLottery(content, lotteryID)
+                        val entrantIDs = lotteryList.getLottery(lotteryID)?.waitList?.toList() ?: emptyList()
+                        notificationList.sendToEntrants(content, lotteryID, entrantIDs)
                     }
                 )
             }
 
-            composable("OwnerNotificationListScreen/{OwnerID}"){
+            composable("OwnerNotificationListScreen/{OwnerID}") {
                 val ownerID = it.arguments!!.getString("OwnerID")!!
-                val ownerLotteryIDs = lotteryList.getOwnerLotteries(ownerID).map{
+                val ownerEnrolledLotteries = lotteryList.getOwnerLotteries(ownerID) + lotteryList.getEnrolledGroupLotteries(ownerID)
+                val ownerLotteryIDs = ownerEnrolledLotteries.map{
                     l -> l.lotteryID
                 }
+                val notifs = notificationList.getAllNotifications()
+                    .filter { it.lotteryID in ownerLotteryIDs }
+                    .distinctBy { it.lotteryID to it.dateSent to it.content }
                 OwnerNotificationListScreen().OwnerNotificationListScreen(
                     navController,
                     ownerID,
-                    notificationList.getAllNotifications().filter { n ->
-                        n.lotteryID in ownerLotteryIDs
-                    }
+                    notifs
+                )
+            }
+
+            composable("WaitlistListScreen/{LotteryID}"){
+                val lotteryID = it.arguments!!.getString("LotteryID")!!
+                val entrantIDs = lotteryList.getLottery(lotteryID)?.waitList ?: emptyList()
+                val entrants = entrantIDs.mapNotNull { id ->
+                    entrantList.getEntrant(id)
+                }
+                WaitlistListScreen().WaitlistListScreen(
+                    navController,
+                    entrants
                 )
             }
 
@@ -561,6 +610,13 @@ class BallinApp(){
                             campsiteList.updateCampsite(oldSite, newSite)
                         }
                     }
+                )
+            }
+
+            composable("AdminQRCodes") {
+                AdminQRCodeScreens().AdminQRCodeListScreen(
+                    navController,
+                    campsites = campsiteList.campsites
                 )
             }
 
@@ -728,7 +784,12 @@ class BallinApp(){
             composable("PastReservationScreen") {
                 val entrant = currentEntrant
                 if (entrant != null) {
-                    PastReservationScreen().PastReservations(navController, entrant)
+                    PastReservationScreen().PastReservations(
+                        navController,
+                        entrant,
+                        campsiteList,
+                        reservationList
+                    )
                 }
             }
 
@@ -770,10 +831,14 @@ class BallinApp(){
             }
 
             composable("EntrantSiteBooker/{campID}") { siteToBook ->
+            composable("EntrantSiteBooker/{campID}/{lotteryID}") { siteToBook ->
                 val entrant = currentEntrant
                 val campID = siteToBook.arguments?.getString("campID")
+                val lotteryID = siteToBook.arguments?.getString("lotteryID")
+                val lottery = lotteryList.getLottery(lotteryID!!)
+
                 if (entrant != null) {
-                    EntrantSiteBooker().SiteBooker(navController, campID, campsiteList, entrant)
+                    EntrantSiteBooker().SiteBooker(navController, campID, entrant, lottery)
                 }
             }
 
@@ -789,28 +854,56 @@ class BallinApp(){
                 PolicyGuidelinesScreen().PolicyGuidelines(navController)
             }
 
-            composable("Scan QR Code/{userID}") {
+            composable("ScanQRCode/{userID}") {
                 val userID = it.arguments?.getString("userID")
                 QRCodeScanner.QRCodeScanner(navController, userID!!)
             }
 
-            composable("confirmBooking/{campID}/{chosenDates}") {
+            composable("confirmBooking/{campID}/{chosenDates}/{lotteryID}") {
                 val campID = it.arguments?.getString("campID")
                 val chosenDates = it.arguments?.getString("chosenDates")
+                val lotteryID = it.arguments?.getString("lotteryID")
                 if (campID != null) {
                     if (chosenDates != null) {
                         val campsite = campsiteList.getCampsite(campID)
                         val entrant = currentEntrant
                         val chosenDatesList = chosenDates.split(",").map { it.toLong() }
+                        val lottery = lotteryList.getLottery(lotteryID!!)
 
                         EntrantConfirmBooking().ConfirmBooking(
                             navController,
                             campsite!!,
                             entrant!!,
                             chosenDatesList,
-                            reservationList
+                            reservationList,
+                            lottery!!
                         )
                     }
+                }
+            }
+
+            composable("siteSelector/{lotteryID}") {
+                val lotteryID = it.arguments?.getString("lotteryID")
+                val lottery = lotteryList.getLottery(lotteryID!!)
+                EntrantSiteSelector().SiteSelector(
+                    navController,
+                    campsiteList,
+                    currentEntrant!!,
+                    lottery
+                )
+            }
+
+            composable("entrantReviewScreen/{campsiteID}") {
+                val campsiteID = it.arguments?.getString("campsiteID")
+                val entrant = currentEntrant
+                if (campsiteID != null && entrant != null) {
+                    EntrantLeaveCampsiteReview().EntrantGiveCampsiteReviewScreen(
+                        navController,
+                        entrant,
+                        campsiteID,
+                        reviewList,
+                        ratingList
+                    )
                 }
             }
         }

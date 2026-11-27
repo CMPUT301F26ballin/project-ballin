@@ -70,7 +70,7 @@ class OwnerReservationScreen {
     fun ReservationRow(reservation: Reservation, onClick: () -> Unit){
         val startDate = formatDateMillisToDMY(reservation.dates!!.first())
         val endDate = formatDateMillisToDMY(reservation.dates.last())
-        val reserverName = entrantList.getEntrant(reservation.UserID!!)
+        val reserverName = entrantList.getEntrant(reservation.userID!!)
 
         Column(modifier = Modifier.fillMaxWidth().clickable(onClick = {onClick()})) {
             Row(modifier = Modifier.padding(8.dp)) {
