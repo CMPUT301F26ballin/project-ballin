@@ -161,7 +161,7 @@ class EntrantBookingConfirmation {
                                 .fillMaxWidth()
                         ){
                             Text(
-                                text = "Campsite Location: ${campsite?.locationName}",
+                                text = "Location: ${campsite?.locationName}",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -171,7 +171,7 @@ class EntrantBookingConfirmation {
                                 .fillMaxWidth()
                         ){
                             Text(
-                                text = "Campsite Occupancy: ${campsite?.occupancy}",
+                                text = "Occupancy: ${campsite?.occupancy}",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -181,7 +181,7 @@ class EntrantBookingConfirmation {
                                 .fillMaxWidth()
                         ){
                             Text(
-                                text = "Campsite Price: $${"%.2f".format(campsite?.price)}/night",
+                                text = "Price: $${"%.2f".format(campsite?.price)}/night",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
