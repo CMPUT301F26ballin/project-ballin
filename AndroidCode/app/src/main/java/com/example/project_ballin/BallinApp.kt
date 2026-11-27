@@ -94,7 +94,6 @@ class BallinApp() {
         val reviewList = remember { ReviewList() }
         val ratingList = remember{ RatingList() }
 
-        //temporary for testing
         var currentEntrant by remember {
             mutableStateOf<Entrant?>(null)
         }
