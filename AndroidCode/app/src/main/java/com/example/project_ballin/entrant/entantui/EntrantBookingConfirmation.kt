@@ -86,7 +86,8 @@ class EntrantBookingConfirmation {
 
             TopAppBar(
                 navController,
-                "Your Booking"
+                "Your Booking",
+                backButton = false,
             ) {
                 Card(
                     modifier = Modifier
