@@ -1,17 +1,22 @@
 package com.example.project_ballin.entrant.entantui
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,20 +27,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.Rating
 import com.example.project_ballin.RatingList
 import com.example.project_ballin.Review
 import com.example.project_ballin.ReviewList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.reusableui.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 
 class EntrantLeaveCampsiteReview {
 
@@ -73,70 +75,83 @@ class EntrantLeaveCampsiteReview {
             navController,
             "Review Input",
         ) {
-            Column(
+            Card(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.height(128.dp))
-                if (!noPreviousReviewGiven) {
-                    Text(
-                        text = "Permission denied.",
-                        fontSize = 24.sp
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "You have already left a review",
-                        fontSize = 24.sp
-                    )
-                } else {
-                    Text(
-                        text = "Review campsite:",
-                        fontSize = 24.sp
-                    )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                ){
+                    if (!noPreviousReviewGiven) {
+                        PastReviewCard(
+                            ratingList.getCampsiteRatingFromEntrant(entrant.userID, campsiteID)!!,
+                            reviewList.getCampsiteReviewFromEntrant(entrant.userID, campsiteID)!!,                        )
+                    } else {
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        for (i in 1..5) {
-                            RatingButton(
-                                i,
-                                onSelectedRating = {rating = it},
-                                modifier = Modifier.weight(1f),
-                                change = (i <= rating)
-                            )
+                        Text(
+                            text = "Review campsite:",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(4.dp, 0.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            for (i in 1..5) {
+                                RatingButton(
+                                    number = i,
+                                    onSelectedRating = { rating = it },
+                                    change = i <= rating,
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        OutlinedTextField(
+                            value = reviewContents,
+                            onValueChange = { newContents: String ->
+                                if (newContents.length <= 500) {
+                                    reviewContents = newContents
+                                }
+                            },
+                            label = { Text("Input your review here...") },
+                            minLines = 1,
+                            modifier = Modifier
+                                .fillMaxWidth()
+
+                        )
+
+                        HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+
+                        Button(
+                            onClick = {
+                                confirmReview = true
+                                confirmRating = true
+                            },
+                            enabled = reviewContents.isNotBlank() && rating > 0,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Confirm")
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(34.dp))
-
-                    OutlinedTextField(
-                        value = reviewContents,
-                        onValueChange = { reviewContents = it },
-                        label = { Text("Input your review here...") }
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = { confirmReview = true },
-                        enabled = reviewContents.isNotBlank() && rating > 0
-                    ) {
-                        Text("Confirm")
+                    if (reviewContents.isBlank() && confirmReview && noPreviousReviewGiven) {
+                        Text(
+                            text = "Review must not be empty",
+                            color = Color.Red
+                        )
                     }
-                    Spacer(modifier = Modifier.height(34.dp))
-                }
-
-                if (reviewContents.isBlank() && confirmReview && noPreviousReviewGiven) {
-                    Text(
-                        text = "Review must not be empty",
-                        color = Color.Red
-                    )
                 }
 
                 if (reviewContents.isNotBlank() && confirmReview && rating > 0 && confirmRating && noPreviousReviewGiven) {
                     ConfirmActionDialog().ConfirmAction(
-                        message = "Are you sure you want to leave this review?",
+                        message = "Are you sure you want to leave this review?\n",
                         confirm = { confirmed ->
                             if (confirmed) {
                                 val newRating = Rating(entrant.userID, rating, campsiteID)
@@ -168,34 +183,84 @@ class EntrantLeaveCampsiteReview {
      * @param modifier the modifier for the button
      * @param change the boolean that determines if the icon button should be big or small, and diff color,
      * it depends on whatever rating the entrant has given
+     *
+     * Source Used: https://brahimoubbad.com/posts/how-to-use-material-icons-in-jetpack-compose/
+     * Title: How to use Material Icons in Jetpack Compose - (A Developer's Complete Guide 2026)
+     * Author: Brahim Oubbad
+     * Published: May 22, 2025
      */
     @Composable
     fun RatingButton(
         number: Int,
         onSelectedRating: (Int) -> Unit,
-        modifier: Modifier = Modifier,
-        change: Boolean
+        change: Boolean,
+        modifier: Modifier = Modifier
     ) {
-        val iconSize = if (change) 68.dp else 24.dp
+        val size = 48.dp
 
-        /**
-         * Source Used: https://brahimoubbad.com/posts/how-to-use-material-icons-in-jetpack-compose/
-         * Title: How to use Material Icons in Jetpack Compose - (A Developer's Complete Guide 2026)
-         * Author: Brahim Oubbad
-         * Published: May 22, 2025
-         */
-        IconButton(
-            onClick = {
-                onSelectedRating(number)
-            },
+        Box(
             modifier = modifier
+                .size(size)
+                .clip(CircleShape)
+                .clickable { onSelectedRating(number) },
+            contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Default.Star,
+                imageVector = Icons.Filled.Star,
                 contentDescription = "Star Icon",
-                modifier = Modifier.size(iconSize),
-                tint = if (change) MaterialTheme.colorScheme.primary else Color.Gray
+                modifier = Modifier.size(if (change) size else size * 0.5f),
+                tint = if (change) MaterialTheme.colorScheme.primary else Color.Gray,
+
             )
         }
+    }
+
+    @Composable
+    fun PastReviewCard(rating: Rating, review: Review, modifier: Modifier = Modifier){
+        val size = 32.dp
+
+        Text(
+            text = "You have already reviewed this campsite:",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(3.dp, 0.dp)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            for (i in 1..(rating.ratingNumber)) {
+                Box(
+                    modifier = modifier
+                        .size(size)
+                        .clip(CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = "Star Icon",
+                        modifier = Modifier.size(size),
+                        tint = Color.Gray,
+                    )
+                }
+            }
+
+            Text(
+                text = "/5",
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Gray,
+                modifier = Modifier.align(Alignment.Bottom)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Review contents: ${review.content}",
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Gray,
+            modifier = Modifier.padding(3.dp, 0.dp)
+        )
     }
 }
