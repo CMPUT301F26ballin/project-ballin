@@ -51,8 +51,8 @@ class MessageListScreen {
      * @return true if the message matches the search
      */
     fun Message.matchesSearch(query: String): Boolean =
-        adminSearch.matchesQuery(query, content, senderID, recipientID, dateSent.toString())
-
+        adminSearch.matchesQuery(query, content, senderID, recipientID, dateSent.toString(), getFormattedDate())
+// LEIGHAN ADDED getFormattedDate()
     /**
      * A composable that shows the overview of all the messages
      * sent by an owner to an entrant.

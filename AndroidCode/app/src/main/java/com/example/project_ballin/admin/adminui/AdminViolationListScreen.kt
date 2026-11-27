@@ -68,8 +68,6 @@ class AdminViolationListScreen {
         reports: List<Report>,
         onDelete: (Report) -> Unit,
     ) {
-        Log.d("Reports", "$reports") // LEIGHAN FOR DEBUGGING
-
         TopAppBar(
             navController = navController,
             screenTitle = "Reports List"
