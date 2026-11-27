@@ -121,19 +121,31 @@ class CampsiteDetailScreen(){
                             )
                         }
 
+                        Spacer(modifier = Modifier.padding(8.dp))
+
                         //Price and occupancy
                         Row{
-                            Text("Price: $${"%.2f".format(site.price)}/night")
+                            Text("Price: ",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text("$${"%.2f".format(site.price)}/night")
 
                         }
 
                         Row{
-                            Text("Occupancy: ${site.occupancy}")
+                            Text("Occupancy: ",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            Text("${site.occupancy}")
                         }
 
                         //Location
                         Row{
-                            Text("Location name: ${site.locationName}")
+                            Text("Located in: ",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(site.locationName)
                         }
 
                         Spacer(modifier = Modifier.padding(8.dp))
@@ -147,7 +159,7 @@ class CampsiteDetailScreen(){
                             if (site.rating != null) {
                                 Text("${"%.1f".format(site.rating)}/5")
                             } else {
-                                Text("No Ratings Available")
+                                Text("No ratings available")
                             }
                         }
 
