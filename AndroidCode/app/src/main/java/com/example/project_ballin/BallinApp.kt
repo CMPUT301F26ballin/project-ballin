@@ -514,7 +514,6 @@ class BallinApp() {
             }
 
 
-
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
                 currentEntrant = entrantList.getEntrant(entrantIDString!!)

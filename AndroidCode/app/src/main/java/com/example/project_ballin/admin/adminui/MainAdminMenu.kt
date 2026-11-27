@@ -123,7 +123,7 @@ class MainAdminMenu(){
                 Spacer(modifier = Modifier.height(16.dp))
                 AdminOptionButton(
                     "Switch Modes",
-                    "AdminSwitchModes",
+                    "AdminSwitchModes/$adminID",
                     "switchModesButton",
                     navController
                 )
