@@ -67,4 +67,14 @@ class LotteryList {
     fun getOwnerLotteries(ID: String): List<Lottery> =
         _lotteries.filter { it.lotteryOwnerID == ID }
 
+    fun getCampsiteLotteries(campID:String): List<Lottery> =
+        lottery.filter { campID in it.associatedSites }
+
+    fun enrollUserInLottery(lotteryID: String, entrantID: String){
+        val lottery = getLottery(lotteryID)
+        val newLottery = getLottery(lotteryID)
+        newLottery!!.waitList.add(entrantID)
+        updateLottery(lottery!!, newLottery)
+    }
+
 }

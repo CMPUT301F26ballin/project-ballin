@@ -17,6 +17,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.ui.theme.ProjectBallinTheme
 
+/**
+ * The main activity: the starting point for the App.
+ * On Start, the app creates a ballinApp() instance and Calls BallinApp (the main navcontroller)
+ *
+ * */
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

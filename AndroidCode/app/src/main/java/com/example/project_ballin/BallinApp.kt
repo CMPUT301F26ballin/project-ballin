@@ -317,6 +317,7 @@ class BallinApp(){
         val mainEntrantMenu = MainEntrantMenu()
 
         val entrantBrowseCampsites = EntrantBrowseCampsites()
+        val entrantLotteryList = EntrantLotteryListScreen()
 
         val signUpScreen = SignUp()
         val userProfile = UserProfile()
@@ -416,21 +417,30 @@ class BallinApp(){
                     onCancel = { reservationList.cancelReservation(res) })
             }
 
-            composable("messagingScreen/{UserID}/{OwnerID}") {
-                val userIDString = it.arguments!!.getString("UserID")
-                val ownerID = it.arguments!!.getString("OwnerID")
+            composable("messagingScreen/{senderID}/{receiverID}") {
+                val senderID = it.arguments!!.getString("UserID")
+                val receiverID = it.arguments!!.getString("OwnerID")
 
-                val entrant = entrantList.getEntrant(userIDString!!)
+                var recipientName: String
+                val user = entrantList.getEntrant(receiverID!!)
+                if(user == null){
+                    val user = ownerList.getOwner(receiverID)
+                    recipientName = user!!.firstName
+                }
+                else{
+                    recipientName = user.firstName
+                }
 
 
-                messagingScreen.MessagingScreen(navController, ownerID!!, userIDString!!, entrant!!.firstName,
+                messagingScreen.MessagingScreen(navController, senderID!!, receiverID!!, recipientName,
                     onAddMessage = {userID, ownerID, messageContent -> messageList.addMessage(
                         Message(
                             senderID = ownerID,
                             recipientID = userID,
                             content = messageContent,
                             dateSent = System.currentTimeMillis()
-                        ))}
+                        ))},
+                    onGetMessages = {senderID, receiverID -> messageList.getMessagesBetween(senderID, receiverID)}
                     )
 
 
@@ -475,6 +485,20 @@ class BallinApp(){
                     getOwnerLotteries = { lotteryList.getOwnerLotteries(it) },
                     getCampsite = { campsiteList.getCampsite(it) }
                 )
+            }
+
+            composable("CampsiteLotteryScreen/{userID}/{siteID}"){
+                val userID = it.arguments!!.getString("userID")
+                val siteID = it.arguments!!.getString("siteID")
+
+                entrantLotteryList.EntrantLotteryListScreen(
+                    navController,
+                    userID!!,
+                    siteID!!,
+                    getLotteries = {lotteryList.getCampsiteLotteries(it)},
+                    onEnroll = {lotteryID, entrantID -> lotteryList.enrollUserInLottery(lotteryID, entrantID)}
+                    )
+
             }
 
             composable(

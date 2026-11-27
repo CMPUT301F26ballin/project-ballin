@@ -240,6 +240,16 @@ class CampsiteDetailScreen(){
                         }
                     }
                 } else {
+
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)){
+                        Button(modifier = Modifier.fillMaxWidth().testTag("ViewLotteriesButton"),
+                            onClick = { navController.navigate("CampsiteLotteryScreen/$userID/${site.ID}") }){
+                            Text("View Active Lotteries")
+                        }
+                    }
+
                     // Anyone who doesn't own this campsite can report it, or report its owner
                     val reportButton = GeneralReportButton()
                     Row(
