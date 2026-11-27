@@ -15,7 +15,6 @@ import androidx.navigation.navArgument
 import com.example.project_ballin.admin.adminui.AdminSwitchModesScreen
 import com.example.project_ballin.admin.adminui.AdminViolationChoiceScreen
 import com.example.project_ballin.admin.adminui.AdminViolationListScreen
-//import com.example.project_ballin.admin.adminui.MessageDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.Entrant
@@ -25,8 +24,6 @@ import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
-import com.example.project_ballin.entrant.entantui.EntrantLeaveCampsiteReview
-import com.example.project_ballin.entrant.entantui.EntrantRateCampsite
 import com.example.project_ballin.entrant.entantui.EntrantLeaveCampsiteReview
 import com.example.project_ballin.entrant.entantui.EntrantSiteBooker
 import com.example.project_ballin.entrant.entantui.EntrantSiteSelector
@@ -97,8 +94,6 @@ class BallinApp() {
         val reservationList = remember { ReservationList() }
         val reviewList = remember { ReviewList() }
         val ratingList = remember{ RatingList() }
-        val ratingList = remember { RatingList() }
-        val reviewList = remember { ReviewList() }
 
         //temporary for testing
         var currentEntrant by remember {
@@ -212,7 +207,7 @@ class BallinApp() {
                     false,
                     mutableListOf<String>(),
                     mutableListOf<String>(),
-                     mutableListOf<String>()
+                    mutableListOf<String>()
                 )
             )
         }
@@ -259,30 +254,6 @@ class BallinApp() {
             )
         }
 
-
-        var message1 by remember {
-            mutableStateOf<Message>(
-                Message(
-                    Uuid.random().toString(),
-                    Uuid.random().toString(),
-                    "You are booked!",
-                    System.currentTimeMillis(),
-                    Uuid.random().toString()
-                )
-            )
-        }
-
-        var notification1 by remember {
-            mutableStateOf<Notification>(
-                Notification(
-                    "You won the lottery!",
-                    System.currentTimeMillis(),
-                    Uuid.random().toString(),
-                    Uuid.random().toString()
-                )
-            )
-        }
-
         var pastReservation by remember {
             mutableStateOf<Reservation>(
                 Reservation(
@@ -324,8 +295,6 @@ class BallinApp() {
             lotteryList.addLottery(lottery)
             lotteryList.addLottery(lottery2)
             lotteryList.addLottery(lottery3)
-            messageList.addMessage(message1)
-            notificationList.addNotification(notification1)
             reservationList.addReservation(pastReservation)
         }
 
@@ -360,9 +329,7 @@ class BallinApp() {
         val adminViolationListScreen = AdminViolationListScreen()
         val adminViolationDetailScreen = AdminViolationDetailScreen()
 
-
-
-        NavHost(navController = navController, startDestination = "AdminMenu/${100100100}") {
+        NavHost(navController = navController, startDestination = "AdminMenu/{400400400}") {
             composable("signup") { signUpScreen.Signup(navController) }
             composable("createprofile") { userProfile.CreateProfile(navController) }
             composable("editprofile") { userProfile.EditProfile(navController) }
@@ -554,7 +521,7 @@ class BallinApp() {
                 val ownerID = it.arguments!!.getString("OwnerID")!!
                 val ownerEnrolledLotteries = lotteryList.getOwnerLotteries(ownerID) + lotteryList.getEnrolledGroupLotteries(ownerID)
                 val ownerLotteryIDs = ownerEnrolledLotteries.map{
-                    l -> l.lotteryID
+                        l -> l.lotteryID
                 }
                 val notifs = notificationList.getAllNotifications()
                     .filter { it.lotteryID in ownerLotteryIDs }
@@ -686,16 +653,16 @@ class BallinApp() {
                 adminViolationListScreen.AdminViolationList(
                     navController,
                     reportsFromSubject,
-                    onDelete = {
+                    onDelete = {  report ->
                         when (subject) {
                             "Campsite Owner" -> {
-                                userReportList.deleteReportInSubjectOwner(it)
+                                userReportList.deleteReportInSubjectOwner(report)
                             }
                             "Review" -> {
-                                userReportList.deleteReportInSubjectReview(it)
+                                userReportList.deleteReportInSubjectReview(report)
                             }
                             "Rating" -> {
-                                userReportList.deleteReportInSubjectRating(it)
+                                userReportList.deleteReportInSubjectRating(report)
                             }
                         }
                     }
@@ -708,16 +675,16 @@ class BallinApp() {
                 adminViolationDetailScreen.AdminViolationDetail(
                     navController,
                     report!!,
-                    onDelete = {
+                    onDelete = { report ->
                         when (report.reportSubject) {
                             "Campsite Owner" -> {
-                                userReportList.deleteReportInSubjectOwner(it)
+                                userReportList.deleteReportInSubjectOwner(report)
                             }
                             "Review" -> {
-                                userReportList.deleteReportInSubjectReview(it)
+                                userReportList.deleteReportInSubjectReview(report)
                             }
                             "Rating" -> {
-                                userReportList.deleteReportInSubjectRating(it)
+                                userReportList.deleteReportInSubjectRating(report)
                             }
                         }
                     }
@@ -729,17 +696,11 @@ class BallinApp() {
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
                 val hasAdminPrivileges = (adminList.getAdmin(entrantIDString!!) != null)
-                Log.d("AdminCheck", entrantIDString)
-                Log.d(
-                    "AdminCheck",
-                    adminList.getAdmin(entrantIDString).toString()
-                )
-                Log.d("AdminCheck", adminList.admins.size.toString())
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!, hasAdminPrivileges)
             }
 
             composable("AdminSwitchModes") {
-                AdminSwitchModesScreen().AdminSwitchModes(navController, entrantList, ownerList, adminList)
+                AdminSwitchModesScreen().AdminSwitchModes((adminList.getAdmin("400400400")!!), "400400400", navController, entrantList, ownerList, adminList)
             }
 
 
@@ -793,44 +754,6 @@ class BallinApp() {
                 }
             }
 
-            /**
-             * Source Used: https://www.baeldung.com/kotlin/finding-element-in-list
-             * Title: Finding an Element in a List Using Kotlin
-             * Author: Baeldung
-             */
-            composable("EntrantRateCampsite/{campID}") {
-                val entrant = currentEntrant
-                val campID = it.arguments?.getString("campID")
-                if (entrant != null) {
-                    EntrantRateCampsite().EntrantGiveCampsiteRatingScreen(
-                        navController,
-                        entrant,
-                        campID!!,
-                        onAdd = {ratingList.addRating(it)},
-                        noPreviousRatingGiven =
-                            ratingList.getRatingsFromCampsite(campID)
-                                .find { it.reviewer == entrant.userID } == null
-                    )
-                }
-            }
-
-            composable("EntrantLeaveCampsiteReview/{campID}") {
-                val entrant = currentEntrant
-                val campID = it.arguments?.getString("campID")
-                if (entrant != null) {
-                    EntrantLeaveCampsiteReview().EntrantGiveCampsiteReviewScreen(
-                        navController,
-                        entrant,
-                        campID!!,
-                        onAdd = {reviewList.addReview(it)},
-                        noPreviousReviewGiven =
-                            reviewList.getReviewsFromCampsite(campID)
-                                .find { it.reviewer == entrant.userID } == null
-                    )
-                }
-            }
-
-            composable("EntrantSiteBooker/{campID}") { siteToBook ->
             composable("EntrantSiteBooker/{campID}/{lotteryID}") { siteToBook ->
                 val entrant = currentEntrant
                 val campID = siteToBook.arguments?.getString("campID")

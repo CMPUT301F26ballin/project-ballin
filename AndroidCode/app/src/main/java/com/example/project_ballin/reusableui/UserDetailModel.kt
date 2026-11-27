@@ -1,8 +1,12 @@
 package com.example.project_ballin.reusableui
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.project_ballin.Admin
+import com.example.project_ballin.AdminList
+import com.example.project_ballin.EntrantList
+import com.example.project_ballin.OwnerList
 import com.example.project_ballin.User
 import com.example.project_ballin.UserRole
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,14 +70,14 @@ class UserDetailModel: ViewModel() {
         val db = Firebase.firestore
         _isloading.value = true
 
-        db.collection("Entrants").whereEqualTo("deviceId", deviceId).get()
-            .addOnSuccessListener { entrantDocs ->
-                if (!entrantDocs.isEmpty) {
-                    val entrant = entrantDocs.documents[0].toObject(Entrant::class.java)
-                    if (entrant != null) {
-                        _uiState.value = entrant
+        db.collection("Admins").whereEqualTo("deviceId", deviceId).get()
+            .addOnSuccessListener { adminDocs ->
+                if (!adminDocs.isEmpty) {
+                    val admin = adminDocs.documents[0].toObject(Admin::class.java)
+                    if (admin != null) {
+                        _uiState.value = admin
                         _isloading.value = false
-                        _selectedRole.value = UserRole.ENTRANT
+                        _selectedRole.value = UserRole.ADMIN
                         return@addOnSuccessListener
                     }
                 }
@@ -91,14 +95,15 @@ class UserDetailModel: ViewModel() {
                             }
                         }
 
-                        db.collection("Admins").whereEqualTo("deviceId", deviceId).get()
-                            .addOnSuccessListener { adminDocs ->
-                                if (!adminDocs.isEmpty) {
-                                    val admin = adminDocs.documents[0].toObject(Admin::class.java)
-                                    if (admin != null) {
-                                        _uiState.value = admin
+                        db.collection("Entrants").whereEqualTo("deviceId", deviceId).get()
+                            .addOnSuccessListener { entrantDocs ->
+                                if (!entrantDocs.isEmpty) {
+                                    val entrant = entrantDocs.documents[0].toObject(Entrant::class.java)
+                                    if (entrant != null) {
+                                        _uiState.value = entrant
                                         _isloading.value = false
-                                        _selectedRole.value = UserRole.ADMIN
+                                        _selectedRole.value = UserRole.ENTRANT
+                                        return@addOnSuccessListener
                                     }
                                 }
                                 _isloading.value = false
@@ -188,6 +193,77 @@ class UserDetailModel: ViewModel() {
             )
         }
     }
+
+    /**
+     * When wanting to change role to entrant, (admin privilege only)
+     *
+     * @param entrantList the list of entrants
+     */
+    fun onRoleChangeToEntrant(admin: Admin, entrantList: EntrantList) {
+        _uiState.value = admin // LEIGHAN  - FOR DEBUGGING AND TESTING, REMOVE LATER ON
+
+        val entrant = entrantList.getEntrant(uiState.value.userID)
+
+        if (entrant != null) {
+            _uiState.value = entrant
+        } else {
+            val newEntrantObj = Entrant(
+                firstName = _uiState.value.firstName,
+                lastName = _uiState.value.lastName,
+                phoneNum = _uiState.value.phoneNum,
+                email = _uiState.value.email,
+                profilePic = _uiState.value.profilePic,
+                userID = "400400400",
+                deviceId = "700700700"
+            )
+            entrantList.addEntrant(newEntrantObj)
+            _uiState.value = newEntrantObj
+        }
+        _selectedRole.value = UserRole.ENTRANT
+    }
+
+    /**
+     * When wanting to change role to owner, (admin privilege)
+     *
+     * @param ownerList the list of owners
+     */
+    fun onRoleChangeToOwner(admin: Admin, ownerList: OwnerList) {
+        _uiState.value = admin // LEIGHAN  - FOR DEBUGGING AND TESTING, REMOVE LATER ON
+        val owner = ownerList.getOwner(uiState.value.userID)
+
+        if (owner != null) {
+            _uiState.value = owner
+        } else {
+            val newOwner = Owner(
+                firstName = _uiState.value.firstName,
+                lastName = _uiState.value.lastName,
+                phoneNum = _uiState.value.phoneNum,
+                email = _uiState.value.email,
+                profilePic = _uiState.value.profilePic,
+                userID = "400400400",
+                deviceId = "700700700" // TESTING PURPOSE
+            )
+            ownerList.addOwner(newOwner)
+            _uiState.value = newOwner
+        }
+
+        _selectedRole.value = UserRole.OWNER
+    }
+
+    /**
+     * When wanting to change role back to admin, (admin privilege)
+     * Shouldn't create a new admin obj, because they start out as admin
+     *
+     * @param adminList the list of admin
+     */
+    fun onRoleChangeToAdmin(adminList: AdminList) {
+        val admin: User? = adminList.getAdmin(uiState.value.userID)
+        _uiState.value = admin!!
+        _selectedRole.value = UserRole.ADMIN
+    }
+
+
+
 
     /**
      * change the details of the user

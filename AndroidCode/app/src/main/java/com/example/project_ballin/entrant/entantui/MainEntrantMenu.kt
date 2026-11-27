@@ -1,5 +1,6 @@
 package com.example.project_ballin.entrant.entantui
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +22,7 @@ import com.example.project_ballin.reusableui.TopAppBar
  *
  * */
 
-
+// DO A LOG CAT TO SEE IF adminPrivileges is working
 class MainEntrantMenu(){
     /**
      * The entrant menu screen
@@ -34,7 +35,7 @@ class MainEntrantMenu(){
      * @param navController the navigation controller for the app
      */
     @Composable
-    fun EntrantMenuScreen(navController: NavController, entrantID: String) {
+    fun EntrantMenuScreen(navController: NavController, entrantID: String, adminPrivileges: Boolean = false) {
 
         val entrantList = remember { EntrantList() }
         val entrant = entrantList.getEntrant(entrantID)
@@ -81,18 +82,16 @@ class MainEntrantMenu(){
                     navController
                 )
 
-                //if (userCurrentSession.isAdmin) {
-                   // Spacer(modifier = Modifier.height(16.dp))
-                    // EntrantHomeButton(
-                      //  "SWITCH MODES",
-                      //  "AdminSwitchModes",
-                      //  "switchModesButton",
-                      //  navController
-                   // )
-                // }
+                if (adminPrivileges) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    EntrantHomeButton(
+                        "SWITCH MODES",
+                        "AdminSwitchModes",
+                        "switchModesButton",
+                        navController
+                    )
+                }
             }
-
-
         }
     }
 

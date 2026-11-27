@@ -18,7 +18,7 @@ open class ReportList {
      * a new report is added.
      *
      */
-    private val reportsRef = db.collection("Messages")
+    private val reportsRef = db.collection("Reports")
 
     init {
         reportsRef.addSnapshotListener { snapshots, error ->
@@ -56,10 +56,10 @@ open class ReportList {
     /**
      * Gets a report from the database with specific ID
      *
-     * @param idBeingReported the ID of the reported ID to get
+     * @param reportID the ID of the reported ID to get
      */
-    fun getReport(idBeingReported: String): Report? =
-        _reports.find { it.idBeingReported == idBeingReported }
+    fun getReport(reportID: String): Report? =
+        _reports.find { it.ID == reportID }
 
 
     /**

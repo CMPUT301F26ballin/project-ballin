@@ -52,7 +52,6 @@ class MainAdminMenu(){
         val admin = adminList.getAdmin(adminID)
         val firstName = admin?.firstName ?: ""
 
-        Log.d("AdminMenuScreen", "AdminID: $adminID" + "FirstName: $firstName" + "LastName: {$admin.lastName}")
         TopAppBar(
             navController = navController,
             screenTitle = "Admin Home",
