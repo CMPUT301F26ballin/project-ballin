@@ -2,6 +2,8 @@ package com.example.project_ballin.reusableui
 
 import androidx.compose.foundation.background
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,7 +29,8 @@ class GeneralReportButton {
         clickedID: String,
         navController: NavController,
         label: String = "Report",
-        testTag: String = "reportButton"
+        testTag: String = "reportButton",
+        modifier: Modifier
     ) {
         Button(
             onClick = {
@@ -35,9 +38,11 @@ class GeneralReportButton {
                     "UserReportScreen/${subjectReport}/${clickedID}"
                 )
             },
-            modifier = Modifier
-                .testTag(testTag)
-                .background(Color.Red)
+            modifier = modifier
+                .testTag(testTag),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.error
+            )
         ){
             Text(label)
         }

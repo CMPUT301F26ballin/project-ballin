@@ -110,7 +110,8 @@ class ReservationDetailScreen {
                         clickedID = res.userID ?: "",
                         navController = navController,
                         label = "Report Entrant",
-                        testTag = "reportEntrantButton"
+                        testTag = "reportEntrantButton",
+                        modifier = Modifier
                     )
                 }
             }

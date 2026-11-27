@@ -62,7 +62,7 @@ class PastReservationScreen {
                 "Past Reservations"
             ) {
                 LazyColumn(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp, 0.dp)
                 ){
                     if(reservationList.getPastReservationsForEntrant(entrant.userID).isNotEmpty()){
                         item{
