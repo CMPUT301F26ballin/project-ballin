@@ -76,3 +76,5 @@ Salix: Implemented the owner lottery notifications (send and previous sent list)
 Leighan: Finished the violation detectors for owners, reviews and ratings. 
 
 Nick: Finished implementing profile pictures, should finish filter by dates soon. 
+
+yuming: add qr code to so it can be displayed
