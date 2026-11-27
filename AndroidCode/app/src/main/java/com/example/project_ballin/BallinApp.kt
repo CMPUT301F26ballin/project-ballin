@@ -731,7 +731,7 @@ class BallinApp() {
                 val lottery = lotteryList.getLottery(lotteryID!!)
 
                 if (entrant != null) {
-                    EntrantSiteBooker().SiteBooker(navController, campID, entrant, lottery)
+                    EntrantSiteBooker().SiteBooker(navController, campID!!, entrant, lottery!!)
                 }
             }
 
