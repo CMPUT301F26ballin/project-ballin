@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +36,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.room.util.TableInfo
 import com.example.project_ballin.reusableui.GeneralReportButton
 import com.example.project_ballin.reusableui.TopAppBar
 import com.google.android.gms.maps.model.LatLng
@@ -70,62 +75,117 @@ class CampsiteDetailScreen(){
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(16.dp, 0.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+
+                Spacer(modifier = Modifier.padding(8.dp))
+
+                //NAME
+                Row{
+                    Text(
+                        text = site.name,
+                        style = MaterialTheme.typography.headlineLarge
+                    )
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 0.dp,0.dp, 16.dp))
 
                 //image Display
                 Row(
                     modifier = Modifier
-                        .padding(12.dp)
                         .horizontalScroll(rememberScrollState(), enabled = !mapMoving)
                 ) {
                     site.images.forEach { blob -> ImageDisplayRow(blob) }
                 }
-                //NAME
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) { Text("Campsite Name: ${site.name}") }
-                //DESC
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) { Text("Campsite Description: ${site.description}") }
-                //Price and occupancy
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("Price Per Night: ${site.price}")
-                    Spacer(Modifier.width(16.dp))
-                    Text("Occupancy: ${site.occupancy}")
-                }
-                //Location
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("Location Name: ${site.locationName}")
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Box(modifier = Modifier
-                        .padding(16.dp)
-                        .height(500.dp)
-                        .fillMaxWidth()) {
-                        map.GoogleMapScreen(LatLng(site.lat, site.lon),
-                            false,
-                            onNewLocation = {},
-                            onMoving = {mapMoving = it})
+
+                Spacer(modifier = Modifier.padding(8.dp))
+
+                Card{
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        //DESC
+                        Row{
+                            Text(
+                            text = "Campsite description:",
+                            style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                        Row{
+                            Text(
+                                text = site.description,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.padding(8.dp))
+
+                        //Price and occupancy
+                        Row{
+                            Text("Price: ",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text("$${"%.2f".format(site.price)}/night")
+
+                        }
+
+                        Row{
+                            Text("Occupancy: ",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            Text("${site.occupancy}")
+                        }
+
+                        //Location
+                        Row{
+                            Text("Located in: ",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(site.locationName)
+                        }
+
+                        Spacer(modifier = Modifier.padding(8.dp))
+
+                        //Rating
+                        Row{
+                            Text("Rating: ",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            if (site.rating != null) {
+                                Text("${"%.1f".format(site.rating)}/5")
+                            } else {
+                                Text("No ratings available")
+                            }
+                        }
+
                     }
                 }
+
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp,0.dp, 16.dp))
+
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                        .aspectRatio(1f)
+                    ,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+
+                    map.GoogleMapScreen(LatLng(site.lat, site.lon),
+                        false,
+                        onNewLocation = {},
+                        onMoving = {mapMoving = it})
+
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp,0.dp, 16.dp))
 
                 if (showAvailability) {
                     datePicker.DatePick(
@@ -136,46 +196,84 @@ class CampsiteDetailScreen(){
                     )
                 }
 
-                Row(
+
+                Button(
+                    onClick = { showAvailability = true },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
                 ) {
-                    Button(
-                        onClick = { showAvailability = true },
+                    Text("Show available dates")
+                }
+
+                if (site.ownerID == userID) {
+                    Row{
+                        Button(
+                            onClick = { navController.navigate("CampsiteInputScreen/${site.ID}/${site.ownerID}") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("updateCampsite")
+                        ) {
+                            Text("Update campsite")
+                        }
+                    }
+                    Row{
+                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Active/${site.ownerID}")},
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("viewActiveReservationsButton")) {
+                            Text("View active reservations")
+                        }
+                    }
+                    Row{
+                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Past/${site.ownerID}")},
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("viewPastReservationsButton")) {
+                            Text("View past reservations")
+                        }
+                    }
+                    Row{
+                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Cancelled/${site.ownerID}")},
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("viewPastReservationsButton")) {
+                            Text("View past reservations")
+                        }
+                    }
+                } else {
+
+                    Row{
+                        Button(modifier = Modifier.fillMaxWidth().testTag("ViewLotteriesButton"),
+                            onClick = { navController.navigate("CampsiteLotteryScreen/$userID/${site.ID}") }){
+                            Text("View active lotteries")
+                        }
+                    }
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+
+                //RULES
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ){
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
-                    ) {
-                        Text("Show Available Dates")
+                    ){
+                        Text("Rules & Cancellation:",
+                            style = MaterialTheme.typography.titleMedium)
+
+                        Text(site.rules,
+                            style = MaterialTheme.typography.bodyMedium)
                     }
-                }
-                //Rating
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    if (site.rating != null) {
-                        Text("Current Rating: ${site.rating}")
-                    } else {
-                        Text("No Ratings Available")
-                    }
-                }
-                //RULES
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("Rules & Cancellation: ${site.rules}")
                 }
 
-                Spacer(Modifier.height(16.dp))
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
                 Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                    .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ){
                     Log.d("Qr", "Getting Bytes")
@@ -193,100 +291,43 @@ class CampsiteDetailScreen(){
                     }
                 }
 
-                if (site.ownerID == userID) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Button(
-                            onClick = { navController.navigate("CampsiteInputScreen/${site.ID}/${site.ownerID}") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .testTag("updateCampsite")
-                        ) {
-                            Text("Update Campsite")
-                        }
-                    }
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)){
-                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Active/${site.ownerID}")},
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag("viewActiveReservationsButton")) {
-                            Text("View Active Reservations")
-                        }
-                    }
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)){
-                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Past/${site.ownerID}")},
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag("viewPastReservationsButton")) {
-                            Text("View Past Reservations")
-                        }
-                    }
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)){
-                        Button(onClick = {navController.navigate("OwnerReservationScreen/${site.ID}/Cancelled/${site.ownerID}")},
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag("viewPastReservationsButton")) {
-                            Text("View Past Reservations")
-                        }
-                    }
-                } else {
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)){
-                        Button(modifier = Modifier.fillMaxWidth().testTag("ViewLotteriesButton"),
-                            onClick = { navController.navigate("CampsiteLotteryScreen/$userID/${site.ID}") }){
-                            Text("View Active Lotteries")
-                        }
-                    }
-
+                if(site.ownerID != userID){
                     // Anyone who doesn't own this campsite can report it, or report its owner
                     val reportButton = GeneralReportButton()
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         reportButton.ReportButton(
                             subjectReport = "Campsite",
                             clickedID = site.ID,
                             navController = navController,
-                            label = "Report Campsite",
-                            testTag = "reportCampsiteButton"
+                            label = "Report campsite",
+                            testTag = "reportCampsiteButton",
+                            modifier = Modifier.weight(1f)
                         )
                         reportButton.ReportButton(
                             subjectReport = "Owner",
                             clickedID = site.ownerID,
                             navController = navController,
-                            label = "Report Owner",
-                            testTag = "reportOwnerButton"
+                            label = "Report owner",
+                            testTag = "reportOwnerButton",
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
             }
         }
-
     }
 
     @Composable
     fun ImageDisplayRow(image: Blob) {
         val imageBytes: ByteArray = image.toBytes()
         val bitmap: Bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        Column(
-            modifier = Modifier
-                .padding(6.dp)
-        ) {
+        Card{
             Image(bitmap = bitmap.asImageBitmap(), contentDescription = "Camp Promo Image")
         }
 

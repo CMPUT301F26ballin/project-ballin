@@ -98,7 +98,7 @@ class EntrantConfirmBooking {
                                 .fillMaxWidth()
                         ){
                             Text(
-                                text = "Campsite Name: ${campsite.name}",
+                                text = "Campsite: ${campsite.name}",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -108,7 +108,7 @@ class EntrantConfirmBooking {
                                 .fillMaxWidth()
                         ){
                             Text(
-                                text = "Campsite Location: ${campsite.locationName}",
+                                text = "Location: ${campsite.locationName}",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -118,7 +118,7 @@ class EntrantConfirmBooking {
                                 .fillMaxWidth()
                         ){
                             Text(
-                                text = "Campsite Occupancy: ${campsite.occupancy}",
+                                text = "Occupancy: ${campsite.occupancy}",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -128,7 +128,7 @@ class EntrantConfirmBooking {
                                 .fillMaxWidth()
                         ){
                             Text(
-                                text = "Campsite Price: $${"%.2f".format(campsite.price)}/night",
+                                text = "Price: $${"%.2f".format(campsite.price)}/night",
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
@@ -221,16 +221,16 @@ class EntrantConfirmBooking {
 
                             Button(
                                 onClick = {
-                                    reservationList.addReservation(
-                                        Reservation(
-                                            campsite.ID,
-                                            chosenDates,
-                                            userID = entrant.userID,
-                                            cancelled = false,
-                                            resID = Uuid.random().toString(),
-                                        )
+                                    val newRes = Reservation(
+                                        campsite.ID,
+                                        chosenDates,
+                                        userID = entrant.userID,
+                                        cancelled = false,
+                                        resID = Uuid.random().toString(),
                                     )
-                                    navController.popBackStack("EntrantBrowseReservations", false)
+
+                                    reservationList.addReservation(newRes)
+                                    navController.navigate("bookingConfirmationScreen/${newRes.resID}")
 
                                     entrant.activeLotteries.remove(lottery)
                                     entrant.wonLotteries.remove(lottery)

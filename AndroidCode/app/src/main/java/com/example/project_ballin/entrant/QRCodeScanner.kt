@@ -113,7 +113,9 @@ class QRCodeScanner(){
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 if(foundQR){ navController.navigate("CampsiteDetailScreen/$qrCodeResult/$userID") }
-                            }) {
+                            }
+                        )
+                        {
                             if(foundQR){ Text("Go to Campsite") }
                             else{Text("No Campsite Found")}
                         }
@@ -126,7 +128,6 @@ class QRCodeScanner(){
                     }
                 }
             }
-
         }
     }
 

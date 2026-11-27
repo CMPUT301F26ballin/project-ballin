@@ -68,7 +68,8 @@ class MessagingScreen {
                     clickedID = senderID,
                     navController = navController,
                     label = "Report Entrant",
-                    testTag = "reportEntrantButton"
+                    testTag = "reportEntrantButton",
+                    modifier = Modifier
                 )
 
                 Row(modifier = Modifier.padding(16.dp)){

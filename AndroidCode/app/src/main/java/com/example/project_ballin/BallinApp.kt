@@ -19,6 +19,7 @@ import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.QRCodeScanner
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.entrant.entantui.ActiveReservationScreen
+import com.example.project_ballin.entrant.entantui.EntrantBookingConfirmation
 import com.example.project_ballin.entrant.entantui.EntrantBrowseCampsites
 import com.example.project_ballin.entrant.entantui.EntrantBrowseReservations
 import com.example.project_ballin.entrant.entantui.EntrantConfirmBooking
@@ -93,19 +94,8 @@ class BallinApp() {
         val reviewList = remember { ReviewList() }
         val ratingList = remember{ RatingList() }
 
-        //temporary for testing
         var currentEntrant by remember {
-            mutableStateOf<Entrant?>(
-                Entrant(
-                    firstName = "Nick",
-                    phoneNum = "123567890",
-                    email = "nick@ualberta.ca",
-                    deviceId = "123",
-                    profilePic = "a",
-                    lastName = "",
-                    userID = "1"
-                )
-            )
+            mutableStateOf<Entrant?>(null)
         }
 
         val campsiteInputScreen = CampsiteInputScreen()
@@ -471,6 +461,7 @@ class BallinApp() {
 
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
+                currentEntrant = entrantList.getEntrant(entrantIDString!!)
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
             }
 
@@ -536,7 +527,7 @@ class BallinApp() {
                 val lottery = lotteryList.getLottery(lotteryID!!)
 
                 if (entrant != null) {
-                    EntrantSiteBooker().SiteBooker(navController, campID, entrant, lottery)
+                    EntrantSiteBooker().SiteBooker(navController, campID!!, entrant, lottery!!)
                 }
             }
 
@@ -603,6 +594,16 @@ class BallinApp() {
                         ratingList
                     )
                 }
+            }
+
+            composable("bookingConfirmationScreen/{reservationID}"){
+                val reservationID = it.arguments?.getString("reservationID")
+                val reservation = reservationList.getReservation(reservationID!!)
+                val campsite = campsiteList.getCampsite(reservation?.campsiteID)
+                val entrant = currentEntrant
+
+
+                EntrantBookingConfirmation().BookingConfirmation(navController, reservation, campsite, entrant)
             }
         }
     }

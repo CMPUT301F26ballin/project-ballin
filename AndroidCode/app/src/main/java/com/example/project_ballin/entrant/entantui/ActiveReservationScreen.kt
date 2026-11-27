@@ -74,7 +74,7 @@ class ActiveReservationScreen {
                 "Active Reservations"
             ) {
                 LazyColumn(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp, 0.dp)
                 ){
                     if(reservationList.getCurrentReservationsForEntrant(entrant.userID).isNotEmpty()){
                         item{
