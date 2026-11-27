@@ -96,17 +96,7 @@ class BallinApp() {
 
         //temporary for testing
         var currentEntrant by remember {
-            mutableStateOf<Entrant?>(
-                Entrant(
-                    firstName = "Nick",
-                    phoneNum = "123567890",
-                    email = "nick@ualberta.ca",
-                    deviceId = "123",
-                    profilePic = "a",
-                    lastName = "",
-                    userID = "1"
-                )
-            )
+            mutableStateOf<Entrant?>(null)
         }
 
         val campsiteInputScreen = CampsiteInputScreen()
@@ -472,6 +462,7 @@ class BallinApp() {
 
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
+                currentEntrant = entrantList.getEntrant(entrantIDString!!)
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
             }
 
