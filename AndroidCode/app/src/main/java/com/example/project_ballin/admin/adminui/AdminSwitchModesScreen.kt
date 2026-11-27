@@ -53,7 +53,6 @@ class AdminSwitchModesScreen {
      */
     @Composable
     fun AdminSwitchModes(
-        admin: Admin,
         adminID: String,
         navController: NavController,
         entrantList: EntrantList,
@@ -96,7 +95,7 @@ class AdminSwitchModesScreen {
                     "Entrant Mode",
                     navController,
                     onRoleChange = {
-                        userDetailModel.onRoleChangeToEntrant(admin, entrantList)
+                        userDetailModel.onRoleChangeToEntrant(entrantList)
                     }
                 )
 
@@ -108,7 +107,7 @@ class AdminSwitchModesScreen {
                     "Owner Mode",
                     navController,
                     onRoleChange = {
-                        userDetailModel.onRoleChangeToOwner(admin, ownerList)
+                        userDetailModel.onRoleChangeToOwner(ownerList)
                     }
                 )
             }
@@ -169,7 +168,7 @@ class AdminSwitchModesScreen {
     fun AdminSwitchModesPreview() {
         val navController = rememberNavController()
         AdminSwitchModes(
-            admin = Admin(), "",navController, entrantList = EntrantList(),
+          "",navController, entrantList = EntrantList(),
             ownerList = OwnerList(), adminList = AdminList())
     }
 }

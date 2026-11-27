@@ -523,8 +523,9 @@ class BallinApp() {
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!, hasAdminPrivileges)
             }
 
-            composable("AdminSwitchModes") {
-                AdminSwitchModesScreen().AdminSwitchModes((adminList.getAdmin("400400400")!!), "400400400", navController, entrantList, ownerList, adminList)
+            composable("AdminSwitchModes/{AdminID}") {
+                val AdminID = it.arguments!!.getString("AdminID")
+                AdminSwitchModesScreen().AdminSwitchModes(AdminID!!, navController, entrantList, ownerList, adminList)
             }
 
 

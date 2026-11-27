@@ -199,8 +199,8 @@ class UserDetailModel: ViewModel() {
      *
      * @param entrantList the list of entrants
      */
-    fun onRoleChangeToEntrant(admin: Admin, entrantList: EntrantList) {
-        _uiState.value = admin // LEIGHAN  - FOR DEBUGGING AND TESTING, REMOVE LATER ON
+    fun onRoleChangeToEntrant(entrantList: EntrantList) {
+      //  _uiState.value = admin // LEIGHAN  - FOR DEBUGGING AND TESTING, REMOVE LATER ON
 
         val entrant = entrantList.getEntrant(uiState.value.userID)
 
@@ -227,8 +227,8 @@ class UserDetailModel: ViewModel() {
      *
      * @param ownerList the list of owners
      */
-    fun onRoleChangeToOwner(admin: Admin, ownerList: OwnerList) {
-        _uiState.value = admin // LEIGHAN  - FOR DEBUGGING AND TESTING, REMOVE LATER ON
+    fun onRoleChangeToOwner(ownerList: OwnerList) {
+       // _uiState.value = admin // LEIGHAN  - FOR DEBUGGING AND TESTING, REMOVE LATER ON
         val owner = ownerList.getOwner(uiState.value.userID)
 
         if (owner != null) {
