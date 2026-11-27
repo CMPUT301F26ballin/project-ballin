@@ -78,8 +78,29 @@ class MessageList {
     fun getMessage(ID: String): Message? =
          _messages.find { it.ID == ID }
 
+    /**
+     * A Method that gets all messages between two users
+     *
+     * @param firstID the ID of the first user
+     * @param secondID the ID of the second user
+     * @return a list of message objects between the two individuals
+     *
+     * */
 
-    fun getMessagesForEntrant(entrantID: String): List<Message> {
-        return _messages.filter { it.recipientID == entrantID }
+    fun getMessagesBetween(firstID: String, secondID: String): List<Message>{
+        val returnList = mutableListOf<Message>()
+        messages.forEach { message ->
+            if(message.senderID == firstID && message.recipientID == secondID){
+                returnList.add(message)
+            }
+            else if(message.senderID == secondID && message.recipientID == firstID){
+                returnList.add(message)
+            }
+
+        }
+        returnList.sortByDescending { message -> message.dateSent }
+        returnList.reverse()
+        return returnList
     }
+
 }
