@@ -28,6 +28,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -159,14 +162,15 @@ class MessageListScreen {
         navController: NavController,
         onDelete: (Message) -> Unit
     ) {
-        Button(
+        Card(
             onClick = {
                 navController.navigate("AdminMessageDetails/${message.ID}")
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .testTag("checkMessage${message.ID}") // for UI testing
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors()
         ) {
 
             Row(
@@ -179,7 +183,7 @@ class MessageListScreen {
                     Text(
                         text = "Message ${index + 1}",
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Text("Date Sent: ${message.getFormattedDate()}")
                     Text("Sender: ${message.senderID}")
@@ -191,7 +195,8 @@ class MessageListScreen {
                         .testTag("removeMessage_${message.ID}"), // for UI testing
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red
-                    )
+                    ),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Text("Remove")
                 }

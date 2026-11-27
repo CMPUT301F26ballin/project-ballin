@@ -75,7 +75,7 @@ class AdminViolationChoiceScreen {
                 ViolationTopicButton(
                     navController,
                     "Reviews",
-                    "AdminViolationListScreen/{reviews}", // So then the screen knows to use the reports related to reviews
+                    "AdminViolationList/Review", // So then the screen knows to use the reports related to reviews
                     "reviewViolationsButton"
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -83,7 +83,7 @@ class AdminViolationChoiceScreen {
                 ViolationTopicButton(
                     navController,
                     "Ratings",
-                    "AdminViolationListScreen/{ratings}",  // So then the screen knows to use the reports related to ratings
+                    "AdminViolationList/Rating",  // So then the screen knows to use the reports related to ratings
                     "ratingViolationsButton"
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -91,7 +91,7 @@ class AdminViolationChoiceScreen {
                 ViolationTopicButton(
                     navController,
                     "Campsite Owners",
-                    "AdminViolationListScreen/{campsiteOwner}",  // So then the screen knows to use the reports related to owners
+                    "AdminViolationList/Campsite Owner",  // So then the screen knows to use the reports related to owners
                     "campsiteOwnerViolationsButton"
                 )
             }

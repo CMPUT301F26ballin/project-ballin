@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
@@ -160,14 +161,15 @@ class NotificationListScreen {
         onDelete: (Notification) -> Unit
     ) {
 
-        Button(
+        Card(
             onClick = {
                 navController.navigate("AdminNotificationDetails/${notification.ID}")
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .testTag("checkNotification${index + 1}") // for UI testing
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -181,7 +183,7 @@ class NotificationListScreen {
                     Text(
                         text = "Notification ${index + 1}",
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Text("Date Sent: ${notification.getFormattedDate()}")
                     Text("Recipient: ${notification.recipientID}")
@@ -193,7 +195,8 @@ class NotificationListScreen {
                         .testTag("removeMessage_${notification.ID}"), // for UI testing
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red
-                    )
+                    ),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Text("Remove")
                 }

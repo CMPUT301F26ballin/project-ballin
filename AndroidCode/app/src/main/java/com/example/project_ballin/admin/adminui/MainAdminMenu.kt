@@ -1,5 +1,7 @@
 package com.example.project_ballin
 
+import android.provider.Settings
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,16 +14,25 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.reusableui.TopAppBar
+import com.example.project_ballin.reusableui.UserDetailModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  *The main menu seen by admins logging into the app
@@ -38,9 +49,10 @@ class MainAdminMenu(){
     fun AdminMenuScreen(navController: NavController, adminID: String) {
 
         val adminList = remember { AdminList() }
-        val entrant = adminList.getAdmin(adminID)
-        val firstName = entrant?.firstName ?: ""
+        val admin = adminList.getAdmin(adminID)
+        val firstName = admin?.firstName ?: ""
 
+        Log.d("AdminMenuScreen", "AdminID: $adminID" + "FirstName: $firstName" + "LastName: {$admin.lastName}")
         TopAppBar(
             navController = navController,
             screenTitle = "Admin Home",
@@ -62,65 +74,63 @@ class MainAdminMenu(){
                 Spacer(modifier = Modifier.height(128.dp))
 
                 AdminOptionButton(
-                    "CAMPSITES\nBROWSE AND DELETE",
+                    "All Campsites",
                     "AdminCampsites",
                     "adminCampsitesButton",
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AdminOptionButton(
-                    "PROFILES\nBROWSE AND DELETE",
+                    "All Profiles",
                     "AdminProfiles",
                     "adminProfilesButton",
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AdminOptionButton(
-                    "NOTIFICATIONS\nBROWSE AND DELETE",
+                    "All Notifications",
                     "AdminNotifications",
                     "adminNotificationsButton",
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AdminOptionButton(
-                    "MESSAGES\nBROWSE AND DELETE",
+                    "All Messages",
                     "AdminMessages",
                     "adminMessagesButton",
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AdminOptionButton(
-                    "IMAGES\nBROWSE AND DELETE",
+                    "All Images",
                     "AdminImages",
                     "adminImagesButton",
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AdminOptionButton(
-                    "QR CODES\nBROWSE",
+                    "QR Codes",
                     "AdminQRCodes",
                     "adminQRCodesButton",
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                //Put temporary destination so it doesn't crash rn
                 AdminOptionButton(
-                    "OWNERS VIOLATING POLICY\nBROWSE AND DELETE",
-                    "Admin Menu Screen",
-                    "ownersViolatingPolicyButton",
+                    "Reports and Violations",
+                    "AdminViolationChoice",
+                    "violationsAndReportsButton",
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                //Put temporary destination so it doesn't crash rn
                 AdminOptionButton(
-                    "SWITCH MODES",
+                    "Switch Modes",
                     "AdminSwitchModes",
                     "switchModesButton",
                     navController
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AdminOptionButton(
-                    "POLICY AND GUIDELINES",
+                    "Policies and Guidelines",
                     "PoliciesAndGuidelines",
                     "policyGuidelinesButton",
                     navController

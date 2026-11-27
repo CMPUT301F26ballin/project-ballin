@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -163,7 +164,7 @@ class AdminImageScreens {
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag("adminImageItem_${image.key}"),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = CardDefaults.cardColors()
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -176,14 +177,16 @@ class AdminImageScreens {
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = 4.dp),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Button(
                     onClick = onRemoveClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red
                     ),
-                    modifier = Modifier.width(150.dp).testTag("removeImage_${image.key}")
+                    modifier = Modifier.width(150.dp).testTag("removeImage_${image.key}"),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Text("Remove")
                 }

@@ -1,5 +1,6 @@
 package com.example.project_ballin.admin.adminui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import com.example.project_ballin.Report
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,6 +68,8 @@ class AdminViolationListScreen {
         reports: List<Report>,
         onDelete: (Report) -> Unit,
     ) {
+        Log.d("Reports", "$reports") // LEIGHAN FOR DEBUGGING
+
         TopAppBar(
             navController = navController,
             screenTitle = "Reports List"
@@ -169,14 +175,15 @@ class AdminViolationListScreen {
         navController: NavController,
         onDelete: (Report) -> Unit
     ) {
-        Button(
+        Card(
             onClick = {
                navController.navigate("AdminViolationDetail/${report.ID}")
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .testTag("checkReport${report.ID}") // for UI testing
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors()
         ) {
 
             Row(
@@ -189,7 +196,7 @@ class AdminViolationListScreen {
                     Text(
                         text = "Report ${index + 1}",
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Text("Report Subject: ${report.reportSubject}")
                     Text("ID Being Reported: ${report.idBeingReported}")
@@ -201,7 +208,8 @@ class AdminViolationListScreen {
                         .testTag("removeReport${report.ID}"), // for UI testing
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red
-                    )
+                    ),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Text("Remove")
                 }

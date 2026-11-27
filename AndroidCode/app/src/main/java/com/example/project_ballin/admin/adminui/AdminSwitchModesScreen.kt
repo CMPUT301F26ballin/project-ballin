@@ -1,5 +1,6 @@
 package com.example.project_ballin.admin.adminui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,10 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.project_ballin.AdminList
+import com.example.project_ballin.EntrantList
+import com.example.project_ballin.OwnerList
 import com.example.project_ballin.entrant.entantui.ConfirmActionDialog
 import com.example.project_ballin.reusableui.TopAppBar
+import com.example.project_ballin.reusableui.UserDetailModel
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.project_ballin.Admin
 
-// NEED TO UPDATE THIS
 
 class AdminSwitchModesScreen {
 
@@ -40,11 +47,21 @@ class AdminSwitchModesScreen {
      * This is made possible through screen navigations, and permissions.
      *
      * @param navController the navController of the app
+     * @param entrantList the list of entrants, to access permission to switch roles
+     * @param ownerList the list of owners, to access permission to switch roles
+     * @param adminList the list of admins, to access permission to switch roles
      */
     @Composable
     fun AdminSwitchModes(
+        admin: Admin,
+        adminID: String,
         navController: NavController,
+        entrantList: EntrantList,
+        ownerList: OwnerList,
+        adminList: AdminList,
+        userDetailModel: UserDetailModel = viewModel()
     ) {
+
         TopAppBar(
             navController = navController,
             screenTitle = "Switch Modes"
@@ -64,29 +81,36 @@ class AdminSwitchModesScreen {
                 Spacer(modifier = Modifier.height(34.dp))
 
                 SwitchModeButton(
-                    "Admin Menu Screen",
+                    "AdminMenu/${adminID}",
                     "adminModeButton",
                     "Admin Mode",
-                    navController
+                    navController,
+                    onRoleChange = {
+                        userDetailModel.onRoleChangeToAdmin(adminList)
+                    }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 SwitchModeButton(
-                    "MainEntrantMenu",
+                    "EntrantMenu/${adminID}",
                     "entrantModeButton",
                     "Entrant Mode",
-                    navController
+                    navController,
+                    onRoleChange = {
+                        userDetailModel.onRoleChangeToEntrant(admin, entrantList)
+                    }
                 )
 
-                """
-                // I did a userCurrentSession object to access the userID
+
                 Spacer(modifier = Modifier.height(16.dp))
                 SwitchModeButton(
-                    // "OwnerMenu/userCurrentSession.currentProfile.userID}",
+                    "OwnerMenu/${adminID}",
                     "ownerModeButton",
                     "Owner Mode",
-                    navController
+                    navController,
+                    onRoleChange = {
+                        userDetailModel.onRoleChangeToOwner(admin, ownerList)
+                    }
                 )
-                """
             }
         }
     }
@@ -105,7 +129,8 @@ class AdminSwitchModesScreen {
         destination: String,
         testTag: String,
         name: String,
-        navController: NavController
+        navController: NavController,
+        onRoleChange: () -> Unit
     ) {
 
         var confirmActionPopUp by remember { mutableStateOf(false) }
@@ -116,6 +141,7 @@ class AdminSwitchModesScreen {
                 confirm = { confirmed: Boolean ->
                     confirmActionPopUp = false
                     if (confirmed) {
+                        onRoleChange()
                         navController.navigate(destination)
                     }
                 }
@@ -142,6 +168,8 @@ class AdminSwitchModesScreen {
     @Composable
     fun AdminSwitchModesPreview() {
         val navController = rememberNavController()
-        AdminSwitchModes(navController)
+        AdminSwitchModes(
+            admin = Admin(), "",navController, entrantList = EntrantList(),
+            ownerList = OwnerList(), adminList = AdminList())
     }
 }
