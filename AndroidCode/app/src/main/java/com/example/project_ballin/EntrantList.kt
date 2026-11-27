@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import com.example.project_ballin.entrant.Entrant
 import com.google.firebase.Firebase
