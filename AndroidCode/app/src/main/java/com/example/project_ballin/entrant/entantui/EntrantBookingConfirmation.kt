@@ -45,19 +45,22 @@ class EntrantBookingConfirmation {
 
 
     /**
-     * The entrant confirm booking page
+     * The entrant booking confirmation page
      * Entrants can confirm a booking after confirming they have read the rules for the campsite
      *
      * @param navController the navigation controller for the app
+     * @param reservation the reservation to confirm
      * @param campsite the campsite to book
      * @param entrant the entrant
-     * @param chosenDates the chosen dates for the reservation
-     * @param reservationList the list of reservations
-     * @param lottery the lottery associated with the site
      */
     @Composable
     fun BookingConfirmation(navController: NavController, reservation: Reservation?, campsite: Campsite?, entrant: Entrant?) {
 
+        /**
+         * Source Used: https://www.jetpackcompose.app/compose-catalog/konfetti
+         * Title: Konfetti - Compose Catalog
+         * Author: Daniel Martinus
+         */
         val parties = remember {
             listOf(
                 Party(
@@ -208,6 +211,11 @@ class EntrantBookingConfirmation {
             }
         }
 
+        /**
+         * Source Used: https://www.jetpackcompose.app/compose-catalog/konfetti
+         * Title: Konfetti - Compose Catalog
+         * Author: Daniel Martinus
+         */
         KonfettiView(
             modifier = Modifier.fillMaxSize(),
             parties = parties
