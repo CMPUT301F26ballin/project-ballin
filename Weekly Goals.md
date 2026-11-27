@@ -64,5 +64,7 @@ yuming: add qr code to so it can be displayed
 
 Leighan: still finishing up admin side - switch modes, reporting system and seeing/removing ratings,reviews,owners that violate app policy. Finishing touches and refining admin ui.
 
+Nick: will test the implemented filter by dates, will start on notifications for entrants (prob during weekend)
+
 
 
