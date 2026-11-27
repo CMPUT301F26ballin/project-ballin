@@ -56,6 +56,7 @@ class EntrantBrowseReservations{
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
                     ActivePastReservationButtons(navController)
 
                     val lotteriesToShow = entrant.activeLotteries.filter {

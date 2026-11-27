@@ -37,7 +37,7 @@ class EntrantSiteBooker {
      * @param lottery the lottery
      */
     @Composable
-    fun SiteBooker (navController: NavController, campsiteID: String?, entrant: Entrant, lottery: Lottery?) {
+    fun SiteBooker (navController: NavController, campsiteID: String, entrant: Entrant, lottery: Lottery) {
 
 
         var chosenDates by remember { mutableStateOf<List<Long>?>(null) }
@@ -60,7 +60,7 @@ class EntrantSiteBooker {
                             .padding(16.dp, 16.dp, 16.dp, 0.dp)
                     ) {
                         DateRangePicker().BookingDateRangePicker(
-                            availableDates = listOf(1795392000000L, 1795478400000L),
+                            availableDates = CampsiteList().getCampsite(campsiteID)!!.availability,
                             modifier = Modifier.weight(1f),
                             chosenDates = { chosenDates = it }
                         )
