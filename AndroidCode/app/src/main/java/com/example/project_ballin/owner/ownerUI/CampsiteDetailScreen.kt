@@ -145,7 +145,7 @@ class CampsiteDetailScreen(){
                             )
 
                             if (site.rating != null) {
-                                Text("${site.rating}")
+                                Text("${"%.1f".format(site.rating)}/5")
                             } else {
                                 Text("No Ratings Available")
                             }
