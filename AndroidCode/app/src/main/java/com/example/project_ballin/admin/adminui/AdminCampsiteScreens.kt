@@ -51,6 +51,7 @@ class AdminCampsiteScreens {
 
     val adminSearch = AdminSearch()
     val confirmDeleteDialog = ConfirmDeleteDialog()
+    val adminQRCodeScreens = AdminQRCodeScreens()
     /**
      * Admin screen listing every campsite in the app, each with a Remove button.
      *
@@ -255,7 +256,7 @@ class AdminCampsiteScreens {
             CampsiteDetailRow("Rules & cancellation policy", site.rules.ifBlank { "None" })
             CampsiteDetailRow("Owner ID", site.ownerID)
             CampsiteImageGallery(site.images)
-            // TODO: show the QR code once campsites have one
+            CampsiteQRCode(site.qrCode)
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -336,6 +337,20 @@ class AdminCampsiteScreens {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(150.dp).testTag("campsiteImage_$index")
             )
+        }
+    }
+
+    /**
+     * The campsite's QR code, which links to the campsite (US 03.04.04).
+     *
+     * @param qrCode the QR code's image, or null if the campsite doesn't have one
+     */
+    @Composable
+    fun CampsiteQRCode(qrCode: Blob?) {
+        Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+            Text("QR code", fontSize = 18.sp,
+                fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            adminQRCodeScreens.QRCodeImage(qrCode, testTag = "campsiteQRCode", size = 200.dp)
         }
     }
 

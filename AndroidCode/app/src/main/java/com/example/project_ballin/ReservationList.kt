@@ -17,12 +17,12 @@ class ReservationList {
     private val db = Firebase.firestore
 
     /**
-     * The path in the database for the campsites and the
+     * The path in the database for the reservations and the
      * snapshot listener that updates the database everytime
      * a new site is added.
      * */
 
-    private val reservationsRef = db.collection("Campsites")
+    private val reservationsRef = db.collection("Reservations")
     init{
         reservationsRef.addSnapshotListener { snapshots, error ->
             if(error != null){
@@ -57,7 +57,7 @@ class ReservationList {
      * A method that takes a campsite reservation and cancels it.
      * */
     fun cancelReservation(reservation: Reservation){
-        reservation.cancelled = false
+        reservation.cancelled = true
 
         reservationsRef.document(reservation.resID).set(reservation)
     }
@@ -142,7 +142,7 @@ class ReservationList {
     fun getUserReservationsAfter(userID: String, date: Long): List<Reservation>{
         val returnList = mutableStateListOf<Reservation>()
         reservations.forEach { reservation ->
-            if(reservation.UserID == userID &&
+            if(reservation.userID == userID &&
                 reservation.dates!!.last() >= date&&
                 !reservation.cancelled){
                 returnList.add(reservation)
@@ -164,7 +164,7 @@ class ReservationList {
     fun getUserReservationsBefore(userID: String, date: Long): List<Reservation>{
         val returnList = mutableStateListOf<Reservation>()
         reservations.forEach { reservation ->
-            if(reservation.UserID == userID &&
+            if(reservation.userID == userID &&
                 reservation.dates!!.last() < date&&
                 !reservation.cancelled){
                 returnList.add(reservation)
@@ -182,7 +182,7 @@ class ReservationList {
     fun getUserCancelledReservations(userID: String): List<Reservation>{
         val returnList = mutableStateListOf<Reservation>()
         reservations.forEach { reservation ->
-            if(reservation.UserID == userID &&
+            if(reservation.userID == userID &&
                 reservation.cancelled){
                 returnList.add(reservation)
             }
@@ -190,15 +190,34 @@ class ReservationList {
         return returnList
     }
 
-    fun getReservationsForEntrant(userID: String): List<Reservation> {
+    fun getCurrentReservationsForEntrant(userID: String): List<Reservation> {
         val returnList = mutableStateListOf<Reservation>()
         reservations.forEach { reservation ->
-            if(reservation.UserID == userID){
+            if(reservation.userID == userID && reservation.dates?.last()!! >= System.currentTimeMillis() && !reservation.cancelled){
                 returnList.add(reservation)
             }
         }
         return returnList
     }
 
+    fun getPastReservationsForEntrant(userID: String): List<Reservation> {
+        val returnList = mutableStateListOf<Reservation>()
 
+        reservations.forEach { reservation ->
+            if(reservation.userID == userID && reservation.dates?.get(1)!! < System.currentTimeMillis() && !reservation.cancelled){
+                returnList.add(reservation)
+            }
+        }
+        return returnList
+    }
+
+    fun getCancelledReservationsForEntrant(userID: String): List<Reservation> {
+        val returnList = mutableStateListOf<Reservation>()
+        reservations.forEach { reservation ->
+            if(reservation.userID == userID && reservation.cancelled){
+                returnList.add(reservation)
+            }
+        }
+        return returnList
+    }
 }

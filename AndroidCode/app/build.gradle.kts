@@ -79,6 +79,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("androidx.navigation:navigation-compose:2.10.2")
     implementation("com.google.firebase:firebase-common-ktx:21.0.0")
+    implementation("androidx.compose.material:material-icons-extended")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
 
@@ -98,5 +99,10 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.7.0")
     implementation("androidx.camera:camera-lifecycle:1.7.0")
     implementation("androidx.camera:camera-view:1.7.0")
+
+    // for profile pics
+    implementation("io.coil-kt.coil3:coil-compose:3.6.3")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.6.3")
+    implementation("com.google.firebase:firebase-storage") //profile pics stored with this
 
 }

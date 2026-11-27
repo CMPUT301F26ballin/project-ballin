@@ -77,4 +77,44 @@ open class ReportList {
         }
         return returnList
     }
+
+    /**
+     * Deletes a report from the database
+     *
+     * @param report The report being deleted
+     */
+    fun deleteReport(report: Report) {
+        reportsRef.document(report.ID).delete()
+    }
+
+    /**
+     * Specific deletion for the report in the database
+     * that is in subject rating
+     */
+    fun deleteReportInSubjectRating(report: Report) {
+        deleteReport(report)
+        // CASCADE THE DELETION IN RATING LIST
+    }
+
+    /**
+     * Specific deletion for the report in the database
+     * that is in subject review
+     */
+    fun deleteReportInSubjectReview(report: Report) {
+        deleteReport(report)
+        // CASCADE THE DELETION IN REVIEW LIST
+    }
+
+    /**
+     * Specific deletion for the report in the database
+     * that is in subject campsite owner
+     */
+    fun deleteReportInSubjectOwner(report: Report) {
+        deleteReport(report)
+        // CASCADE THE DELETION IN CAMPSITE LIST - for the ownerID
+        // CASCADE THE DELETION IN LOTTERY LIST
+        // CASCADE THE DELETION IN OWNER LIST
+        // CASCADE THE DELETION IN OTHER LISTS WHICH DEALS WITH OWNER IN ANYWAY
+    }
+
 }

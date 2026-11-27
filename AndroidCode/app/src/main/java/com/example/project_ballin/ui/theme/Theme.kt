@@ -22,6 +22,8 @@ private val DarkColorScheme = darkColorScheme(
     background = BallinDarkBackground,
     onBackground = BallinDarkBackgroundText,
 
+
+
 )
 
 private val LightColorScheme = lightColorScheme(

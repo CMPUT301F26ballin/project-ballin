@@ -34,16 +34,6 @@ import androidx.compose.foundation.lazy.items
 
 class OwnerNotificationListScreen() {
 
-    /**
-     * Screen to send notifications to entrants in a lottery.
-     * Notifications are sent to one lottery for all entrants to read.
-     *
-     * @param navController the navcontroller of the app
-     * @param userID the userID of the owner sending the message
-     * @param lotteryID the lotteryID of the lottery we're sending notifcations to
-     * @param sendNotification the function to send a notification
-     */
-
     @SuppressLint("NotConstructor")
     @Composable
     fun OwnerNotificationListScreen(
@@ -72,6 +62,7 @@ class OwnerNotificationListScreen() {
                 ){
                     items(sortedNotifs, key = {it.ID}) { notif ->
                         NotificationDetailBox(notif)
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
             }
@@ -88,9 +79,21 @@ class OwnerNotificationListScreen() {
                 .fillMaxWidth()
         ){
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(notification.dateSent.toString())
+                Text(formatDateMillisToDMY(notification.dateSent))
                 Text(notification.content)
             }
         }
+    }
+
+    /**
+     * Convert the date picker Long millis times to standard date format
+     *
+     * @param millis the millis to convert
+     * @return the formatted date (dd/mm/yyyy)
+     */
+    fun formatDateMillisToDMY(millis: Long): String {
+        val format = java.text.SimpleDateFormat("dd/MM/yyyy")
+        format.timeZone = java.util.TimeZone.getTimeZone("UTC")
+        return format.format(java.util.Date(millis))
     }
 }
