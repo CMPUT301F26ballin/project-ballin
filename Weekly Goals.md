@@ -62,5 +62,7 @@ Mies: I am going to work on past reservations (ratings and reviews) as well as t
 
 yuming: add qr code to so it can be displayed
 
+Leighan: still finishing up admin side - switch modes, reporting system and seeing/removing ratings,reviews,owners that violate app policy. Finishing touches and refining admin ui.
+
 
 
