@@ -106,7 +106,7 @@ class EntrantSiteBooker {
                 onClick = {
                     navController.navigate("confirmBooking/${campsiteID}/${chosenDates?.joinToString(",")}/${lottery?.lotteryID}")
                 },
-                enabled = chosenDates != null,
+                enabled = chosenDates != null, //note for self use with validate details in userdetailmodel() -N
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Book")

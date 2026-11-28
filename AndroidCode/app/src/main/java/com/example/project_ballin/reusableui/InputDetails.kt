@@ -262,7 +262,7 @@ fun InputDetails(
 
         }
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         if (mode == "create"){
             SelectProfileRole(viewModel)
         }
@@ -305,14 +305,12 @@ fun InputDetails(
 
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Recieve Notifications")
+            Text("Receive Notifications")
 
         Switch(
             checked = true,
@@ -328,46 +326,45 @@ fun InputDetails(
             )
         }
 
-        if (viewModel.validateDetails()) {
-            Button(
-                onClick = {
-                    if (mode == "create"){
-                        viewModel.onCreate()
-                        when (viewModel.selectedRole.value) {
-                            UserRole.ENTRANT -> {
-                                navController.navigate("EntrantMenu/${uiState.userID}")
-                            }
-                            UserRole.OWNER -> {
-                                navController.navigate("OwnerMenu/${uiState.userID}")
-                            }
-                            UserRole.ADMIN -> {
-                                navController.navigate("AdminMenu/${uiState.userID}")
-                            }
-                        }
-
-                    }else{
-                        viewModel.onEdit()
-                        when (viewModel.selectedRole.value) {
-                            UserRole.ENTRANT -> {
-                                navController.navigate("EntrantMenu/${uiState.userID}")
-                            }
-                            UserRole.OWNER -> {
-                                navController.navigate("OwnerMenu/${uiState.userID}")
-                            }
-                            UserRole.ADMIN -> {
-                                navController.navigate("AdminMenu/${uiState.userID}")
-                            }
-                        }
-
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
+        Button(
+            onClick = {
                 if (mode == "create"){
-                    Text("Create Account")
+                    viewModel.onCreate()
+                    when (viewModel.selectedRole.value) {
+                        UserRole.ENTRANT -> {
+                            navController.navigate("EntrantMenu/${uiState.userID}")
+                        }
+                        UserRole.OWNER -> {
+                            navController.navigate("OwnerMenu/${uiState.userID}")
+                        }
+                        UserRole.ADMIN -> {
+                            navController.navigate("AdminMenu/${uiState.userID}")
+                        }
+                    }
+
                 }else{
-                    Text("Save Changes")
+                    viewModel.onEdit()
+                    when (viewModel.selectedRole.value) {
+                        UserRole.ENTRANT -> {
+                            navController.navigate("EntrantMenu/${uiState.userID}")
+                        }
+                        UserRole.OWNER -> {
+                            navController.navigate("OwnerMenu/${uiState.userID}")
+                        }
+                        UserRole.ADMIN -> {
+                            navController.navigate("AdminMenu/${uiState.userID}")
+                        }
+                    }
+
                 }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = viewModel.validateDetails()
+        ) {
+            if (mode == "create"){
+                Text("Create Account")
+            }else{
+                Text("Save Changes")
             }
         }
 
