@@ -166,14 +166,14 @@ class AdminProfilesScreens {
                 .fillMaxWidth()
                 .clickable { onClick() }
                 .testTag("profileItem_${profile.userID}"),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = CardDefaults.cardColors()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(profile.fullName, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(profile.fullName, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
                     Text(profile.role, fontSize = 12.sp)
                     Text(profile.email, fontSize = 12.sp)
                 }

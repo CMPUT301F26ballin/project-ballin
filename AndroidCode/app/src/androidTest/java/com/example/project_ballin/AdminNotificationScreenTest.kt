@@ -16,9 +16,6 @@ class AdminNotificationScreenTest {
 
     @Test
     fun navigate_to_admin_notifications_screen_from_signin_screen() {
-        composeTestRule.mainClock.advanceTimeBy(2500)
-        composeTestRule.waitForIdle()
-
         composeTestRule
             .onNodeWithTag("adminSignin")
             .assertExists()

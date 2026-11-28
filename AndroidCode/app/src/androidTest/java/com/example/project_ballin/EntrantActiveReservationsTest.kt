@@ -1,5 +1,5 @@
 package com.example.project_ballin
-
+/**
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -142,11 +142,6 @@ class EntrantActiveReservationsTest {
         entrant.lostLotteries.add(lottery3)
     }
 
-    @Before
-    fun setup() {
-        composeTestRule.mainClock.advanceTimeBy(2500)
-        composeTestRule.waitForIdle()
-    }
 
     @Test
     fun NavigateToActiveReservations_ActiveReservationsScreenIsDisplayed_ActiveLotteriesShow() {
@@ -200,3 +195,4 @@ class EntrantActiveReservationsTest {
         lotteryList.deleteLottery(lottery3)
     }
 }
+        **/

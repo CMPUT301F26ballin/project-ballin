@@ -17,12 +17,6 @@ class AdminMessagesScreenTest {
 
     @Test
     fun navigate_to_admin_messages_screen_from_signin_screen(){
-        // the following two lines of code are from Microsoft, Copilot,
-        // "how to wait for composable to finish in kotlin, for testing",
-        // 2026-11-10. I used it because ballinApp() has an initial screen loading
-        composeTestRule.mainClock.advanceTimeBy(2500)
-        composeTestRule.waitForIdle()
-
         composeTestRule
             .onNodeWithTag("adminSignin")
             .assertExists()

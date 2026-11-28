@@ -1,10 +1,10 @@
 package com.example.project_ballin
 
-import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.PropertyName
+import java.text.DateFormat
 import java.util.Date
-import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.uuid.Uuid
+
 
 /**
  * A class that stores information shows information
@@ -25,5 +25,16 @@ class Message (
     var dateSent: Long = System.currentTimeMillis(),
     var ID: String = Uuid.random().toString()
 ) {
-   // fun getFormattedDate() {}
+    /**
+     * Gets the date of the message in a readable format.
+     *
+     * Got code from EntrantConfirmBooking.kt
+     *
+     * @param dateFormat the format of the date
+     * @return the date of the message in a readable format
+     */
+    fun getFormattedDate(dateFormat: Int =  DateFormat.MEDIUM): String {
+        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+        return df.format(Date(this.dateSent))
+    }
 }

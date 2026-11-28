@@ -18,7 +18,7 @@ open class ReportList {
      * a new report is added.
      *
      */
-    private val reportsRef = db.collection("Messages")
+    private val reportsRef = db.collection("Reports")
 
     init {
         reportsRef.addSnapshotListener { snapshots, error ->
@@ -56,10 +56,10 @@ open class ReportList {
     /**
      * Gets a report from the database with specific ID
      *
-     * @param idBeingReported the ID of the reported ID to get
+     * @param reportID the ID of the reported ID to get
      */
-    fun getReport(idBeingReported: String): Report? =
-        _reports.find { it.idBeingReported == idBeingReported }
+    fun getReport(reportID: String): Report? =
+        _reports.find { it.ID == reportID }
 
 
     /**
@@ -87,13 +87,14 @@ open class ReportList {
         reportsRef.document(report.ID).delete()
     }
 
+    // DELETIONS FOR EACH SUBJECT MUST CASCADE DELETE
     /**
      * Specific deletion for the report in the database
      * that is in subject rating
      */
     fun deleteReportInSubjectRating(report: Report) {
         deleteReport(report)
-        // CASCADE THE DELETION IN RATING LIST
+        RatingList().deleteRating(report.ID)
     }
 
     /**
@@ -102,7 +103,7 @@ open class ReportList {
      */
     fun deleteReportInSubjectReview(report: Report) {
         deleteReport(report)
-        // CASCADE THE DELETION IN REVIEW LIST
+        ReviewList().deleteReview(report.ID)
     }
 
     /**

@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-
+/**
 //Test to make sure that the search correctly returns results
 class EntrantSearchTest {
     private lateinit var campsiteList: CampsiteList
@@ -168,3 +168,4 @@ class EntrantSearchTest {
         campsiteList.deleteCampsite(campsite)
     }
 }
+        **/

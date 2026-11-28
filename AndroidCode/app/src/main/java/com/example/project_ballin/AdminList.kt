@@ -1,5 +1,6 @@
 package com.example.project_ballin
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -77,8 +78,8 @@ class AdminList{
      *
      * @param id the Uuid of the admin
      */
-    fun getAdmin(id: String): Admin? = _admins.find {
-        it.userID == id
+    fun getAdmin(id: String): Admin? {
+        return _admins.find { it.userID == id }
     }
 }
 

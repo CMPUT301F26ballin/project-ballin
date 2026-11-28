@@ -168,14 +168,14 @@ class AdminCampsiteScreens {
                 .fillMaxWidth()
                 .clickable { onClick() }
                 .testTag("adminCampsiteItem_${site.ID}"),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = CardDefaults.cardColors()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text( site.name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text( site.name, fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
                     Text(
                         site.locationName,
                         fontSize = 12.sp,

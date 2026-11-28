@@ -1,11 +1,13 @@
 package com.example.project_ballin.reusableui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,9 +25,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.Report
 import com.example.project_ballin.entrant.entantui.ConfirmActionDialog
-
-// NEED TO FIND WAY TO REPLACE THE ID
-// PROB JUST GENERATE A RANDOM ID OR SOMETHING
+import kotlin.uuid.Uuid
 
 class UserReportScreen {
 
@@ -56,8 +56,9 @@ class UserReportScreen {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Spacer(modifier = Modifier.height(128.dp))
                 Text(
                     text = "Must be a valid report",
                     fontSize = 24.sp
@@ -67,12 +68,13 @@ class UserReportScreen {
                 OutlinedTextField(
                     value = reason,
                     onValueChange = { reason = it },
-                    label = { Text("Reason for Report") }
+                    label = { Text("Input reason for report") }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { confirmReport = true }
+                    onClick = { confirmReport = true },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
                     Text("Confirm")
                 }
@@ -94,7 +96,7 @@ class UserReportScreen {
                                     reason,
                                     subjectReport,
                                     clickedID,
-                                    "TODO"
+                                    Uuid.random().toString()
                                 )
                                 onAdd(newUserReport)
                                 navController.popBackStack()
