@@ -58,7 +58,7 @@ Nick: working on filter by dates, then account profile pic editing
 
 Peter: I will fix the scroll hijacking bug with the map location input, I will add to the campsite detail screen to allow users to view the active lotteries of a campsite. I will refine old tests and create new ones for the screens. I will properly test the different owner reservation views, and I will update and add to the UML, UI mockup, and other documents.
 
-Mies: I am going to work on past reservations (ratings and reviews) as well as the entrant side of messaging. I'm also going to create tests 
+Mies: I am going to work on past reservations (ratings and reviews) as well as the entrant side of messaging. I'm also going to create tests. Work on the look of the app as well.
 
 yuming: add qr code to so it can be displayed
 
