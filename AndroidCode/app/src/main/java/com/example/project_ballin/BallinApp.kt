@@ -13,6 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.project_ballin.admin.adminui.AdminSwitchModesScreen
+import com.example.project_ballin.admin.adminui.AdminViolationChoiceScreen
+import com.example.project_ballin.admin.adminui.AdminViolationListScreen
 import com.example.project_ballin.admin.adminui.NotificationDetailScreen
 import com.example.project_ballin.admin.adminui.NotificationListScreen
 import com.example.project_ballin.entrant.Entrant
@@ -125,6 +127,10 @@ class BallinApp() {
         //MessagingScreen
         val messagingScreen = MessagingScreen()
 
+        //Reporting/Violation Screens
+        val adminViolationChoiceScreen = AdminViolationChoiceScreen()
+        val adminViolationListScreen = AdminViolationListScreen()
+        val adminViolationDetailScreen = AdminViolationDetailScreen()
 
         NavHost(navController = navController, startDestination = "signup") {
             composable("signup") { signUpScreen.Signup(navController) }
@@ -134,7 +140,8 @@ class BallinApp() {
 
             composable("OwnerMenu/{OwnerID}") {
                 val ownerIDString = it.arguments!!.getString("OwnerID")
-                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!)
+                val hasAdminPrivileges = (adminList.getAdmin(ownerIDString!!) != null)
+                mainOwnerMenu.OwnerMenuScreen(navController, ownerIDString!!, hasAdminPrivileges)
             }
 
             composable("CampsiteListScreen/{OwnerID}") {
@@ -336,7 +343,7 @@ class BallinApp() {
                 val ownerID = it.arguments!!.getString("OwnerID")!!
                 val ownerEnrolledLotteries = lotteryList.getOwnerLotteries(ownerID) + lotteryList.getEnrolledGroupLotteries(ownerID)
                 val ownerLotteryIDs = ownerEnrolledLotteries.map{
-                    l -> l.lotteryID
+                        l -> l.lotteryID
                 }
                 val notifs = notificationList.getAllNotifications()
                     .filter { it.lotteryID in ownerLotteryIDs }
@@ -458,15 +465,66 @@ class BallinApp() {
                 }
             }
 
+            composable("AdminViolationChoice") {
+                adminViolationChoiceScreen.AdminViolationChoice(navController)
+            }
+
+            composable("AdminViolationList/{subject}") {
+                val subject = it.arguments!!.getString("subject")
+                val reportsFromSubject = userReportList.getReportsInSubject(subject!!)
+                adminViolationListScreen.AdminViolationList(
+                    navController,
+                    reportsFromSubject,
+                    onDelete = {  report ->
+                        when (subject) {
+                            "Campsite Owner" -> {
+                                userReportList.deleteReportInSubjectOwner(report)
+                            }
+                            "Review" -> {
+                                userReportList.deleteReportInSubjectReview(report)
+                            }
+                            "Rating" -> {
+                                userReportList.deleteReportInSubjectRating(report)
+                            }
+                        }
+                    }
+                )
+            }
+
+            composable("AdminViolationDetail/{reportID}") {
+                val reportID = it.arguments!!.getString("reportID")
+                val report = userReportList.getReport(reportID!!)
+                adminViolationDetailScreen.AdminViolationDetail(
+                    navController,
+                    report!!,
+                    onDelete = { report ->
+                        when (report.reportSubject) {
+                            "Campsite Owner" -> {
+                                userReportList.deleteReportInSubjectOwner(report)
+                            }
+                            "Review" -> {
+                                userReportList.deleteReportInSubjectReview(report)
+                            }
+                            "Rating" -> {
+                                userReportList.deleteReportInSubjectRating(report)
+                            }
+                        }
+                    }
+                )
+            }
+
 
             composable("EntrantMenu/{EntrantID}") {
                 val entrantIDString = it.arguments!!.getString("EntrantID")
                 currentEntrant = entrantList.getEntrant(entrantIDString!!)
                 mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!)
+                val hasAdminPrivileges = (adminList.getAdmin(entrantIDString!!) != null)
+                mainEntrantMenu.EntrantMenuScreen(navController, entrantIDString!!, hasAdminPrivileges)
             }
 
-            composable("AdminSwitchModes") {
-                AdminSwitchModesScreen().AdminSwitchModes(navController)
+            composable("AdminSwitchModes/{AdminID}") {
+                val AdminID = it.arguments!!.getString("AdminID")
+                AdminSwitchModesScreen().AdminSwitchModes(AdminID!!, navController, entrantList, ownerList, adminList)
             }
 
 

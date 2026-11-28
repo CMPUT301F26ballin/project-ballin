@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,8 +24,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.reusableui.TopAppBar
 
-// STILL DOING IT/ CHANGES TO DO
-// CHANGE THE TEXT A BIT LATER ON TO MAKE IT MORE UNDERSTANDABLE
 
 class AdminViolationChoiceScreen {
 
@@ -68,7 +65,7 @@ class AdminViolationChoiceScreen {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "to View List of Related Violations",
+                        text = "to View List of Campsite Related Violations",
                         fontSize = 18.sp
                     )
                 }
@@ -77,7 +74,7 @@ class AdminViolationChoiceScreen {
                 ViolationTopicButton(
                     navController,
                     "Reviews",
-                    "TODO",
+                    "AdminViolationList/Review", // So then the screen knows to use the reports related to reviews
                     "reviewViolationsButton"
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -85,7 +82,7 @@ class AdminViolationChoiceScreen {
                 ViolationTopicButton(
                     navController,
                     "Ratings",
-                    "TODO",
+                    "AdminViolationList/Rating",  // So then the screen knows to use the reports related to ratings
                     "ratingViolationsButton"
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -93,7 +90,7 @@ class AdminViolationChoiceScreen {
                 ViolationTopicButton(
                     navController,
                     "Campsite Owners",
-                    "TODO",
+                    "AdminViolationList/Campsite Owner",  // So then the screen knows to use the reports related to owners
                     "campsiteOwnerViolationsButton"
                 )
             }

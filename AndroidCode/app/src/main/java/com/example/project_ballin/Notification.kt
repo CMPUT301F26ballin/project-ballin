@@ -1,9 +1,8 @@
 package com.example.project_ballin
 
-import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.PropertyName
-import java.text.SimpleDateFormat
+import java.text.DateFormat
 import java.util.Date
+import java.util.Locale
 import kotlin.uuid.Uuid
 
 /**
@@ -21,9 +20,15 @@ import kotlin.uuid.Uuid
 class Notification (
     var content: String = "",
     var dateSent: Long = System.currentTimeMillis(),
-    var ID: String = "",
+    var ID: String = Uuid.random().toString(),
     var recipientID: String = "",
     var lotteryID: String = ""
 ) {
-    // getFormattedDate() {}
+    /**
+     * Gets the date of the message in a readable format.
+     */
+    fun getFormattedDate(dateFormat: Int =  DateFormat.MEDIUM): String {
+        val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+        return df.format(Date(this.dateSent))
+    }
 }

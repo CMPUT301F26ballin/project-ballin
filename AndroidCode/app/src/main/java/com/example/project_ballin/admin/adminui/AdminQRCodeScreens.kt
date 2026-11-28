@@ -135,7 +135,7 @@ class AdminQRCodeScreens {
                 .fillMaxWidth()
                 .clickable { onClick() }
                 .testTag("adminQRCodeItem_${site.ID}"),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = CardDefaults.cardColors()
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
@@ -148,7 +148,8 @@ class AdminQRCodeScreens {
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 4.dp),
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Text(
                     site.locationName,

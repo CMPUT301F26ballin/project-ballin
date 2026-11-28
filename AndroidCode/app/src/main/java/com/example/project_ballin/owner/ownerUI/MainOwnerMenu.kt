@@ -37,13 +37,13 @@ class MainOwnerMenu(){
  *
  * @param navController the navController Object.
  * @param ownerID the String representation of the logged-in owner's Uuid. This value gets passed along to new screens as needed
- *
+ * @param adminPrivileges a boolean that says true if user has admin privilege else false.
  *
  *
  * */
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun OwnerMenuScreen(navController: NavController, ownerID: String) {
+    fun OwnerMenuScreen(navController: NavController, ownerID: String,  adminPrivileges: Boolean = false) {
 
         val ownerList = remember { OwnerList() }
         val owner = ownerList.getOwner(ownerID)
@@ -89,16 +89,15 @@ class MainOwnerMenu(){
                     navController
                 )
 
-
-               // if (userCurrentSession.isAdmin) {
-                 //   Spacer(modifier = Modifier.height(16.dp))
-                   // OwnerOptionsButton(
-                     //   "SWITCH MODES",
-                       // "AdminSwitchModes",
-                        //"switchModesButton",
-                        //navController
-                    //)
-                //}
+                if (adminPrivileges) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    OwnerOptionsButton(
+                        "SWITCH MODES",
+                        "AdminSwitchModes/$ownerID",
+                        "switchModesButton",
+                        navController
+                    )
+                }
             }
         }
     }

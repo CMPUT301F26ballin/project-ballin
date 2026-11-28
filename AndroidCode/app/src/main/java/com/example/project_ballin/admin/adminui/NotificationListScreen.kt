@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
@@ -35,8 +36,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import com.example.project_ballin.AdminSearch
 import com.example.project_ballin.ConfirmDeleteDialog
+import com.example.project_ballin.EntrantList
 import com.example.project_ballin.Message
 import com.example.project_ballin.Notification
+import com.example.project_ballin.OwnerList
 import com.example.project_ballin.reusableui.TopAppBar
 import java.util.Date
 
@@ -89,7 +92,6 @@ class NotificationListScreen {
                     // What the admin typed in the search box (kept when the screen rotates)
                     var query by rememberSaveable { mutableStateOf("") }
                     val results = notifications.filter { it.matchesSearch(query) }
-
                         adminSearch.AdminSearchField(
                         query,
                         onQueryChange = { query = it },
@@ -161,14 +163,15 @@ class NotificationListScreen {
         onDelete: (Notification) -> Unit
     ) {
 
-        Button(
+        Card(
             onClick = {
                 navController.navigate("AdminNotificationDetails/${notification.ID}")
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .testTag("checkNotification${index + 1}") // for UI testing
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -182,10 +185,25 @@ class NotificationListScreen {
                     Text(
                         text = "Notification ${index + 1}",
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
+                        color = MaterialTheme.colorScheme.primary
                     )
-                    Text("Date Sent: ${notification.dateSent}")
-                    Text("Recipient: ${notification.recipientID}")
+                    val entrant = EntrantList().getEntrant(notification.recipientID)
+                    val owner = OwnerList().getOwner(notification.recipientID)
+
+                    // Trying to get name because its more useful information
+                    // at a glance for admin, rather than UUID unique ID- harder to decipher
+                    val userName =
+                        when {
+                            entrant != null ->
+                                "${entrant.firstName} ${entrant.lastName}"
+                            owner != null ->
+                                "${owner.firstName} ${owner.lastName}"
+                            else ->
+                                "Anonymous User"
+                        }
+
+                    Text("Date Sent: ${notification.getFormattedDate()}")
+                    Text("Recipient: $userName")
                 }
 
                 Button(
@@ -194,7 +212,8 @@ class NotificationListScreen {
                         .testTag("removeMessage_${notification.ID}"), // for UI testing
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red
-                    )
+                    ),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Text("Remove")
                 }

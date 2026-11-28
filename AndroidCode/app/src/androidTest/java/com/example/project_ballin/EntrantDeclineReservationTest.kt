@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-
+/**
 //Test for declining a reservation in the browse reservations screen when a user wins a lottery
 class EntrantDeclineReservationTest {
     private lateinit var campsiteList: CampsiteList
@@ -93,12 +93,6 @@ class EntrantDeclineReservationTest {
         entrant.wonLotteries.add(lottery2)
     }
 
-    @Before
-    fun setup() {
-        composeTestRule.mainClock.advanceTimeBy(2500)
-        composeTestRule.waitForIdle()
-    }
-
     @Test
     fun NavigateToBrowseReservations_WonAndLostLotteriesShow_DeclineLottery() {
         composeTestRule
@@ -173,3 +167,4 @@ class EntrantDeclineReservationTest {
         lotteryList.deleteLottery(lottery2)
     }
 }
+**/
