@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -67,7 +68,7 @@ class ActiveReservationScreen {
     fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList, reservationList: ReservationList, lotteryList: LotteryList, onLeaveLottery: (Lottery, Entrant) -> Unit, onLeaveReservation: (Reservation) -> Unit){
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
         var reservationToLeave by remember { mutableStateOf<Reservation?>(null) }
-        var refresh by remember { mutableStateOf(0) }
+        var refresh by remember { mutableIntStateOf(0) }
 
         val currentReservations = remember(refresh) {
             reservationList.getCurrentReservationsForEntrant(entrant.userID)

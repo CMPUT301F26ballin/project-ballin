@@ -42,6 +42,7 @@ class EntrantBrowseReservations{
     fun BrowseReservations (navController: NavController, campsiteList: CampsiteList ,entrant: Entrant, lotteryList: LotteryList) {
 
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
+        var refresh by remember { mutableIntStateOf(0) }
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -87,6 +88,7 @@ class EntrantBrowseReservations{
                     if (confirmed) {
                         lotteryList.leaveWaitingList(lottery.lotteryID, entrant.userID)
                         lotteryList.remWinner(lottery.lotteryID, entrant.userID)
+                        refresh++
                     }
                     lotteryToLeave = null
                 }
