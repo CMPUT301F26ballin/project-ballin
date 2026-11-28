@@ -284,7 +284,10 @@ class SearchBar(){
 
                 Button(
                     onClick = { showFilters = !showFilters },
-                    modifier = Modifier.testTag("Filters Button")
+                    modifier = Modifier
+                        .testTag("Filters Button")
+                        .align(Alignment.CenterVertically),
+
                 ) {
                     Text("Filters")
                 }
