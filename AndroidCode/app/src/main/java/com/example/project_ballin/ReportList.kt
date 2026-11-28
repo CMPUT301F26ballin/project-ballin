@@ -113,8 +113,10 @@ open class ReportList {
     fun deleteReportInSubjectOwner(report: Report) {
         deleteReport(report)
         // CASCADE THE DELETION IN CAMPSITE LIST - for the ownerID
+       // CampsiteList().get
         // CASCADE THE DELETION IN LOTTERY LIST
         // CASCADE THE DELETION IN OWNER LIST
+      //  OwnerList().
         // CASCADE THE DELETION IN OTHER LISTS WHICH DEALS WITH OWNER IN ANYWAY
     }
 

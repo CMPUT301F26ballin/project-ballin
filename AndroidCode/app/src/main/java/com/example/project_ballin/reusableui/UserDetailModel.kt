@@ -213,8 +213,8 @@ class UserDetailModel: ViewModel() {
                 phoneNum = _uiState.value.phoneNum,
                 email = _uiState.value.email,
                 profilePic = _uiState.value.profilePic,
-                userID = "400400400",
-                deviceId = "700700700"
+                userID = _uiState.value.userID,
+                deviceId = _uiState.value.deviceId
             )
             entrantList.addEntrant(newEntrantObj)
             _uiState.value = newEntrantObj
@@ -240,8 +240,8 @@ class UserDetailModel: ViewModel() {
                 phoneNum = _uiState.value.phoneNum,
                 email = _uiState.value.email,
                 profilePic = _uiState.value.profilePic,
-                userID = "400400400",
-                deviceId = "700700700" // TESTING PURPOSE
+                userID = _uiState.value.userID,
+                deviceId = _uiState.value.deviceId
             )
             ownerList.addOwner(newOwner)
             _uiState.value = newOwner
@@ -252,13 +252,27 @@ class UserDetailModel: ViewModel() {
 
     /**
      * When wanting to change role back to admin, (admin privilege)
-     * Shouldn't create a new admin obj, because they start out as admin
      *
      * @param adminList the list of admin
      */
     fun onRoleChangeToAdmin(adminList: AdminList) {
         val admin: User? = adminList.getAdmin(uiState.value.userID)
-        _uiState.value = admin!!
+
+        if (admin != null) {
+            _uiState.value = admin
+        } else {
+            val newAdminObj = Admin(
+                firstName = _uiState.value.firstName,
+                lastName = _uiState.value.lastName,
+                phoneNum = _uiState.value.phoneNum,
+                email = _uiState.value.email,
+                profilePic = _uiState.value.profilePic,
+                userID = _uiState.value.userID,
+                deviceId = _uiState.value.deviceId
+            )
+            adminList.addAdmin(newAdminObj)
+            _uiState.value = newAdminObj
+        }
         _selectedRole.value = UserRole.ADMIN
     }
 

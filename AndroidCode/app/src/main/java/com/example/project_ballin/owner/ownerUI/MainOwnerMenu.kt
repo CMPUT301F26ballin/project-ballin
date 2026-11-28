@@ -93,7 +93,7 @@ class MainOwnerMenu(){
                     Spacer(modifier = Modifier.height(16.dp))
                     OwnerOptionsButton(
                         "SWITCH MODES",
-                        "AdminSwitchModes",
+                        "AdminSwitchModes/$ownerID",
                         "switchModesButton",
                         navController
                     )

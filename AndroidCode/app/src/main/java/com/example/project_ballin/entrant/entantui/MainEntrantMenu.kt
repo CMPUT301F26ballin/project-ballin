@@ -86,7 +86,7 @@ class MainEntrantMenu(){
                     Spacer(modifier = Modifier.height(16.dp))
                     EntrantHomeButton(
                         "SWITCH MODES",
-                        "AdminSwitchModes",
+                        "AdminSwitchModes/$entrantID",
                         "switchModesButton",
                         navController
                     )

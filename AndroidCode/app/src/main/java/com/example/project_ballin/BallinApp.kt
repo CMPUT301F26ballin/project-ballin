@@ -132,7 +132,7 @@ class BallinApp() {
         val adminViolationListScreen = AdminViolationListScreen()
         val adminViolationDetailScreen = AdminViolationDetailScreen()
 
-        NavHost(navController = navController, startDestination = "AdminMenu/{400400400}") {
+        NavHost(navController = navController, startDestination = "signup") {
             composable("signup") { signUpScreen.Signup(navController) }
             composable("createprofile") { userProfile.CreateProfile(navController) }
             composable("editprofile") { userProfile.EditProfile(navController) }
