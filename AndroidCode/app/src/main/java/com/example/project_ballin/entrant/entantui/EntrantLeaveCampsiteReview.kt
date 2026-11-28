@@ -37,6 +37,7 @@ import com.example.project_ballin.RatingList
 import com.example.project_ballin.Review
 import com.example.project_ballin.ReviewList
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.reusableui.GeneralReportButton
 import com.example.project_ballin.reusableui.TopAppBar
 
 class EntrantLeaveCampsiteReview {
@@ -75,103 +76,129 @@ class EntrantLeaveCampsiteReview {
             navController,
             "Review Input",
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-            ) {
-                Column(
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                ){
-                    if (!noPreviousReviewGiven) {
-                        PastReviewCard(
-                            ratingList.getCampsiteRatingFromEntrant(entrant.userID, campsiteID)!!,
-                            reviewList.getCampsiteReviewFromEntrant(entrant.userID, campsiteID)!!,                        )
-                    } else {
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                    ){
+                        if (!noPreviousReviewGiven) {
+                            PastReviewCard(
+                                ratingList.getCampsiteRatingFromEntrant(entrant.userID, campsiteID)!!,
+                                reviewList.getCampsiteReviewFromEntrant(entrant.userID, campsiteID)!!,                        )
+                        } else {
 
-                        Text(
-                            text = "Review campsite:",
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.padding(4.dp, 0.dp)
-                        )
+                            Text(
+                                text = "Review campsite:",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(4.dp, 0.dp)
+                            )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            for (i in 1..5) {
-                                RatingButton(
-                                    number = i,
-                                    onSelectedRating = { rating = it },
-                                    change = i <= rating,
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        OutlinedTextField(
-                            value = reviewContents,
-                            onValueChange = { newContents: String ->
-                                if (newContents.length <= 500) {
-                                    reviewContents = newContents
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                for (i in 1..5) {
+                                    RatingButton(
+                                        number = i,
+                                        onSelectedRating = { rating = it },
+                                        change = i <= rating,
+                                    )
                                 }
-                            },
-                            label = { Text("Input your review here...") },
-                            minLines = 1,
-                            modifier = Modifier
-                                .fillMaxWidth()
-
-                        )
-
-                        HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
-
-                        Button(
-                            onClick = {
-                                confirmReview = true
-                                confirmRating = true
-                            },
-                            enabled = reviewContents.isNotBlank() && rating > 0,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("Confirm")
-                        }
-                    }
-
-                    if (reviewContents.isBlank() && confirmReview && noPreviousReviewGiven) {
-                        Text(
-                            text = "Review must not be empty",
-                            color = Color.Red
-                        )
-                    }
-                }
-
-                if (reviewContents.isNotBlank() && confirmReview && rating > 0 && confirmRating && noPreviousReviewGiven) {
-                    ConfirmActionDialog().ConfirmAction(
-                        message = "Are you sure you want to leave this review?\n",
-                        confirm = { confirmed ->
-                            if (confirmed) {
-                                val newRating = Rating(entrant.userID, rating, campsiteID)
-                                ratingList.addRating(newRating)
-                                navController.popBackStack()
-
-                                val newReview = Review(entrant.userID, reviewContents, campsiteID)
-                                reviewList.addReview(newReview)
-                                navController.popBackStack()
                             }
-                            rating = 0
-                            confirmRating = false
 
-                            confirmReview = false
-                            reviewContents = ""
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            OutlinedTextField(
+                                value = reviewContents,
+                                onValueChange = { newContents: String ->
+                                    if (newContents.length <= 500) {
+                                        reviewContents = newContents
+                                    }
+                                },
+                                label = { Text("Input your review here...") },
+                                minLines = 1,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+
+                            )
+
+                            HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
+
+                            Button(
+                                onClick = {
+                                    confirmReview = true
+                                    confirmRating = true
+                                },
+                                enabled = reviewContents.isNotBlank() && rating > 0,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("Confirm")
+                            }
                         }
-                    )
+
+                        if (reviewContents.isBlank() && confirmReview && noPreviousReviewGiven) {
+                            Text(
+                                text = "Review must not be empty",
+                                color = Color.Red
+                            )
+                        }
+                    }
+
+                    if (reviewContents.isNotBlank() && confirmReview && rating > 0 && confirmRating && noPreviousReviewGiven) {
+                        ConfirmActionDialog().ConfirmAction(
+                            message = "Are you sure you want to leave this review?\n",
+                            confirm = { confirmed ->
+                                if (confirmed) {
+                                    val newRating = Rating(entrant.userID, rating, campsiteID)
+                                    ratingList.addRating(newRating)
+                                    navController.popBackStack()
+
+                                    val newReview = Review(entrant.userID, reviewContents, campsiteID)
+                                    reviewList.addReview(newReview)
+                                    navController.popBackStack()
+                                }
+                                rating = 0
+                                confirmRating = false
+
+                                confirmReview = false
+                                reviewContents = ""
+                            }
+                        )
+                    }
                 }
+
+                // Lets the entrant report the campsite they are reviewing
+                ReportCampsiteButton(navController, campsiteID)
             }
         }
+    }
+
+    /**
+     * A "Report" button that lets the entrant report the campsite
+     * they are reviewing to the admins.
+     *
+     * @param navController the navController Object
+     * @param campsiteID the ID of the campsite being reported
+     */
+    @Composable
+    fun ReportCampsiteButton(navController: NavController, campsiteID: String) {
+        GeneralReportButton().ReportButton(
+            subjectReport = "Campsite",
+            clickedID = campsiteID,
+            navController = navController,
+            label = "Report",
+            testTag = "reviewReportButton",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp, 0.dp)
+        )
     }
 
     /**
