@@ -72,7 +72,7 @@ class SearchBar(){
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .width(100.dp)
-                    .testTag("Occupancy Filter")
+                    .testTag("Occupancy Filter"),
             )
         }
     }
@@ -180,7 +180,6 @@ class SearchBar(){
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(8.dp)
                 .clickable {
                     navController.navigate("CampsiteDetailScreen/${campsite.ID}/${entrantID}")
 
@@ -283,18 +282,19 @@ class SearchBar(){
                     placeholder = { Text("Search Campsites") }
                 )
 
-                //Spacer(modifier = Modifier.height(8.dp))
-
                 Button(
                     onClick = { showFilters = !showFilters },
-                    modifier = Modifier.testTag("Filters Button")
+                    modifier = Modifier
+                        .testTag("Filters Button")
+                        .align(Alignment.CenterVertically),
+
                 ) {
                     Text("Filters")
                 }
             }
             if (showFilters) {
 
-                Spacer(modifier = Modifier.height(8.dp))
+                HorizontalDivider(modifier = Modifier.padding(0.dp, 16.dp))
 
                 GuestFilter(viewModel = viewModel)
 
@@ -313,15 +313,18 @@ class SearchBar(){
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
 
 
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
+
             ) {
                 items(campsites) { campsite ->
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     DisplayCampsite(
                         navController = navController,
                         campsite = campsite,

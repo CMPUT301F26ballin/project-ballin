@@ -363,7 +363,8 @@ class BallinApp() {
                 }
                 WaitlistListScreen().WaitlistListScreen(
                     navController,
-                    entrants
+                    entrants,
+                    reservationList
                 )
             }
 
@@ -549,7 +550,8 @@ class BallinApp() {
                     EntrantBrowseReservations().BrowseReservations(
                         navController,
                         campsiteList,
-                        entrant
+                        entrant,
+                        lotteryList
                     )
                 }
             }
@@ -561,7 +563,14 @@ class BallinApp() {
                         navController,
                         entrant,
                         campsiteList,
-                        reservationList
+                        reservationList,
+                        lotteryList,
+                        onLeaveLottery = { lottery, entrant ->
+                            lotteryList.leaveWaitingList(lottery.lotteryID, entrant.userID)
+                        },
+                        onLeaveReservation = { reservation ->
+                            reservationList.cancelReservation(reservation)
+                        }
                     )
                 }
             }

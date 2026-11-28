@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,17 +30,20 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import androidx.room.util.TableInfo
 import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.ReservationList
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.entrant.Reservation
 import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.lottery.LotteryList
 import com.example.project_ballin.reusableui.TopAppBar
 import java.text.DateFormat
 import java.util.Locale
 
 
 class ActiveReservationScreen {
+
 
     // Converts long to date string
     // Source - https://stackoverflow.com/q/49551461
@@ -61,9 +65,17 @@ class ActiveReservationScreen {
      * @param campsiteList the list of campsites
      */
     @Composable
-    fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList, reservationList: ReservationList){
+    fun ActiveReservations(navController: NavController, entrant: Entrant, campsiteList: CampsiteList, reservationList: ReservationList, lotteryList: LotteryList, onLeaveLottery: (Lottery, Entrant) -> Unit, onLeaveReservation: (Reservation) -> Unit){
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
         var reservationToLeave by remember { mutableStateOf<Reservation?>(null) }
+        var refresh by remember { mutableIntStateOf(0) }
+
+        val currentReservations = remember(refresh) {
+            reservationList.getCurrentReservationsForEntrant(entrant.userID)
+        }
+        val activeLotteries = remember(refresh) {
+            lotteryList.getEntrantLotteries(entrant.userID)
+        }
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -76,9 +88,10 @@ class ActiveReservationScreen {
                 LazyColumn(
                     modifier = Modifier.padding(16.dp, 0.dp)
                 ){
-                    if(reservationList.getCurrentReservationsForEntrant(entrant.userID).isNotEmpty()){
+                    if(currentReservations.isNotEmpty()){
                         item{
 
+                            Spacer(modifier = Modifier.height(16.dp))
 
                             Text(
                                 text = "Your current reservations:",
@@ -89,7 +102,7 @@ class ActiveReservationScreen {
                             HorizontalDivider(modifier = Modifier.padding(0.dp,0.dp, 0.dp, 16.dp))
                         }
 
-                        items(reservationList.getCurrentReservationsForEntrant(entrant.userID)) { reservation ->
+                        items(currentReservations) { reservation ->
                             CurrentReservationCard(entrant, reservation, campsiteList, navController, { reservationToLeave = reservation })
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -98,10 +111,12 @@ class ActiveReservationScreen {
 
                     }
 
-                    if(entrant.activeLotteries.isNotEmpty()){
+
+                    if(activeLotteries.isNotEmpty()){
 
                         item{
 
+                            Spacer(modifier = Modifier.height(16.dp))
 
                             Text(
                                 text = "Your active lotteries:",
@@ -112,7 +127,7 @@ class ActiveReservationScreen {
                             HorizontalDivider(modifier = Modifier.padding(0.dp,0.dp, 0.dp, 16.dp))
                         }
 
-                        items(entrant.activeLotteries) { lottery ->
+                        items(activeLotteries) { lottery ->
                             ActiveLotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -130,8 +145,8 @@ class ActiveReservationScreen {
                 "Are you sure you want to leave this waiting list?",
                 confirm = { confirmed ->
                     if (confirmed) {
-                            lottery.waitList.remove(entrant.userID)
-                        entrant.activeLotteries.remove(lottery)
+                        onLeaveLottery(lottery, entrant)
+                        refresh++
                     }
                     lotteryToLeave = null
                 }
@@ -143,7 +158,8 @@ class ActiveReservationScreen {
                 "Are you sure you want to cancel this reservation?",
                 confirm = { confirmed ->
                     if (confirmed) {
-                        reservationList.cancelReservation(reservation)
+                        onLeaveReservation(reservation)
+                        refresh++
                     }
                     reservationToLeave = null
                 }
@@ -216,12 +232,59 @@ class ActiveReservationScreen {
                                         Row(
                                             modifier = Modifier.padding(16.dp, 0.dp)
                                         ){
-                                            Text(
-                                                text =  "- Location: ${campsiteList.getCampsite(site)?.locationName}\n" +
-                                                        "- Occupancy: ${campsiteList.getCampsite(site)?.occupancy}\n" +
-                                                        "- Price: $${"%.2f".format(campsiteList.getCampsite(site)?.price)}/night",
-                                                style = MaterialTheme.typography.bodyLarge
-                                            )
+                                            Column {
+                                                Text(
+                                                    text = "- Location: ${
+                                                        campsiteList.getCampsite(
+                                                            site
+                                                        )?.locationName
+                                                    }" ,
+                                                    style = MaterialTheme.typography.bodyLarge
+                                                )
+                                                Text(
+                                                    text = "- Occupancy: ${
+                                                        campsiteList.getCampsite(
+                                                            site
+                                                        )?.occupancy
+                                                    }",
+                                                    style = MaterialTheme.typography.bodyLarge
+
+                                                )
+
+                                                Text(
+                                                    text = "- Price: $${
+                                                        "%.2f".format(
+                                                            campsiteList.getCampsite(
+                                                                site
+                                                            )?.price
+                                                        )
+                                                    }/night",
+                                                    style = MaterialTheme.typography.bodyLarge
+
+                                                )
+
+                                                if(campsiteList.getCampsite(site)?.rating == null){
+                                                    Text(
+                                                        text = "- No ratings yet",
+                                                        style = MaterialTheme.typography.bodyLarge
+                                                    )
+                                                }
+                                                else{
+                                                    Text(
+                                                        "- Rating: ${
+                                                            "%.2f".format(
+                                                                campsiteList.getCampsite(
+                                                                    site
+                                                                )?.rating
+                                                            )
+                                                        }/5",
+                                                        style = MaterialTheme.typography.bodyLarge
+
+                                                    )
+                                                }
+
+                                            }
+
                                         }
                                     }
 

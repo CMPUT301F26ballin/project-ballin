@@ -1,5 +1,6 @@
 package com.example.project_ballin.lottery
 
+import androidx.compose.runtime.mutableStateListOf
 import com.example.project_ballin.Campsite
 import com.example.project_ballin.User
 import com.example.project_ballin.entrant.Entrant
@@ -47,6 +48,9 @@ data class Lottery(
     var losers: MutableList<String> = mutableListOf(),
     var bWinnersDrawn: Boolean = false
 ){
+
     fun addWinner(id: String) { winners.add(id) }
     fun addLoser(id: String) { losers.add(id) }
+
+
 }

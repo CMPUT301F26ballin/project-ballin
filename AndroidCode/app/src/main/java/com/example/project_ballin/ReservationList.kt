@@ -220,4 +220,8 @@ class ReservationList {
         }
         return returnList
     }
+
+    fun updateReservation(oldReservation: Reservation, updatedReservation: Reservation){
+        reservationsRef.document(oldReservation.resID).set(updatedReservation)
+    }
 }

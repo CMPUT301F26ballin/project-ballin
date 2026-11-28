@@ -32,10 +32,6 @@ data class Entrant(
     override val deviceId: String = "",
     override var profilePic: String = "",
     override val userID: String = Uuid.random().toString(),
-    val activeLotteries: MutableList<Lottery> = mutableStateListOf(),
-    val wonLotteries: MutableList<Lottery> = mutableStateListOf(),
-    val lostLotteries: MutableList<Lottery> = mutableStateListOf(),
-    val pastReservations: MutableList<Reservation> = mutableStateListOf(),
 ) : User{
     override fun updateDetails(
         firstName: String,

@@ -26,6 +26,7 @@ import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.lottery.LotteryList
 import com.google.apps.card.v1.Columns
 
 class EntrantBrowseReservations{
@@ -38,9 +39,10 @@ class EntrantBrowseReservations{
      * @param navController the navigation controller for the app
      */
     @Composable
-    fun BrowseReservations (navController: NavController, campsiteList: CampsiteList ,entrant: Entrant) {
+    fun BrowseReservations (navController: NavController, campsiteList: CampsiteList ,entrant: Entrant, lotteryList: LotteryList) {
 
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
+        var refresh by remember { mutableIntStateOf(0) }
 
         Column(
             modifier = Modifier.fillMaxSize()
@@ -59,7 +61,7 @@ class EntrantBrowseReservations{
 
                     ActivePastReservationButtons(navController)
 
-                    val lotteriesToShow = entrant.activeLotteries.filter {
+                    val lotteriesToShow = lotteryList.getEntrantLotteries(entrant.userID).filter {
                         entrant.userID in it.winners || entrant.userID in it.losers
                     }
 
@@ -68,7 +70,12 @@ class EntrantBrowseReservations{
 
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            LotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
+                            LotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery },
+                                {
+                                    lotteryList.leaveWaitingList(lottery.lotteryID, entrant.userID)
+                                    refresh++
+                                }
+                            )
                         }
                     }
                 }
@@ -84,10 +91,9 @@ class EntrantBrowseReservations{
                 "Are you sure you want to decline booking this site??",
                 confirm = { confirmed ->
                     if (confirmed) {
-                        lottery.waitList.remove(entrant.userID)
-                        lottery.winners.remove(entrant.userID)
-                        entrant.activeLotteries.remove(lottery)
-                        entrant.wonLotteries.remove(lottery)
+                        lotteryList.leaveWaitingList(lottery.lotteryID, entrant.userID)
+                        lotteryList.remWinner(lottery.lotteryID, entrant.userID)
+                        refresh++
                     }
                     lotteryToLeave = null
                 }
@@ -154,7 +160,7 @@ class EntrantBrowseReservations{
      * @param onDeclineClick the function to run when the decline button is clicked
      */
     @Composable
-    fun LotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onDeclineClick: () -> Unit){
+    fun LotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onDeclineClick: () -> Unit, onDismissClick: () -> Unit){
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -253,9 +259,7 @@ class EntrantBrowseReservations{
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Button(
-                            onClick = {
-                                entrant.activeLotteries.remove(lottery)
-                            },
+                            onClick = onDismissClick,
                             modifier = Modifier
                                 .weight(1f)
                                 .testTag("Dismiss Button")
