@@ -235,7 +235,7 @@
 - Story Points: 3
 - Risk: Medium
 
-**US 03.02.05 As an admin, I should be able to be a campsite owner and/or entrant with my admin profile**
+**US 03.02.05 As an admin, I should be able to be a campsite owner and/or entrant with my admin profile**✅
 - Story Points: 8
 - Risk: High
 
