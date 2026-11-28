@@ -31,7 +31,9 @@ import androidx.navigation.NavController
 import com.example.project_ballin.Notification
 import com.example.project_ballin.reusableui.TopAppBar
 import androidx.compose.foundation.lazy.items
+import com.example.project_ballin.ReservationList
 import com.example.project_ballin.entrant.Entrant
+import com.example.project_ballin.lottery.LotteryList
 
 class WaitlistListScreen() {
 
@@ -47,7 +49,8 @@ class WaitlistListScreen() {
     @Composable
     fun WaitlistListScreen(
         navController: NavController,
-        entrants: List<Entrant>
+        entrants: List<Entrant>,
+        reservationList: ReservationList
     ) {
         TopAppBar(navController, "Sent Notifications") {
             if (entrants.isEmpty()){
@@ -66,7 +69,7 @@ class WaitlistListScreen() {
                         .padding(16.dp)
                 ){
                     items(entrants, key = {it.userID}) { entrant ->
-                        EntrantDetailBox(entrant)
+                        EntrantDetailBox(entrant, reservationList)
                     }
                 }
             }
@@ -76,7 +79,8 @@ class WaitlistListScreen() {
     @SuppressLint("NotConstructor")
     @Composable
     fun EntrantDetailBox(
-        entrant: Entrant
+        entrant: Entrant,
+        reservationList: ReservationList,
     ){
         Card(
             modifier = Modifier
@@ -85,7 +89,7 @@ class WaitlistListScreen() {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("${entrant.firstName} ${entrant.lastName}")
                 Text("${entrant.email}")
-                Text("Past reservations: ${entrant.pastReservations.count()}")
+                Text("Past reservations: ${reservationList.getPastReservationsForEntrant(entrant.userID).size}")
             }
         }
     }

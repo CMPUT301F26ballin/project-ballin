@@ -26,6 +26,7 @@ import com.example.project_ballin.CampsiteList
 import com.example.project_ballin.reusableui.TopAppBar
 import com.example.project_ballin.entrant.Entrant
 import com.example.project_ballin.lottery.Lottery
+import com.example.project_ballin.lottery.LotteryList
 import com.google.apps.card.v1.Columns
 
 class EntrantBrowseReservations{
@@ -38,7 +39,7 @@ class EntrantBrowseReservations{
      * @param navController the navigation controller for the app
      */
     @Composable
-    fun BrowseReservations (navController: NavController, campsiteList: CampsiteList ,entrant: Entrant) {
+    fun BrowseReservations (navController: NavController, campsiteList: CampsiteList ,entrant: Entrant, lotteryList: LotteryList) {
 
         var lotteryToLeave by remember { mutableStateOf<Lottery?>(null) }
 
@@ -59,7 +60,7 @@ class EntrantBrowseReservations{
 
                     ActivePastReservationButtons(navController)
 
-                    val lotteriesToShow = entrant.activeLotteries.filter {
+                    val lotteriesToShow = lotteryList.getEntrantLotteries(entrant.userID).filter {
                         entrant.userID in it.winners || entrant.userID in it.losers
                     }
 
@@ -84,10 +85,8 @@ class EntrantBrowseReservations{
                 "Are you sure you want to decline booking this site??",
                 confirm = { confirmed ->
                     if (confirmed) {
-                        lottery.waitList.remove(entrant.userID)
-                        lottery.winners.remove(entrant.userID)
-                        entrant.activeLotteries.remove(lottery)
-                        entrant.wonLotteries.remove(lottery)
+                        lotteryList.leaveWaitingList(lottery.lotteryID, entrant.userID)
+                        lotteryList.remWinner(lottery.lotteryID, entrant.userID)
                     }
                     lotteryToLeave = null
                 }
@@ -254,7 +253,7 @@ class EntrantBrowseReservations{
                     ) {
                         Button(
                             onClick = {
-                                entrant.activeLotteries.remove(lottery)
+                                lottery.waitList.remove(entrant.userID)
                             },
                             modifier = Modifier
                                 .weight(1f)

@@ -41,7 +41,7 @@ class LotteryList {
         }
     }
 
-    val lottery: List<Lottery>
+    val lotteries: List<Lottery>
         get() = _lotteries
 
     /**
@@ -69,7 +69,7 @@ class LotteryList {
         _lotteries.filter { it.lotteryOwnerID == ownerID }
 
     fun getCampsiteLotteries(campID:String): List<Lottery> =
-        lottery.filter { campID in it.associatedSites }
+        lotteries.filter { campID in it.associatedSites }
 
     fun enrollUserInLottery(lotteryID: String, entrantID: String){
         val lottery = getLottery(lotteryID)
@@ -85,4 +85,28 @@ class LotteryList {
     // get all group lotteries that you're NOT the primary owner of
     fun getAllGroupLotteries(ownerID: String): List<Lottery> =
         _lotteries.filter { it.multipleOwnerLottery && ownerID != it.lotteryOwnerID  && ownerID !in it.additionalLotteryOwners}
+
+    fun getEntrantLotteries(entrantID: String): List<Lottery> =
+        _lotteries.filter { entrantID in it.waitList }
+
+    fun leaveWaitingList(lotteryID: String, entrantID: String){
+        val lottery = getLottery(lotteryID)
+        val newLottery = getLottery(lotteryID)
+        newLottery!!.waitList.remove(entrantID)
+        updateLottery(lottery!!, newLottery)
+    }
+
+    fun remWinner(lotteryID: String, entrantID: String){
+        val lottery = getLottery(lotteryID)
+        val newLottery = getLottery(lotteryID)
+        newLottery!!.winners.remove(entrantID)
+        updateLottery(lottery!!, newLottery)
+    }
+
+    fun remLoser(lotteryID: String, entrantID: String){
+        val lottery = getLottery(lotteryID)
+        val newLottery = getLottery(lotteryID)
+        newLottery!!.losers.remove(entrantID)
+        updateLottery(lottery!!, newLottery)
+    }
 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -64,15 +65,19 @@ class EntrantLotteryListScreen {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(16.dp, 0.dp)
             ) {
                 itemsIndexed(lotteries) { index, lottery ->
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     ActiveLotteryCard(
                         lottery,
                         entrantID,
                         CampsiteList(),
-                        onEnrollClick = { onEnroll(lottery.lotteryID, entrantID) })
+                        onEnrollClick = { onEnroll(lottery.lotteryID, entrantID) }
+                    )
+
+
 
                 }
             }
@@ -96,7 +101,6 @@ class EntrantLotteryListScreen {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -106,7 +110,7 @@ class EntrantLotteryListScreen {
             )
             {
                 Text(text = "Sites:",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleLarge
                 )
                 lottery.associatedSites.forEach{site ->
                     Text(
@@ -119,28 +123,32 @@ class EntrantLotteryListScreen {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
                 Text(
                     "Lottery period: ${formatDateMillisToDMY(lottery.registrationStart!!)} " +
-                            "to ${formatDateMillisToDMY(lottery.registrationEnd!!)}"
+                            "to ${formatDateMillisToDMY(lottery.registrationEnd!!)}",
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
                     "Booking period: ${formatDateMillisToDMY(lottery.bookingStart!!)} " +
-                            "to ${formatDateMillisToDMY(lottery.bookingEnd!!)}"
+                            "to ${formatDateMillisToDMY(lottery.bookingEnd!!)}",
+                    style = MaterialTheme.typography.bodyLarge
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     if(enrolled){
-                        Text("Already enrolled in lottery")
+                        Text("You are enrolled in this lottery"
+                        , style = MaterialTheme.typography.bodyLarge)
                     }
                     else if(lottery.occupancy != null && lottery.waitList.size >= lottery.occupancy!!){
-                        Text("Lottery full")
+                        Text("Lottery full",
+                            style = MaterialTheme.typography.bodyLarge)
                     }
                     else{
 
@@ -151,6 +159,7 @@ class EntrantLotteryListScreen {
                                 enrolled = true
                             },
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .testTag("Leave Waiting List Button")
                         ) {
                             Text("Enroll")

@@ -231,9 +231,6 @@ class EntrantConfirmBooking {
 
                                     reservationList.addReservation(newRes)
                                     navController.navigate("bookingConfirmationScreen/${newRes.resID}")
-
-                                    entrant.activeLotteries.remove(lottery)
-                                    entrant.wonLotteries.remove(lottery)
                                 },
                                 enabled = rulesChecked,
                                 modifier = Modifier
