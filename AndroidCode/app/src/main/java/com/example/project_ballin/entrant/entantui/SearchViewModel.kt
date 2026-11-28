@@ -56,6 +56,12 @@ class SearchViewModel: ViewModel() {
         _campsites.value = newList
     }
 
+    fun clearFilters(){
+        _selectedNumOfGuests.value = null
+        _selectedLocationFilter.value = null
+        _selectedDateFilter.value = null
+    }
+
     val campsites = combine(
         query, numOfGuests, locationFilter, dateFilter, _campsites
     ) { text, guestLimit, locationLimit, dateLimit, campsites ->
@@ -69,11 +75,10 @@ class SearchViewModel: ViewModel() {
             val matchesLocation = locationLimit == null ||
                     campsite.locationName == locationLimit
 
-            val dateLimit = dateLimit == null ||
+            val matchesDates = dateLimit == null ||
                     campsite.availability.containsAll(dateLimit)
 
-
-            matchesText && matchesGuests && matchesLocation && dateLimit
+            matchesText && matchesGuests && matchesLocation && matchesDates
         }
     }
         .stateIn(
