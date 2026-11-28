@@ -70,7 +70,12 @@ class EntrantBrowseReservations{
 
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            LotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery })
+                            LotteryCard(lottery, entrant, campsiteList, navController, { lotteryToLeave = lottery },
+                                {
+                                    lotteryList.leaveWaitingList(lottery.lotteryID, entrant.userID)
+                                    refresh++
+                                }
+                            )
                         }
                     }
                 }
@@ -155,7 +160,7 @@ class EntrantBrowseReservations{
      * @param onDeclineClick the function to run when the decline button is clicked
      */
     @Composable
-    fun LotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onDeclineClick: () -> Unit){
+    fun LotteryCard(lottery: Lottery, entrant: Entrant, campsiteList: CampsiteList, navController: NavController, onDeclineClick: () -> Unit, onDismissClick: () -> Unit){
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -254,9 +259,7 @@ class EntrantBrowseReservations{
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Button(
-                            onClick = {
-                                lottery.waitList.remove(entrant.userID)
-                            },
+                            onClick = onDismissClick,
                             modifier = Modifier
                                 .weight(1f)
                                 .testTag("Dismiss Button")
