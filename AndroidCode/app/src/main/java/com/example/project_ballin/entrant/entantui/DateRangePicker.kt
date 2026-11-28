@@ -2,6 +2,7 @@ package com.example.project_ballin.entrant.entantui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.rememberDateRangePickerState
@@ -62,11 +63,11 @@ class DateRangePicker {
             else null
         )
 
-
         DateRangePicker(
             state = state,
             showModeToggle = false,
             modifier = modifier
+
         )
     }
 

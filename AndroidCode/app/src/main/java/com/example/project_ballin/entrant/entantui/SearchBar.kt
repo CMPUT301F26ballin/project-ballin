@@ -14,11 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
+import androidx.navigation.compose.rememberNavController
 import com.example.project_ballin.Campsite
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.project_ballin.CampsiteList
+import com.example.project_ballin.GeneralDatePicker
+import com.example.project_ballin.ui.theme.ProjectBallinTheme
 import kotlin.String
 import kotlin.collections.sorted
 
@@ -26,6 +30,22 @@ import kotlin.collections.sorted
  * The important functions allowing the user to search for campsites based on a variety of factors
  * */
 class SearchBar(){
+
+
+    @Composable
+    fun ClearFilters(
+        modifier: Modifier = Modifier,
+        viewModel: SearchViewModel = viewModel()
+    ) {
+
+        Button(
+            onClick = { viewModel.clearFilters() },
+            modifier = modifier.testTag("Clear Filters")
+        ){
+            Text("Clear Filters")
+        }
+
+    }
     /**
      * function to filter campsites by number of guests
      *
@@ -40,17 +60,19 @@ class SearchBar(){
     ) {
         val selectedNumOfGuests by viewModel.numOfGuests.collectAsState()
 
+        Text("Max Number of Guests:")
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(8.dp),
         ) {
             OutlinedTextField(
                 value = selectedNumOfGuests?.toString() ?: "",
                 onValueChange = viewModel::onNumOfGuestsChange,
-                placeholder = { Text("Number of Guests") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.testTag("Occupancy Filter")
+                modifier = Modifier
+                    .width(100.dp)
+                    .testTag("Occupancy Filter")
             )
         }
     }
@@ -59,24 +81,24 @@ class SearchBar(){
      *
      * function to filter campsites by location
      *
-     * @param modifier the modifier to apply to the filter
+     * @param modifier for UI
      * @param viewModel the view model to use for filtering
-     * @param campsites the list of campsites to filter from
+     * @param campsiteList the list of campsites to filter from
      *
      */
     @Composable
     fun LocationFilter(
         modifier: Modifier = Modifier,
         viewModel: SearchViewModel = viewModel(),
-        campsites: List<Campsite>
+        campsiteList: CampsiteList
     ) {
-        val locationOptions = campsites.map { it.locationName }.distinct()
+        val locationOptions = campsiteList.campsites.map { it.locationName }.distinct()
         val selectedLocation by viewModel.locationFilter.collectAsState()
 
+        Text("Filter by Location:")
         LazyRow(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(8.dp)
                 .testTag("Location Filter")
         ) {
             items(locationOptions) { location ->
@@ -97,46 +119,46 @@ class SearchBar(){
         }
     }
 
+    /**
+     *
+     * Function to filter campsites by date
+     *
+     *@param modifier for UI
+     *@param viewModel the view model to use for filtering
+     *@param campsiteList the list of campsites to filter from
+     *
+     */
     @Composable
     fun DateFilter(
         modifier: Modifier = Modifier,
-        viewModel: SearchViewModel = viewModel(),
+        viewModel: SearchViewModel,
         campsiteList: CampsiteList
     ) {
 
         var showDatePicker by remember { mutableStateOf(false) }
 
         val dateOptions = remember(campsiteList.campsites) {
-            campsiteList.campsites.flatMap { it.availability }.distinct().sorted()
+            campsiteList.campsites
+                .flatMap { it.availability }
+                .distinct()
+                .sorted()
         }
-        //val dateRange by viewModel.dateFilter.collectAsStateWithLifecycle()
-
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                onClick = {
-                    showDatePicker = true
-
-                }
-            ){
-                Text("Filter by Dates")
+        Button(
+            onClick = {
+                showDatePicker = true
             }
-
-            if (showDatePicker) {
-                DateRangePicker().BookingDateRangePicker(
-                    availableDates = dateOptions,
-                    modifier = Modifier.weight(1f),
-                    chosenDates = { selectedDates ->
-                        viewModel.onSelectedDateFilterChange(selectedDates)
-                    }
-                )
-            }
-
+        ){
+            Text("Filter by Availability")
         }
+        if (showDatePicker) {
+            GeneralDatePicker().DatePick(
+                campAvailableDates = dateOptions,
+                onDismiss = { showDatePicker = false },
+                onSelect = { viewModel.onSelectedDateFilterChange(it) },
+                adding = false
+            )
+        }
+
     }
 
     /**
@@ -165,8 +187,8 @@ class SearchBar(){
                 }
                 .testTag("Campsite: ${campsite.name}"),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
             Column(
@@ -177,6 +199,11 @@ class SearchBar(){
                 Text(
                     text = campsite.name,
                     style = MaterialTheme.typography.headlineMedium
+                )
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(0.dp, 8.dp),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
                     text = "Location: ${campsite.locationName}",
@@ -215,32 +242,79 @@ class SearchBar(){
             viewModel.updateCampsites(allSites)
         }
 
+        SearchBarContent(
+            queryText = queryText,
+            onSearchTextChange = viewModel::onSearchTextChange,
+            campsites = campsites,
+            navController = navController,
+            entrantID = entrantID,
+            campsiteList = campsiteList,
+            viewModel = viewModel
+        )
+    }
+
+    @Composable
+    fun SearchBarContent(
+        queryText: String,
+        onSearchTextChange: (String) -> Unit,
+        campsites: List<Campsite>,
+        navController: NavController,
+        entrantID: String,
+        campsiteList: CampsiteList,
+        viewModel: SearchViewModel = viewModel()
+    ) {
+        var showFilters by remember { mutableStateOf(false) }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            OutlinedTextField(
-                value = queryText,
-                onValueChange = viewModel::onSearchTextChange,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("Search Bar"),
-                placeholder = { Text("Search Campsites") }
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                OutlinedTextField(
+                    value = queryText,
+                    onValueChange = onSearchTextChange,
+                    modifier = Modifier
+                        //.fillMaxWidth()
+                        .testTag("Search Bar"),
+                    placeholder = { Text("Search Campsites") }
+                )
+
+                //Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = { showFilters = !showFilters },
+                    modifier = Modifier.testTag("Filters Button")
+                ) {
+                    Text("Filters")
+                }
+            }
+            if (showFilters) {
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                GuestFilter(viewModel = viewModel)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                LocationFilter(viewModel = viewModel, campsiteList = campsiteList)
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    DateFilter(viewModel = viewModel, campsiteList = campsiteList)
+                    ClearFilters(viewModel = viewModel)
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
 
-            GuestFilter()
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LocationFilter(campsites = campsites)
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            //DateFilter(campsiteList = campsiteList)
-
-            Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn(
                 modifier = Modifier
@@ -255,7 +329,6 @@ class SearchBar(){
                     )
                 }
             }
-
         }
     }
 }

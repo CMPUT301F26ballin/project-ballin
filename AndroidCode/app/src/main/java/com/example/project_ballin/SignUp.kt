@@ -111,15 +111,15 @@ class SignUp() {
             }
 
 
-            Button(
-                onClick = {
-                    val ownerID = "Test1" // just for testing
-                    navController.navigate("OwnerMenu/${ownerID}")
-                },
-                modifier = Modifier.testTag("ownerSignin") // for testing
-            ) {
-                Text("Sign-up as Campsite Owner")
-            }
+//            Button(
+//                onClick = {
+//                    val ownerID = "Test1" // just for testing
+//                    navController.navigate("OwnerMenu/${ownerID}")
+//                },
+//                modifier = Modifier.testTag("ownerSignin") // for testing
+//            ) {
+//                Text("Sign-up as Campsite Owner")
+//            }
 
 //            Button(
 //                onClick = {
