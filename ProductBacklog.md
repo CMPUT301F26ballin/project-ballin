@@ -5,7 +5,7 @@
 - Story Points: 1
 - Risk: Low
 
-**US 01.01.02 As an entrant, I want to filter campsites by location, date, and number of guests.** 
+**US 01.01.02 As an entrant, I want to filter campsites by location, date, and number of guests.**✅ 
 - Story Points: 2
 - Risk: Low
 
